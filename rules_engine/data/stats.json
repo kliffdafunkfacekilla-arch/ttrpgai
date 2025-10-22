@@ -1,0 +1,14 @@
+[
+  {"name": "A (Might)", "description": "Governs physical power and force."},
+  {"name": "B (Endurance)", "description": "Governs stamina and physical resilience."},
+  {"name": "C (Finesse)", "description": "Governs precision, subtlety, and manual dexterity."},
+  {"name": "D (Agility)", "description": "Governs physical speed, reflexes, and coordination."},
+  {"name": "E (Constitution)", "description": "Governs health and resistance to physical strain."},
+  {"name": "F (Fortitude)", "description": "Governs mental and physical toughness."},
+  {"name": "G (Knowledge)", "description": "Governs learned information and academic recall."},
+  {"name": "H (Logic)", "description": "Governs reasoning, deduction, and strategic thinking."},
+  {"name": "I (Awareness)", "description": "Governs perception and the ability to notice details."},
+  {"name": "J (Intuition)", "description": "Governs gut feelings, instincts, and subconscious insights."},
+  {"name": "K (Charm)", "description": "Governs social grace, influence, and personal magnetism."},
+  {"name": "L (Willpower)", "description": "Governs mental resolve, discipline, and determination."}
+]

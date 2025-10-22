@@ -1,0 +1,26 @@
+[
+  {
+    "name": "Smithing",
+    "description": "Metal Weapons, Heavy Armor, Forging, and Metal Refinement."
+  },
+  {
+    "name": "Alchemy",
+    "description": "Potions, Tinctures, Venoms, and Complex Chemical Synthesis."
+  },
+  {
+    "name": "Cooking",
+    "description": "Provisions, Durable Rations, and Special Master Chef Meals."
+  },
+  {
+    "name": "Mechanics",
+    "description": "Traps, Clockwork, Engines, and Complex Mechanisms/Repair."
+  },
+  {
+    "name": "Tailoring",
+    "description": "Cloth/Leather Armor, Hides, and Specialized Garments."
+  },
+  {
+    "name": "Infusing",
+    "description": "Charms, Hexes, Totems, and Binding Magic to Non-Tech Items."
+  }
+]
