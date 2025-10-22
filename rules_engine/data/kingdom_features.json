@@ -1,0 +1,560 @@
+[
+  {
+    "kingdom_name": "Mammalian",
+    "features": [
+      {
+        "feature": "F1: Eyes (Physical Offense Focus)",
+        "choices": [
+          { "p_index": "P1", "choice_name": "Predator's Gaze", "description": "Hyper-focused binocular vision for distance and tracking." },
+          { "p_index": "P1", "choice_name": "Nocturnal Taps", "description": "Large pupils and reflective layer for superior low-light perception." },
+          { "p_index": "P1", "choice_name": "Panoramic Sense", "description": "Wide-set eyes and rapid processing for high situational awareness." },
+          { "p_index": "P1", "choice_name": "Social Filters", "description": "Highly sensitive to minute facial and postural cues." },
+          { "p_index": "P1", "choice_name": "Rangefinder Focus", "description": "Excellent depth perception balanced with mental tracking." },
+          { "p_index": "P1", "choice_name": "Peripheral Hunter", "description": "Vision excels at detecting movement across a wide field." }
+        ]
+      },
+      {
+        "feature": "F2: Integument (Cognitive/Social Defense Focus)",
+        "choices": [
+          { "p_index": "P2", "choice_name": "Insulated Pelt", "description": "Extremely dense fur or thick hide for thermal and blunt force protection." },
+          { "p_index": "P2", "choice_name": "Camouflage Pattern", "description": "Skin/fur capable of rapid, complex colour change or perfect mimicry." },
+          { "p_index": "P2", "choice_name": "Keratin Plating", "description": "Hardened, thick plates or scales offering physical damage reduction." },
+          { "p_index": "P2", "choice_name": "Sensitive Receptors", "description": "Skin loaded with specialized hairs or nerves for acute environmental feedback." },
+          { "p_index": "P2", "choice_name": "Adaptive Glands", "description": "Skin secretes tailored pheromones or defensive toxins." },
+          { "p_index": "P2", "choice_name": "Elastic Hide", "description": "Extremely flexible, tough skin that resists tearing and limits critical hits." }
+        ]
+      },
+      {
+        "feature": "F3: Jaws & Teeth (Diagonal/Evasion Focus)",
+        "choices": [
+          { "p_index": "P3", "choice_name": "Bone-Crusher", "description": "Massive, powerful jaws specialized for high-force impact." },
+          { "p_index": "P3", "choice_name": "Venomous Bite", "description": "Specialized glands and delivery fangs for injecting toxins." },
+          { "p_index": "P3", "choice_name": "Precision Shear", "description": "Fine, sharp teeth and controlled bite strength for delicate work or rapid strikes." },
+          { "p_index": "P3", "choice_name": "Efficient Graze", "description": "Wide, durable molars for constant, low-effort feeding and high metabolism." },
+          { "p_index": "P3", "choice_name": "Scavenger's Set", "description": "Versatile teeth capable of tearing, crushing, and probing in various materials." },
+          { "p_index": "P3", "choice_name": "Suction Feeder", "description": "Specialized mouthparts that generate vacuum force or manipulate liquids/gases." }
+        ]
+      },
+      {
+        "feature": "F4: Front Limbs (Endurance/Willpower Focus)",
+        "choices": [
+          { "p_index": "P4", "choice_name": "Climbing Grip", "description": "Sharp claws and powerful flexors for vertical climbing and grappling." },
+          { "p_index": "P4", "choice_name": "Enduring Runners", "description": "Long, light, and perfectly balanced limbs for sustained speed and motion." },
+          { "p_index": "P4", "choice_name": "Articulated Digits", "description": "Highly flexible, dexterous hands or paws capable of complex tool manipulation." },
+          { "p_index": "P4", "choice_name": "Burrowing Shovels", "description": "Broad, dense bone structure and powerful forearms for digging and tunneling." },
+          { "p_index": "P4", "choice_name": "Brachiation Arms", "description": "Exceptionally long, strong arms for swinging and rapid traversing through foliage." },
+          { "p_index": "P4", "choice_name": "Shielding Forearms", "description": "Dense bone and tough hide on the forearms used for blocking and parrying." }
+        ]
+      },
+      {
+        "feature": "F5: Skeletal Structure (Mental Resilience Focus)",
+        "choices": [
+          { "p_index": "P5", "choice_name": "Cartilaginous Joints", "description": "Extremely flexible, quiet joints that allow for silent, low-impact movement." },
+          { "p_index": "P5", "choice_name": "Heavy Bone Density", "description": "Exceptionally dense bones that offer high physical defense and structural strength." },
+          { "p_index": "P5", "choice_name": "Cranial Reinforcement", "description": "A thickened skull or internal shock-absorbing structure to protect the brain." },
+          { "p_index": "P5", "choice_name": "Lightweight Frame", "description": "Hollow or thin bones that maximize speed and evasiveness at the cost of durability." },
+          { "p_index": "P5", "choice_name": "Vertebral Resilience", "description": "Highly flexible spine and internal organ bracing for massive blunt force resistance." },
+          { "p_index": "P5", "choice_name": "Occipital Knobs", "description": "Specialized neck joint and muscle attachments for complex head movements and focus." }
+        ]
+      },
+      {
+        "feature": "F6: Metabolism & Internal Organs (Social/Physical Synergy Focus)",
+        "choices": [
+          { "p_index": "P6", "choice_name": "Efficient Circulator", "description": "A powerful heart and efficient blood oxygenation system for rapid recovery." },
+          { "p_index": "P6", "choice_name": "Fat Reserves", "description": "Specialized fat storage and slow-burn metabolism for long-term survival." },
+          { "p_index": "P6", "choice_name": "Toxin Filter", "description": "Hyper-efficient kidneys and liver capable of neutralizing potent poisons and chemicals." },
+          { "p_index": "P6", "choice_name": "Thermal Adapt", "description": "Glands and systems that allow for rapid shifts in core temperature for survival." },
+          { "p_index": "P6", "choice_name": "Silent Breathing", "description": "Specialized lungs and diaphragm for low-volume, continuous air exchange." },
+          { "p_index": "P6", "choice_name": "High Energy Burn", "description": "A fast, demanding metabolism that generates immense bursts of power." }
+        ]
+      },
+      {
+        "feature": "F7: Auditory System (Cognitive/Speed Focus)",
+        "choices": [
+          { "p_index": "P7", "choice_name": "Echolocator", "description": "Specialized apparatus to generate and interpret sound waves." },
+          { "p_index": "P7", "choice_name": "Subsonic Hearer", "description": "The ability to perceive low-frequency sounds that travel long distances." },
+          { "p_index": "P7", "choice_name": "Ultrasonic Hearer", "description": "The ability to perceive high-frequency sounds, ideal for small target location." },
+          { "p_index": "P7", "choice_name": "Directional Ears", "description": "Highly mobile and sensitive ears that can triangulate sound origin instantly." },
+          { "p_index": "P7", "choice_name": "Sonic Shielding", "description": "A mechanism to mute loud external noise while retaining internal processing." },
+          { "p_index": "P7", "choice_name": "Complex Signaling", "description": "Specialized vocal cords and ear structure for rapid, coded communication." }
+        ]
+      },
+      {
+        "feature": "F8: Locomotion (Final Cross-Balance)",
+        "choices": [
+          { "p_index": "P8", "choice_name": "Tundra Loper", "description": "Long legs and broad paws/hooves for fast, sustained movement over uneven ground." },
+          { "p_index": "P8", "choice_name": "Arboreal Grips", "description": "Paws with specialized pads and high grip strength for climbing and swinging." },
+          { "p_index": "P8", "choice_name": "Gliding Membranes", "description": "Skin membranes and light bones that enable controlled freefall and quick descents." },
+          { "p_index": "P8", "choice_name": "Hoof Ram", "description": "Powerful, hardened limbs capable of delivering heavy impact strikes." },
+          { "p_index": "P8", "choice_name": "Aquatic Thruster", "description": "Specialized tail/fins and dense muscle for powerful, efficient swimming." },
+          { "p_index": "P8", "choice_name": "Ambusher Leap", "description": "Specialized leg muscles and tendons for powerful, short-range bursts of speed." }
+        ]
+      }
+    ]
+  },
+  {
+    "kingdom_name": "Avian",
+    "features": [
+      {
+        "feature": "F1: Beak (Physical Offense Focus)",
+        "choices": [
+          { "p_index": "P1", "choice_name": "Tearing Hook", "description": "A strong, razor-sharp hooked beak designed for dismembering prey." },
+          { "p_index": "P1", "choice_name": "Sieve Filter", "description": "A specialized, broad beak designed to filter nutrients from water or mud." },
+          { "p_index": "P1", "choice_name": "Seed Sheller", "description": "A short, thick, powerful conical beak for crushing hard seeds and nuts." },
+          { "p_index": "P1", "choice_name": "Probing Needle", "description": "An extremely long, thin beak used to probe deep into flowers or crevices." },
+          { "p_index": "P1", "choice_name": "Generalist Wedge", "description": "A versatile, medium-sized wedge beak for a wide variety of foods and uses." },
+          { "p_index": "P1", "choice_name": "Impact Ram", "description": "A robust, heavy-duty beak and reinforced skull for pounding or drilling." }
+        ]
+      },
+      {
+        "feature": "F2: Feathers (Cognitive/Social Defense Focus)",
+        "choices": [
+          { "p_index": "P2", "choice_name": "Oil Slicked", "description": "Highly water-resistant feathers that maintain thermal stability in aquatic environments." },
+          { "p_index": "P2", "choice_name": "Vibrancy Display", "description": "Highly complex, iridescent feathers used for dazzling social communication." },
+          { "p_index": "P2", "choice_name": "Armor Plume", "description": "Feathers that are stiff, overlapping, and reinforced to deflect glancing blows." },
+          { "p_index": "P2", "choice_name": "Sound Dampeners", "description": "Specialized, soft feather structure that silences flight and movement noise." },
+          { "p_index": "P2", "choice_name": "Insulation Down", "description": "A thick, dense layer of insulating feathers for extreme cold or heat resilience." },
+          { "p_index": "P2", "choice_name": "Contour Airfoils", "description": "Feathers shaped for minute air manipulation and stability in high wind." }
+        ]
+      },
+      {
+        "feature": "F3: Talons & Feet (Diagonal/Evasion Focus)",
+        "choices": [
+          { "p_index": "P3", "choice_name": "Raptor Clench", "description": "Massive, curved talons and strong tendons for locking onto large, heavy prey." },
+          { "p_index": "P3", "choice_name": "Zygodactyl Grasp", "description": "Two forward, two backward toes for superior grip on vertical surfaces." },
+          { "p_index": "P3", "choice_name": "Fine Perchers", "description": "Small, delicate feet with high nerve endings for sensing vibrations and subtle shifts." },
+          { "p_index": "P3", "choice_name": "Cursor Stance", "description": "Long, powerful legs with thick pads and reduced toes for high-speed running." },
+          { "p_index": "P3", "choice_name": "Wading Struts", "description": "Exceptionally long, thin legs designed for silent movement through shallows." },
+          { "p_index": "P3", "choice_name": "Webbed Paddles", "description": "Feet with broad webbing and dense muscles for powerful aquatic propulsion." }
+        ]
+      },
+      {
+        "feature": "F4: Sensory Nerves (Endurance/Willpower Focus)",
+        "choices": [
+          { "p_index": "P4", "choice_name": "Barometric Sense", "description": "Nerves highly tuned to minute changes in air pressure and weather." },
+          { "p_index": "P4", "choice_name": "Tactile Probes", "description": "Highly sensitive nerves in the beak or tongue for exploring food and texture." },
+          { "p_index": "P4", "choice_name": "Magnetic Alignment", "description": "Specialized iron deposits in the brain or eyes for superior navigation/direction." },
+          { "p_index": "P4", "choice_name": "Heat Pits", "description": "Facial or skin receptors that sense infrared radiation (body heat)." },
+          { "p_index": "P4", "choice_name": "High-G Tolerance", "description": "Internal balancing and fluid systems built to withstand extreme acceleration/deceleration." },
+          { "p_index": "P4", "choice_name": "Low-Light Scanners", "description": "Enhanced sensitivity to light stimuli that are normally too dim to perceive." }
+        ]
+      },
+      {
+        "feature": "F5: Flight Style (Mental Resilience Focus)",
+        "choices": [
+          { "p_index": "P5", "choice_name": "Soaring Wings", "description": "Long, slender wings designed to exploit thermal currents and maximize gliding range." },
+          { "p_index": "P5", "choice_name": "Flap Velocity", "description": "Short, powerful wings and large flight muscles for incredible burst speed and lift." },
+          { "p_index": "P5", "choice_name": "Aerobatic Agility", "description": "Broad, rounded wings and short tail feathers for high-speed maneuverability." },
+          { "p_index": "P5", "choice_name": "Hovering Form", "description": "Small, dense structure and unique joint rotation for sustained hovering and precision." },
+          { "p_index": "P5", "choice_name": "Long-Haul Migration", "description": "Highly efficient wing-loading and metabolism for sustained, long-distance travel." },
+          { "p_index": "P5", "choice_name": "Surface Skimmer", "description": "Wings specialized for dynamic soaring and rapid dives near water or the ground." }
+        ]
+      },
+      {
+        "feature": "F6: Glands & Secretions (Social/Physical Synergy Focus)",
+        "choices": [
+          { "p_index": "P6", "choice_name": "Preen Oil", "description": "A highly effective, multi-purpose oil secreted to protect feathers and repel irritants." },
+          { "p_index": "P6", "choice_name": "Hyper-Adrenal", "description": "Specialized adrenal glands that generate overwhelming bursts of fear or aggression." },
+          { "p_index": "P6", "choice_name": "Stomach Acid", "description": "Highly potent digestive juices that allow the consumption of tough, toxic material." },
+          { "p_index": "P6", "choice_name": "Pheromone Signal", "description": "Scent glands that release subtle, persuasive chemical signals to others." },
+          { "p_index": "P6", "choice_name": "Detoxifying Gut", "description": "An enlarged organ structure optimized for rapidly processing toxins and pathogens." },
+          { "p_index": "P6", "choice_name": "Skeletal Calcifiers", "description": "Glands that rapidly add or remove calcium from bone for quick strength/weight shifts." }
+        ]
+      },
+      {
+        "feature": "F7: Communication (Cognitive/Speed Focus)",
+        "choices": [
+          { "p_index": "P7", "choice_name": "Mimicry Trill", "description": "A versatile syrinx (voice box) capable of complex mimicry and perfect vocal recall." },
+          { "p_index": "P7", "choice_name": "Alarm Shriek", "description": "Lungs and syrinx built to produce piercing, highly directional sonic blasts." },
+          { "p_index": "P7", "choice_name": "Hypnotic Song", "description": "A melodious, complex vocal sequence that induces emotional states in listeners." },
+          { "p_index": "P7", "choice_name": "Infrasound Pulse", "description": "The ability to communicate through deep, resonant sounds that travel far." },
+          { "p_index": "P7", "choice_name": "Silent Posture", "description": "The use of feather positions and body language as the primary mode of complex signaling." },
+          { "p_index": "P7", "choice_name": "Rapid Dialect", "description": "An extremely fast, complex series of chirps and calls for quick tactical communication." }
+        ]
+      },
+      {
+        "feature": "F8: Bone Structure (Final Cross-Balance)",
+        "choices": [
+          { "p_index": "P8", "choice_name": "Keeled Sternum", "description": "An enlarged breastbone that acts as a strong anchor for powerful chest muscles." },
+          { "p_index": "P8", "choice_name": "Fused Vertebrae", "description": "Rigid spine and hip structure that creates a strong, shock-resistant platform." },
+          { "p_index": "P8", "choice_name": "Pneumatic Bones", "description": "Extremely light, hollow bones that minimize weight for high aerial efficiency." },
+          { "p_index": "P8", "choice_name": "Center of Mass", "description": "A low center of gravity and dense leg bones for stable terrestrial stance/combat." },
+          { "p_index": "P8", "choice_name": "Wing Bone Spurs", "description": "Specialized bone extensions on the wings used for striking, defense, or display." },
+          { "p_index": "P8", "choice_name": "Reinforced Skull", "description": "Bone density concentrated in the cranium and facial structure for impact." }
+        ]
+      }
+    ]
+  },
+  {
+    "kingdom_name": "Reptilian",
+    "features": [
+      {
+        "feature": "F1: Cranium & Jaw (Physical Offense Focus)",
+        "choices": [
+          { "p_index": "P1", "choice_name": "Constrictor Muscle", "description": "Specialized jaw musculature for immense, sustained clamping force." },
+          { "p_index": "P1", "choice_name": "Dislocating Jaw", "description": "Flexible jaw hinge allowing the mouth to open far beyond its normal capacity." },
+          { "p_index": "P1", "choice_name": "Precision Strike", "description": "Rapid-fire jaw snap and specialized fangs for quick, accurate injections." },
+          { "p_index": "P1", "choice_name": "Cranial Crest", "description": "Elaborate head crests or frills used purely for intimidating display." },
+          { "p_index": "P1", "choice_name": "Heavy Head-Butt", "description": "Thickened frontal bone for delivering high-impact, non-lethal strikes." },
+          { "p_index": "P1", "choice_name": "Low-Vibration Pit", "description": "Facial pits or slits that detect minute ground or air vibrations from prey." }
+        ]
+      },
+      {
+        "feature": "F2: Scales & Scutes (Cognitive/Social Defense Focus)",
+        "choices": [
+          { "p_index": "P2", "choice_name": "Thermal Camo", "description": "Scales with dynamic pigment and thermal properties for blending with backgrounds." },
+          { "p_index": "P2", "choice_name": "Iridescent Display", "description": "Highly reflective, patterned scales used for complex signalling and distraction." },
+          { "p_index": "P2", "choice_name": "Osteoderm Armor", "description": "Scales reinforced with bony plates for superb protection against blunt force." },
+          { "p_index": "P2", "choice_name": "Hydro-Dynamic", "description": "Smooth, overlapping, water-shedding scales that drastically reduce drag." },
+          { "p_index": "P2", "choice_name": "Lateral Line", "description": "Specialized sensory scales along the flank to detect water movement and pressure." },
+          { "p_index": "P2", "choice_name": "Rattle Defense", "description": "Hardened, hollow tail sections designed to produce a startling auditory warning." }
+        ]
+      },
+      {
+        "feature": "F3: Limbs & Digits (Diagonal/Evasion Focus)",
+        "choices": [
+          { "p_index": "P3", "choice_name": "Clinging Pads", "description": "Microscopic hair/lamellae on the digits for incredible grip on smooth surfaces." },
+          { "p_index": "P3", "choice_name": "Digging Claws", "description": "Stout, powerful limbs and large claws for rapid excavation and securing ground." },
+          { "p_index": "P3", "choice_name": "Prehensile Tail", "description": "A highly flexible, muscular tail used as a fifth limb for grasping and balancing." },
+          { "p_index": "P3", "choice_name": "Burrowing Form", "description": "Highly compact, streamlined body and reduced limbs for efficient tunneling." },
+          { "p_index": "P3", "choice_name": "Bipedal Sprinter", "description": "Long, muscular hind legs used to achieve immense bursts of speed over short distances." },
+          { "p_index": "P3", "choice_name": "Aquatic Fins", "description": "Limbs specialized into flippers or paddles for powerful underwater propulsion." }
+        ]
+      },
+      {
+        "feature": "F4: Venom & Glands (Endurance/Willpower Focus)",
+        "choices": [
+          { "p_index": "P4", "choice_name": "Neuro-Lethality", "description": "Highly specialized venom that primarily attacks the nervous system." },
+          { "p_index": "P4", "choice_name": "Hemotoxic Decay", "description": "Potent venom that destroys tissues and blood cells, inducing rapid pain and shock." },
+          { "p_index": "P4", "choice_name": "Anti-Coagulant", "description": "Glands that produce powerful blood thinners to ensure maximum blood loss." },
+          { "p_index": "P4", "choice_name": "Spitting Defense", "description": "Venom ducts aimed for precision spraying into the eyes or face of attackers." },
+          { "p_index": "P4", "choice_name": "Pheromone Trail", "description": "Specialized glands that emit complex chemical trails for navigation or communication." },
+          { "p_index": "P4", "choice_name": "Venom Immunity", "description": "Blood and organs that filter and neutralize common toxins and venoms." }
+        ]
+      },
+      {
+        "feature": "F5: Scales/Integument (Mental Resilience Focus)",
+        "choices": [
+          { "p_index": "P5", "choice_name": "Kinetic Dampener", "description": "Sub-dermal muscle and tissue that absorb and redistribute impact energy." },
+          { "p_index": "P5", "choice_name": "Shedding Cycle", "description": "Rapid, controlled shedding of the entire skin layer to remove parasites or tracking chemicals." },
+          { "p_index": "P5", "choice_name": "Heat Sink", "description": "Scales designed to rapidly absorb and dissipate ambient heat, preventing overheating." },
+          { "p_index": "P5", "choice_name": "Hydroscopic Skin", "description": "Scales that collect dew or moisture from the air for self-hydration." },
+          { "p_index": "P5", "choice_name": "Tension Flap", "description": "Large flaps or gills that inflate to make the creature appear much larger and more threatening." },
+          { "p_index": "P5", "choice_name": "Chameleon Cell", "description": "Chromatophores capable of rendering the creature virtually invisible in its surroundings." }
+        ]
+      },
+      {
+        "feature": "F6: Cardiovascular System (Social/Physical Synergy Focus)",
+        "choices": [
+          { "p_index": "P6", "choice_name": "Vascular Shunt", "description": "The heart can selectively reroute blood flow to maximize endurance or anaerobic speed." },
+          { "p_index": "P6", "choice_name": "Anaerobic Buffer", "description": "Muscles can function efficiently for long periods without oxygen, delaying fatigue." },
+          { "p_index": "P6", "choice_name": "Bradycardia State", "description": "The heart can slow to an incredibly low rate, maximizing submerged time and stealth." },
+          { "p_index": "P6", "choice_name": "Rapid Recharge", "description": "Metabolism capable of incredibly fast heat absorption for quick bursts of activity." },
+          { "p_index": "P6", "choice_name": "Fluid Reserves", "description": "Specialized tissues that store immense amounts of water/nutrients for deep dehydration tolerance." },
+          { "p_index": "P6", "choice_name": "Acidic Gizzard", "description": "A specialized stomach lining that processes bone and dense material quickly for energy." }
+        ]
+      },
+      {
+        "feature": "F7: Sensory Organs (Cognitive/Speed Focus)",
+        "choices": [
+          { "p_index": "P7", "choice_name": "Jacobson's Scan", "description": "Highly advanced Vomeronasal organ (Jacobson's organ) for complex chemical detection." },
+          { "p_index": "P7", "choice_name": "Thermographic Sight", "description": "Highly sensitive pits that grant a passive infrared heat signature vision." },
+          { "p_index": "P7", "choice_name": "Flicker Fusion", "description": "Eyes with an incredibly fast rate of image processing for high-speed tracking." },
+          { "p_index": "P7", "choice_name": "Subsonic Drum", "description": "Specialized bone in the ear/jaw that transmits low-frequency seismic vibrations." },
+          { "p_index": "P7", "choice_name": "Parietal Eye", "description": "A simple 'third eye' on the crown that detects light changes and aids navigation/thermoregulation." },
+          { "p_index": "P7", "choice_name": "Color Shifter", "description": "Eyes capable of seeing into the ultraviolet or other specialized color spectra." }
+        ]
+      },
+      {
+        "feature": "F8: Locomotion (Final Cross-Balance)",
+        "choices": [
+          { "p_index": "P8", "choice_name": "Lateral Undulation", "description": "Optimized serpentine movement for maximum speed over varied terrain." },
+          { "p_index": "P8", "choice_name": "Tail Propulsion", "description": "A massive, vertically flattened tail used for powerful aquatic thrust." },
+          { "p_index": "P8", "choice_name": "Gliding Ribs", "description": "Elongated, articulated ribs that can be spread to act as a rudimentary parachute or airfoil." },
+          { "p_index": "P8", "choice_name": "Static Hold", "description": "Specialized limb muscles that allow the creature to remain completely motionless for long periods." },
+          { "p_index": "P8", "choice_name": "Paddle Sculler", "description": "Forelimbs specialized into powerful sculling paddles for efficient water movement." },
+          { "p_index": "P8", "choice_name": "Limbless Grip", "description": "Specialized ventral scales used for superior purchase on vertical surfaces and through sand." }
+        ]
+      }
+    ]
+  },
+  {
+    "kingdom_name": "Plant",
+    "features": [
+      {
+        "feature": "F1: Root System (Physical Offense Focus)",
+        "choices": [
+          { "p_index": "P1", "choice_name": "Binding Taproot", "description": "A single, massive root that anchors the plant and drains deep resources." },
+          { "p_index": "P1", "choice_name": "Creeping Rhizome", "description": "A sprawling, fibrous network that spreads quickly beneath the soil." },
+          { "p_index": "P1", "choice_name": "Mycorrhizal Link", "description": "Highly optimized root hairs that form a symbiotic, communicative network." },
+          { "p_index": "P1", "choice_name": "Trapping Basket", "description": "Roots modified to form a dense, contracting cage around soil nutrients or prey." },
+          { "p_index": "P1", "choice_name": "Seismic Anchor", "description": "Root tips capable of detecting and reacting to ground vibrations instantly." },
+          { "p_index": "P1", "choice_name": "Water Skimmer", "description": "Shallow roots designed to maximize dew and surface-level moisture absorption." }
+        ]
+      },
+      {
+        "feature": "F2: Stem & Trunk (Cognitive/Social Defense Focus)",
+        "choices": [
+          { "p_index": "P2", "choice_name": "Arboreal Armor", "description": "A dense, thick outer bark that deflects physical and thermal attacks." },
+          { "p_index": "P2", "choice_name": "Elastic Fiber", "description": "Highly flexible, spring-like cell walls that allow the plant to bend without breaking." },
+          { "p_index": "P2", "choice_name": "Whip-Vine Tendril", "description": "Fast-growing, muscular tendrils capable of coiling and striking." },
+          { "p_index": "P2", "choice_name": "Pneumatic Tissue", "description": "Hollow or cork-filled tissues that maximize buoyancy and floatation capability." },
+          { "p_index": "P2", "choice_name": "Glandular Secretor", "description": "Glands embedded in the stem that release volatile organic compounds (VOCs)." },
+          { "p_index": "P2", "choice_name": "Thorned Defence", "description": "Large, dense, venom-coated thorns covering the surface for passive deterrence." }
+        ]
+      },
+      {
+        "feature": "F3: Leaf & Photosynthesis (Diagonal/Evasion Focus)",
+        "choices": [
+          { "p_index": "P3", "choice_name": "Carnivore Trapper", "description": "Leaves modified into sophisticated traps (pitchers, snapping leaves) for nutrient capture." },
+          { "p_index": "P3", "choice_name": "Desert Succulent", "description": "Thick, waxy leaves designed to minimize water loss and maximize storage capacity." },
+          { "p_index": "P3", "choice_name": "Heliotropic Tracker", "description": "Leaves that rapidly track the sun to maximize light absorption throughout the day." },
+          { "p_index": "P3", "choice_name": "Chlorophyll Shift", "description": "Photosynthetic machinery optimized to utilize low light or specialized color spectra." },
+          { "p_index": "P3", "choice_name": "Floating Surface", "description": "Broad, flat leaves with air bladders, designed to cover the surface of water bodies." },
+          { "p_index": "P3", "choice_name": "Spore Dispersal", "description": "Specialized seed pods/spores designed for immense range and aerial stability." }
+        ]
+      },
+      {
+        "feature": "F4: Toxins & Chemistry (Endurance/Willpower Focus)",
+        "choices": [
+          { "p_index": "P4", "choice_name": "Neuro-Inhibitor", "description": "Production of alkaloids that paralyze or disrupt the central nervous system." },
+          { "p_index": "P4", "choice_name": "Hallucinogen", "description": "Complex terpenes and psychedelics that disorient and manipulate perception." },
+          { "p_index": "P4", "choice_name": "Growth Accelerator", "description": "Secretion of hormones that promote rapid, uncontrolled growth in other organisms." },
+          { "p_index": "P4", "choice_name": "Necrotic Agent", "description": "Enzymes and chemicals that rapidly break down organic tissue (acidic sap)." },
+          { "p_index": "P4", "choice_name": "Pheromone Lure", "description": "Release of complex attractant compounds designed to manipulate social behaviour." },
+          { "p_index": "P4", "choice_name": "Immune Blockade", "description": "Chemicals that specifically suppress the immune response of attacking organisms." }
+        ]
+      },
+      {
+        "feature": "F5: Vascular System (Mental Resilience Focus)",
+        "choices": [
+          { "p_index": "P5", "choice_name": "Pressurized Xylem", "description": "Xylem cells capable of generating high internal fluid pressure for defense or movement." },
+          { "p_index": "P5", "choice_name": "Vascular Sealer", "description": "Specialized resin or sap that instantly seals damage to prevent bleeding/infection." },
+          { "p_index": "P5", "choice_name": "Internal Storage", "description": "Specialized cells that hold and stabilize vital fluids against dehydration/freezing." },
+          { "p_index": "P5", "choice_name": "Heat Exchange", "description": "Vascular rings that move heat rapidly between stem and leaves for precise temperature control." },
+          { "p_index": "P5", "choice_name": "Structural Pith", "description": "A dense, non-vascular core that acts as an internal spine, preventing crushing." },
+          { "p_index": "P5", "choice_name": "Sap Analysis", "description": "Phloem cells that constantly monitor the chemical state of the plant and surrounding life." }
+        ]
+      },
+      {
+        "feature": "F6: Growth & Movement (Social/Physical Synergy Focus)",
+        "choices": [
+          { "p_index": "P6", "choice_name": "Nastic Response", "description": "Extremely rapid, shock-induced movement (e.g., leaf folding, snapping traps)." },
+          { "p_index": "P6", "choice_name": "Geotropic Motor", "description": "Powerful, rapid, gravity-driven growth/movement for repositioning or escape." },
+          { "p_index": "P6", "choice_name": "Phototropism", "description": "The ability to grow/move with precise response to light sources (sun, fire, etc.)." },
+          { "p_index": "P6", "choice_name": "Tropic Coiler", "description": "High-tension vines or stems that rapidly coil and constrict around targets." },
+          { "p_index": "P6", "choice_name": "Long-Lived State", "description": "Optimized cell repair and growth suppression for near-immortality." },
+          { "p_index": "P6", "choice_name": "Burst Sprout", "description": "The ability to enter a phase of incredibly rapid, resource-intensive vertical growth." }
+        ]
+      },
+      {
+        "feature": "F7: Environmental Signaling (Cognitive/Speed Focus)",
+        "choices": [
+          { "p_index": "P7", "choice_name": "Electrical Pulse", "description": "The ability to generate and transmit small electrical signals across its surface/roots." },
+          { "p_index": "P7", "choice_name": "Airborne Warning", "description": "Release of specific VOCs to warn neighboring plants of pathogens/predators." },
+          { "p_index": "P7", "choice_name": "Seismic Whisper", "description": "Extremely sensitive mechanoreceptors in the roots to interpret ground vibrations." },
+          { "p_index": "P7", "choice_name": "Scent Beacon", "description": "Production of potent, far-reaching scents for attraction or repulsion." },
+          { "p_index": "P7", "choice_name": "Sonic Resonance", "description": "Specialized leaves/flowers that resonate at specific frequencies to communicate." },
+          { "p_index": "P7", "choice_name": "Infrared Sensor", "description": "Specialized pigment patches that detect the body heat of nearby organisms." }
+        ]
+      },
+      {
+        "feature": "F8: Special Structures (Final Cross-Balance)",
+        "choices": [
+          { "p_index": "P8", "choice_name": "Lignified Heartwood", "description": "An extremely hard, dense, and non-flammable core to the trunk/stem." },
+          { "p_index": "P8", "choice_name": "Floating Bladder", "description": "Large, pressurized air or gas sacs that ensure high buoyancy and rapid surfacing." },
+          { "p_index": "P8", "choice_name": "Needle Leaf Array", "description": "Highly reduced, needle-like leaves that maximize cold and wind resistance." },
+          { "p_index": "P8", "choice_name": "Self-Pruner", "description": "The ability to rapidly cut off and discard damaged or diseased limbs/sections." },
+          { "p_index": "P8", "choice_name": "Acidic Sap", "description": "High-pressure, highly corrosive sap used as a physical or chemical deterrent." },
+          { "p_index": "P8", "choice_name": "Root Tendrils", "description": "Roots that, when exposed, move and strike with the speed of animal limbs." }
+        ]
+      }
+    ]
+  },
+  {
+    "kingdom_name": "Insectoid",
+    "features": [
+      {
+        "feature": "F1: Exoskeleton (Physical Offense Focus)",
+        "choices": [
+          { "p_index": "P1", "choice_name": "Chitinous Shell", "description": "A dense, thick outer shell optimized for resisting crushing and physical impact." },
+          { "p_index": "P1", "choice_name": "Cuticular Armor", "description": "A layered, flexible shell with shock-absorbing properties." },
+          { "p_index": "P1", "choice_name": "Iridescent Carapace", "description": "The shell is highly reflective and refractive, creating a dazzling display." },
+          { "p_index": "P1", "choice_name": "Spiked Defense", "description": "Exoskeleton is covered in rigid, sharp spikes used to deter attackers." },
+          { "p_index": "P1", "choice_name": "Friction Pads", "description": "Specialized pads or hairs on the shell for superior grip and purchase on any surface." },
+          { "p_index": "P1", "choice_name": "Mimic Shell", "description": "The shell mimics the appearance of a dangerous or inedible substance/organism." }
+        ]
+      },
+      {
+        "feature": "F2: Mandibles & Mouthparts (Cognitive/Social Defense Focus)",
+        "choices": [
+          { "p_index": "P2", "choice_name": "Shearing Pincers", "description": "Massive, opposed mandibles built for cutting and crushing hard materials." },
+          { "p_index": "P2", "choice_name": "Piercing Stylet", "description": "A hypodermic-like proboscis used to pierce armor and suck fluids." },
+          { "p_index": "P2", "choice_name": "Sucking Siphon", "description": "A highly flexible, coiled tube used for drawing nectar or small amounts of fluid." },
+          { "p_index": "P2", "choice_name": "Sponging Labellum", "description": "Mouthparts specialized for dabbing and soaking up liquids from surfaces." },
+          { "p_index": "P2", "choice_name": "Drilling Ovipositor", "description": "A specialized abdominal structure used for injecting eggs or liquids into tough media." },
+          { "p_index": "P2", "choice_name": "Grinding Mill", "description": "Internal plates or teeth for finely pulverizing food before digestion." }
+        ]
+      },
+      {
+        "feature": "F3: Wings & Flight (Diagonal/Evasion Focus)",
+        "choices": [
+          { "p_index": "P3", "choice_name": "Oar-Wing Propulsion", "description": "Large, powerful wings for high thrust and sustained, long-distance flight." },
+          { "p_index": "P3", "choice_name": "Hovering Flex", "description": "Asynchronously controlled wings for unparalleled agility and static hovering." },
+          { "p_index": "P3", "choice_name": "Gliding Sail", "description": "Large, fixed wings that maximize passive flight and minimize energy cost." },
+          { "p_index": "P3", "choice_name": "Soundless Flight", "description": "Specialized fringe and scaling to reduce wind noise to near-silent levels." },
+          { "p_index": "P3", "choice_name": "Rapid Decoupling", "description": "The ability to instantly detach wings for ground escape or defense." },
+          { "p_index": "P3", "choice_name": "Directional Scale", "description": "Tiny, adjustable scales on the wing surface for minute changes in air flow/direction." }
+        ]
+      },
+      {
+        "feature": "F4: Chemosensing (Endurance/Willpower Focus)",
+        "choices": [
+          { "p_index": "P4", "choice_name": "Pheromone Tracker", "description": "Antennae highly specialized for following minute airborne chemical trails." },
+          { "p_index": "P4", "choice_name": "Contact Taste", "description": "Specialized hairs on the feet and mouth that analyze chemical compounds upon touch." },
+          { "p_index": "P4", "choice_name": "Air Current Reader", "description": "Fine hairs across the body that accurately detect subtle shifts in air movement and temperature." },
+          { "p_index": "P4", "choice_name": "Toxin Analyzer", "description": "Internal glands and receptors that rapidly identify poisons and chemical threats." },
+          { "p_index": "P4", "choice_name": "Social Signature", "description": "The ability to produce and recognize complex chemical signals related to hierarchy/mood." },
+          { "p_index": "P4", "choice_name": "Electro-Sense", "description": "Antennae capable of detecting small static electrical fields generated by living organisms." }
+        ]
+      },
+      {
+        "feature": "F5: Legs & Terrestrial Movement (Mental Resilience Focus)",
+        "choices": [
+          { "p_index": "P5", "choice_name": "Adhesive Pads", "description": "Tarsal pads that allow for walking on ceilings, glass, or slick surfaces." },
+          { "p_index": "P5", "choice_name": "Saltatorial Jump", "description": "Massive hind legs and musculature specialized for immense, rapid leaping." },
+          { "p_index": "P5", "choice_name": "Cursorial Speed", "description": "Long, thin, well-articulated legs optimized for rapid, sustained running over ground." },
+          { "p_index": "P5", "choice_name": "Fossorial Shovels", "description": "Broad, sturdy forelegs modified for powerful digging and clearing debris." },
+          { "p_index": "P5", "choice_name": "Aquatic Oars", "description": "Hind legs adapted with fine hairs or webbing to act as efficient, powerful paddles." },
+          { "p_index": "P5", "choice_name": "Tripod Gait", "description": "Neural programming that ensures the organism always has three contact points for maximum stability." }
+        ]
+      },
+      {
+        "feature": "F6: Internal Biomechanics (Social/Physical Synergy Focus)",
+        "choices": [
+          { "p_index": "P6", "choice_name": "Direct Muscle", "description": "Flight muscles that connect directly to the wings for maximum control and rapid response." },
+          { "p_index": "P6", "choice_name": "Fat Body Reserves", "description": "Large internal fat body (organ) that buffers against extreme starvation or desiccation." },
+          { "p_index": "P6", "choice_name": "Hemolymph Pressure", "description": "The ability to rapidly increase blood (hemolymph) pressure for structural rigidity or limb movement." },
+          { "p_index": "P6", "choice_name": "Metabolic Burst", "description": "The ability to enter a short, high-energy state fueled by rapid sugar conversion." },
+          { "p_index": "P6", "choice_name": "Malpighian Filtration", "description": "Highly efficient excretory system for rapid waste removal and internal detoxification." },
+          { "p_index": "P6", "choice_name": "Tymbal Organ", "description": "Specialized vibrating membranes used to produce extremely loud, directional clicks or pulses." }
+        ]
+      },
+      {
+        "feature": "F7: Vision (Cognitive/Speed Focus)",
+        "choices": [
+          { "p_index": "P7", "choice_name": "Polarized Sight", "description": "The ability to perceive the polarization of light for superior navigation (sun compass)." },
+          { "p_index": "P7", "choice_name": "Omni-Directional", "description": "Eyes that cover nearly a full 360-degree field of view with minimal blind spots." },
+          { "p_index": "P7", "choice_name": "Multi-Spectral", "description": "Vision extends far into the ultraviolet (UV) range for pattern and path finding." },
+          { "p_index": "P7", "choice_name": "Flicker Fusion Max", "description": "Extremely high refresh rate for the eyes, allowing clear sight during high-speed movement." },
+          { "p_index": "P7", "choice_name": "Ocelli Focus", "description": "The simple eyes (ocelli) are hyper-sensitive to light level changes, aiding stability." },
+          { "p_index": "P7", "choice_name": "Night Scanners", "description": "Omatidia (individual lenses) are fused for high light capture in dark environments." }
+        ]
+      },
+      {
+        "feature": "F8: Life Cycle & Sociality (Final Cross-Balance)",
+        "choices": [
+          { "p_index": "P8", "choice_name": "Solitary Nomad", "description": "The creature thrives without social interaction, relying purely on self-sufficiency." },
+          { "p_index": "P8", "choice_name": "Colonial Mind", "description": "High sensory input and output to maintain precise coordination with a large group." },
+          { "p_index": "P8", "choice_name": "Complete Metamorph", "description": "The life cycle includes a high-resource pupal stage, enabling radical transformation." },
+          { "p_index": "P8", "choice_name": "Viviparous Birth", "description": "The creature retains eggs internally, giving birth to live young, reducing external vulnerability." },
+          { "p_index": "P8", "choice_name": "Chemical Caste", "description": "The ability to induce specific developmental or behavioral changes in other insects via chemicals." },
+          { "p_index": "P8", "choice_name": "Waggle Communication", "description": "The ability to convey complex, precise information through ritualized movement patterns." }
+        ]
+      }
+    ]
+  },
+  {
+    "kingdom_name": "Aquatic",
+    "features": [
+      {
+        "feature": "F1: Fins & Propellers (Physical Offense Focus)",
+        "choices": [
+          { "p_index": "P1", "choice_name": "Caudal Thrust", "description": "A massive, rigid tail fin optimized for powerful bursts of speed." },
+          { "p_index": "P1", "choice_name": "Pectoral Sculling", "description": "Large, flexible side fins used for complex, low-speed maneuvering and hovering." },
+          { "p_index": "P1", "choice_name": "Jet Propulsion", "description": "Specialized siphons or muscles that expel water for high-speed, intermittent movement." },
+          { "p_index": "P1", "choice_name": "Hydrodynamic Foil", "description": "Fins shaped like sleek, rigid airfoils for highly efficient, sustained gliding movement." },
+          { "p_index": "P1", "choice_name": "Whipping Lure", "description": "The tail/fins possess a highly flexible tip capable of delivering surprise strikes or lures." },
+          { "p_index": "P1", "choice_name": "Tractor Beam", "description": "Specialized suction cups or barbs on fins/limbs for clinging to surfaces or prey." }
+        ]
+      },
+      {
+        "feature": "F2: Integument & Defense (Cognitive/Social Defense Focus)",
+        "choices": [
+          { "p_index": "P2", "choice_name": "Placoid Denticles", "description": "Skin covered in tiny, abrasive, tooth-like scales for defense and reduced drag." },
+          { "p_index": "P2", "choice_name": "Chromatophore Camo", "description": "Dynamic pigment cells allow the creature to instantly match any background texture/color." },
+          { "p_index": "P2", "choice_name": "Spiked Puffer", "description": "The ability to rapidly inflate the body and deploy sharp external spines." },
+          { "p_index": "P2", "choice_name": "Anti-Fouling Slime", "description": "A constant secretion of slick, noxious mucus to deter parasites and physical contact." },
+          { "p_index": "P2", "choice_name": "Osmotic Shield", "description": "Specialized cells to buffer against extreme salinity or pressure changes." },
+          { "p_index": "P2", "choice_name": "Pressure Dampener", "description": "Highly elastic skin/tissue that absorbs the immense pressure of deep-sea diving." }
+        ]
+      },
+      {
+        "feature": "F3: Respiration (Diagonal/Evasion Focus)",
+        "choices": [
+          { "p_index": "P3", "choice_name": "Ram Ventilation", "description": "Gill structure optimized for maximum efficiency when swimming at high speed." },
+          { "p_index": "P3", "choice_name": "Buoyancy Control", "description": "Precise management of a swim bladder or lipid sacs for perfect depth positioning." },
+          { "p_index": "P3", "choice_name": "Cutaneous Breathing", "description": "High oxygen exchange rate directly through the skin, minimizing reliance on gills/lungs." },
+          { "p_index": "P3", "choice_name": "Air Breather", "description": "Specialized lungs or vascular structures optimized for air breathing at the surface." },
+          { "p_index": "P3", "choice_name": "Anaerobic Buffer", "description": "Muscles and organs can sustain function in severely oxygen-depleted environments." },
+          { "p_index": "P3", "choice_name": "Unidirectional Flow", "description": "Gill structure that draws water in one direction only for highly efficient, constant oxygen uptake." }
+        ]
+      },
+      {
+        "feature": "F4: Jaws & Weaponry (Endurance/Willpower Focus)",
+        "choices": [
+          { "p_index": "P4", "choice_name": "Filter Siphon", "description": "Massive, wide mouth with specialized filters for efficiently gathering plankton/small prey." },
+          { "p_index": "P4", "choice_name": "Pressure Cannon", "description": "The ability to forcefully expel a high-velocity jet of water at a target." },
+          { "p_index": "P4", "choice_name": "Bio-Harpoon", "description": "Specialized, venomous spine or barb launched from the body or tail." },
+          { "p_index": "P4", "choice_name": "Electric Field", "description": "Specialized organs that generate a powerful stunning or defensive electric field." },
+          { "p_index": "P4", "choice_name": "Angler Lure", "description": "A light-producing lure or complex display used to attract prey or mates." },
+          { "p_index": "P4", "choice_name": "Vacuum Mouth", "description": "Rapid expansion of the mouth/gill cavity to create a powerful, localized vacuum force." }
+        ]
+      },
+      {
+        "feature": "F5: Sensory Lines (Mental Resilience Focus)",
+        "choices": [
+          { "p_index": "P5", "choice_name": "Lateral Line Array", "description": "Hyper-sensitive pressure-sensing system running along the flanks." },
+          { "p_index": "P5", "choice_name": "Ampullae of Lorenzini", "description": "Specialized pores for detecting faint electrical fields generated by muscle contractions." },
+          { "p_index": "P5", "choice_name": "Echolocation Click", "description": "The ability to produce and interpret rapid, focused sonar clicks for navigation." },
+          { "p_index": "P5", "choice_name": "Internal Ear Drum", "description": "Auditory system highly shielded and optimized for interpreting distant, low-frequency sound." },
+          { "p_index": "P5", "choice_name": "Water Chemosense", "description": "Receptors across the skin/gills that 'taste' the water's chemical composition." },
+          { "p_index": "P5", "choice_name": "Depth Sonar", "description": "Specialized internal organ that constantly monitors changes in water density and depth." }
+        ]
+      },
+      {
+        "feature": "F6: Bioluminescence (Social/Physical Synergy Focus)",
+        "choices": [
+          { "p_index": "P6", "choice_name": "Counter-Illumination", "description": "Vents that produce light to erase the creature's silhouette when viewed from below." },
+          { "p_index": "P6", "choice_name": "Alarm Flash", "description": "The ability to trigger a blinding, focused flash of light to startle or warn." },
+          { "p_index": "P6", "choice_name": "Complex Patterning", "description": "Vents capable of producing rapidly shifting, complex light sequences for communication." },
+          { "p_index": "P6", "choice_name": "Noxious Glow", "description": "Bioluminescence that is intrinsically linked to a toxic compound, warning of danger." },
+          { "p_index": "P6", "choice_name": "Photophore Array", "description": "Numerous small, distributed light organs used for wide-angle illumination or display." },
+          { "p_index": "P6", "choice_name": "Infrared Glow", "description": "The ability to produce light just outside the visible spectrum for covert signaling." }
+        ]
+      },
+      {
+        "feature": "F7: Specialized Structure (Cognitive/Speed Focus)",
+        "choices": [
+          { "p_index": "P7", "choice_name": "Grasping Tentacle", "description": "Highly flexible, strong appendages used for restraining or manipulating prey." },
+          { "p_index": "P7", "choice_name": "Hydro-Abrasive Skin", "description": "Specialized skin cells that secrete highly acidic or abrasive compounds upon contact." },
+          { "p_index": "P7", "choice_name": "Armored Head", "description": "A dense, reinforced cranial bone used primarily as a battering ram." },
+          { "p_index": "P7", "choice_name": "Ink Cloud", "description": "A dedicated gland for expelling a thick, disorienting cloud of ink or dye." },
+          { "p_index": "P7", "choice_name": "Sperm Whale Form", "description": "Massive size and blubber layer optimized for deep, long-duration dives." },
+          { "p_index": "P7", "choice_name": "Telescopic Eyes", "description": "Eyes set on stalks or modified for immense depth of field and light gathering." }
+        ]
+      },
+      {
+        "feature": "F8: Locomotion & Habitat (Final Cross-Balance)",
+        "choices": [
+          { "p_index": "P8", "choice_name": "Pelagic Cruiser", "description": "Body structure optimized for tireless, efficient movement in the open ocean." },
+          { "p_index": "P8", "choice_name": "Demersal Glide", "description": "Flattened body and dense bones for resting and maneuvering along the ocean floor." },
+          { "p_index": "P8", "choice_name": "Benthic Burrower", "description": "Powerful muscles and streamlined form for rapidly digging into sand or mud." },
+          { "p_index": "P8", "choice_name": "Reef Dart", "description": "Compact body and highly flexible fins for quick bursts and maneuvers in complex structures." },
+          { "p_index": "P8", "choice_name": "Amphibious Crawl", "description": "Limbs/fins capable of supporting limited movement on land or muddy shorelines." },
+          { "p_index": "P8", "choice_name": "School Synchrony", "description": "Neurological systems optimized for instantaneous, coordinated movement with a large group." }
+        ]
+      }
+    ]
+  }
+]
