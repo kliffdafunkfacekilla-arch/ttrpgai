@@ -16,4 +16,14 @@ def validate_skill_check(request: SkillCheckRequest):
 
 @app.get("/v1/data/{data_type}")
 def get_data(data_type: str):
-    return game_data.get(data_type, {"error": "Data type not found"})
+    data = game_data.get(data_type)
+    if data is None:
+        return {"error": "Data type not found"}
+
+    if isinstance(data, list):
+        return [item.dict() for item in data]
+
+    if hasattr(data, 'dict'):
+        return data.dict()
+
+    return data

@@ -1,7 +1,236 @@
-[
-  {
-    "name": "Acrobatics",
-    "description": "Your Dexterity (Acrobatics) check covers your attempt to stay on your feet in a tricky situation, such as when you're trying to run across a sheet of ice, balance on a tightrope, or stay upright on a rocking ship's deck. The GM might also call for a Dexterity (Acrobatics) check to see if you can perform acrobatic stunts, including dives, rolls, somersaults, and flips.",
-    "ability": "Dexterity"
-  }
-]
+{
+  "combat_skills": [
+    {
+      "stat": "A (Might)",
+      "armor_skill": "Band/Scale/Ringmail (Heavy Strikes)",
+      "melee_skill": "Heavy Bludgeons (Warhammers, Mauls)",
+      "ranged_skill": "Heavy Crossbows (High draw weight)"
+    },
+    {
+      "stat": "B (Endurance)",
+      "armor_skill": "Plate (The enduring defense)",
+      "melee_skill": "Shields & Polearms (Defensive positioning)",
+      "ranged_skill": "Flame-Based (Aether-Flame Projectors)"
+    },
+    {
+      "stat": "C (Finesse)",
+      "armor_skill": "Camouflage (Hidden/Disguised gear)",
+      "melee_skill": "Dueling Blades (Rapiers, Short Swords)",
+      "ranged_skill": "Hand Crossbows/Darts (Concealed weapons)"
+    },
+    {
+      "stat": "D (Agility)",
+      "armor_skill": "Clothing/Utility (Maximum fluid mobility)",
+      "melee_skill": "Dual Knives (Fluid dual-wielding)",
+      "ranged_skill": "Throwing Knives (Quick, repetitive attacks)"
+    },
+    {
+      "stat": "E (Constitution)",
+      "armor_skill": "Wood and Stone (Natural, rigid material defense)",
+      "melee_skill": "Staves & Rods (Leverage and reach)",
+      "ranged_skill": "Alchemic Grenades (Area effects, poison)"
+    },
+    {
+      "stat": "F (Fortitude)",
+      "armor_skill": "None (Just Clothing) (Unarmored discipline)",
+      "melee_skill": "Unarmed & Fist Weapons (Gauntlets, Brass Knuckles)",
+      "ranged_skill": "Flying Strikes (Jump kicks, combat maneuvers)"
+    },
+    {
+      "stat": "G (Knowledge)",
+      "armor_skill": "Robes/Cloaks (Runes, properties)",
+      "melee_skill": "Tech Blades (Shock Sticks, Chain Blades)",
+      "ranged_skill": "Thrown Spears (Calculated trajectory)"
+    },
+    {
+      "stat": "H (Logic)",
+      "armor_skill": "Chainmail (Tactical, flexible coverage)",
+      "melee_skill": "Defensive/Chemical Weapons (Spiked Armor, Dusts)",
+      "ranged_skill": "Nets & Bolas (Calculated restraint)"
+    },
+    {
+      "stat": "I (Awareness)",
+      "armor_skill": "Leather/Hides (High sensory input)",
+      "melee_skill": "Hooks & Axes (Joint-striking, structural points)",
+      "ranged_skill": "Bows (Instinctive pull, wind reading)"
+    },
+    {
+      "stat": "J (Intuition)",
+      "armor_skill": "Tribal/Spirit (Ritualistic/Natural defense)",
+      "melee_skill": "Swinging Weapons (Flails, Morning Stars)",
+      "ranged_skill": "Boomerangs & Chakrams (Chaotic flight paths)"
+    },
+    {
+      "stat": "K (Charm)",
+      "armor_skill": "Ornate/Showy (Disruption via appearance)",
+      "melee_skill": "Whips & Scepters (Flashy, high-presence)",
+      "ranged_skill": "Muskets (Standard, reliable ranged weapon)"
+    },
+    {
+      "stat": "L (Willpower)",
+      "armor_skill": "Reinforced (Effectiveness via mental resolve)",
+      "melee_skill": "Two-Handed Cleavers (Waraxes, Great Swords)",
+      "ranged_skill": "Siege Weapons (Immense mental commitment)"
+    }
+  ],
+  "non_combat_skills": [
+    {
+      "stat": "A (Might)",
+      "conversational_skill": "Intimidation (Assert dominance and compel fear)",
+      "utility_skill": "Strength (Apply raw physical force to overcome resistance)",
+      "lore_skill": "Lore: Tribal & Outlaw (Hierarchies, gang symbols, lawless societies)"
+    },
+    {
+      "stat": "B (Endurance)",
+      "conversational_skill": "Resilience (Resist mental fatigue and emotional wear-down)",
+      "utility_skill": "Survival (Establish a secure base/shelter, fire-starting)",
+      "lore_skill": "Lore: Common Folk (Daily lives, gossip, and motivations of non-elites)"
+    },
+    {
+      "stat": "C (Finesse)",
+      "conversational_skill": "Slight of Hand (Use misdirection/physical flair to hide intent or deceive)",
+      "utility_skill": "Artifice (Manipulate small, complex mechanisms, lockpicking, traps)",
+      "lore_skill": "Lore: Outlaw/Criminal (Underworld operations, illicit trading routes)"
+    },
+    {
+      "stat": "D (Agility)",
+      "conversational_skill": "Evasion (Skillfully slip away from direct attention/questioning)",
+      "utility_skill": "Athletics (Dynamic physical maneuvers, climbing, evading pitfalls)",
+      "lore_skill": "Lore: Travel & Routes (Road networks, air lanes, predicting chokepoints)"
+    },
+    {
+      "stat": "E (Constitution)",
+      "conversational_skill": "Comfort (Use displays of wellness/conviviality to gain respect or rally allies)",
+      "utility_skill": "Provisioning (Sourcing, preparing, and preserving food and drink)",
+      "lore_skill": "Lore: Agricul. & Wilds (Soil health, crop cycles, natural warning signs)"
+    },
+    {
+      "stat": "F (Fortitude)",
+      "conversational_skill": "Discipline (Resist direct social pressure, interrogation, or mental control)",
+      "utility_skill": "Resourcefulness (Utilizing natural materials for medicine or pain relief)",
+      "lore_skill": "Lore: Miners & Geology (Geological formations, ore deposits, cave stability)"
+    },
+    {
+      "stat": "G (Knowledge)",
+      "conversational_skill": "Debate (Win argument via structured logic, facts, and dismantling opposition)",
+      "utility_skill": "Navigation (Reading environment, charts, weather to plot optimal routes)",
+      "lore_skill": "Lore: Science & Acad. (History, Aether-Tech principles, arcane concepts)"
+    },
+    {
+      "stat": "H (Logic)",
+      "conversational_skill": "Rhetoric (Structure argument with flawless logic to control the narrative)",
+      "utility_skill": "Pathfinding (Use logic and pattern recognition to solve spatial puzzles/identify routes)",
+      "lore_skill": "Lore: Trades & Eng. (Craftsmanship quality, structural principles)"
+    },
+    {
+      "stat": "I (Awareness)",
+      "conversational_skill": "Insight (Pierce social masks, detect hidden agendas, understand emotional state)",
+      "utility_skill": "Security (Establish secure perimeters, watch routines, tracking)",
+      "lore_skill": "Lore: Merchant/Trade (Customs, market values, financial laws, spotting counterfeit goods)"
+    },
+    {
+      "stat": "J (Intuition)",
+      "conversational_skill": "Empathy (Provide emotional counsel and understand vulnerability)",
+      "utility_skill": "Nature Sense (Instinctual reading of the natural environment, non-physical warning signs)",
+      "lore_skill": "Lore: Religion & Spirit (Sacred texts, rituals, symbolic meaning)"
+    },
+    {
+      "stat": "K (Charm)",
+      "conversational_skill": "Persuasion (Sway emotion, generate trust, and gain assent)",
+      "utility_skill": "Communication (Efficient transmission of complex information/instruction)",
+      "lore_skill": "Lore: Nobility/Court (Etiquette, heraldry, political relations between elite families)"
+    },
+    {
+      "stat": "L (Willpower)",
+      "conversational_skill": "Negotiations (Hold firm on a position, resist unfair demands, maintain mandate)",
+      "utility_skill": "Expedition (Manage personnel, equipment, and resources for large deployment)",
+      "lore_skill": "Lore: Royalty/Political (Power structures, monarchical history, diplomatic treaties)"
+    }
+  ],
+  "urban_archetypes": [
+    {
+      "stat": "A",
+      "urban_archetype": "The Strongman",
+      "conversational_skill": "Intimidation",
+      "utility_skill": "Strength/Break Down",
+      "lore": "Lore: Tribal & Outlaw/Local History"
+    },
+    {
+      "stat": "B",
+      "urban_archetype": "The Sentinel",
+      "conversational_skill": "Resilience/Endure Taunts",
+      "utility_skill": "Survival/Staking Out",
+      "lore": "Lore: Common Folk/Guard Duty"
+    },
+    {
+      "stat": "C",
+      "urban_archetype": "The Artisan",
+      "conversational_skill": "Slight of Hand",
+      "utility_skill": "Artifice (Lockpicking, crafting)",
+      "lore": "Guilds/Trade"
+    },
+    {
+      "stat": "D",
+      "urban_archetype": "The Runner",
+      "conversational_skill": "Evasion",
+      "utility_skill": "Parkour",
+      "lore": "Underbelly"
+    },
+    {
+      "stat": "E",
+      "urban_archetype": "The Steward",
+      "conversational_skill": "Comfort/Feats of Health",
+      "utility_skill": "Provisioning/First Aid",
+      "lore": "Medicine/Anatomy"
+    },
+    {
+      "stat": "F",
+      "urban_archetype": "The Pioneer",
+      "conversational_skill": "Discipline/Unflappable",
+      "utility_skill": "Resourcefulness/Tolerance (Resisting toxins)",
+      "lore": "Geology/Structure"
+    },
+    {
+      "stat": "G",
+      "urban_archetype": "The Scholar",
+      "conversational_skill": "Debate",
+      "utility_skill": "Knowledge/Research (Translating runes)",
+      "lore": "Ancient Lore"
+    },
+    {
+      "stat": "H",
+      "urban_archetype": "The Investigator",
+      "conversational_skill": "Rhetoric",
+      "utility_skill": "Puzzles/Ciphers",
+      "lore": "Cartography"
+    },
+    {
+      "stat": "I",
+      "urban_archetype": "The Watcher",
+      "conversational_skill": "Insight/Read Intent",
+      "utility_skill": "Security/Appraisal/Trade",
+      "lore": "Market/Gossip"
+    },
+    {
+      "stat": "J",
+      "urban_archetype": "The Mystic",
+      "conversational_skill": "Empathy",
+      "utility_skill": "Nature Sense/Street Sense",
+      "lore": "Religion/Nature"
+    },
+    {
+      "stat": "K",
+      "urban_archetype": "The Diplomat",
+      "conversational_skill": "Persuasion",
+      "utility_skill": "Communication/Networking",
+      "lore": "Politics/Nobility"
+    },
+    {
+      "stat": "L",
+      "urban_archetype": "The Commander",
+      "conversational_skill": "Negotiations",
+      "utility_skill": "Expedition/Military/Tactics",
+      "lore": "Warfare/Siege"
+    }
+  ]
+}
