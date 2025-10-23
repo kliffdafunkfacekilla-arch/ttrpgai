@@ -1,182 +1,422 @@
-{
-  "Force": {
-    "resource_pool": "Presence",
-    "associated_stat": "Might",
-    "tiers": [
-      { "tier": 1, "control": "Minor Shove", "offense": "Concussive Strike", "support": "Quick Leap" },
-      { "tier": 2, "control": "Repel Step", "offense": "Armor Shock", "support": "Light Step" },
-      { "tier": 3, "control": "Precision Trip", "offense": "Shockwave Cone", "support": "Velocity Boost" },
-      { "tier": 4, "control": "Blast Wave", "offense": "Solid Impact", "support": "Kinetic Shield" },
-      { "tier": 5, "control": "Weapon Disarm", "offense": "Internal Echo", "support": "Barrier Dash" },
-      { "tier": 6, "control": "Anchor", "offense": "Precision Burst", "support": "Group Mobility" },
-      { "tier": 7, "control": "Group Containment", "offense": "Concussive Focus", "support": "Hover Field" },
-      { "tier": 8, "control": "Crush Limb", "offense": "Terrain Rupture", "support": "Juggernaut Advance" },
-      { "tier": 9, "control": "Telekinetic Lock", "offense": "Full Force Cataclysm", "support": "Nullify Gravity" }
+[
+  {
+    "school": "Force",
+    "resource": "Presence",
+    "branches": [
+      {
+        "branch": "Control (External Movement)",
+        "tiers": [
+          { "tier": "T1", "description": "Minor Shove (Push 1 target 2m)" },
+          { "tier": "T2", "description": "Repel Step (Push self 2m)" },
+          { "tier": "T3", "description": "Precision Trip (Force Agility check or Prone)" },
+          { "tier": "T4", "description": "Blast Wave (Push all targets in a 3m radius 1m back)" },
+          { "tier": "T5", "description": "Weapon Disarm (Contested Might vs. Strength check)" },
+          { "tier": "T6", "description": "Anchor (Hold 1 target stationary for 1 round)" },
+          { "tier": "T7", "description": "Group Containment (Push all targets in 5m cone 1m back)" },
+          { "tier": "T8", "description": "Crush Limb (Inflict Hinder status for 3 rounds)" },
+          { "tier": "T9", "description": "Telekinetic Lock (Immobilize 1 target completely for 3 rounds)" }
+        ]
+      },
+      {
+        "branch": "Offense (Impact Rupture)",
+        "tiers": [
+          { "tier": "T1", "description": "Concussive Strike (+1d4 extra non-lethal damage)" },
+          { "tier": "T2", "description": "Armor Shock (Armor treated as 1 tier weaker)" },
+          { "tier": "T3", "description": "Shockwave Cone (1d6 AoE damage in 5m cone)" },
+          { "tier": "T4", "description": "Solid Impact (Guaranteed Solid Hit)" },
+          { "tier": "T5", "description": "Internal Echo (1d8 damage directly to HP)" },
+          { "tier": "T6", "description": "Precision Burst (Inflict Minor Injury once per encounter)" },
+          { "tier": "T7", "description": "Concussive Focus (Ignores 2 armor, inflicts 2d6 damage)" },
+          { "tier": "T8", "description": "Terrain Rupture (Destroy T3 material resistance terrain/cover)" },
+          { "tier": "T9", "description": "Full Force Cataclysm (Massive 3d12 damage, forces Constitution check or Prone)" }
+        ]
+      },
+      {
+        "branch": "Support (Kinetic Support)",
+        "tiers": [
+          { "tier": "T1", "description": "Quick Leap (Increase jump distance/height by 3m)" },
+          { "tier": "T2", "description": "Light Step (Ignore T1 movement penalties)" },
+          { "tier": "T3", "description": "Velocity Boost (Ally gains +3m Movement bonus)" },
+          { "tier": "T4", "description": "Kinetic Shield (Absorb 1 incoming physical damage per level)" },
+          { "tier": "T5", "description": "Barrier Dash (Move up to 5m through crowds without penalty)" },
+          { "tier": "T6", "description": "Group Mobility (2 allies gain +5m movement for 2 rounds)" },
+          { "tier": "T7", "description": "Hover Field (Float 1m off ground for 3 rounds)" },
+          { "tier": "T8", "description": "Juggernaut Advance (Immunity to Prone and Staggered for 3 rounds)" },
+          { "tier": "T9", "description": "Nullify Gravity (Ally weight reduced to zero for 2 turns)" }
+        ]
+      }
     ]
   },
-  "Bastion": {
-    "resource_pool": "Stamina",
-    "associated_stat": "Endurance",
-    "tiers": [
-      { "tier": 1, "control": "Taunt", "offense": "Minor Reflect", "support": "Self-Repair" },
-      { "tier": 2, "control": "Threat Zone", "offense": "Spiked Deflection", "support": "Reinforce Armor" },
-      { "tier": 3, "control": "Anchor Ally", "offense": "Retaliatory Stun", "support": "Shield Ally" },
-      { "tier": 4, "control": "Mass Taunt", "offense": "Reactive Guard", "support": "AoE Defense" },
-      { "tier": 5, "control": "Defensive Bind", "offense": "Shield Crash", "support": "Resist Status" },
-      { "tier": 6, "control": "Area Denial", "offense": "Full Feedback", "support": "Energy Dampener" },
-      { "tier": 7, "control": "Immovable Object", "offense": "Absolute Deflect", "support": "Aegis Wall" },
-      { "tier": 8, "control": "Ally Anchor", "offense": "Vengeful Aura", "support": "Absolute Immunity" },
-      { "tier": 9, "control": "Absolute Rebuke", "offense": "Damage Nullification", "support": "Full Barrier" }
+  {
+    "school": "Bastion",
+    "resource": "Stamina",
+    "branches": [
+      {
+        "branch": "Control (Challenging Presence)",
+        "tiers": [
+          { "tier": "T1", "description": "Taunt (Force 1 enemy to target you)" },
+          { "tier": "T2", "description": "Threat Zone (Enemies leaving 3m radius provoke AoO)" },
+          { "tier": "T3", "description": "Anchor Ally (Redirect next single attack on ally to self)" },
+          { "tier": "T4", "description": "Mass Taunt (Force all enemies in 5m radius to target you)" },
+          { "tier": "T5", "description": "Defensive Bind (Hold 1 enemy for 2 rounds)" },
+          { "tier": "T6", "description": "Area Denial (3m field imposes movement penalty to enter)" },
+          { "tier": "T7", "description": "Immovable Object (Immune to forced movement for 3 rounds)" },
+          { "tier": "T8", "description": "Ally Anchor (Redirect all attacks aimed at 1 ally to self for 3 rounds)" },
+          { "tier": "T9", "description": "Absolute Rebuke (5m AoE, enemies leaving suffer Major 3d10 damage)" }
+        ]
+      },
+      {
+        "branch": "Offense (Retaliatory Block)",
+        "tiers": [
+          { "tier": "T1", "description": "Minor Reflect (Inflict 1d4 damage back when hit)" },
+          { "tier": "T2", "description": "Spiked Deflection (Inflict 1/4 original attack damage back)" },
+          { "tier": "T3", "description": "Retaliatory Stun (Block Melee, inflict Staggered status)" },
+          { "tier": "T4", "description": "Reactive Guard (Next attack deals bonus damage equal to damage absorbed)" },
+          { "tier": "T5", "description": "Shield Crash (Block attack, attacker must pass Constitution check or be Prone)" },
+          { "tier": "T6", "description": "Full Feedback (Inflict 1/2 original base damage back)" },
+          { "tier": "T7", "description": "Absolute Deflect (Block Ranged, redirect at another target)" },
+          { "tier": "T8", "description": "Vengeful Aura (Enemy dealing damage suffers 1d6 direct damage)" },
+          { "tier": "T9", "description": "Damage Nullification (Completely absorb damage from next 3 attacks, add to next attack)" }
+        ]
+      },
+      {
+        "branch": "Support (Shielding Aegis)",
+        "tiers": [
+          { "tier": "T1", "description": "Self-Repair (Restore 1d6 HP to self)" },
+          { "tier": "T2", "description": "Reinforce Armor (+1 Defense to 1 type of armor for 2 rounds)" },
+          { "tier": "T3", "description": "Shield Ally (Adjacent ally gains +1 Defense for 1 round)" },
+          { "tier": "T4", "description": "AoE Defense (All allies in 3m radius gain +1 Defense for 2 rounds)" },
+          { "tier": "T5", "description": "Resist Status (Ally immunity to 1 T1 status effect for 2 rounds)" },
+          { "tier": "T6", "description": "Energy Dampener (Self gains 5 resistance against 1 chosen elemental type)" },
+          { "tier": "T7", "description": "Aegis Wall (Create 3m force wall, +3 Defense to allies behind it)" },
+          { "tier": "T8", "description": "Absolute Immunity (Ally immunity to next 3 physical damage instances)" },
+          { "tier": "T9", "description": "Full Barrier (Self/ally complete immunity to all damage for duration of next 3 attacks)" }
+        ]
+      }
     ]
   },
-  "Ki": {
-    "resource_pool": "Chi",
-    "associated_stat": "Fortitude",
-    "tiers": [
-      { "tier": 1, "control": "Stifle Movement", "offense": "Clean Strike", "support": "Restore Chi" },
-      { "tier": 2, "control": "Weakened Attack", "offense": "Armor Flicker", "support": "Deflect Missile" },
-      { "tier": 3, "control": "Pressure Stun", "offense": "Ghost Strike", "support": "Self-Stance" },
-      { "tier": 4, "control": "Nerve Pinch", "offense": "Internal Shock", "support": "Group Focus" },
-      { "tier": 5, "control": "Chi Drain", "offense": "Chain Hit", "support": "Project Aura" },
-      { "tier": 6, "control": "Muscle Spasm", "offense": "Critical Pierce", "support": "Inner Fire" },
-      { "tier": 7, "control": "Vital Lock", "offense": "Force Rupture", "support": "Group Deflection" },
-      { "tier": 8, "control": "Sensory Shutoff", "offense": "Vital Organ Strike", "support": "Resilient Will" },
-      { "tier": 9, "control": "Organ Cessation", "offense": "Strike of Annihilation", "support": "Eternal Stance" }
+  {
+    "school": "Ki",
+    "resource": "Chi",
+    "branches": [
+      {
+        "branch": "Control (Pressure Point Control)",
+        "tiers": [
+          { "tier": "T1", "description": "Stifle Movement (-3 penalty on next Movement roll)" },
+          { "tier": "T2", "description": "Weakened Attack (-3 penalty on next attack roll)" },
+          { "tier": "T3", "description": "Pressure Stun (Inflict Staggered status effect)" },
+          { "tier": "T4", "description": "Nerve Pinch (Inflict Hinder on 1 limb for 2 rounds)" },
+          { "tier": "T5", "description": "Chi Drain (Target spends 1 extra Chi on next action)" },
+          { "tier": "T6", "description": "Muscle Spasm (Hinder on legs for 2 rounds, Halved Movement)" },
+          { "tier": "T7", "description": "Vital Lock (Immobilize completely for 3 rounds)" },
+          { "tier": "T8", "description": "Sensory Shutoff (Blind/Deaf target for 2 rounds)" },
+          { "tier": "T9", "description": "Organ Cessation (Shut down non-vital system for remainder of encounter)" }
+        ]
+      },
+      {
+        "branch": "Offense (Focused Strike)",
+        "tiers": [
+          { "tier": "T1", "description": "Clean Strike (+1d4 extra damage)" },
+          { "tier": "T2", "description": "Armor Flicker (Armor treated as 2 tiers weaker)" },
+          { "tier": "T3", "description": "Ghost Strike (Next Unarmed attack ignores 1 armor completely)" },
+          { "tier": "T4", "description": "Internal Shock (1d8 damage directly to HP)" },
+          { "tier": "T5", "description": "Chain Hit (Free follow-up attack against another target within 2m)" },
+          { "tier": "T6", "description": "Critical Pierce (Automatically converts Solid Hit to Critical Hit)" },
+          { "tier": "T7", "description": "Force Rupture (Ignores 3 armor, inflicts 2d6 damage)" },
+          { "tier": "T8", "description": "Vital Organ Strike (Inflict Major Injury on Torso/Head)" },
+          { "tier": "T9", "description": "Strike of Annihilation (Ignores all passive defense, deals 2d10 + Fortitude score damage)" }
+        ]
+      },
+      {
+        "branch": "Support (Projected Reinforcement)",
+        "tiers": [
+          { "tier": "T1", "description": "Restore Chi (Restore 1d4 Chi resource)" },
+          { "tier": "T2", "description": "Deflect Missile (+3 defense against next single incoming projectile)" },
+          { "tier": "T3", "description": "Self-Stance (Immunity to Prone and Staggered for 1 round)" },
+          { "tier": "T4", "description": "Group Focus (All allies in 5m radius gain immunity to Staggered)" },
+          { "tier": "T5", "description": "Project Aura (Ally gains +3 defense against Melee for 2 rounds)" },
+          { "tier": "T6", "description": "Inner Fire (Immunity to all T1 environmental effects for 3 rounds)" },
+          { "tier": "T7", "description": "Group Deflection (3 selected allies gain +3 defense against Ranged Attacks)" },
+          { "tier": "T8", "description": "Resilient Will (Ally immunity to next 2 instances of Composure damage)" },
+          { "tier": "T9", "description": "Eternal Stance (All allies in 5m radius cannot be forcibly moved or knocked Prone for 3 rounds)" }
+        ]
+      }
     ]
   },
-  "Biomancy": {
-    "resource_pool": "Stamina",
-    "associated_stat": "Vitality",
-    "tiers": [
-      { "tier": 1, "control": "Nausea", "offense": "Minor Poison", "support": "Stabilize" },
-      { "tier": 2, "control": "Weaken Limbs", "offense": "Pain Receptor Spike", "support": "Minor Heal" },
-      { "tier": 3, "control": "Pain Block", "offense": "Internal Bleed", "support": "Restore Stamina" },
-      { "tier": 4, "control": "Bio-Toxin Cloud", "offense": "Toxic Coating", "support": "Cure Toxin" },
-      { "tier": 5, "control": "Fatigue Drain", "offense": "Vicious Poison", "support": "Repair Minor Injury" },
-      { "tier": 6, "control": "Contagion Carrier", "offense": "Blood Boiling", "support": "Rapid Regeneration" },
-      { "tier": 7, "control": "Rapid Wasting", "offense": "Vitals Strike", "support": "Repair Major Injury" },
-      { "tier": 8, "control": "Organ Spasm", "offense": "Rapid Degeneration", "support": "Mass Health" },
-      { "tier": 9, "control": "Biological Collapse", "offense": "Full Hemorrhage", "support": "Full Life Restore" }
+  {
+    "school": "Biomancy",
+    "resource": "Stamina",
+    "branches": [
+      {
+        "branch": "Control (Organic Hindrance)",
+        "tiers": [
+          { "tier": "T1", "description": "Nausea (-3 penalty on all attack rolls for 1 round)" },
+          { "tier": "T2", "description": "Weaken Limbs (Inflict Hinder status on arms for 2 rounds)" },
+          { "tier": "T3", "description": "Pain Block (Penalty to all Fortitude and Constitution checks for 2 rounds)" },
+          { "tier": "T4", "description": "Bio-Toxin Cloud (3m cloud, enemies suffer 1d4 damage when starting turn in it)" },
+          { "tier": "T5", "description": "Fatigue Drain (Drain 1d6 points from target's Fatigue pool)" },
+          { "tier": "T6", "description": "Contagion Carrier (Target must pass Constitution check or spread T1 disease/poison to ally)" },
+          { "tier": "T7", "description": "Rapid Wasting (Inflict Major Disease status, deals continuous 1d6 damage)" },
+          { "tier": "T8", "description": "Organ Spasm (Target is Staggered for 2 rounds)" },
+          { "tier": "T9", "description": "Biological Collapse (Target suffers -1d4 to both HP and both Stamina and Fatigue)" }
+        ]
+      },
+      {
+        "branch": "Offense (Vitals Offense)",
+        "tiers": [
+          { "tier": "T1", "description": "Minor Poison (Inflict T1 Poison status)" },
+          { "tier": "T2", "description": "Pain Receptor Spike (1d6 direct damage bypassing armor)" },
+          { "tier": "T3", "description": "Internal Bleed (Inflict Minor Bleeding status, resists basic First Aid)" },
+          { "tier": "T4", "description": "Toxic Coating (Weapon deals +1d4 poison damage for 2 rounds)" },
+          { "tier": "T5", "description": "Vicious Poison (Inflict T2 Poison status)" },
+          { "tier": "T6", "description": "Blood Boiling (2d6 damage directly to HP)" },
+          { "tier": "T7", "description": "Vitals Strike (Damage equal to 1/2 target's missing HP as direct damage)" },
+          { "tier": "T8", "description": "Rapid Degeneration (Target suffers permanent -1 penalty to Constitution for encounter duration)" },
+          { "tier": "T9", "description": "Full Hemorrhage (Inflict Major Bleeding status, deals continuous 2d4 damage)" }
+        ]
+      },
+      {
+        "branch": "Support (Accelerated Healing)",
+        "tiers": [
+          { "tier": "T1", "description": "Stabilize (Remove Bleeding status)" },
+          { "tier": "T2", "description": "Minor Heal (Restore 1d8 HP)" },
+          { "tier": "T3", "description": "Restore Stamina (Restore 1d6 Stamina resource)" },
+          { "tier": "T4", "description": "Cure Toxin (Cure T1/T2 Poison or Disease)" },
+          { "tier": "T5", "description": "Repair Minor Injury (Remove a Minor Injury from a limb)" },
+          { "tier": "T6", "description": "Rapid Regeneration (Restore 1d4 HP at start of turn for 3 rounds)" },
+          { "tier": "T7", "description": "Repair Major Injury (Reduce Major Injury to Minor Injury)" },
+          { "tier": "T8", "description": "Mass Health (Restore moderate 2d6 HP to all allies in 5m)" },
+          { "tier": "T9", "description": "Full Life Restore (Instantly restore target's HP to maximum and remove all negative status/injury effects)" }
+        ]
+      }
     ]
   },
-  "Cunning": {
-    "resource_pool": "Guile",
-    "associated_stat": "Finesse",
-    "tiers": [
-      { "tier": 1, "control": "Deceptive Traps T1", "offense": "Vulnerable Strike T1", "support": "Concealment T1" },
-      { "tier": 2, "control": "Deceptive Traps T2", "offense": "Vulnerable Strike T2", "support": "Concealment T2" },
-      { "tier": 3, "control": "Deceptive Traps T3", "offense": "Vulnerable Strike T3", "support": "Concealment T3" },
-      { "tier": 4, "control": "Deceptive Traps T4", "offense": "Vulnerable Strike T4", "support": "Concealment T4" },
-      { "tier": 5, "control": "Deceptive Traps T5", "offense": "Vulnerable Strike T5", "support": "Concealment T5" },
-      { "tier": 6, "control": "Deceptive Traps T6", "offense": "Vulnerable Strike T6", "support": "Concealment T6" },
-      { "tier": 7, "control": "Deceptive Traps T7", "offense": "Vulnerable Strike T7", "support": "Concealment T7" },
-      { "tier": 8, "control": "Deceptive Traps T8", "offense": "Vulnerable Strike T8", "support": "Concealment T8" },
-      { "tier": 9, "control": "Deceptive Traps T9", "offense": "Vulnerable Strike T9", "support": "Concealment T9" }
+  {
+    "school": "Cunning",
+    "resource": "Guile",
+    "branches": [
+      { "branch": "Control Focus (Hindering/Directing)", "tiers": [{ "tier": "T1", "description": "Deceptive Traps (Set magical snares)." }] },
+      { "branch": "Offense Focus (Harm/Direct Attack)", "tiers": [{ "tier": "T1", "description": "Vulnerable Strike (Exploit blind spots and openings)." }] },
+      { "branch": "Support Focus (Buffs/Protection)", "tiers": [{ "tier": "T1", "description": "Concealment/Distraction (Cloak allies/illusions to break line of sight)." }] }
     ]
   },
-  "Grace": {
-    "resource_pool": "Chi",
-    "associated_stat": "Reflexes",
-    "tiers": [
-      { "tier": 1, "control": "Movement Constraint T1", "offense": "Counter-Evade T1", "support": "Shifting Maneuver T1" },
-      { "tier": 2, "control": "Movement Constraint T2", "offense": "Counter-Evade T2", "support": "Shifting Maneuver T2" },
-      { "tier": 3, "control": "Movement Constraint T3", "offense": "Counter-Evade T3", "support": "Shifting Maneuver T3" },
-      { "tier": 4, "control": "Movement Constraint T4", "offense": "Counter-Evade T4", "support": "Shifting Maneuver T4" },
-      { "tier": 5, "control": "Movement Constraint T5", "offense": "Counter-Evade T5", "support": "Shifting Maneuver T5" },
-      { "tier": 6, "control": "Movement Constraint T6", "offense": "Counter-Evade T6", "support": "Shifting Maneuver T6" },
-      { "tier": 7, "control": "Movement Constraint T7", "offense": "Counter-Evade T7", "support": "Shifting Maneuver T7" },
-      { "tier": 8, "control": "Movement Constraint T8", "offense": "Counter-Evade T8", "support": "Shifting Maneuver T8" },
-      { "tier": 9, "control": "Movement Constraint T9", "offense": "Counter-Evade T9", "support": "Shifting Maneuver T9" }
+  {
+    "school": "Grace",
+    "resource": "Chi",
+    "branches": [
+      { "branch": "Control Focus (Hindering/Directing)", "tiers": [{ "tier": "T1", "description": "Movement Constraint (Pin opponents or restrict area)." }] },
+      { "branch": "Offense Focus (Harm/Direct Attack)", "tiers": [{ "tier": "T1", "description": "Counter-Evade (Dodging counter-attacks/AOE during evasion)." }] },
+      { "branch": "Support Focus (Buffs/Protection)", "tiers": [{ "tier": "T1", "description": "Shifting Maneuver (Move allies/objects rapidly across the battlefield)." }] }
     ]
   },
-  "Evocation": {
-    "resource_pool": "Guile",
-    "associated_stat": "Knowledge",
-    "tiers": [
-      { "tier": 1, "control": "Elemental Area T1", "offense": "Focused Projection T1", "support": "Elemental Enchant T1" },
-      { "tier": 2, "control": "Elemental Area T2", "offense": "Focused Projection T2", "support": "Elemental Enchant T2" },
-      { "tier": 3, "control": "Elemental Area T3", "offense": "Focused Projection T3", "support": "Elemental Enchant T3" },
-      { "tier": 4, "control": "Elemental Area T4", "offense": "Focused Projection T4", "support": "Elemental Enchant T4" },
-      { "tier": 5, "control": "Elemental Area T5", "offense": "Focused Projection T5", "support": "Elemental Enchant T5" },
-      { "tier": 6, "control": "Elemental Area T6", "offense": "Focused Projection T6", "support": "Elemental Enchant T6" },
-      { "tier": 7, "control": "Elemental Area T7", "offense": "Focused Projection T7", "support": "Elemental Enchant T7" },
-      { "tier": 8, "control": "Elemental Area T8", "offense": "Focused Projection T8", "support": "Elemental Enchant T8" },
-      { "tier": 9, "control": "Elemental Area T9", "offense": "Focused Projection T9", "support": "Elemental Enchant T9" }
+  {
+    "school": "Evocation",
+    "resource": "Guile",
+    "branches": [
+      { "branch": "Control Focus (Hindering/Directing)", "tiers": [{ "tier": "T1", "description": "Elemental Area (Use AOE effects like fog, ice, fire to hinder movement or block passage)." }] },
+      { "branch": "Offense Focus (Harm/Direct Attack)", "tiers": [{ "tier": "T1", "description": "Focused Projection (Launch powerful elemental blasts or deliver direct-elemental strikes)." }] },
+      { "branch": "Support Focus (Buffs/Protection)", "tiers": [{ "tier": "T1", "description": "Elemental Enchant (Create elemental walls or enchant allies' weapons/armor for temporary defense/damage)." }] }
     ]
   },
-  "Cosmos": {
-    "resource_pool": "Tactics",
-    "associated_stat": "Logic",
-    "tiers": [
-      { "tier": 1, "control": "Turn Delay T1", "offense": "Temporal Decay T1", "support": "Event Reversal T1" },
-      { "tier": 2, "control": "Turn Delay T2", "offense": "Temporal Decay T2", "support": "Event Reversal T2" },
-      { "tier": 3, "control": "Turn Delay T3", "offense": "Temporal Decay T3", "support": "Event Reversal T3" },
-      { "tier": 4, "control": "Turn Delay T4", "offense": "Temporal Decay T4", "support": "Event Reversal T4" },
-      { "tier": 5, "control": "Turn Delay T5", "offense": "Temporal Decay T5", "support": "Event Reversal T5" },
-      { "tier": 6, "control": "Turn Delay T6", "offense": "Temporal Decay T6", "support": "Event Reversal T6" },
-      { "tier": 7, "control": "Turn Delay T7", "offense": "Temporal Decay T7", "support": "Event Reversal T7" },
-      { "tier": 8, "control": "Turn Delay T8", "offense": "Temporal Decay T8", "support": "Event Reversal T8" },
-      { "tier": 9, "control": "Turn Delay T9", "offense": "Temporal Decay T9", "support": "Event Reversal T9" }
+  {
+    "school": "Cosmos",
+    "resource": "Tactics",
+    "branches": [
+      { "branch": "Control Focus (Hindering/Directing)", "tiers": [{ "tier": "T1", "description": "Turn Delay (Apply time-based mobility effects or delay an opponent's turn)." }] },
+      { "branch": "Offense Focus (Harm/Direct Attack)", "tiers": [{ "tier": "T1", "description": "Temporal Decay (Rapidly accelerate or reverse time on objects for breakage, or creatures for damage/aging)." }] },
+      { "branch": "Support Focus (Buffs/Protection)", "tiers": [{ "tier": "T1", "description": "Event Reversal (Reverse a minor event, delay consequences, or freeze time to prolong an effect)." }] }
     ]
   },
-  "Spirit": {
-    "resource_pool": "Tactics",
-    "associated_stat": "Awareness",
-    "tiers": [
-      { "tier": 1, "control": "Minor Fear", "offense": "Psychic Sting", "support": "Ethereal Scout" },
-      { "tier": 2, "control": "Spectral Shove", "offense": "Ethereal Chill", "support": "Sense Vulnerability" },
-      { "tier": 3, "control": "Sensory Overload", "offense": "Soul Drain", "support": "Spiritual Light" },
-      { "tier": 4, "control": "Mass Fear", "offense": "Spirit Bolt", "support": "Sensory Link" },
-      { "tier": 5, "control": "Spectral Anchor", "offense": "Mass Chill", "support": "Warden Spirit" },
-      { "tier": 6, "control": "Terror Brand", "offense": "Composure Breakdown", "support": "Fear Dampener" },
-      { "tier": 7, "control": "Group Panic", "offense": "Soul Rend", "support": "Group Sight" },
-      { "tier": 8, "control": "Mental Domination", "offense": "Spirit Consumption", "support": "Mass Morale" },
-      { "tier": 9, "control": "Void Lock", "offense": "Essence Sever", "support": "Transcendence" }
+  {
+    "school": "Spirit",
+    "resource": "Tactics",
+    "branches": [
+      {
+        "branch": "Control (Ethereal Leash)",
+        "tiers": [
+          { "tier": "T1", "description": "Minor Fear (1 Composure Damage)" },
+          { "tier": "T2", "description": "Spectral Shove (Push 1 target 2m)" },
+          { "tier": "T3", "description": "Sensory Overload (-3 penalty to all Perception checks)" },
+          { "tier": "T4", "description": "Mass Fear (3m radius, Minor Composure damage)" },
+          { "tier": "T5", "description": "Spectral Anchor (Compel 1 enemy to remain stationary for 2 rounds)" },
+          { "tier": "T6", "description": "Terror Brand (Target suffers -2 penalty to all actions for 2 rounds)" },
+          { "tier": "T7", "description": "Group Panic (Major Composure damage, force attempt to Flee)" },
+          { "tier": "T8", "description": "Mental Domination (Target performs 1 non-harmful action of your choice)" },
+          { "tier": "T9", "description": "Void Lock (Immobilize 1 target completely for 3 rounds)" }
+        ]
+      },
+      {
+        "branch": "Offense (Soul Channeling)",
+        "tiers": [
+          { "tier": "T1", "description": "Psychic Sting (1d4 damage to Composure)" },
+          { "tier": "T2", "description": "Ethereal Chill (1d6 ethereal damage bypassing armor)" },
+          { "tier": "T3", "description": "Soul Drain (1d6 damage to target's Fatigue pool)" },
+          { "tier": "T4", "description": "Spirit Bolt (2d6 ethereal damage)" },
+          { "tier": "T5", "description": "Mass Chill (2d4 ethereal damage in 5m line)" },
+          { "tier": "T6", "description": "Composure Breakdown (2d6 damage to Composure)" },
+          { "tier": "T7", "description": "Soul Rend (Massive damage split equally between HP and Composure)" },
+          { "tier": "T8", "description": "Spirit Consumption (Drain 1/4 of target's current Tactics pool)" },
+          { "tier": "T9", "description": "Essence Sever (Instantly kill a non-essential NPC)" }
+        ]
+      },
+      {
+        "branch": "Support (Spirit Summoning)",
+        "tiers": [
+          { "tier": "T1", "description": "Ethereal Scout (Manifest minor invisible spirit for 1 round scouting)" },
+          { "tier": "T2", "description": "Sense Vulnerability (Identify target's lowest defensive stat)" },
+          { "tier": "T3", "description": "Spiritual Light (Ally gains +2 to all Awareness checks)" },
+          { "tier": "T4", "description": "Sensory Link (Link senses to ally for 2 rounds, grants them your Awareness score)" },
+          { "tier": "T5", "description": "Warden Spirit (Spirit absorbs next 1d4 attacks in 3m radius)" },
+          { "tier": "T6", "description": "Fear Dampener (All allies in 5m radius immune to Fear effects)" },
+          { "tier": "T7", "description": "Group Sight (All allies gain low-light vision for encounter duration)" },
+          { "tier": "T8", "description": "Mass Morale (Restore moderate Composure amount to all allies)" },
+          { "tier": "T9", "description": "Transcendence (Immunity to all physical damage and HP loss for 1 round)" }
+        ]
+      }
     ]
   },
-  "Psionics": {
-    "resource_pool": "Instinct",
-    "associated_stat": "Willpower",
-    "tiers": [
-      { "tier": 1, "control": "Distract", "offense": "Mental Echo", "support": "Mind Shield" },
-      { "tier": 2, "control": "Push Object", "offense": "Object Hurl", "support": "Barrier" },
-      { "tier": 3, "control": "Daze", "offense": "Psychic Drain", "support": "Group Defense" },
-      { "tier": 4, "control": "Mental Confusion", "offense": "Telekinetic Strike", "support": "Telekinetic Shield" },
-      { "tier": 5, "control": "Unravel Focus", "offense": "Psychic Scream", "support": "Psychic Repulsion" },
-      { "tier": 6, "control": "Mental Void", "offense": "Targeted Concussion", "support": "Clarity" },
-      { "tier": 7, "control": "Brain Lock", "offense": "Overwhelming Force", "support": "Projected Will" },
-      { "tier": 8, "control": "Puppet Master", "offense": "Composure Collapse", "support": "Mass Clarity" },
-      { "tier": 9, "control": "Mindwipe", "offense": "Mass Hurl", "support": "Absolute Barrier" }
+  {
+    "school": "Psionics",
+    "resource": "Instinct",
+    "branches": [
+      {
+        "branch": "Control (Mental Stun)",
+        "tiers": [
+          { "tier": "T1", "description": "Distract (-2 penalty to all actions for 1 round)" },
+          { "tier": "T2", "description": "Push Object (Move small object 5m)" },
+          { "tier": "T3", "description": "Daze (Inflict Dazed status for 1 round)" },
+          { "tier": "T4", "description": "Mental Confusion (-3 penalty to all Willpower checks)" },
+          { "tier": "T5", "description": "Unravel Focus (Target immediately loses Focus and cannot concentrate for 2 rounds)" },
+          { "tier": "T6", "description": "Mental Void (Target suffers Mental Blockade (Guile exhaustion effect) for 1 round)" },
+          { "tier": "T7", "description": "Brain Lock (Inflict Major Composure damage; Composure zero results in Immobilized in Fear)" },
+          { "tier": "T8", "description": "Puppet Master (Gain temporary control of non-hostile ET2 NPC for 1 round)" },
+          { "tier": "T9", "description": "Mindwipe (Erase memory of last 5 minutes)" }
+        ]
+      },
+      {
+        "branch": "Offense (Telekinetic Assault)",
+        "tiers": [
+          { "tier": "T1", "description": "Mental Echo (1d6 direct Composure damage)" },
+          { "tier": "T2", "description": "Object Hurl (1d8 damage)" },
+          { "tier": "T3", "description": "Psychic Drain (1d4 from target's Instinct pool)" },
+          { "tier": "T4", "description": "Telekinetic Strike (2d8 raw physical damage)" },
+          { "tier": "T5", "description": "Psychic Scream (1d10 damage to Composure in 5m cone)" },
+          { "tier": "T6", "description": "Targeted Concussion (2d6 damage, Constitution check or Staggered)" },
+          { "tier": "T7", "description": "Overwhelming Force (Telekinetically crush target, 3d8 damage)" },
+          { "tier": "T8", "description": "Composure Collapse (Inflict 3 Major Composure damage)" },
+          { "tier": "T9", "description": "Mass Hurl (Throw up to 3 enemies 10m away)" }
+        ]
+      },
+      {
+        "branch": "Support (Psychic Barrier)",
+        "tiers": [
+          { "tier": "T1", "description": "Mind Shield (+2 defense to next Composure check)" },
+          { "tier": "T2", "description": "Barrier (Absorb next 2 damage instances)" },
+          { "tier": "T3", "description": "Group Defense (All allies in 3m gain +1 defense for 1 round)" },
+          { "tier": "T4", "description": "Telekinetic Shield (Absorb up to 8 total damage for 2 rounds)" },
+          { "tier": "T5", "description": "Psychic Repulsion (Enemies entering 3m radius suffer Composure damage)" },
+          { "tier": "T6", "description": "Clarity (Restore moderate Composure, remove Shaken status)" },
+          { "tier": "T7", "description": "Projected Will (Transfer Willpower score as bonus to ally's Defense for 2 rounds)" },
+          { "tier": "T8", "description": "Mass Clarity (Restore moderate Composure amount to all allies)" },
+          { "tier": "T9", "description": "Absolute Barrier (Impenetrable shield around self for 1 round)" }
+        ]
+      }
     ]
   },
-  "Command": {
-    "resource_pool": "Presence",
-    "associated_stat": "Charm",
-    "tiers": [
-      { "tier": 1, "control": "Fluster", "offense": "Distracting Strike", "support": "Inspire" },
-      { "tier": 2, "control": "Draw Gaze", "offense": "Exploit Opportunity", "support": "Remove Shaken" },
-      { "tier": 3, "control": "Vulnerable Posture", "offense": "Vicious Mockery", "support": "Rallying Cry" },
-      { "tier": 4, "control": "Target Lock", "offense": "Coordinated Strike", "support": "Unbreakable Morale" },
-      { "tier": 5, "control": "Mass Confusion", "offense": "Strategic Opening", "support": "Group Resolve" },
-      { "tier": 6, "control": "Opening Attack", "offense": "Focus Fire", "support": "Battlefield Command" },
-      { "tier": 7, "control": "Mass Demoralize", "offense": "Leadership Momentum", "support": "Mass Clarity" },
-      { "tier": 8, "control": "Compel Surrender", "offense": "Command Strike", "support": "Immunity Aura" },
-      { "tier": 9, "control": "Total Loyalty", "offense": "Rally Strike of Annihilation", "support": "Total Dominance" }
+  {
+    "school": "Command",
+    "resource": "Presence",
+    "branches": [
+      {
+        "branch": "Control (Distraction/Confusion)",
+        "tiers": [
+          { "tier": "T1", "description": "Fluster (-2 penalty to next Defense roll)" },
+          { "tier": "T2", "description": "Draw Gaze (Target only looks at you for 1 round)" },
+          { "tier": "T3", "description": "Vulnerable Posture (-3 penalty to next Willpower check)" },
+          { "tier": "T4", "description": "Target Lock (Compel enemy group (5m radius) to prioritize a designated target)" },
+          { "tier": "T5", "description": "Mass Confusion (All enemies in 5m radius suffer -3 penalty to Perception checks)" },
+          { "tier": "T6", "description": "Opening Attack (Ally attacking target gains +2 attack roll bonus)" },
+          { "tier": "T7", "description": "Mass Demoralize (Inflict Major Composure damage on all enemies in 5m radius)" },
+          { "tier": "T8", "description": "Compel Surrender (Force non-hostile ET3 NPC to immediately flee)" },
+          { "tier": "T9", "description": "Total Loyalty (Instantly turn hostile NPC of ET2 or lower into temporary ally)" }
+        ]
+      },
+      {
+        "branch": "Offense (Opening Attack)",
+        "tiers": [
+          { "tier": "T1", "description": "Distracting Strike (1d4 Composure damage)" },
+          { "tier": "T2", "description": "Exploit Opportunity (Ally attacking target gains +2 bonus)" },
+          { "tier": "T3", "description": "Vicious Mockery (1d6 damage to Composure)" },
+          { "tier": "T4", "description": "Coordinated Strike (Adjacent allies gain +1d4 damage on next successful attack)" },
+          { "tier": "T5", "description": "Strategic Opening (Target suffers -2 Defense against 3 incoming attacks)" },
+          { "tier": "T6", "description": "Focus Fire (All allies gain +1d4 bonus against 1 designated target for 2 rounds)" },
+          { "tier": "T7", "description": "Leadership Momentum (Successful attack allows all allies to instantly regain 1d4 HP)" },
+          { "tier": "T8", "description": "Command Strike (Successful attack also inflicts 1d6 Composure damage)" },
+          { "tier": "T9", "description": "Rally Strike of Annihilation (Successful attack allows all allies free Melee attack against target immediately)" }
+        ]
+      },
+      {
+        "branch": "Support (Composure Buff)",
+        "tiers": [
+          { "tier": "T1", "description": "Inspire (Restore minor 1d4 Composure)" },
+          { "tier": "T2", "description": "Remove Shaken (Instantly remove Shaken status)" },
+          { "tier": "T3", "description": "Rallying Cry (Restore moderate 1d6 Composure to all allies in 5m)" },
+          { "tier": "T4", "description": "Unbreakable Morale (All allies immunity to Fear effects for 3 rounds)" },
+          { "tier": "T5", "description": "Group Resolve (All allies in 5m gain +2 bonus to Willpower checks)" },
+          { "tier": "T6", "description": "Battlefield Command (3 allies gain bonus Minor Action on next turn)" },
+          { "tier": "T7", "description": "Mass Clarity (Restore moderate Composure amount to all allies)" },
+          { "tier": "T8", "description": "Immunity Aura (All allies immunity to Composure loss for 2 rounds)" },
+          { "tier": "T9", "description": "Total Dominance (All allies gain temporary +3 increase to Charm stat for remainder of encounter)" }
+        ]
+      }
     ]
   },
-  "Chaos": {
-    "resource_pool": "Instinct",
-    "associated_stat": "Intuition",
-    "tiers": [
-      { "tier": 1, "control": "Minor Shift", "offense": "Random Blast", "support": "Minor Surge" },
-      { "tier": 2, "control": "Random Stumble", "offense": "Unstable Bolt", "support": "Resist Random" },
-      { "tier": 3, "control": "Unstable Field", "offense": "Chaos Field", "support": "Ally Mutation" },
-      { "tier": 4, "control": "Area Mutate", "offense": "Volatile Charge", "support": "Self-Morph" },
-      { "tier": 5, "control": "Psychic Feedback", "offense": "Unpredictable Nova", "support": "Weapon Mutation" },
-      { "tier": 6, "control": "Temporal Flicker", "offense": "Unstable Critical", "support": "Elemental Randomize" },
-      { "tier": 7, "control": "Reality Ripple", "offense": "Full Cataclysm", "support": "Reality Shift" },
-      { "tier": 8, "control": "Mass Instability", "offense": "Paradox Strike", "support": "Full Mutation" },
-      { "tier": 9, "control": "Full Entropy", "offense": "Dimensional Rift", "support": "Absolute Paradox" }
+  {
+    "school": "Chaos",
+    "resource": "Instinct",
+    "branches": [
+      {
+        "branch": "Control (Unpredictable Hindrance)",
+        "tiers": [
+          { "tier": "T1", "description": "Minor Shift (Randomly transform a 2m patch of ground)" },
+          { "tier": "T2", "description": "Random Stumble (Random -2 penalty on 1 Derived Stat (A-L) for 1 round)" },
+          { "tier": "T3", "description": "Unstable Field (All characters in 3m radius suffer -1 penalty to 1 randomly determined core stat)" },
+          { "tier": "T4", "description": "Area Mutate (Randomly transform 5m section, imposing -2 penalty on Agility for 2 rounds)" },
+          { "tier": "T5", "description": "Psychic Feedback (Willpower check or suffer Composure damage equal to resource cost of last ability used)" },
+          { "tier": "T6", "description": "Temporal Flicker (Randomly impose T1 penalty from Cosmos school)" },
+          { "tier": "T7", "description": "Reality Ripple (All non-essential objects randomly destroyed, moved, or changed)" },
+          { "tier": "T8", "description": "Mass Instability (All characters in 5m radius must pass Willpower check or be Staggered for 1 round)" },
+          { "tier": "T9", "description": "Full Entropy (Cause Major Injury to 1d4 randomly determined limbs on 1 target)" }
+        ]
+      },
+      {
+        "branch": "Offense (Randomized Assault)",
+        "tiers": [
+          { "tier": "T1", "description": "Random Blast (1d8 damage of a randomly determined type)" },
+          { "tier": "T2", "description": "Unstable Bolt (1d10 damage; even roll = Stagger, odd roll = caster suffers 1d4 damage)" },
+          { "tier": "T3", "description": "Chaos Field (1d6 AoE damage in 3m circle)" },
+          { "tier": "T4", "description": "Volatile Charge (Damage + Fortitude save or suffer random T1 Poison/Bleed)" },
+          { "tier": "T5", "description": "Unpredictable Nova (3d6 damage split randomly between 2 targets)" },
+          { "tier": "T6", "description": "Unstable Critical (Next attack auto-converts Solid Hit to Critical Hit, but caster suffers random T1 status effect)" },
+          { "tier": "T7", "description": "Full Cataclysm (Massive 3d10 damage randomly split between HP, Fatigue, and Composure)" },
+          { "tier": "T8", "description": "Paradox Strike (Damage equal to Willpower score x 2 to a randomly determined target)" },
+          { "tier": "T9", "description": "Dimensional Rift (Instantly deals 3d12 damage to 3m area and inflicts Major Composure damage)" }
+        ]
+      },
+      {
+        "branch": "Support (Mutation/Alteration)",
+        "tiers": [
+          { "tier": "T1", "description": "Minor Surge (Randomly boost 1 core stat (A-L) by +1 for 1 round)" },
+          { "tier": "T2", "description": "Resist Random (Bonus resistance against next 2 instances of random damage/status)" },
+          { "tier": "T3", "description": "Ally Mutation (Ally randomly gains T2-level physical advantage for 2 rounds)" },
+          { "tier": "T4", "description": "Self-Morph (Change body size, shape, or appearance for 3 rounds)" },
+          { "tier": "T5", "description": "Weapon Mutation (Change weapon damage type and gain +1d4 damage bonus)" },
+          { "tier": "T6", "description": "Elemental Randomize (All allies immunity to 1 randomly determined elemental damage type for 2 rounds)" },
+          { "tier": "T7", "description": "Reality Shift (Instantly change weather or environmental lighting)" },
+          { "tier": "T8", "description": "Full Mutation (Self gains 3 randomly determined physical bonuses for 3 rounds)" },
+          { "tier": "T9", "description": "Absolute Paradox (Immediately reset all allies' HP pool to maximum, but suffer a permanent -1 penalty to Willpower)" }
+        ]
+      }
     ]
   }
-}
+]
