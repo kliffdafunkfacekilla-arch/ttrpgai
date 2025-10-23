@@ -1,0 +1,7 @@
+# Database
+*.db
+
+# Python
+__pycache__/
+venv/
+*.pyc
