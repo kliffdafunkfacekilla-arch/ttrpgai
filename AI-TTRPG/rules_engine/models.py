@@ -117,3 +117,4 @@ class Talents(BaseModel):
 class Stat(BaseModel):
     name: str
     description: str
+
