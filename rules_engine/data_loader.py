@@ -1,77 +1,100 @@
+# data_loader.py
 import json
-from pathlib import Path
-from typing import List, Dict, Any
-from .models import (
-    AbilitySchool,
-    CharacterCreation,
-    CombatSkill,
-    NonCombatSkill,
-    UrbanArchetype,
-    CraftingDiscipline,
-    Talents,
-    Stat,
-    DevotionChoice,
-    BirthCircumstance,
-    ChildhoodDevelopment,
-    ComingOfAgeEvent,
-    SingleStatTalent,
-    SingleSkillTalent,
-    DualStatTalent,
-    Kingdom
-)
+from typing import Dict, List, Any
+import logging
+import os
 
-def load_data() -> Dict[str, Any]:
-    data_dir = Path(__file__).parent / "data"
+# Configure logging
+logging.basicConfig(level=logging.INFO, filename="server.log", filemode="w")
 
-    with open(data_dir / "abilities.json") as f:
-        ability_data = json.load(f)
-        ability_schools: List[AbilitySchool] = [AbilitySchool(**item) for item in ability_data]
+# Global variables to hold our "Rulebook"
+STATS_LIST: List[str] = []
+SKILL_CATEGORIES: Dict[str, List[str]] = {}
+ALL_SKILLS: Dict[str, Dict[str, str]] = {} # e.g., {"Intimidation": {"category": "Conversational", "stat": "Might"}}
 
-    with open(data_dir / "character_creation.json") as f:
-        char_data = json.load(f)
-        character_creation = CharacterCreation(
-            devotion=[DevotionChoice(**item) for item in char_data["devotion"]],
-            birth_circumstance=[BirthCircumstance(**item) for item in char_data["birth_circumstance"]],
-            childhood_development=[ChildhoodDevelopment(**item) for item in char_data["childhood_development"]],
-            coming_of_age=[ComingOfAgeEvent(**item) for item in char_data["coming_of_age"]],
-        )
+ABILITY_DATA: Dict[str, Any] = {}
+TALENT_DATA: Dict[str, Any] = {}
+KINGDOM_DATA: Dict[str, Any] = {}
 
-    with open(data_dir / "crafting.json") as f:
-        crafting_data = json.load(f)
-        crafting: List[CraftingDiscipline] = [CraftingDiscipline(**item) for item in crafting_data]
+# A pre-processed map for fast feature lookups
+FEATURE_STATS_MAP: Dict[str, Any] = {}
 
-    with open(data_dir / "skills.json") as f:
-        skills_data = json.load(f)
-        skills = {
-            "combat_skills": [CombatSkill(**item) for item in skills_data["combat_skills"]],
-            "non_combat_skills": [NonCombatSkill(**item) for item in skills_data["non_combat_skills"]],
-            "urban_archetypes": [UrbanArchetype(**item) for item in skills_data["urban_archetypes"]],
-        }
+def _load_json(filepath: str) -> Any:
+    """Helper function to load a JSON file."""
+    try:
+        with open(filepath, "r") as f:
+            return json.load(f)
+    except FileNotFoundError:
+        logging.error(f"FATAL ERROR: Rules data file not found: {filepath}")
+        raise
+    except json.JSONDecodeError:
+        logging.error(f"FATAL ERROR: Failed to decode JSON from {filepath}")
+        raise
 
-    with open(data_dir / "stats.json") as f:
-        stats_data = json.load(f)
-        stats: List[Stat] = [Stat(**item) for item in stats_data]
+def _process_kingdom_features():
+    """
+    Processes the nested kingdom data into a simple, flat dictionary
+    for fast lookups by feature name.
+    """
+    global FEATURE_STATS_MAP
 
-    with open(data_dir / "talents.json") as f:
-        talents_data = json.load(f)
-        talents = Talents(
-            single_stat_mastery=[SingleStatTalent(**item) for item in talents_data["single_stat_mastery"]],
-            single_skill_mastery=[SingleSkillTalent(**item) for item in talents_data["single_skill_mastery"]],
-            dual_stat_focus=[DualStatTalent(**item) for item in talents_data["dual_stat_focus"]],
-        )
+    # We must correct the stat name "Constitution" to "Vitality"
+    # as we load the data, since our app uses "Vitality"
+    def _correct_stat_names(mods: Dict[str, List[str]]) -> Dict[str, List[str]]:
+        corrected_mods = {}
+        for key, stats in mods.items():
+            corrected_mods[key] = ["Vitality" if stat == "Constitution" else stat for stat in stats]
+        return corrected_mods
 
-    with open(data_dir / "kingdom_features.json") as f:
-        kingdom_features_data = json.load(f)
-        kingdom_features: List[Kingdom] = [Kingdom(**item) for item in kingdom_features_data]
+    for category_data in KINGDOM_DATA.values(): # "F1", "F2", ...
+        for kingdom_data in category_data.values(): # "Mammal", "Reptile", ...
+            if isinstance(kingdom_data, list):
+                for feature in kingdom_data:
+                    feature_name = feature.get("name")
+                    if feature_name:
+                        # Correct stat names before storing
+                        feature["mods"] = _correct_stat_names(feature["mods"])
+                        FEATURE_STATS_MAP[feature_name] = feature
 
-    return {
-        "ability_schools": ability_schools,
-        "character_creation": character_creation,
-        "crafting": crafting,
-        "skills": skills,
-        "stats": stats,
-        "talents": talents,
-        "kingdom_features": kingdom_features,
-    }
+    logging.info(f"Processed {len(FEATURE_STATS_MAP)} kingdom features into flat map.")
 
-game_data = load_data()
+def _process_skills():
+    """Processes the categorized skills into a master list."""
+    global ALL_SKILLS, SKILL_CATEGORIES
+
+    data = _load_json(os.path.abspath(os.path.join(os.path.dirname(__file__), 'data/stats_and_skills.json')))
+    SKILL_CATEGORIES = data.get("skill_categories", {})
+
+    # This maps each skill to its category and governing stat (from skills.txt)
+    # This logic assumes the skills in each category are in the same order
+    # as the stats in the stats list (A-L).
+    stats_list = data.get("stats", [])
+
+    for category, skills in SKILL_CATEGORIES.items():
+        for i, skill_name in enumerate(skills):
+            stat_index = i % 12 # Maps skill to its A-L stat
+            ALL_SKILLS[skill_name] = {
+                "category": category,
+                "stat": stats_list[stat_index]
+            }
+    logging.info(f"Processed {len(ALL_SKILLS)} skills into master map.")
+
+
+def load_rules_data():
+    """Main function called on server startup to load all rules."""
+    global STATS_LIST, ABILITY_DATA, TALENT_DATA, KINGDOM_DATA
+
+    # Load stats and skills first
+    stats_data = _load_json(os.path.abspath(os.path.join(os.path.dirname(__file__), 'data/stats_and_skills.json')))
+    STATS_LIST = stats_data.get("stats", [])
+    _process_skills()
+
+    # Load other data
+    ABILITY_DATA = _load_json(os.path.abspath(os.path.join(os.path.dirname(__file__), 'data/abilities.json')))
+    TALENT_DATA = _load_json(os.path.abspath(os.path.join(os.path.dirname(__file__), 'data/talents.json')))
+    KINGDOM_DATA = _load_json(os.path.abspath(os.path.join(os.path.dirname(__file__), 'data/kingdom_features.json')))
+
+    # Pre-process complex data
+    _process_kingdom_features()
+
+    logging.info("--- Rules Engine Data Loaded Successfully ---")
