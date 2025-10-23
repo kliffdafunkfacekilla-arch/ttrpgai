@@ -184,21 +184,12 @@ async def api_get_all_skills():
 @app.get("/v1/lookup/all_ability_schools", response_model=List[str])
 async def api_get_all_ability_schools():
     """Returns the list of the 12 official ability school names."""
-    try:
-        if not data_loader.ABILITY_DATA:
-             raise HTTPException(status_code=503, detail="Ability data not loaded yet.")
-        return list(data_loader.ABILITY_DATA.keys())
-    except Exception as e:
-         raise HTTPException(status_code=500, detail=f"Internal error getting ability schools list: {e}")
-
-@app.get("/v1/lookup/all_ability_schools", response_model=List[str])
-async def api_get_all_ability_schools():
-        logger.info("Received request for /v1/lookup/all_ability_schools") # Make sure logger is defined or remove this line
+    logger.info("Received request for /v1/lookup/all_ability_schools") # Make sure logger is defined or remove this line
     try:
         # Check if data_loader module itself is loaded and has the attribute
         if not hasattr(data_loader, 'ABILITY_DATA'):
             # logger.error("data_loader.ABILITY_DATA attribute does not exist!") # Make sure logger is defined or remove this line
-         raise HTTPException(status_code=500, detail="Ability data structure not loaded.")
+            raise HTTPException(status_code=500, detail="Ability data structure not loaded.")
 
         # Get the data (safer access)
         ability_data = getattr(data_loader, 'ABILITY_DATA', None)
@@ -210,12 +201,12 @@ async def api_get_all_ability_schools():
 
         # Try getting the keys
         keys = list(ability_data.keys())
-        # logger.info(f"Successfully retrieved ability school keys: {keys}") # Make sure logger is defined or remove this line
+        logger.info(f"Successfully retrieved ability school keys: {keys}")
         return keys
 
     except HTTPException as e: # Re-raise known HTTP errors
-        # logger.warning(f"HTTPException in api_get_all_ability_schools: {e.detail}") # Make sure logger is defined or remove this line
+        logger.warning(f"HTTPException in api_get_all_ability_schools: {e.detail}")
         raise e
     except Exception as e: # Catch unexpected errors
-         # logger.exception(f"Unexpected ERROR in api_get_all_ability_schools: {e}") # Make sure logger is defined or remove this line
-         raise HTTPException(status_code=500, detail=f"Internal server error getting ability schools list.") # Hide details from client
+         logger.exception(f"Unexpected ERROR in api_get_all_ability_schools: {e}")
+         raise HTTPException(status_code=500, detail=f"Internal server error getting ability schools list.")
