@@ -8,43 +8,411 @@
       { "name": "Rangefinder Focus", "mods": { "+2": ["Might", "Reflexes", "Knowledge"], "+1": ["Endurance", "Constitution", "Logic", "Charm"], "-1": ["Finesse", "Fortitude", "Awareness", "Intuition", "Willpower"] } },
       { "name": "Peripheral Hunter", "mods": { "+2": ["Endurance", "Constitution", "Logic"], "+1": ["Finesse", "Fortitude", "Awareness", "Willpower"], "-1": ["Might", "Reflexes", "Knowledge", "Intuition", "Charm"] } }
     ],
-    "Reptile": [], "Avian": [], "Aquatic": [], "Insect": [], "Plant": []
+    "Reptile": [
+        { "name": "Constrictor Muscle", "mods": { "+2": ["Might", "Endurance", "Finesse"], "+1": ["Knowledge", "Logic", "Awareness", "Intuition"], "-1": ["Reflexes", "Constitution", "Fortitude", "Charm", "Willpower"] } },
+        { "name": "Dislocating Jaw", "mods": { "+2": ["Reflexes", "Constitution", "Fortitude"], "+1": ["Charm", "Willpower", "Might", "Endurance"], "-1": ["Finesse", "Knowledge", "Logic", "Awareness", "Intuition"] } },
+        { "name": "Precision Strike", "mods": { "+2": ["Knowledge", "Logic", "Awareness"], "+1": ["Finesse", "Reflexes", "Constitution", "Fortitude"], "-1": ["Might", "Endurance", "Intuition", "Charm", "Willpower"] } },
+        { "name": "Cranial Crest", "mods": { "+2": ["Intuition", "Charm", "Willpower"], "+1": ["Might", "Endurance", "Knowledge", "Logic"], "-1": ["Finesse", "Reflexes", "Constitution", "Fortitude", "Awareness"] } },
+        { "name": "Heavy Head-Butt", "mods": { "+2": ["Might", "Reflexes", "Knowledge"], "+1": ["Endurance", "Constitution", "Logic", "Charm"], "-1": ["Finesse", "Fortitude", "Awareness", "Intuition", "Willpower"] } },
+        { "name": "Low-Vibration Pit", "mods": { "+2": ["Endurance", "Constitution", "Logic"], "+1": ["Finesse", "Fortitude", "Awareness", "Willpower"], "-1": ["Might", "Reflexes", "Knowledge", "Intuition", "Charm"] } }
+      ],
+      "Avian": [
+        { "name": "Tearing Hook", "mods": { "+2": ["Might", "Endurance", "Finesse"], "+1": ["Knowledge", "Logic", "Awareness", "Intuition"], "-1": ["Reflexes", "Constitution", "Fortitude", "Charm", "Willpower"] } },
+        { "name": "Sieve Filter", "mods": { "+2": ["Reflexes", "Constitution", "Fortitude"], "+1": ["Charm", "Willpower", "Might", "Endurance"], "-1": ["Finesse", "Knowledge", "Logic", "Awareness", "Intuition"] } },
+        { "name": "Seed Sheller", "mods": { "+2": ["Knowledge", "Logic", "Awareness"], "+1": ["Finesse", "Reflexes", "Constitution", "Fortitude"], "-1": ["Might", "Endurance", "Intuition", "Charm", "Willpower"] } },
+        { "name": "Probing Needle", "mods": { "+2": ["Intuition", "Charm", "Willpower"], "+1": ["Might", "Endurance", "Knowledge", "Logic"], "-1": ["Finesse", "Reflexes", "Constitution", "Fortitude", "Awareness"] } },
+        { "name": "Generalist Wedge", "mods": { "+2": ["Might", "Reflexes", "Knowledge"], "+1": ["Endurance", "Constitution", "Logic", "Charm"], "-1": ["Finesse", "Fortitude", "Awareness", "Intuition", "Willpower"] } },
+        { "name": "Impact Ram", "mods": { "+2": ["Endurance", "Constitution", "Logic"], "+1": ["Finesse", "Fortitude", "Awareness", "Willpower"], "-1": ["Might", "Reflexes", "Knowledge", "Intuition", "Charm"] } }
+      ],
+      "Aquatic": [
+        { "name": "Caudal Thrust", "mods": { "+2": ["Might", "Endurance", "Finesse"], "+1": ["Knowledge", "Logic", "Awareness", "Intuition"], "-1": ["Reflexes", "Constitution", "Fortitude", "Charm", "Willpower"] } },
+        { "name": "Pectoral Sculling", "mods": { "+2": ["Reflexes", "Constitution", "Fortitude"], "+1": ["Charm", "Willpower", "Might", "Endurance"], "-1": ["Finesse", "Knowledge", "Logic", "Awareness", "Intuition"] } },
+        { "name": "Jet Propulsion", "mods": { "+2": ["Knowledge", "Logic", "Awareness"], "+1": ["Finesse", "Reflexes", "Constitution", "Fortitude"], "-1": ["Might", "Endurance", "Intuition", "Charm", "Willpower"] } },
+        { "name": "Hydrodynamic Foil", "mods": { "+2": ["Intuition", "Charm", "Willpower"], "+1": ["Might", "Endurance", "Knowledge", "Logic"], "-1": ["Finesse", "Reflexes", "Constitution", "Fortitude", "Awareness"] } },
+        { "name": "Whipping Lure", "mods": { "+2": ["Might", "Reflexes", "Knowledge"], "+1": ["Endurance", "Constitution", "Logic", "Charm"], "-1": ["Finesse", "Fortitude", "Awareness", "Intuition", "Willpower"] } },
+        { "name": "Tractor Beam", "mods": { "+2": ["Endurance", "Constitution", "Logic"], "+1": ["Finesse", "Fortitude", "Awareness", "Willpower"], "-1": ["Might", "Reflexes", "Knowledge", "Intuition", "Charm"] } }
+      ],
+      "Insect": [
+        { "name": "Chitinous Shell", "mods": { "+2": ["Might", "Endurance", "Finesse"], "+1": ["Knowledge", "Logic", "Awareness", "Intuition"], "-1": ["Reflexes", "Constitution", "Fortitude", "Charm", "Willpower"] } },
+        { "name": "Cuticular Armor", "mods": { "+2": ["Reflexes", "Constitution", "Fortitude"], "+1": ["Charm", "Willpower", "Might", "Endurance"], "-1": ["Finesse", "Knowledge", "Logic", "Awareness", "Intuition"] } },
+        { "name": "Iridescent Carapace", "mods": { "+2": ["Knowledge", "Logic", "Awareness"], "+1": ["Finesse", "Reflexes", "Constitution", "Fortitude"], "-1": ["Might", "Endurance", "Intuition", "Charm", "Willpower"] } },
+        { "name": "Spiked Defense", "mods": { "+2": ["Intuition", "Charm", "Willpower"], "+1": ["Might", "Endurance", "Knowledge", "Logic"], "-1": ["Finesse", "Reflexes", "Constitution", "Fortitude", "Awareness"] } },
+        { "name": "Friction Pads", "mods": { "+2": ["Might", "Reflexes", "Knowledge"], "+1": ["Endurance", "Constitution", "Logic", "Charm"], "-1": ["Finesse", "Fortitude", "Awareness", "Intuition", "Willpower"] } },
+        { "name": "Mimic Shell", "mods": { "+2": ["Endurance", "Constitution", "Logic"], "+1": ["Finesse", "Fortitude", "Awareness", "Willpower"], "-1": ["Might", "Reflexes", "Knowledge", "Intuition", "Charm"] } }
+      ],
+      "Plant": [
+        { "name": "Binding Taproot", "mods": { "+2": ["Might", "Endurance", "Finesse"], "+1": ["Knowledge", "Logic", "Awareness", "Intuition"], "-1": ["Reflexes", "Constitution", "Fortitude", "Charm", "Willpower"] } },
+        { "name": "Creeping Rhizome", "mods": { "+2": ["Reflexes", "Constitution", "Fortitude"], "+1": ["Charm", "Willpower", "Might", "Endurance"], "-1": ["Finesse", "Knowledge", "Logic", "Awareness", "Intuition"] } },
+        { "name": "Mycorrhizal Link", "mods": { "+2": ["Knowledge", "Logic", "Awareness"], "+1": ["Finesse", "Reflexes", "Constitution", "Fortitude"], "-1": ["Might", "Endurance", "Intuition", "Charm", "Willpower"] } },
+        { "name": "Trapping Basket", "mods": { "+2": ["Intuition", "Charm", "Willpower"], "+1": ["Might", "Endurance", "Knowledge", "Logic"], "-1": ["Finesse", "Reflexes", "Constitution", "Fortitude", "Awareness"] } },
+        { "name": "Seismic Anchor", "mods": { "+2": ["Might", "Reflexes", "Knowledge"], "+1": ["Endurance", "Constitution", "Logic", "Charm"], "-1": ["Finesse", "Fortitude", "Awareness", "Intuition", "Willpower"] } },
+        { "name": "Water Skimmer", "mods": { "+2": ["Endurance", "Constitution", "Logic"], "+1": ["Finesse", "Fortitude", "Awareness", "Willpower"], "-1": ["Might", "Reflexes", "Knowledge", "Intuition", "Charm"] } }
+      ]
   },
   "F2": {
-    "Mammal": [], "Reptile": [], "Avian": [], "Aquatic": [], "Insect": [], "Plant": []
+    "Mammal": [
+        { "name": "Insulated Pelt", "mods": { "+2": ["Knowledge", "Logic", "Awareness"], "+1": ["Intuition", "Charm", "Willpower", "Might"], "-1": ["Endurance", "Finesse", "Reflexes", "Constitution", "Fortitude"] } },
+        { "name": "Camouflage Pattern", "mods": { "+2": ["Intuition", "Charm", "Willpower"], "+1": ["Endurance", "Finesse", "Reflexes", "Constitution"], "-1": ["Fortitude", "Knowledge", "Logic", "Awareness", "Might"] } },
+        { "name": "Keratin Plating", "mods": { "+2": ["Might", "Endurance", "Finesse"], "+1": ["Fortitude", "Knowledge", "Logic", "Awareness"], "-1": ["Reflexes", "Constitution", "Intuition", "Charm", "Willpower"] } },
+        { "name": "Sensitive Receptors", "mods": { "+2": ["Reflexes", "Constitution", "Fortitude"], "+1": ["Intuition", "Charm", "Willpower", "Awareness"], "-1": ["Might", "Endurance", "Finesse", "Knowledge", "Logic"] } },
+        { "name": "Adaptive Glands", "mods": { "+2": ["Knowledge", "Intuition", "Might"], "+1": ["Logic", "Charm", "Endurance", "Reflexes"], "-1": ["Finesse", "Constitution", "Fortitude", "Awareness", "Willpower"] } },
+        { "name": "Elastic Hide", "mods": { "+2": ["Logic", "Charm", "Endurance"], "+1": ["Awareness", "Willpower", "Finesse", "Constitution"], "-1": ["Might", "Reflexes", "Fortitude", "Knowledge", "Intuition"] } }
+      ],
+      "Reptile": [
+        { "name": "Thermal Camo", "mods": { "+2": ["Knowledge", "Logic", "Awareness"], "+1": ["Intuition", "Charm", "Willpower", "Might"], "-1": ["Endurance", "Finesse", "Reflexes", "Constitution", "Fortitude"] } },
+        { "name": "Iridescent Display", "mods": { "+2": ["Intuition", "Charm", "Willpower"], "+1": ["Endurance", "Finesse", "Reflexes", "Constitution"], "-1": ["Fortitude", "Knowledge", "Logic", "Awareness", "Might"] } },
+        { "name": "Osteoderm Armor", "mods": { "+2": ["Might", "Endurance", "Finesse"], "+1": ["Fortitude", "Knowledge", "Logic", "Awareness"], "-1": ["Reflexes", "Constitution", "Intuition", "Charm", "Willpower"] } },
+        { "name": "Hydro-Dynamic", "mods": { "+2": ["Reflexes", "Constitution", "Fortitude"], "+1": ["Intuition", "Charm", "Willpower", "Awareness"], "-1": ["Might", "Endurance", "Finesse", "Knowledge", "Logic"] } },
+        { "name": "Lateral Line", "mods": { "+2": ["Knowledge", "Intuition", "Might"], "+1": ["Logic", "Charm", "Endurance", "Reflexes"], "-1": ["Finesse", "Constitution", "Fortitude", "Awareness", "Willpower"] } },
+        { "name": "Rattle Defense", "mods": { "+2": ["Logic", "Charm", "Endurance"], "+1": ["Awareness", "Willpower", "Finesse", "Constitution"], "-1": ["Might", "Reflexes", "Fortitude", "Knowledge", "Intuition"] } }
+      ],
+      "Avian": [
+        { "name": "Oil Slicked", "mods": { "+2": ["Knowledge", "Logic", "Awareness"], "+1": ["Intuition", "Charm", "Willpower", "Might"], "-1": ["Endurance", "Finesse", "Reflexes", "Constitution", "Fortitude"] } },
+        { "name": "Vibrancy Display", "mods": { "+2": ["Intuition", "Charm", "Willpower"], "+1": ["Endurance", "Finesse", "Reflexes", "Constitution"], "-1": ["Fortitude", "Knowledge", "Logic", "Awareness", "Might"] } },
+        { "name": "Armor Plume", "mods": { "+2": ["Might", "Endurance", "Finesse"], "+1": ["Fortitude", "Knowledge", "Logic", "Awareness"], "-1": ["Reflexes", "Constitution", "Intuition", "Charm", "Willpower"] } },
+        { "name": "Sound Dampeners", "mods": { "+2": ["Reflexes", "Constitution", "Fortitude"], "+1": ["Intuition", "Charm", "Willpower", "Awareness"], "-1": ["Might", "Endurance", "Finesse", "Knowledge", "Logic"] } },
+        { "name": "Insulation Down", "mods": { "+2": ["Knowledge", "Intuition", "Might"], "+1": ["Logic", "Charm", "Endurance", "Reflexes"], "-1": ["Finesse", "Constitution", "Fortitude", "Awareness", "Willpower"] } },
+        { "name": "Contour Airfoils", "mods": { "+2": ["Logic", "Charm", "Endurance"], "+1": ["Awareness", "Willpower", "Finesse", "Constitution"], "-1": ["Might", "Reflexes", "Fortitude", "Knowledge", "Intuition"] } }
+      ],
+      "Aquatic": [
+        { "name": "Placoid Denticles", "mods": { "+2": ["Knowledge", "Logic", "Awareness"], "+1": ["Intuition", "Charm", "Willpower", "Might"], "-1": ["Endurance", "Finesse", "Reflexes", "Constitution", "Fortitude"] } },
+        { "name": "Chromatophore Camo", "mods": { "+2": ["Intuition", "Charm", "Willpower"], "+1": ["Endurance", "Finesse", "Reflexes", "Constitution"], "-1": ["Fortitude", "Knowledge", "Logic", "Awareness", "Might"] } },
+        { "name": "Spiked Puffer", "mods": { "+2": ["Might", "Endurance", "Finesse"], "+1": ["Fortitude", "Knowledge", "Logic", "Awareness"], "-1": ["Reflexes", "Constitution", "Intuition", "Charm", "Willpower"] } },
+        { "name": "Anti-Fouling Slime", "mods": { "+2": ["Reflexes", "Constitution", "Fortitude"], "+1": ["Intuition", "Charm", "Willpower", "Awareness"], "-1": ["Might", "Endurance", "Finesse", "Knowledge", "Logic"] } },
+        { "name": "Osmotic Shield", "mods": { "+2": ["Knowledge", "Intuition", "Might"], "+1": ["Logic", "Charm", "Endurance", "Reflexes"], "-1": ["Finesse", "Constitution", "Fortitude", "Awareness", "Willpower"] } },
+        { "name": "Pressure Dampener", "mods": { "+2": ["Logic", "Charm", "Endurance"], "+1": ["Awareness", "Willpower", "Finesse", "Constitution"], "-1": ["Might", "Reflexes", "Fortitude", "Knowledge", "Intuition"] } }
+      ],
+      "Insect": [
+        { "name": "Shearing Pincers", "mods": { "+2": ["Knowledge", "Logic", "Awareness"], "+1": ["Intuition", "Charm", "Willpower", "Might"], "-1": ["Endurance", "Finesse", "Reflexes", "Constitution", "Fortitude"] } },
+        { "name": "Piercing Stylet", "mods": { "+2": ["Intuition", "Charm", "Willpower"], "+1": ["Endurance", "Finesse", "Reflexes", "Constitution"], "-1": ["Fortitude", "Knowledge", "Logic", "Awareness", "Might"] } },
+        { "name": "Sucking Siphon", "mods": { "+2": ["Might", "Endurance", "Finesse"], "+1": ["Fortitude", "Knowledge", "Logic", "Awareness"], "-1": ["Reflexes", "Constitution", "Intuition", "Charm", "Willpower"] } },
+        { "name": "Sponging Labellum", "mods": { "+2": ["Reflexes", "Constitution", "Fortitude"], "+1": ["Intuition", "Charm", "Willpower", "Awareness"], "-1": ["Might", "Endurance", "Finesse", "Knowledge", "Logic"] } },
+        { "name": "Drilling Ovipositor", "mods": { "+2": ["Knowledge", "Intuition", "Might"], "+1": ["Logic", "Charm", "Endurance", "Reflexes"], "-1": ["Finesse", "Constitution", "Fortitude", "Awareness", "Willpower"] } },
+        { "name": "Grinding Mill", "mods": { "+2": ["Logic", "Charm", "Endurance"], "+1": ["Awareness", "Willpower", "Finesse", "Constitution"], "-1": ["Might", "Reflexes", "Fortitude", "Knowledge", "Intuition"] } }
+      ],
+      "Plant": [
+        { "name": "Arboreal Armor", "mods": { "+2": ["Knowledge", "Logic", "Awareness"], "+1": ["Intuition", "Charm", "Willpower", "Might"], "-1": ["Endurance", "Finesse", "Reflexes", "Constitution", "Fortitude"] } },
+        { "name": "Elastic Fiber", "mods": { "+2": ["Intuition", "Charm", "Willpower"], "+1": ["Endurance", "Finesse", "Reflexes", "Constitution"], "-1": ["Fortitude", "Knowledge", "Logic", "Awareness", "Might"] } },
+        { "name": "Whip-Vine Tendril", "mods": { "+2": ["Might", "Endurance", "Finesse"], "+1": ["Fortitude", "Knowledge", "Logic", "Awareness"], "-1": ["Reflexes", "Constitution", "Intuition", "Charm", "Willpower"] } },
+        { "name": "Pneumatic Tissue", "mods": { "+2": ["Reflexes", "Constitution", "Fortitude"], "+1": ["Intuition", "Charm", "Willpower", "Awareness"], "-1": ["Might", "Endurance", "Finesse", "Knowledge", "Logic"] } },
+        { "name": "Glandular Secretor", "mods": { "+2": ["Knowledge", "Intuition", "Might"], "+1": ["Logic", "Charm", "Endurance", "Reflexes"], "-1": ["Finesse", "Constitution", "Fortitude", "Awareness", "Willpower"] } },
+        { "name": "Thorned Defence", "mods": { "+2": ["Logic", "Charm", "Endurance"], "+1": ["Awareness", "Willpower", "Finesse", "Constitution"], "-1": ["Might", "Reflexes", "Fortitude", "Knowledge", "Intuition"] } }
+      ]
   },
   "F3": {
-    "Mammal": [], "Reptile": [], "Avian": [], "Aquatic": [], "Insect": [], "Plant": []
+    "Mammal": [
+        { "name": "Bone-Crusher", "mods": { "+2": ["Might", "Reflexes", "Intuition"], "+1": ["Knowledge", "Logic", "Awareness", "Charm"], "-1": ["Endurance", "Finesse", "Constitution", "Fortitude", "Willpower"] } },
+        { "name": "Venomous Bite", "mods": { "+2": ["Endurance", "Constitution", "Charm"], "+1": ["Logic", "Awareness", "Intuition", "Willpower"], "-1": ["Might", "Finesse", "Reflexes", "Fortitude", "Knowledge"] } },
+        { "name": "Precision Shear", "mods": { "+2": ["Finesse", "Fortitude", "Willpower"], "+1": ["Awareness", "Intuition", "Charm", "Knowledge"], "-1": ["Might", "Endurance", "Reflexes", "Constitution", "Logic"] } },
+        { "name": "Efficient Graze", "mods": { "+2": ["Knowledge", "Logic", "Might"], "+1": ["Endurance", "Constitution", "Finesse", "Willpower"], "-1": ["Reflexes", "Fortitude", "Awareness", "Intuition", "Charm"] } },
+        { "name": "Scavenger's Set", "mods": { "+2": ["Reflexes", "Awareness", "Endurance"], "+1": ["Constitution", "Fortitude", "Logic", "Charm"], "-1": ["Might", "Finesse", "Knowledge", "Intuition", "Willpower"] } },
+        { "name": "Suction Feeder", "mods": { "+2": ["Constitution", "Intuition", "Fortitude"], "+1": ["Might", "Knowledge", "Finesse", "Willpower"], "-1": ["Endurance", "Reflexes", "Logic", "Awareness", "Charm"] } }
+      ],
+      "Reptile": [
+        { "name": "Clinging Pads", "mods": { "+2": ["Might", "Reflexes", "Intuition"], "+1": ["Knowledge", "Logic", "Awareness", "Charm"], "-1": ["Endurance", "Finesse", "Constitution", "Fortitude", "Willpower"] } },
+        { "name": "Digging Claws", "mods": { "+2": ["Endurance", "Constitution", "Charm"], "+1": ["Logic", "Awareness", "Intuition", "Willpower"], "-1": ["Might", "Finesse", "Reflexes", "Fortitude", "Knowledge"] } },
+        { "name": "Prehensile Tail", "mods": { "+2": ["Finesse", "Fortitude", "Willpower"], "+1": ["Awareness", "Intuition", "Charm", "Knowledge"], "-1": ["Might", "Endurance", "Reflexes", "Constitution", "Logic"] } },
+        { "name": "Burrowing Form", "mods": { "+2": ["Knowledge", "Logic", "Might"], "+1": ["Endurance", "Constitution", "Finesse", "Willpower"], "-1": ["Reflexes", "Fortitude", "Awareness", "Intuition", "Charm"] } },
+        { "name": "Bipedal Sprinter", "mods": { "+2": ["Reflexes", "Awareness", "Endurance"], "+1": ["Constitution", "Fortitude", "Logic", "Charm"], "-1": ["Might", "Finesse", "Knowledge", "Intuition", "Willpower"] } },
+        { "name": "Aquatic Fins", "mods": { "+2": ["Constitution", "Intuition", "Fortitude"], "+1": ["Might", "Knowledge", "Finesse", "Willpower"], "-1": ["Endurance", "Reflexes", "Logic", "Awareness", "Charm"] } }
+      ],
+      "Avian": [
+        { "name": "Raptor Clench", "mods": { "+2": ["Might", "Reflexes", "Intuition"], "+1": ["Knowledge", "Logic", "Awareness", "Charm"], "-1": ["Endurance", "Finesse", "Constitution", "Fortitude", "Willpower"] } },
+        { "name": "Zygodactyl Grasp", "mods": { "+2": ["Endurance", "Constitution", "Charm"], "+1": ["Logic", "Awareness", "Intuition", "Willpower"], "-1": ["Might", "Finesse", "Reflexes", "Fortitude", "Knowledge"] } },
+        { "name": "Fine Perchers", "mods": { "+2": ["Finesse", "Fortitude", "Willpower"], "+1": ["Awareness", "Intuition", "Charm", "Knowledge"], "-1": ["Might", "Endurance", "Reflexes", "Constitution", "Logic"] } },
+        { "name": "Cursor Stance", "mods": { "+2": ["Knowledge", "Logic", "Might"], "+1": ["Endurance", "Constitution", "Finesse", "Willpower"], "-1": ["Reflexes", "Fortitude", "Awareness", "Intuition", "Charm"] } },
+        { "name": "Wading Struts", "mods": { "+2": ["Reflexes", "Awareness", "Endurance"], "+1": ["Constitution", "Fortitude", "Logic", "Charm"], "-1": ["Might", "Finesse", "Knowledge", "Intuition", "Willpower"] } },
+        { "name": "Webbed Paddles", "mods": { "+2": ["Constitution", "Intuition", "Fortitude"], "+1": ["Might", "Knowledge", "Finesse", "Willpower"], "-1": ["Endurance", "Reflexes", "Logic", "Awareness", "Charm"] } }
+      ],
+      "Aquatic": [
+        { "name": "Ram Ventilation", "mods": { "+2": ["Might", "Reflexes", "Intuition"], "+1": ["Knowledge", "Logic", "Awareness", "Charm"], "-1": ["Endurance", "Finesse", "Constitution", "Fortitude", "Willpower"] } },
+        { "name": "Buoyancy Control", "mods": { "+2": ["Endurance", "Constitution", "Charm"], "+1": ["Logic", "Awareness", "Intuition", "Willpower"], "-1": ["Might", "Finesse", "Reflexes", "Fortitude", "Knowledge"] } },
+        { "name": "Cutaneous Breathing", "mods": { "+2": ["Finesse", "Fortitude", "Willpower"], "+1": ["Awareness", "Intuition", "Charm", "Knowledge"], "-1": ["Might", "Endurance", "Reflexes", "Constitution", "Logic"] } },
+        { "name": "Air Breather", "mods": { "+2": ["Knowledge", "Logic", "Might"], "+1": ["Endurance", "Constitution", "Finesse", "Willpower"], "-1": ["Reflexes", "Fortitude", "Awareness", "Intuition", "Charm"] } },
+        { "name": "Anaerobic Buffer", "mods": { "+2": ["Reflexes", "Awareness", "Endurance"], "+1": ["Constitution", "Fortitude", "Logic", "Charm"], "-1": ["Might", "Finesse", "Knowledge", "Intuition", "Willpower"] } },
+        { "name": "Unidirectional Flow", "mods": { "+2": ["Constitution", "Intuition", "Fortitude"], "+1": ["Might", "Knowledge", "Finesse", "Willpower"], "-1": ["Endurance", "Reflexes", "Logic", "Awareness", "Charm"] } }
+      ],
+      "Insect": [
+        { "name": "Oar-Wing Propulsion", "mods": { "+2": ["Might", "Reflexes", "Intuition"], "+1": ["Knowledge", "Logic", "Awareness", "Charm"], "-1": ["Endurance", "Finesse", "Constitution", "Fortitude", "Willpower"] } },
+        { "name": "Hovering Flex", "mods": { "+2": ["Endurance", "Constitution", "Charm"], "+1": ["Logic", "Awareness", "Intuition", "Willpower"], "-1": ["Might", "Finesse", "Reflexes", "Fortitude", "Knowledge"] } },
+        { "name": "Gliding Sail", "mods": { "+2": ["Finesse", "Fortitude", "Willpower"], "+1": ["Awareness", "Intuition", "Charm", "Knowledge"], "-1": ["Might", "Endurance", "Reflexes", "Constitution", "Logic"] } },
+        { "name": "Soundless Flight", "mods": { "+2": ["Knowledge", "Logic", "Might"], "+1": ["Endurance", "Constitution", "Finesse", "Willpower"], "-1": ["Reflexes", "Fortitude", "Awareness", "Intuition", "Charm"] } },
+        { "name": "Rapid Decoupling", "mods": { "+2": ["Reflexes", "Awareness", "Endurance"], "+1": ["Constitution", "Fortitude", "Logic", "Charm"], "-1": ["Might", "Finesse", "Knowledge", "Intuition", "Willpower"] } },
+        { "name": "Directional Scale", "mods": { "+2": ["Constitution", "Intuition", "Fortitude"], "+1": ["Might", "Knowledge", "Finesse", "Willpower"], "-1": ["Endurance", "Reflexes", "Logic", "Awareness", "Charm"] } }
+      ],
+      "Plant": [
+        { "name": "Carnivore Trapper", "mods": { "+2": ["Might", "Reflexes", "Intuition"], "+1": ["Knowledge", "Logic", "Awareness", "Charm"], "-1": ["Endurance", "Finesse", "Constitution", "Fortitude", "Willpower"] } },
+        { "name": "Desert Succulent", "mods": { "+2": ["Endurance", "Constitution", "Charm"], "+1": ["Logic", "Awareness", "Intuition", "Willpower"], "-1": ["Might", "Finesse", "Reflexes", "Fortitude", "Knowledge"] } },
+        { "name": "Heliotropic Tracker", "mods": { "+2": ["Finesse", "Fortitude", "Willpower"], "+1": ["Awareness", "Intuition", "Charm", "Knowledge"], "-1": ["Might", "Endurance", "Reflexes", "Constitution", "Logic"] } },
+        { "name": "Chlorophyll Shift", "mods": { "+2": ["Knowledge", "Logic", "Might"], "+1": ["Endurance", "Constitution", "Finesse", "Willpower"], "-1": ["Reflexes", "Fortitude", "Awareness", "Intuition", "Charm"] } },
+        { "name": "Floating Surface", "mods": { "+2": ["Reflexes", "Awareness", "Endurance"], "+1": ["Constitution", "Fortitude", "Logic", "Charm"], "-1": ["Might", "Finesse", "Knowledge", "Intuition", "Willpower"] } },
+        { "name": "Spore Dispersal", "mods": { "+2": ["Constitution", "Intuition", "Fortitude"], "+1": ["Might", "Knowledge", "Finesse", "Willpower"], "-1": ["Endurance", "Reflexes", "Logic", "Awareness", "Charm"] } }
+      ]
   },
   "F4": {
-    "Mammal": [], "Reptile": [], "Avian": [], "Aquatic": [], "Insect": [], "Plant": []
+    "Mammal": [
+        { "name": "Climbing Grip", "mods": { "+2": ["Might", "Fortitude", "Charm"], "+1": ["Endurance", "Knowledge", "Logic", "Awareness"], "-1": ["Finesse", "Reflexes", "Constitution", "Intuition", "Willpower"] } },
+        { "name": "Enduring Runners", "mods": { "+2": ["Endurance", "Reflexes", "Logic"], "+1": ["Constitution", "Intuition", "Charm", "Willpower"], "-1": ["Might", "Finesse", "Fortitude", "Knowledge", "Awareness"] } },
+        { "name": "Articulated Digits", "mods": { "+2": ["Finesse", "Constitution", "Awareness"], "+1": ["Might", "Reflexes", "Knowledge", "Fortitude"], "-1": ["Endurance", "Logic", "Intuition", "Charm", "Willpower"] } },
+        { "name": "Burrowing Shovels", "mods": { "+2": ["Knowledge", "Intuition", "Willpower"], "+1": ["Endurance", "Fortitude", "Charm", "Might"], "-1": ["Finesse", "Reflexes", "Constitution", "Logic", "Awareness"] } },
+        { "name": "Brachiation Arms", "mods": { "+2": ["Logic", "Charm", "Finesse"], "+1": ["Constitution", "Awareness", "Intuition", "Willpower"], "-1": ["Might", "Endurance", "Reflexes", "Fortitude", "Knowledge"] } },
+        { "name": "Shielding Forearms", "mods": { "+2": ["Willpower", "Might", "Constitution"], "+1": ["Finesse", "Fortitude", "Knowledge", "Awareness"], "-1": ["Endurance", "Reflexes", "Logic", "Intuition", "Charm"] } }
+      ],
+      "Reptile": [
+        { "name": "Neuro-Lethality", "mods": { "+2": ["Might", "Fortitude", "Charm"], "+1": ["Endurance", "Knowledge", "Logic", "Awareness"], "-1": ["Finesse", "Reflexes", "Constitution", "Intuition", "Willpower"] } },
+        { "name": "Hemotoxic Decay", "mods": { "+2": ["Endurance", "Reflexes", "Logic"], "+1": ["Constitution", "Intuition", "Charm", "Willpower"], "-1": ["Might", "Finesse", "Fortitude", "Knowledge", "Awareness"] } },
+        { "name": "Anti-Coagulant", "mods": { "+2": ["Finesse", "Constitution", "Awareness"], "+1": ["Might", "Reflexes", "Knowledge", "Fortitude"], "-1": ["Endurance", "Logic", "Intuition", "Charm", "Willpower"] } },
+        { "name": "Spitting Defense", "mods": { "+2": ["Knowledge", "Intuition", "Willpower"], "+1": ["Endurance", "Fortitude", "Charm", "Might"], "-1": ["Finesse", "Reflexes", "Constitution", "Logic", "Awareness"] } },
+        { "name": "Pheromone Trail", "mods": { "+2": ["Logic", "Charm", "Finesse"], "+1": ["Constitution", "Awareness", "Intuition", "Willpower"], "-1": ["Might", "Endurance", "Reflexes", "Fortitude", "Knowledge"] } },
+        { "name": "Venom Immunity", "mods": { "+2": ["Willpower", "Might", "Constitution"], "+1": ["Finesse", "Fortitude", "Knowledge", "Awareness"], "-1": ["Endurance", "Reflexes", "Logic", "Intuition", "Charm"] } }
+      ],
+      "Avian": [
+        { "name": "Barometric Sense", "mods": { "+2": ["Might", "Fortitude", "Charm"], "+1": ["Endurance", "Knowledge", "Logic", "Awareness"], "-1": ["Finesse", "Reflexes", "Constitution", "Intuition", "Willpower"] } },
+        { "name": "Tactile Probes", "mods": { "+2": ["Endurance", "Reflexes", "Logic"], "+1": ["Constitution", "Intuition", "Charm", "Willpower"], "-1": ["Might", "Finesse", "Fortitude", "Knowledge", "Awareness"] } },
+        { "name": "Magnetic Alignment", "mods": { "+2": ["Finesse", "Constitution", "Awareness"], "+1": ["Might", "Reflexes", "Knowledge", "Fortitude"], "-1": ["Endurance", "Logic", "Intuition", "Charm", "Willpower"] } },
+        { "name": "Heat Pits", "mods": { "+2": ["Knowledge", "Intuition", "Willpower"], "+1": ["Endurance", "Fortitude", "Charm", "Might"], "-1": ["Finesse", "Reflexes", "Constitution", "Logic", "Awareness"] } },
+        { "name": "High-G Tolerance", "mods": { "+2": ["Logic", "Charm", "Finesse"], "+1": ["Constitution", "Awareness", "Intuition", "Willpower"], "-1": ["Might", "Endurance", "Reflexes", "Fortitude", "Knowledge"] } },
+        { "name": "Low-Light Scanners", "mods": { "+2": ["Willpower", "Might", "Constitution"], "+1": ["Finesse", "Fortitude", "Knowledge", "Awareness"], "-1": ["Endurance", "Reflexes", "Logic", "Intuition", "Charm"] } }
+      ],
+      "Aquatic": [
+        { "name": "Filter Siphon", "mods": { "+2": ["Might", "Fortitude", "Charm"], "+1": ["Endurance", "Knowledge", "Logic", "Awareness"], "-1": ["Finesse", "Reflexes", "Constitution", "Intuition", "Willpower"] } },
+        { "name": "Pressure Cannon", "mods": { "+2": ["Endurance", "Reflexes", "Logic"], "+1": ["Constitution", "Intuition", "Charm", "Willpower"], "-1": ["Might", "Finesse", "Fortitude", "Knowledge", "Awareness"] } },
+        { "name": "Bio-Harpoon", "mods": { "+2": ["Finesse", "Constitution", "Awareness"], "+1": ["Might", "Reflexes", "Knowledge", "Fortitude"], "-1": ["Endurance", "Logic", "Intuition", "Charm", "Willpower"] } },
+        { "name": "Electric Field", "mods": { "+2": ["Knowledge", "Intuition", "Willpower"], "+1": ["Endurance", "Fortitude", "Charm", "Might"], "-1": ["Finesse", "Reflexes", "Constitution", "Logic", "Awareness"] } },
+        { "name": "Angler Lure", "mods": { "+2": ["Logic", "Charm", "Finesse"], "+1": ["Constitution", "Awareness", "Intuition", "Willpower"], "-1": ["Might", "Endurance", "Reflexes", "Fortitude", "Knowledge"] } },
+        { "name": "Vacuum Mouth", "mods": { "+2": ["Willpower", "Might", "Constitution"], "+1": ["Finesse", "Fortitude", "Knowledge", "Awareness"], "-1": ["Endurance", "Reflexes", "Logic", "Intuition", "Charm"] } }
+      ],
+      "Insect": [
+        { "name": "Pheromone Tracker", "mods": { "+2": ["Might", "Fortitude", "Charm"], "+1": ["Endurance", "Knowledge", "Logic", "Awareness"], "-1": ["Finesse", "Reflexes", "Constitution", "Intuition", "Willpower"] } },
+        { "name": "Contact Taste", "mods": { "+2": ["Endurance", "Reflexes", "Logic"], "+1": ["Constitution", "Intuition", "Charm", "Willpower"], "-1": ["Might", "Finesse", "Fortitude", "Knowledge", "Awareness"] } },
+        { "name": "Air Current Reader", "mods": { "+2": ["Finesse", "Constitution", "Awareness"], "+1": ["Might", "Reflexes", "Knowledge", "Fortitude"], "-1": ["Endurance", "Logic", "Intuition", "Charm", "Willpower"] } },
+        { "name": "Toxin Analyzer", "mods": { "+2": ["Knowledge", "Intuition", "Willpower"], "+1": ["Endurance", "Fortitude", "Charm", "Might"], "-1": ["Finesse", "Reflexes", "Constitution", "Logic", "Awareness"] } },
+        { "name": "Social Signature", "mods": { "+2": ["Logic", "Charm", "Finesse"], "+1": ["Constitution", "Awareness", "Intuition", "Willpower"], "-1": ["Might", "Endurance", "Reflexes", "Fortitude", "Knowledge"] } },
+        { "name": "Electro-Sense", "mods": { "+2": ["Willpower", "Might", "Constitution"], "+1": ["Finesse", "Fortitude", "Knowledge", "Awareness"], "-1": ["Endurance", "Reflexes", "Logic", "Intuition", "Charm"] } }
+      ],
+      "Plant": [
+        { "name": "Neuro-Inhibitor", "mods": { "+2": ["Might", "Fortitude", "Charm"], "+1": ["Endurance", "Knowledge", "Logic", "Awareness"], "-1": ["Finesse", "Reflexes", "Constitution", "Intuition", "Willpower"] } },
+        { "name": "Hallucinogen", "mods": { "+2": ["Endurance", "Reflexes", "Logic"], "+1": ["Constitution", "Intuition", "Charm", "Willpower"], "-1": ["Might", "Finesse", "Fortitude", "Knowledge", "Awareness"] } },
+        { "name": "Growth Accelerator", "mods": { "+2": ["Finesse", "Constitution", "Awareness"], "+1": ["Might", "Reflexes", "Knowledge", "Fortitude"], "-1": ["Endurance", "Logic", "Intuition", "Charm", "Willpower"] } },
+        { "name": "Necrotic Agent", "mods": { "+2": ["Knowledge", "Intuition", "Willpower"], "+1": ["Endurance", "Fortitude", "Charm", "Might"], "-1": ["Finesse", "Reflexes", "Constitution", "Logic", "Awareness"] } },
+        { "name": "Pheromone Lure", "mods": { "+2": ["Logic", "Charm", "Finesse"], "+1": ["Constitution", "Awareness", "Intuition", "Willpower"], "-1": ["Might", "Endurance", "Reflexes", "Fortitude", "Knowledge"] } },
+        { "name": "Immune Blockade", "mods": { "+2": ["Willpower", "Might", "Constitution"], "+1": ["Finesse", "Fortitude", "Knowledge", "Awareness"], "-1": ["Endurance", "Reflexes", "Logic", "Intuition", "Charm"] } }
+      ]
   },
   "F5": {
-    "Mammal": [], "Reptile": [], "Avian": [], "Aquatic": [], "Insect": [], "Plant": []
+    "Mammal": [
+        { "name": "Cartilaginous Joints", "mods": { "+2": ["Endurance", "Finesse", "Fortitude"], "+1": ["Might", "Knowledge", "Logic", "Awareness"], "-1": ["Reflexes", "Constitution", "Intuition", "Charm", "Willpower"] } },
+        { "name": "Heavy Bone Density", "mods": { "+2": ["Reflexes", "Constitution", "Willpower"], "+1": ["Finesse", "Knowledge", "Intuition", "Charm"], "-1": ["Might", "Endurance", "Fortitude", "Logic", "Awareness"] } },
+        { "name": "Cranial Reinforcement", "mods": { "+2": ["Might", "Logic", "Intuition"], "+1": ["Endurance", "Reflexes", "Fortitude", "Willpower"], "-1": ["Finesse", "Constitution", "Knowledge", "Awareness", "Charm"] } },
+        { "name": "Lightweight Frame", "mods": { "+2": ["Finesse", "Charm", "Willpower"], "+1": ["Constitution", "Fortitude", "Awareness", "Intuition"], "-1": ["Might", "Endurance", "Reflexes", "Knowledge", "Logic"] } },
+        { "name": "Vertebral Resilience", "mods": { "+2": ["Constitution", "Fortitude", "Awareness"], "+1": ["Might", "Endurance", "Logic", "Intuition"], "-1": ["Finesse", "Reflexes", "Knowledge", "Charm", "Willpower"] } },
+        { "name": "Occipital Knobs", "mods": { "+2": ["Knowledge", "Awareness", "Charm"], "+1": ["Endurance", "Reflexes", "Constitution", "Willpower"], "-1": ["Might", "Finesse", "Fortitude", "Logic", "Intuition"] } }
+      ],
+      "Reptile": [
+        { "name": "Kinetic Dampener", "mods": { "+2": ["Endurance", "Finesse", "Fortitude"], "+1": ["Might", "Knowledge", "Logic", "Awareness"], "-1": ["Reflexes", "Constitution", "Intuition", "Charm", "Willpower"] } },
+        { "name": "Shedding Cycle", "mods": { "+2": ["Reflexes", "Constitution", "Willpower"], "+1": ["Finesse", "Knowledge", "Intuition", "Charm"], "-1": ["Might", "Endurance", "Fortitude", "Logic", "Awareness"] } },
+        { "name": "Heat Sink", "mods": { "+2": ["Might", "Logic", "Intuition"], "+1": ["Endurance", "Reflexes", "Fortitude", "Willpower"], "-1": ["Finesse", "Constitution", "Knowledge", "Awareness", "Charm"] } },
+        { "name": "Hydroscopic Skin", "mods": { "+2": ["Finesse", "Charm", "Willpower"], "+1": ["Constitution", "Fortitude", "Awareness", "Intuition"], "-1": ["Might", "Endurance", "Reflexes", "Knowledge", "Logic"] } },
+        { "name": "Tension Flap", "mods": { "+2": ["Constitution", "Fortitude", "Awareness"], "+1": ["Might", "Endurance", "Logic", "Intuition"], "-1": ["Finesse", "Reflexes", "Knowledge", "Charm", "Willpower"] } },
+        { "name": "Chameleon Cell", "mods": { "+2": ["Knowledge", "Awareness", "Charm"], "+1": ["Endurance", "Reflexes", "Constitution", "Willpower"], "-1": ["Might", "Finesse", "Fortitude", "Logic", "Intuition"] } }
+      ],
+      "Avian": [
+        { "name": "Soaring Wings", "mods": { "+2": ["Endurance", "Finesse", "Fortitude"], "+1": ["Might", "Knowledge", "Logic", "Awareness"], "-1": ["Reflexes", "Constitution", "Intuition", "Charm", "Willpower"] } },
+        { "name": "Flap Velocity", "mods": { "+2": ["Reflexes", "Constitution", "Willpower"], "+1": ["Finesse", "Knowledge", "Intuition", "Charm"], "-1": ["Might", "Endurance", "Fortitude", "Logic", "Awareness"] } },
+        { "name": "Aerobatic Agility", "mods": { "+2": ["Might", "Logic", "Intuition"], "+1": ["Endurance", "Reflexes", "Fortitude", "Willpower"], "-1": ["Finesse", "Constitution", "Knowledge", "Awareness", "Charm"] } },
+        { "name": "Hovering Form", "mods": { "+2": ["Finesse", "Charm", "Willpower"], "+1": ["Constitution", "Fortitude", "Awareness", "Intuition"], "-1": ["Might", "Endurance", "Reflexes", "Knowledge", "Logic"] } },
+        { "name": "Long-Haul Migration", "mods": { "+2": ["Constitution", "Fortitude", "Awareness"], "+1": ["Might", "Endurance", "Logic", "Intuition"], "-1": ["Finesse", "Reflexes", "Knowledge", "Charm", "Willpower"] } },
+        { "name": "Surface Skimmer", "mods": { "+2": ["Knowledge", "Awareness", "Charm"], "+1": ["Endurance", "Reflexes", "Constitution", "Willpower"], "-1": ["Might", "Finesse", "Fortitude", "Logic", "Intuition"] } }
+      ],
+      "Aquatic": [
+        { "name": "Lateral Line Array", "mods": { "+2": ["Endurance", "Finesse", "Fortitude"], "+1": ["Might", "Knowledge", "Logic", "Awareness"], "-1": ["Reflexes", "Constitution", "Intuition", "Charm", "Willpower"] } },
+        { "name": "Ampullae of Lorenzini", "mods": { "+2": ["Reflexes", "Constitution", "Willpower"], "+1": ["Finesse", "Knowledge", "Intuition", "Charm"], "-1": ["Might", "Endurance", "Fortitude", "Logic", "Awareness"] } },
+        { "name": "Echolocation Click", "mods": { "+2": ["Might", "Logic", "Intuition"], "+1": ["Endurance", "Reflexes", "Fortitude", "Willpower"], "-1": ["Finesse", "Constitution", "Knowledge", "Awareness", "Charm"] } },
+        { "name": "Internal Ear Drum", "mods": { "+2": ["Finesse", "Charm", "Willpower"], "+1": ["Constitution", "Fortitude", "Awareness", "Intuition"], "-1": ["Might", "Endurance", "Reflexes", "Knowledge", "Logic"] } },
+        { "name": "Water Chemosense", "mods": { "+2": ["Constitution", "Fortitude", "Awareness"], "+1": ["Might", "Endurance", "Logic", "Intuition"], "-1": ["Finesse", "Reflexes", "Knowledge", "Charm", "Willpower"] } },
+        { "name": "Depth Sonar", "mods": { "+2": ["Knowledge", "Awareness", "Charm"], "+1": ["Endurance", "Reflexes", "Constitution", "Willpower"], "-1": ["Might", "Finesse", "Fortitude", "Logic", "Intuition"] } }
+      ],
+      "Insect": [
+        { "name": "Adhesive Pads", "mods": { "+2": ["Endurance", "Finesse", "Fortitude"], "+1": ["Might", "Knowledge", "Logic", "Awareness"], "-1": ["Reflexes", "Constitution", "Intuition", "Charm", "Willpower"] } },
+        { "name": "Saltatorial Jump", "mods": { "+2": ["Reflexes", "Constitution", "Willpower"], "+1": ["Finesse", "Knowledge", "Intuition", "Charm"], "-1": ["Might", "Endurance", "Fortitude", "Logic", "Awareness"] } },
+        { "name": "Cursorial Speed", "mods": { "+2": ["Might", "Logic", "Intuition"], "+1": ["Endurance", "Reflexes", "Fortitude", "Willpower"], "-1": ["Finesse", "Constitution", "Knowledge", "Awareness", "Charm"] } },
+        { "name": "Fossorial Shovels", "mods": { "+2": ["Finesse", "Charm", "Willpower"], "+1": ["Constitution", "Fortitude", "Awareness", "Intuition"], "-1": ["Might", "Endurance", "Reflexes", "Knowledge", "Logic"] } },
+        { "name": "Aquatic Oars", "mods": { "+2": ["Constitution", "Fortitude", "Awareness"], "+1": ["Might", "Endurance", "Logic", "Intuition"], "-1": ["Finesse", "Reflexes", "Knowledge", "Charm", "Willpower"] } },
+        { "name": "Tripod Gait", "mods": { "+2": ["Knowledge", "Awareness", "Charm"], "+1": ["Endurance", "Reflexes", "Constitution", "Willpower"], "-1": ["Might", "Finesse", "Fortitude", "Logic", "Intuition"] } }
+      ],
+      "Plant": [
+        { "name": "Pressurized Xylem", "mods": { "+2": ["Endurance", "Finesse", "Fortitude"], "+1": ["Might", "Knowledge", "Logic", "Awareness"], "-1": ["Reflexes", "Constitution", "Intuition", "Charm", "Willpower"] } },
+        { "name": "Vascular Sealer", "mods": { "+2": ["Reflexes", "Constitution", "Willpower"], "+1": ["Finesse", "Knowledge", "Intuition", "Charm"], "-1": ["Might", "Endurance", "Fortitude", "Logic", "Awareness"] } },
+        { "name": "Internal Storage", "mods": { "+2": ["Might", "Logic", "Intuition"], "+1": ["Endurance", "Reflexes", "Fortitude", "Willpower"], "-1": ["Finesse", "Constitution", "Knowledge", "Awareness", "Charm"] } },
+        { "name": "Heat Exchange", "mods": { "+2": ["Finesse", "Charm", "Willpower"], "+1": ["Constitution", "Fortitude", "Awareness", "Intuition"], "-1": ["Might", "Endurance", "Reflexes", "Knowledge", "Logic"] } },
+        { "name": "Structural Pith", "mods": { "+2": ["Constitution", "Fortitude", "Awareness"], "+1": ["Might", "Endurance", "Logic", "Intuition"], "-1": ["Finesse", "Reflexes", "Knowledge", "Charm", "Willpower"] } },
+        { "name": "Sap Analysis", "mods": { "+2": ["Knowledge", "Awareness", "Charm"], "+1": ["Endurance", "Reflexes", "Constitution", "Willpower"], "-1": ["Might", "Finesse", "Fortitude", "Logic", "Intuition"] } }
+      ]
   },
   "F6": {
-    "Mammal": [], "Reptile": [], "Avian": [], "Aquatic": [], "Insect": [], "Plant": []
+    "Mammal": [
+        { "name": "Efficient Circulator", "mods": { "+2": ["Might", "Reflexes", "Willpower"], "+1": ["Endurance", "Constitution", "Logic", "Charm"], "-1": ["Finesse", "Fortitude", "Knowledge", "Awareness", "Intuition"] } },
+        { "name": "Fat Reserves", "mods": { "+2": ["Endurance", "Constitution", "Charm"], "+1": ["Might", "Finesse", "Fortitude", "Knowledge"], "-1": ["Reflexes", "Logic", "Awareness", "Intuition", "Willpower"] } },
+        { "name": "Toxin Filter", "mods": { "+2": ["Finesse", "Fortitude", "Intuition"], "+1": ["Reflexes", "Knowledge", "Awareness", "Willpower"], "-1": ["Might", "Endurance", "Constitution", "Logic", "Charm"] } },
+        { "name": "Thermal Adapt", "mods": { "+2": ["Reflexes", "Logic", "Charm"], "+1": ["Might", "Fortitude", "Awareness", "Intuition"], "-1": ["Endurance", "Finesse", "Constitution", "Knowledge", "Willpower"] } },
+        { "name": "Silent Breathing", "mods": { "+2": ["Constitution", "Awareness", "Willpower"], "+1": ["Endurance", "Finesse", "Logic", "Intuition"], "-1": ["Might", "Reflexes", "Fortitude", "Knowledge", "Charm"] } },
+        { "name": "High Energy Burn", "mods": { "+2": ["Fortitude", "Knowledge", "Might"], "+1": ["Finesse", "Constitution", "Intuition", "Charm"], "-1": ["Endurance", "Reflexes", "Logic", "Awareness", "Willpower"] } }
+      ],
+      "Reptile": [
+        { "name": "Vascular Shunt", "mods": { "+2": ["Might", "Reflexes", "Willpower"], "+1": ["Endurance", "Constitution", "Logic", "Charm"], "-1": ["Finesse", "Fortitude", "Knowledge", "Awareness", "Intuition"] } },
+        { "name": "Anaerobic Buffer", "mods": { "+2": ["Endurance", "Constitution", "Charm"], "+1": ["Might", "Finesse", "Fortitude", "Knowledge"], "-1": ["Reflexes", "Logic", "Awareness", "Intuition", "Willpower"] } },
+        { "name": "Bradycardia State", "mods": { "+2": ["Finesse", "Fortitude", "Intuition"], "+1": ["Reflexes", "Knowledge", "Awareness", "Willpower"], "-1": ["Might", "Endurance", "Constitution", "Logic", "Charm"] } },
+        { "name": "Rapid Recharge", "mods": { "+2": ["Reflexes", "Logic", "Charm"], "+1": ["Might", "Fortitude", "Awareness", "Intuition"], "-1": ["Endurance", "Finesse", "Constitution", "Knowledge", "Willpower"] } },
+        { "name": "Fluid Reserves", "mods": { "+2": ["Constitution", "Awareness", "Willpower"], "+1": ["Endurance", "Finesse", "Logic", "Intuition"], "-1": ["Might", "Reflexes", "Fortitude", "Knowledge", "Charm"] } },
+        { "name": "Acidic Gizzard", "mods": { "+2": ["Fortitude", "Knowledge", "Might"], "+1": ["Finesse", "Constitution", "Intuition", "Charm"], "-1": ["Endurance", "Reflexes", "Logic", "Awareness", "Willpower"] } }
+      ],
+      "Avian": [
+        { "name": "Preen Oil", "mods": { "+2": ["Might", "Reflexes", "Willpower"], "+1": ["Endurance", "Constitution", "Logic", "Charm"], "-1": ["Finesse", "Fortitude", "Knowledge", "Awareness", "Intuition"] } },
+        { "name": "Hyper-Adrenal", "mods": { "+2": ["Endurance", "Constitution", "Charm"], "+1": ["Might", "Finesse", "Fortitude", "Knowledge"], "-1": ["Reflexes", "Logic", "Awareness", "Intuition", "Willpower"] } },
+        { "name": "Stomach Acid", "mods": { "+2": ["Finesse", "Fortitude", "Intuition"], "+1": ["Reflexes", "Knowledge", "Awareness", "Willpower"], "-1": ["Might", "Endurance", "Constitution", "Logic", "Charm"] } },
+        { "name": "Pheromone Signal", "mods": { "+2": ["Reflexes", "Logic", "Charm"], "+1": ["Might", "Fortitude", "Awareness", "Intuition"], "-1": ["Endurance", "Finesse", "Constitution", "Knowledge", "Willpower"] } },
+        { "name": "Detoxifying Gut", "mods": { "+2": ["Constitution", "Awareness", "Willpower"], "+1": ["Endurance", "Finesse", "Logic", "Intuition"], "-1": ["Might", "Reflexes", "Fortitude", "Knowledge", "Charm"] } },
+        { "name": "Skeletal Calcifiers", "mods": { "+2": ["Fortitude", "Knowledge", "Might"], "+1": ["Finesse", "Constitution", "Intuition", "Charm"], "-1": ["Endurance", "Reflexes", "Logic", "Awareness", "Willpower"] } }
+      ],
+      "Aquatic": [
+        { "name": "Counter-Illumination", "mods": { "+2": ["Might", "Reflexes", "Willpower"], "+1": ["Endurance", "Constitution", "Logic", "Charm"], "-1": ["Finesse", "Fortitude", "Knowledge", "Awareness", "Intuition"] } },
+        { "name": "Alarm Flash", "mods": { "+2": ["Endurance", "Constitution", "Charm"], "+1": ["Might", "Finesse", "Fortitude", "Knowledge"], "-1": ["Reflexes", "Logic", "Awareness", "Intuition", "Willpower"] } },
+        { "name": "Complex Patterning", "mods": { "+2": ["Finesse", "Fortitude", "Intuition"], "+1": ["Reflexes", "Knowledge", "Awareness", "Willpower"], "-1": ["Might", "Endurance", "Constitution", "Logic", "Charm"] } },
+        { "name": "Noxious Glow", "mods": { "+2": ["Reflexes", "Logic", "Charm"], "+1": ["Might", "Fortitude", "Awareness", "Intuition"], "-1": ["Endurance", "Finesse", "Constitution", "Knowledge", "Willpower"] } },
+        { "name": "Photophore Array", "mods": { "+2": ["Constitution", "Awareness", "Willpower"], "+1": ["Endurance", "Finesse", "Logic", "Intuition"], "-1": ["Might", "Reflexes", "Fortitude", "Knowledge", "Charm"] } },
+        { "name": "Infrared Glow", "mods": { "+2": ["Fortitude", "Knowledge", "Might"], "+1": ["Finesse", "Constitution", "Intuition", "Charm"], "-1": ["Endurance", "Reflexes", "Logic", "Awareness", "Willpower"] } }
+      ],
+      "Insect": [
+        { "name": "Direct Muscle", "mods": { "+2": ["Might", "Reflexes", "Willpower"], "+1": ["Endurance", "Constitution", "Logic", "Charm"], "-1": ["Finesse", "Fortitude", "Knowledge", "Awareness", "Intuition"] } },
+        { "name": "Fat Body Reserves", "mods": { "+2": ["Endurance", "Constitution", "Charm"], "+1": ["Might", "Finesse", "Fortitude", "Knowledge"], "-1": ["Reflexes", "Logic", "Awareness", "Intuition", "Willpower"] } },
+        { "name": "Hemolymph Pressure", "mods": { "+2": ["Finesse", "Fortitude", "Intuition"], "+1": ["Reflexes", "Knowledge", "Awareness", "Willpower"], "-1": ["Might", "Endurance", "Constitution", "Logic", "Charm"] } },
+        { "name": "Metabolic Burst", "mods": { "+2": ["Reflexes", "Logic", "Charm"], "+1": ["Might", "Fortitude", "Awareness", "Intuition"], "-1": ["Endurance", "Finesse", "Constitution", "Knowledge", "Willpower"] } },
+        { "name": "Malpighian Filtration", "mods": { "+2": ["Constitution", "Awareness", "Willpower"], "+1": ["Endurance", "Finesse", "Logic", "Intuition"], "-1": ["Might", "Reflexes", "Fortitude", "Knowledge", "Charm"] } },
+        { "name": "Tymbal Organ", "mods": { "+2": ["Fortitude", "Knowledge", "Might"], "+1": ["Finesse", "Constitution", "Intuition", "Charm"], "-1": ["Endurance", "Reflexes", "Logic", "Awareness", "Willpower"] } }
+      ],
+      "Plant": [
+        { "name": "Nastic Response", "mods": { "+2": ["Might", "Reflexes", "Willpower"], "+1": ["Endurance", "Constitution", "Logic", "Charm"], "-1": ["Finesse", "Fortitude", "Knowledge", "Awareness", "Intuition"] } },
+        { "name": "Geotropic Motor", "mods": { "+2": ["Endurance", "Constitution", "Charm"], "+1": ["Might", "Finesse", "Fortitude", "Knowledge"], "-1": ["Reflexes", "Logic", "Awareness", "Intuition", "Willpower"] } },
+        { "name": "Phototropism", "mods": { "+2": ["Finesse", "Fortitude", "Intuition"], "+1": ["Reflexes", "Knowledge", "Awareness", "Willpower"], "-1": ["Might", "Endurance", "Constitution", "Logic", "Charm"] } },
+        { "name": "Tropic Coiler", "mods": { "+2": ["Reflexes", "Logic", "Charm"], "+1": ["Might", "Fortitude", "Awareness", "Intuition"], "-1": ["Endurance", "Finesse", "Constitution", "Knowledge", "Willpower"] } },
+        { "name": "Long-Lived State", "mods": { "+2": ["Constitution", "Awareness", "Willpower"], "+1": ["Endurance", "Finesse", "Logic", "Intuition"], "-1": ["Might", "Reflexes", "Fortitude", "Knowledge", "Charm"] } },
+        { "name": "Burst Sprout", "mods": { "+2": ["Fortitude", "Knowledge", "Might"], "+1": ["Finesse", "Constitution", "Intuition", "Charm"], "-1": ["Endurance", "Reflexes", "Logic", "Awareness", "Willpower"] } }
+      ]
   },
   "F7": {
-    "Mammal": [], "Reptile": [], "Avian": [], "Aquatic": [], "Insect": [], "Plant": []
+    "Mammal": [
+        { "name": "Echolocator", "mods": { "+2": ["Knowledge", "Intuition", "Might"], "+1": ["Finesse", "Constitution", "Fortitude", "Willpower"], "-1": ["Endurance", "Reflexes", "Logic", "Awareness", "Charm"] } },
+        { "name": "Subsonic Hearer", "mods": { "+2": ["Logic", "Charm", "Endurance"], "+1": ["Reflexes", "Fortitude", "Knowledge", "Intuition"], "-1": ["Might", "Finesse", "Constitution", "Awareness", "Willpower"] } },
+        { "name": "Ultrasonic Hearer", "mods": { "+2": ["Awareness", "Willpower", "Finesse"], "+1": ["Constitution", "Knowledge", "Logic", "Charm"], "-1": ["Might", "Endurance", "Reflexes", "Fortitude", "Intuition"] } },
+        { "name": "Directional Ears", "mods": { "+2": ["Intuition", "Reflexes", "Constitution"], "+1": ["Might", "Endurance", "Logic", "Awareness"], "-1": ["Finesse", "Fortitude", "Knowledge", "Charm", "Willpower"] } },
+        { "name": "Sonic Shielding", "mods": { "+2": ["Charm", "Might", "Fortitude"], "+1": ["Finesse", "Reflexes", "Awareness", "Willpower"], "-1": ["Endurance", "Constitution", "Knowledge", "Logic", "Intuition"] } },
+        { "name": "Complex Signaling", "mods": { "+2": ["Willpower", "Endurance", "Knowledge"], "+1": ["Might", "Finesse", "Constitution", "Intuition"], "-1": ["Reflexes", "Fortitude", "Logic", "Awareness", "Charm"] } }
+      ],
+      "Reptile": [
+        { "name": "Jacobson's Scan", "mods": { "+2": ["Knowledge", "Intuition", "Might"], "+1": ["Finesse", "Constitution", "Fortitude", "Willpower"], "-1": ["Endurance", "Reflexes", "Logic", "Awareness", "Charm"] } },
+        { "name": "Thermographic Sight", "mods": { "+2": ["Logic", "Charm", "Endurance"], "+1": ["Reflexes", "Fortitude", "Knowledge", "Intuition"], "-1": ["Might", "Finesse", "Constitution", "Awareness", "Willpower"] } },
+        { "name": "Flicker Fusion", "mods": { "+2": ["Awareness", "Willpower", "Finesse"], "+1": ["Constitution", "Knowledge", "Logic", "Charm"], "-1": ["Might", "Endurance", "Reflexes", "Fortitude", "Intuition"] } },
+        { "name": "Subsonic Drum", "mods": { "+2": ["Intuition", "Reflexes", "Constitution"], "+1": ["Might", "Endurance", "Logic", "Awareness"], "-1": ["Finesse", "Fortitude", "Knowledge", "Charm", "Willpower"] } },
+        { "name": "Parietal Eye", "mods": { "+2": ["Charm", "Might", "Fortitude"], "+1": ["Finesse", "Reflexes", "Awareness", "Willpower"], "-1": ["Endurance", "Constitution", "Knowledge", "Logic", "Intuition"] } },
+        { "name": "Color Shifter", "mods": { "+2": ["Willpower", "Endurance", "Knowledge"], "+1": ["Might", "Finesse", "Constitution", "Intuition"], "-1": ["Reflexes", "Fortitude", "Logic", "Awareness", "Charm"] } }
+      ],
+      "Avian": [
+        { "name": "Mimicry Trill", "mods": { "+2": ["Knowledge", "Intuition", "Might"], "+1": ["Finesse", "Constitution", "Fortitude", "Willpower"], "-1": ["Endurance", "Reflexes", "Logic", "Awareness", "Charm"] } },
+        { "name": "Alarm Shriek", "mods": { "+2": ["Logic", "Charm", "Endurance"], "+1": ["Reflexes", "Fortitude", "Knowledge", "Intuition"], "-1": ["Might", "Finesse", "Constitution", "Awareness", "Willpower"] } },
+        { "name": "Hypnotic Song", "mods": { "+2": ["Awareness", "Willpower", "Finesse"], "+1": ["Constitution", "Knowledge", "Logic", "Charm"], "-1": ["Might", "Endurance", "Reflexes", "Fortitude", "Intuition"] } },
+        { "name": "Infrasound Pulse", "mods": { "+2": ["Intuition", "Reflexes", "Constitution"], "+1": ["Might", "Endurance", "Logic", "Awareness"], "-1": ["Finesse", "Fortitude", "Knowledge", "Charm", "Willpower"] } },
+        { "name": "Silent Posture", "mods": { "+2": ["Charm", "Might", "Fortitude"], "+1": ["Finesse", "Reflexes", "Awareness", "Willpower"], "-1": ["Endurance", "Constitution", "Knowledge", "Logic", "Intuition"] } },
+        { "name": "Rapid Dialect", "mods": { "+2": ["Willpower", "Endurance", "Knowledge"], "+1": ["Might", "Finesse", "Constitution", "Intuition"], "-1": ["Reflexes", "Fortitude", "Logic", "Awareness", "Charm"] } }
+      ],
+      "Aquatic": [
+        { "name": "Grasping Tentacle", "mods": { "+2": ["Knowledge", "Intuition", "Might"], "+1": ["Finesse", "Constitution", "Fortitude", "Willpower"], "-1": ["Endurance", "Reflexes", "Logic", "Awareness", "Charm"] } },
+        { "name": "Hydro-Abrasive Skin", "mods": { "+2": ["Logic", "Charm", "Endurance"], "+1": ["Reflexes", "Fortitude", "Knowledge", "Intuition"], "-1": ["Might", "Finesse", "Constitution", "Awareness", "Willpower"] } },
+        { "name": "Armored Head", "mods": { "+2": ["Awareness", "Willpower", "Finesse"], "+1": ["Constitution", "Knowledge", "Logic", "Charm"], "-1": ["Might", "Endurance", "Reflexes", "Fortitude", "Intuition"] } },
+        { "name": "Ink Cloud", "mods": { "+2": ["Intuition", "Reflexes", "Constitution"], "+1": ["Might", "Endurance", "Logic", "Awareness"], "-1": ["Finesse", "Fortitude", "Knowledge", "Charm", "Willpower"] } },
+        { "name": "Sperm Whale Form", "mods": { "+2": ["Charm", "Might", "Fortitude"], "+1": ["Finesse", "Reflexes", "Awareness", "Willpower"], "-1": ["Endurance", "Constitution", "Knowledge", "Logic", "Intuition"] } },
+        { "name": "Telescopic Eyes", "mods": { "+2": ["Willpower", "Endurance", "Knowledge"], "+1": ["Might", "Finesse", "Constitution", "Intuition"], "-1": ["Reflexes", "Fortitude", "Logic", "Awareness", "Charm"] } }
+      ],
+      "Insect": [
+        { "name": "Polarized Sight", "mods": { "+2": ["Knowledge", "Intuition", "Might"], "+1": ["Finesse", "Constitution", "Fortitude", "Willpower"], "-1": ["Endurance", "Reflexes", "Logic", "Awareness", "Charm"] } },
+        { "name": "Omni-Directional", "mods": { "+2": ["Logic", "Charm", "Endurance"], "+1": ["Reflexes", "Fortitude", "Knowledge", "Intuition"], "-1": ["Might", "Finesse", "Constitution", "Awareness", "Willpower"] } },
+        { "name": "Multi-Spectral", "mods": { "+2": ["Awareness", "Willpower", "Finesse"], "+1": ["Constitution", "Knowledge", "Logic", "Charm"], "-1": ["Might", "Endurance", "Reflexes", "Fortitude", "Intuition"] } },
+        { "name": "Flicker Fusion Max", "mods": { "+2": ["Intuition", "Reflexes", "Constitution"], "+1": ["Might", "Endurance", "Logic", "Awareness"], "-1": ["Finesse", "Fortitude", "Knowledge", "Charm", "Willpower"] } },
+        { "name": "Ocelli Focus", "mods": { "+2": ["Charm", "Might", "Fortitude"], "+1": ["Finesse", "Reflexes", "Awareness", "Willpower"], "-1": ["Endurance", "Constitution", "Knowledge", "Logic", "Intuition"] } },
+        { "name": "Night Scanners", "mods": { "+2": ["Willpower", "Endurance", "Knowledge"], "+1": ["Might", "Finesse", "Constitution", "Intuition"], "-1": ["Reflexes", "Fortitude", "Logic", "Awareness", "Charm"] } }
+      ],
+      "Plant": [
+        { "name": "Electrical Pulse", "mods": { "+2": ["Knowledge", "Intuition", "Might"], "+1": ["Finesse", "Constitution", "Fortitude", "Willpower"], "-1": ["Endurance", "Reflexes", "Logic", "Awareness", "Charm"] } },
+        { "name": "Airborne Warning", "mods": { "+2": ["Logic", "Charm", "Endurance"], "+1": ["Reflexes", "Fortitude", "Knowledge", "Intuition"], "-1": ["Might", "Finesse", "Constitution", "Awareness", "Willpower"] } },
+        { "name": "Seismic Whisper", "mods": { "+2": ["Awareness", "Willpower", "Finesse"], "+1": ["Constitution", "Knowledge", "Logic", "Charm"], "-1": ["Might", "Endurance", "Reflexes", "Fortitude", "Intuition"] } },
+        { "name": "Scent Beacon", "mods": { "+2": ["Intuition", "Reflexes", "Constitution"], "+1": ["Might", "Endurance", "Logic", "Awareness"], "-1": ["Finesse", "Fortitude", "Knowledge", "Charm", "Willpower"] } },
+        { "name": "Sonic Resonance", "mods": { "+2": ["Charm", "Might", "Fortitude"], "+1": ["Finesse", "Reflexes", "Awareness", "Willpower"], "-1": ["Endurance", "Constitution", "Knowledge", "Logic", "Intuition"] } },
+        { "name": "Infrared Sensor", "mods": { "+2": ["Willpower", "Endurance", "Knowledge"], "+1": ["Might", "Finesse", "Constitution", "Intuition"], "-1": ["Reflexes", "Fortitude", "Logic", "Awareness", "Charm"] } }
+      ]
   },
   "F8": {
-    "Mammal": [], "Reptile": [], "Avian": [], "Aquatic": [], "Insect": [], "Plant": []
+    "Mammal": [
+        { "name": "Tundra Loper", "mods": { "+2": ["Logic", "Awareness", "Endurance"], "+1": ["Reflexes", "Constitution", "Intuition", "Charm"], "-1": ["Might", "Finesse", "Fortitude", "Knowledge", "Willpower"] } },
+        { "name": "Arboreal Grips", "mods": { "+2": ["Intuition", "Charm", "Finesse"], "+1": ["Constitution", "Fortitude", "Willpower", "Might"], "-1": ["Endurance", "Reflexes", "Knowledge", "Logic", "Awareness"] } },
+        { "name": "Gliding Membranes", "mods": { "+2": ["Willpower", "Might", "Reflexes"], "+1": ["Fortitude", "Knowledge", "Charm", "Endurance"], "-1": ["Finesse", "Constitution", "Logic", "Awareness", "Intuition"] } },
+        { "name": "Hoof Ram", "mods": { "+2": ["Endurance", "Constitution", "Logic"], "+1": ["Awareness", "Intuition", "Might", "Finesse"], "-1": ["Reflexes", "Fortitude", "Knowledge", "Charm", "Willpower"] } },
+        { "name": "Aquatic Thruster", "mods": { "+2": ["Fortitude", "Knowledge", "Awareness"], "+1": ["Finesse", "Reflexes", "Logic", "Willpower"], "-1": ["Might", "Endurance", "Constitution", "Intuition", "Charm"] } },
+        { "name": "Ambusher Leap", "mods": { "+2": ["Finesse", "Charm", "Willpower"], "+1": ["Constitution", "Knowledge", "Intuition", "Fortitude"], "-1": ["Might", "Endurance", "Reflexes", "Logic", "Awareness"] } }
+      ],
+      "Reptile": [
+        { "name": "Lateral Undulation", "mods": { "+2": ["Logic", "Awareness", "Endurance"], "+1": ["Reflexes", "Constitution", "Intuition", "Charm"], "-1": ["Might", "Finesse", "Fortitude", "Knowledge", "Willpower"] } },
+        { "name": "Tail Propulsion", "mods": { "+2": ["Intuition", "Charm", "Finesse"], "+1": ["Constitution", "Fortitude", "Willpower", "Might"], "-1": ["Endurance", "Reflexes", "Knowledge", "Logic", "Awareness"] } },
+        { "name": "Gliding Ribs", "mods": { "+2": ["Willpower", "Might", "Reflexes"], "+1": ["Fortitude", "Knowledge", "Charm", "Endurance"], "-1": ["Finesse", "Constitution", "Logic", "Awareness", "Intuition"] } },
+        { "name": "Static Hold", "mods": { "+2": ["Endurance", "Constitution", "Logic"], "+1": ["Awareness", "Intuition", "Might", "Finesse"], "-1": ["Reflexes", "Fortitude", "Knowledge", "Charm", "Willpower"] } },
+        { "name": "Paddle Sculler", "mods": { "+2": ["Fortitude", "Knowledge", "Awareness"], "+1": ["Finesse", "Reflexes", "Logic", "Willpower"], "-1": ["Might", "Endurance", "Constitution", "Intuition", "Charm"] } },
+        { "name": "Limbless Grip", "mods": { "+2": ["Finesse", "Charm", "Willpower"], "+1": ["Constitution", "Knowledge", "Intuition", "Fortitude"], "-1": ["Might", "Endurance", "Reflexes", "Logic", "Awareness"] } }
+      ],
+      "Avian": [
+        { "name": "Keeled Sternum", "mods": { "+2": ["Logic", "Awareness", "Endurance"], "+1": ["Reflexes", "Constitution", "Intuition", "Charm"], "-1": ["Might", "Finesse", "Fortitude", "Knowledge", "Willpower"] } },
+        { "name": "Fused Vertebrae", "mods": { "+2": ["Intuition", "Charm", "Finesse"], "+1": ["Constitution", "Fortitude", "Willpower", "Might"], "-1": ["Endurance", "Reflexes", "Knowledge", "Logic", "Awareness"] } },
+        { "name": "Pneumatic Bones", "mods": { "+2": ["Willpower", "Might", "Reflexes"], "+1": ["Fortitude", "Knowledge", "Charm", "Endurance"], "-1": ["Finesse", "Constitution", "Logic", "Awareness", "Intuition"] } },
+        { "name": "Center of Mass", "mods": { "+2": ["Endurance", "Constitution", "Logic"], "+1": ["Awareness", "Intuition", "Might", "Finesse"], "-1": ["Reflexes", "Fortitude", "Knowledge", "Charm", "Willpower"] } },
+        { "name": "Wing Bone Spurs", "mods": { "+2": ["Fortitude", "Knowledge", "Awareness"], "+1": ["Finesse", "Reflexes", "Logic", "Willpower"], "-1": ["Might", "Endurance", "Constitution", "Intuition", "Charm"] } },
+        { "name": "Reinforced Skull", "mods": { "+2": ["Finesse", "Charm", "Willpower"], "+1": ["Constitution", "Knowledge", "Intuition", "Fortitude"], "-1": ["Might", "Endurance", "Reflexes", "Logic", "Awareness"] } }
+      ],
+      "Aquatic": [
+        { "name": "Pelagic Cruiser", "mods": { "+2": ["Logic", "Awareness", "Endurance"], "+1": ["Reflexes", "Constitution", "Intuition", "Charm"], "-1": ["Might", "Finesse", "Fortitude", "Knowledge", "Willpower"] } },
+        { "name": "Demersal Glide", "mods": { "+2": ["Intuition", "Charm", "Finesse"], "+1": ["Constitution", "Fortitude", "Willpower", "Might"], "-1": ["Endurance", "Reflexes", "Knowledge", "Logic", "Awareness"] } },
+        { "name": "Benthic Burrower", "mods": { "+2": ["Willpower", "Might", "Reflexes"], "+1": ["Fortitude", "Knowledge", "Charm", "Endurance"], "-1": ["Finesse", "Constitution", "Logic", "Awareness", "Intuition"] } },
+        { "name": "Reef Dart", "mods": { "+2": ["Endurance", "Constitution", "Logic"], "+1": ["Awareness", "Intuition", "Might", "Finesse"], "-1": ["Reflexes", "Fortitude", "Knowledge", "Charm", "Willpower"] } },
+        { "name": "Amphibious Crawl", "mods": { "+2": ["Fortitude", "Knowledge", "Awareness"], "+1": ["Finesse", "Reflexes", "Logic", "Willpower"], "-1": ["Might", "Endurance", "Constitution", "Intuition", "Charm"] } },
+        { "name": "School Synchrony", "mods": { "+2": ["Finesse", "Charm", "Willpower"], "+1": ["Constitution", "Knowledge", "Intuition", "Fortitude"], "-1": ["Might", "Endurance", "Reflexes", "Logic", "Awareness"] } }
+      ],
+      "Insect": [
+        { "name": "Solitary Nomad", "mods": { "+2": ["Logic", "Awareness", "Endurance"], "+1": ["Reflexes", "Constitution", "Intuition", "Charm"], "-1": ["Might", "Finesse", "Fortitude", "Knowledge", "Willpower"] } },
+        { "name": "Colonial Mind", "mods": { "+2": ["Intuition", "Charm", "Finesse"], "+1": ["Constitution", "Fortitude", "Willpower", "Might"], "-1": ["Endurance", "Reflexes", "Knowledge", "Logic", "Awareness"] } },
+        { "name": "Complete Metamorph", "mods": { "+2": ["Willpower", "Might", "Reflexes"], "+1": ["Fortitude", "Knowledge", "Charm", "Endurance"], "-1": ["Finesse", "Constitution", "Logic", "Awareness", "Intuition"] } },
+        { "name": "Viviparous Birth", "mods": { "+2": ["Endurance", "Constitution", "Logic"], "+1": ["Awareness", "Intuition", "Might", "Finesse"], "-1": ["Reflexes", "Fortitude", "Knowledge", "Charm", "Willpower"] } },
+        { "name": "Chemical Caste", "mods": { "+2": ["Fortitude", "Knowledge", "Awareness"], "+1": ["Finesse", "Reflexes", "Logic", "Willpower"], "-1": ["Might", "Endurance", "Constitution", "Intuition", "Charm"] } },
+        { "name": "Waggle Communication", "mods": { "+2": ["Finesse", "Charm", "Willpower"], "+1": ["Constitution", "Knowledge", "Intuition", "Fortitude"], "-1": ["Might", "Endurance", "Reflexes", "Logic", "Awareness"] } }
+      ],
+      "Plant": [
+        { "name": "Lignified Heartwood", "mods": { "+2": ["Logic", "Awareness", "Endurance"], "+1": ["Reflexes", "Constitution", "Intuition", "Charm"], "-1": ["Might", "Finesse", "Fortitude", "Knowledge", "Willpower"] } },
+        { "name": "Floating Bladder", "mods": { "+2": ["Intuition", "Charm", "Finesse"], "+1": ["Constitution", "Fortitude", "Willpower", "Might"], "-1": ["Endurance", "Reflexes", "Knowledge", "Logic", "Awareness"] } },
+        { "name": "Needle Leaf Array", "mods": { "+2": ["Willpower", "Might", "Reflexes"], "+1": ["Fortitude", "Knowledge", "Charm", "Endurance"], "-1": ["Finesse", "Constitution", "Logic", "Awareness", "Intuition"] } },
+        { "name": "Self-Pruner", "mods": { "+2": ["Endurance", "Constitution", "Logic"], "+1": ["Awareness", "Intuition", "Might", "Finesse"], "-1": ["Reflexes", "Fortitude", "Knowledge", "Charm", "Willpower"] } },
+        { "name": "Acidic Sap", "mods": { "+2": ["Fortitude", "Knowledge", "Awareness"], "+1": ["Finesse", "Reflexes", "Logic", "Willpower"], "-1": ["Might", "Endurance", "Constitution", "Intuition", "Charm"] } },
+        { "name": "Root Tendrils", "mods": { "+2": ["Finesse", "Charm", "Willpower"], "+1": ["Constitution", "Knowledge", "Intuition", "Fortitude"], "-1": ["Might", "Endurance", "Reflexes", "Logic", "Awareness"] } }
+      ]
   },
   "F9": {
     "All": [
-      { "name": "Capstone: +1 Might", "mods": { "+1": ["Might"] } },
-      { "name": "Capstone: +1 Endurance", "mods": { "+1": ["Endurance"] } },
-      { "name": "Capstone: +1 Finesse", "mods": { "+1": ["Finesse"] } },
-      { "name": "Capstone: +1 Reflexes", "mods": { "+1": ["Reflexes"] } },
-      { "name": "Capstone: +1 Constitution", "mods": { "+1": ["Constitution"] } },
-      { "name": "Capstone: +1 Fortitude", "mods": { "+1": ["Fortitude"] } },
-      { "name": "Capstone: +1 Knowledge", "mods": { "+1": ["Knowledge"] } },
-      { "name": "Capstone: +1 Logic", "mods": { "+1": ["Logic"] } },
-      { "name": "Capstone: +1 Awareness", "mods": { "+1": ["Awareness"] } },
-      { "name": "Capstone: +1 Intuition", "mods": { "+1": ["Intuition"] } },
-      { "name": "Capstone: +1 Charm", "mods": { "+1": ["Charm"] } },
-      { "name": "Capstone: +1 Willpower", "mods": { "+1": ["Willpower"] } }
-    ]
+        { "name": "Capstone: +1 Might", "mods": { "+1": ["Might"] } },
+        { "name": "Capstone: +1 Endurance", "mods": { "+1": ["Endurance"] } },
+        { "name": "Capstone: +1 Finesse", "mods": { "+1": ["Finesse"] } },
+        { "name": "Capstone: +1 Reflexes", "mods": { "+1": ["Reflexes"] } },
+        { "name": "Capstone: +1 Constitution", "mods": { "+1": ["Constitution"] } },
+        { "name": "Capstone: +1 Fortitude", "mods": { "+1": ["Fortitude"] } },
+        { "name": "Capstone: +1 Knowledge", "mods": { "+1": ["Knowledge"] } },
+        { "name": "Capstone: +1 Logic", "mods": { "+1": ["Logic"] } },
+        { "name": "Capstone: +1 Awareness", "mods": { "+1": ["Awareness"] } },
+        { "name": "Capstone: +1 Intuition", "mods": { "+1": ["Intuition"] } },
+        { "name": "Capstone: +1 Charm", "mods": { "+1": ["Charm"] } },
+        { "name": "Capstone: +1 Willpower", "mods": { "+1": ["Willpower"] } }
+      ]
   }
 }
