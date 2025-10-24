@@ -1,15 +1,21 @@
+# main.py
 from fastapi import Depends, FastAPI, HTTPException
 from sqlalchemy.orm import Session
-import requests
+from typing import List, Dict, Any
+import logging
+from pydantic import BaseModel
 
+# Import local modules using relative paths
 from . import crud, models, schemas, services
-from .database import SessionLocal, engine
+from .database import SessionLocal, engine, Base # Import Base if needed here
 
-models.Base.metadata.create_all(bind=engine)
+# Create tables if they don't exist (useful for simple setups, Alembic is better for prod)
+# Base.metadata.create_all(bind=engine)
 
-app = FastAPI()
+app = FastAPI(title="Character Engine")
+logger = logging.getLogger("uvicorn.error")
 
-# Dependency
+# --- Dependency ---
 def get_db():
     db = SessionLocal()
     try:
@@ -17,60 +23,169 @@ def get_db():
     finally:
         db.close()
 
-@app.post("/v1/characters/", response_model=schemas.CharacterResponse)
-def create_character(character_request: schemas.CharacterCreateRequest, db: Session = Depends(get_db)):
+# --- API Endpoints ---
+
+@app.post("/v1/characters/", response_model=schemas.CharacterResponse, status_code=201)
+async def create_character( # Make endpoint async
+    character_request: schemas.CharacterCreateRequest,
+    db: Session = Depends(get_db)
+):
+    """Creates a new character, calculating stats and fetching rules."""
+    logger.info(f"Received request to create character: {character_request.name}")
     try:
-        ability_schools = services.get_all_ability_schools()
-    except requests.exceptions.ConnectionError:
-        raise HTTPException(status_code=503, detail="Rules Engine is unavailable.")
+        # --- 1. Calculate Stats ---
+        logger.info("Calculating stats...")
+        stats_list = await services.get_all_stats_names()
+        final_stats = {stat: 8 for stat in stats_list}
 
-    # A more robust implementation would validate character_request against ability_schools
+        for feature_key, feature_name in character_request.f_stats.items():
+            mods = await services.get_feature_stat_mods(feature_name)
+            for stat in mods.get("+2", []): final_stats[stat] = final_stats.get(stat, 8) + 2
+            for stat in mods.get("+1", []): final_stats[stat] = final_stats.get(stat, 8) + 1
+            for stat in mods.get("-1", []): final_stats[stat] = final_stats.get(stat, 8) - 1
 
-    base_resources = services.get_base_resources()
+        cap_stat = character_request.capstone_stat
+        if cap_stat in final_stats:
+            final_stats[cap_stat] += 1
+        logger.info("Stats calculation complete.")
 
-    character_sheet = {
-        "stats": character_request.f_stats,
-        "capstone": character_request.capstone_stat,
-        "background_skills": character_request.background_skills,
-        "resources": base_resources,
-        "sre": {},
-        "valid_ability_schools": ability_schools
-    }
+        # --- 2. Initialize Skills & Apply Background ---
+        logger.info("Initializing skills...")
+        all_skill_names = await services.get_all_skill_names()
+        final_skills = {skill: {"rank": 0, "sre": 0} for skill in all_skill_names}
 
-    character_data = {
-        "name": character_request.name,
-        "kingdom": character_request.kingdom,
-        "character_sheet": character_sheet
-    }
+        if len(character_request.background_skills) != 12:
+             # This check should ideally happen during Pydantic validation if model enforces length
+             logger.warning("Incorrect number of background skills provided.")
+             # Raise error or handle default skills? We'll proceed but log warning.
+             # raise HTTPException(status_code=400, detail="Must provide exactly 12 background skills.")
 
-    return crud.create_character(db=db, character_data=character_data)
+        for skill_name in character_request.background_skills:
+            if skill_name in final_skills:
+                final_skills[skill_name]["rank"] = 1
+            else:
+                logger.warning(f"Background skill '{skill_name}' not found in master list.")
+        logger.info("Skills initialized.")
+
+        # --- 3. Initialize Abilities ---
+        logger.info("Initializing abilities...")
+        ability_school_names = await services.get_all_ability_schools()
+        final_abilities = {school: 0 for school in ability_school_names} # Store rank as int
+        logger.info("Abilities initialized.")
+
+        # --- 4. Initialize Resources ---
+        logger.info("Initializing resources...")
+        final_resources = await services.get_base_resources()
+        logger.info("Resources initialized.")
+
+        # --- 5. Get Initial Talents ---
+        logger.info("Fetching initial talents...")
+        skill_ranks_for_talents = {name: data["rank"] for name, data in final_skills.items()}
+        initial_talents = await services.get_eligible_talents(final_stats, skill_ranks_for_talents)
+        logger.info(f"Found {len(initial_talents)} starting talents.")
+
+        # --- 6. Construct Character Sheet ---
+        character_sheet_data = {
+            "stats": final_stats,
+            "skills": final_skills,
+            "abilities": final_abilities,
+            "resources": final_resources,
+            "choices": { # Store original choices for reference
+                 "features": character_request.f_stats,
+                 "capstone": character_request.capstone_stat,
+                 "background_skills": character_request.background_skills
+            },
+            "unlocked_talents": initial_talents,
+            "location": "STARTING_ZONE", # Default start location
+            # Add other base fields if needed: description, image_url, inventory=[]
+        }
+
+        # --- 7. Save to Database via CRUD ---
+        logger.info("Saving character to database...")
+        db_character = crud.create_character(
+            db=db,
+            name=character_request.name,
+            kingdom=character_request.kingdom,
+            character_sheet=character_sheet_data # Pass the calculated sheet
+        )
+        logger.info(f"Character '{db_character.name}' saved with ID {db_character.id}.")
+
+        # --- 8. Return Response ---
+        # Construct the response according to schemas.CharacterResponse
+        return schemas.CharacterResponse(
+            id=db_character.id,
+            name=db_character.name,
+            kingdom=db_character.kingdom,
+            character_sheet=db_character.character_sheet # Return the saved sheet
+        )
+
+    # Keep existing exception handlers for ConnectionError etc.
+    except HTTPException as e:
+        logger.error(f"HTTP Exception during character creation: {e.detail}")
+        raise e
+    except Exception as e:
+        logger.exception(f"Unexpected error during character creation for {character_request.name}") # Log full traceback
+        raise HTTPException(status_code=500, detail=f"Internal server error: {e}")
+
 
 @app.get("/v1/characters/{char_id}", response_model=schemas.CharacterResponse)
-def read_character(char_id: int, db: Session = Depends(get_db)):
+async def read_character(char_id: int, db: Session = Depends(get_db)): # Make async
+    """Retrieves a character by ID."""
+    logger.info(f"Fetching character ID: {char_id}")
     db_character = crud.get_character(db, char_id=char_id)
     if db_character is None:
+        logger.warning(f"Character ID {char_id} not found.")
         raise HTTPException(status_code=404, detail="Character not found")
+    logger.info(f"Character '{db_character.name}' found.")
+    # Response model automatically handles conversion if orm_mode=True
     return db_character
 
-@app.post("/v1/characters/{char_id}/add_sre")
-def add_sre_to_character(char_id: int, sre_request: dict, db: Session = Depends(get_db)):
-    skill_name = sre_request.get("skill_name")
-    if not skill_name:
-        raise HTTPException(status_code=400, detail="skill_name not provided")
 
+# --- Simplified SRE Logic (Placeholder) ---
+# Define a Pydantic model for the request body
+class SreRequest(BaseModel):
+    skill_name: str
+
+@app.post("/v1/characters/{char_id}/add_sre") # Removed response_model for simplicity
+async def add_sre_to_character(char_id: int, sre_request: SreRequest, db: Session = Depends(get_db)): # Make async
+    """Adds SRE to a skill (Simplified Logic)."""
+    logger.info(f"Adding SRE to skill '{sre_request.skill_name}' for char ID: {char_id}")
     character = crud.get_character(db, char_id)
     if not character:
+        logger.warning(f"Add SRE failed: Character ID {char_id} not found.")
         raise HTTPException(status_code=404, detail="Character not found")
 
-    # This is a simplified SRE addition logic. A real implementation would
-    # call the Rules Engine to get the SRE progression rules.
-    current_sre = character.character_sheet.get("sre", {})
-    current_rank = current_sre.get(skill_name, 0)
+    # --- Simplified SRE/Rank Logic ---
+    # In a real app, call Rules Engine for rules & check talents
+    sheet = dict(character.character_sheet) # Mutable copy
+    skills = sheet.get("skills", {})
+    skill_data = skills.get(sre_request.skill_name)
 
-    # In this example, we'll just increment the rank.
-    new_rank = current_rank + 1
-    current_sre[skill_name] = new_rank
+    if skill_data is None:
+        logger.warning(f"Skill '{sre_request.skill_name}' not found in character sheet.")
+        raise HTTPException(status_code=400, detail=f"Skill '{sre_request.skill_name}' not found for character.")
 
-    crud.update_character_sheet(db, char_id, {"sre": current_sre})
+    # Increment SRE, check for rank up
+    skill_data["sre"] = skill_data.get("sre", 0) + 1
+    new_sre = skill_data["sre"]
+    new_rank = skill_data.get("rank", 0)
+    message = f"Added 1 SRE to {sre_request.skill_name}. Current SRE: {new_sre}."
 
-    return {"message": f"SRE for {skill_name} added/updated.", "new_rank": new_rank}
+    if new_sre >= 5: # Assuming 5 SRE per rank
+        skill_data["sre"] = 0
+        skill_data["rank"] += 1
+        new_rank = skill_data["rank"]
+        new_sre = 0
+        message = f"Ranked up {sre_request.skill_name} to Rank {new_rank}!"
+        logger.info(message)
+        # TODO: Here you would call services.get_eligible_talents with updated skills
+        #       and update the character sheet's 'unlocked_talents' list.
+
+    # Update the sheet in the DB
+    updated_char = crud.update_character_sheet(db, char_id, {"skills": skills})
+    # --- ---
+
+    if not updated_char: # Should not happen if character was found initially
+         raise HTTPException(status_code=500, detail="Failed to update character sheet after adding SRE.")
+
+    return {"message": message, "new_rank": new_rank, "new_sre": new_sre}

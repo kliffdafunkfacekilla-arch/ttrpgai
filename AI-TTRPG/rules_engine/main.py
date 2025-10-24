@@ -100,16 +100,25 @@ async def api_validate_ability_check(request: AbilityCheckRequest):
         raise HTTPException(status_code=500, detail=f"Error calculating ability check: {e}")
 
 
+# In main.py
 @app.get("/v1/lookup/kingdom_feature_stats", response_model=FeatureStatsResponse)
 async def api_get_feature_stats(feature_name: str):
-    """
-    Looks up the stat modifications for a specific Kingdom Feature by its name.
-    """
+    """Looks up the stat modifications for a specific Kingdom Feature by its name."""
+    logger.info(f"--- Endpoint api_get_feature_stats received request for: '{feature_name}'")
     try:
-        return core.get_kingdom_feature_stats(feature_name)
-    except ValueError as e: # Specific error for feature not found
-        raise HTTPException(status_code=404, detail=str(e))
+        # Ensure data_loader map is loaded before accessing it
+        if not hasattr(data_loader, 'FEATURE_STATS_MAP') or not data_loader.FEATURE_STATS_MAP:
+             logger.error("FEATURE_STATS_MAP is not loaded or empty!")
+             raise HTTPException(status_code=503, detail="Feature map not loaded.")
+
+        # Call the core function AND PASS the map directly
+        return core.get_kingdom_feature_stats(feature_name, data_loader.FEATURE_STATS_MAP)
+
+    except ValueError as e: # Catch the ValueError raised by the core function
+        logger.error(f"Lookup failed in core function: {e}")
+        raise HTTPException(status_code=404, detail=str(e)) # Return 404
     except Exception as e:
+         logger.exception(f"Unexpected error in api_get_feature_stats for '{feature_name}': {e}")
          raise HTTPException(status_code=500, detail=f"Internal error looking up feature: {e}")
 
 @app.post("/v1/lookup/talents", response_model=List[TalentInfo])
