@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from typing import List, Dict, Any
 import logging
 from pydantic import BaseModel
+from sqlalchemy.orm.attributes import flag_modified
 
 # Import local modules using relative paths
 from . import crud, models, schemas, services
@@ -146,18 +147,17 @@ async def read_character(char_id: int, db: Session = Depends(get_db)): # Make as
 class SreRequest(BaseModel):
     skill_name: str
 
-@app.post("/v1/characters/{char_id}/add_sre") # Removed response_model for simplicity
-async def add_sre_to_character(char_id: int, sre_request: SreRequest, db: Session = Depends(get_db)): # Make async
-    """Adds SRE to a skill (Simplified Logic)."""
+@app.post("/v1/characters/{char_id}/add_sre")
+async def add_sre_to_character(char_id: int, sre_request: SreRequest, db: Session = Depends(get_db)):
+    """Adds SRE to a skill and handles rank-up logic."""
     logger.info(f"Adding SRE to skill '{sre_request.skill_name}' for char ID: {char_id}")
-    character = crud.get_character(db, char_id)
+    character = crud.get_character(db, char_id=char_id)
     if not character:
         logger.warning(f"Add SRE failed: Character ID {char_id} not found.")
         raise HTTPException(status_code=404, detail="Character not found")
 
-    # --- Simplified SRE/Rank Logic ---
-    # In a real app, call Rules Engine for rules & check talents
-    sheet = dict(character.character_sheet) # Mutable copy
+    # Get a mutable copy of the entire sheet
+    sheet = dict(character.character_sheet)
     skills = sheet.get("skills", {})
     skill_data = skills.get(sre_request.skill_name)
 
@@ -165,21 +165,64 @@ async def add_sre_to_character(char_id: int, sre_request: SreRequest, db: Sessio
         logger.warning(f"Skill '{sre_request.skill_name}' not found in character sheet.")
         raise HTTPException(status_code=400, detail=f"Skill '{sre_request.skill_name}' not found for character.")
 
-    # Increment SRE, check for rank up
+    # Increment SRE
     skill_data["sre"] = skill_data.get("sre", 0) + 1
     new_sre = skill_data["sre"]
     new_rank = skill_data.get("rank", 0)
     message = f"Added 1 SRE to {sre_request.skill_name}. Current SRE: {new_sre}."
+    newly_unlocked_talents = [] # This will hold the talent dictionaries
 
-    if new_sre >= 5: # Assuming 5 SRE per rank
+    if new_sre >= 5: # Rule: 5 SRE per rank
         skill_data["sre"] = 0
         skill_data["rank"] += 1
         new_rank = skill_data["rank"]
         new_sre = 0
         message = f"Ranked up {sre_request.skill_name} to Rank {new_rank}!"
         logger.info(message)
-        # TODO: Here you would call services.get_eligible_talents with updated skills
-        #       and update the character sheet's 'unlocked_talents' list.
+
+        # Check for new talents
+        try:
+            logger.info("Checking for newly unlocked talents...")
+            char_stats = sheet.get("stats", {})
+            skill_ranks_now = {name: data.get("rank", 0) for name, data in skills.items()}
+
+            # This returns a list of dictionaries, e.g., [{"name": "...", "source": "...", "effect": "..."}]
+            all_eligible_talents_raw = await services.get_eligible_talents(char_stats, skill_ranks_now)
+
+            current_talent_dicts = sheet.get("unlocked_talents", [])
+            current_talents_set = {t['name'] for t in current_talent_dicts if isinstance(t, dict) and 'name' in t}
+
+            new_talents_found_dicts = []
+            for talent_dict in all_eligible_talents_raw:
+                if talent_dict.get('name') not in current_talents_set:
+                    new_talents_found_dicts.append(talent_dict)
+                    newly_unlocked_talents.append(talent_dict) # Add the raw dict to our response list
+                    logger.info(f"New talent unlocked: {talent_dict.get('name')}")
+
+            if new_talents_found_dicts:
+                 sheet["unlocked_talents"] = current_talent_dicts + new_talents_found_dicts
+
+        except Exception as e:
+             logger.error(f"Error checking/updating talents for char {char_id}: {e}")
+             # Log the error but don't crash the SRE add
+
+    # Explicitly flag the JSON column as modified
+    flag_modified(character, "character_sheet")
+
+    # Pass the ENTIRE modified sheet dictionary to the update function
+    updated_char = crud.update_character_sheet(db, character, sheet)
+
+    if not updated_char:
+         raise HTTPException(status_code=500, detail="Failed to update character sheet after adding SRE.")
+
+    return {
+        "character_id": char_id,
+        "skill_name": sre_request.skill_name,
+        "new_rank": new_rank,
+        "new_sre": new_sre,
+        "sre_update_message": message,
+        "newly_unlocked_talents": newly_unlocked_talents # Return the list of dictionaries
+    }
 
     # Update the sheet in the DB
     updated_char = crud.update_character_sheet(db, char_id, {"skills": skills})

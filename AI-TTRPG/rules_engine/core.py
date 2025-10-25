@@ -1,21 +1,8 @@
-import random
-
-def perform_skill_check(stat_modifier: int, skill_rank: int, dc: int) -> tuple[bool, int]:
-    """
-    Performs a skill check by rolling a d20, adding modifiers, and comparing to a DC.
-    """
-    roll = random.randint(1, 20)
-    total = roll + stat_modifier + skill_rank
-    success = total >= dc
-    return success, roll
-
 # core.py
 import random
 from typing import Dict, List, Optional, Any
 # Use relative import for models within the same package
 from .models import RollResult, TalentInfo, FeatureStatsResponse
-# Import globals from data_loader using relative import
-from .data_loader import TALENT_DATA, STATS_LIST, SKILL_CATEGORIES, ALL_SKILLS
 
 # --- Dice Rolling ---
 
@@ -47,7 +34,7 @@ def calculate_ability_check(rank: int, stat_mod: int, tier: int) -> RollResult:
     if tier <= 3: dc = 12
     elif tier <= 6: dc = 14
     elif tier <= 9: dc = 16
-    else: dc = 20 # Define a DC for T10?
+    else: dc = 20 # Assuming T10 might exist implicitly or have a higher DC
 
     roll = _roll_d20()
     total = roll + rank + stat_mod
@@ -63,11 +50,11 @@ def calculate_ability_check(rank: int, stat_mod: int, tier: int) -> RollResult:
 
 # --- Core Lookup Logic ---
 
-# In core.py
 def get_kingdom_feature_stats(feature_name: str, feature_map: Dict[str, Any]) -> FeatureStatsResponse:
-    """Looks up the stat modifications using the provided map."""
+    """Looks up stat mods using the provided map."""
+    if not feature_map:
+        raise ValueError("Feature map not provided or empty.")
     if feature_name not in feature_map:
-        # This function now raises the error if not found in the map IT RECEIVED
         raise ValueError(f"Feature '{feature_name}' not found in provided rules map.")
     feature_data = feature_map[feature_name]
     mods_data = feature_data.get("mods", {})
@@ -76,80 +63,77 @@ def get_kingdom_feature_stats(feature_name: str, feature_map: Dict[str, Any]) ->
         mods=mods_data
     )
 
-def get_skills_by_category() -> Dict[str, List[str]]:
-    """Returns skills grouped by category."""
-    # Ensure SKILL_CATEGORIES is loaded
-    if not SKILL_CATEGORIES:
-        raise ValueError("Skill categories not loaded.")
-    return SKILL_CATEGORIES
+def get_skills_by_category(skill_categories_map: Dict[str, List[str]]) -> Dict[str, List[str]]:
+    """Returns skills grouped by category from the provided map."""
+    if not skill_categories_map:
+        raise ValueError("Skill categories map not provided or empty.")
+    return skill_categories_map
 
-def find_eligible_talents(stats_in: Dict[str, int], skills_in: Dict[str, int]) -> List[TalentInfo]:
-    """Finds all unlocked talents based on stats and skills."""
+def find_eligible_talents(stats_in: Dict[str, int],
+                           skills_in: Dict[str, int], # {skill_name: rank}
+                           talent_data: Dict[str, Any],
+                           stats_list: List[str],
+                           all_skills_map: Dict[str, Dict[str, str]]
+                           ) -> List[TalentInfo]:
+    """Finds unlocked talents based on stats, skills, and provided talent data."""
     unlocked_talents = []
 
-    # Ensure TALENT_DATA is loaded
-    if not TALENT_DATA:
-         print("Warning: Talent data not loaded, cannot find eligible talents.")
+    if not talent_data or not stats_list or not all_skills_map:
+         print("Warning: Missing required data (talents, stats list, or skills map) for talent lookup.")
          return []
 
-    # Ensure STATS_LIST is available for defaulting stats
-    stats_complete = {stat: stats_in.get(stat, 0) for stat in STATS_LIST}
-    # skills_in should be {skill_name: rank}
-    skills_complete = skills_in
+    stats_complete = {stat: stats_in.get(stat, 0) for stat in stats_list}
+    skills_complete = skills_in # Assumes skills_in is {skill_name: rank}
 
     # --- 1. Check Single Stat Mastery ---
-    for talent_group in TALENT_DATA.get("singleStatMastery", []):
-        stat_name = talent_group.get("stat") # Already corrected to Vitality
-        if not stat_name: continue # Skip if stat name is missing
+    for talent_group in talent_data.get("single_stat_mastery", []):
+        stat_name = talent_group.get("stat")
+        if not stat_name: continue
         current_stat_score = stats_complete.get(stat_name, 0)
-        for milestone in talent_group.get("milestones", []):
-            if current_stat_score >= milestone.get("score", 99):
-                unlocked_talents.append(TalentInfo(
-                    name=milestone.get("name", "Unknown Talent"),
-                    source=f"Stat: {stat_name} {milestone.get('score', '?')}",
-                    effect=milestone.get("effect", "")
-                ))
+        # Check 'score' field (ensure talents.json uses 'score')
+        required_score = talent_group.get("score")
+        if required_score is not None and current_stat_score >= required_score:
+             unlocked_talents.append(TalentInfo(
+                 name=talent_group.get("talent_name", "Unknown Talent"),
+                 source=f"Stat: {stat_name} {required_score}",
+                 effect=talent_group.get("effect", "")
+             ))
 
     # --- 2. Check Dual Stat Synergy ---
-    for talent in TALENT_DATA.get("dualStatSynergy", []):
-        req_score = talent.get("score", 99)
-        stats_pair = talent.get("pairedStats", []) # Already corrected
+    for talent in talent_data.get("dual_stat_focus", []):
+        req_score = talent.get("score", 99) # Check 'score' field
+        stats_pair = talent.get("paired_stats", []) # Check 'paired_stats' field
         if len(stats_pair) == 2:
             stat1, stat2 = stats_pair
             if stats_complete.get(stat1, 0) >= req_score and stats_complete.get(stat2, 0) >= req_score:
                 unlocked_talents.append(TalentInfo(
-                    name=talent.get("name", "Unknown Talent"),
+                    name=talent.get("talent_name", "Unknown Talent"), # Check 'talent_name' field
                     source=f"Dual Stat: {stat1} & {stat2} {req_score}",
                     effect=talent.get("effect", "")
                 ))
 
     # --- 3. Check Skill Mastery ---
-    # Ensure ALL_SKILLS is loaded for skill name validation (optional but safer)
-    if not ALL_SKILLS:
-         print("Warning: Skill master list not loaded, skill mastery talents might be missed.")
-
-    for category_key, category_list in TALENT_DATA.get("skillMastery", {}).items():
+    for category_key, category_list in talent_data.get("single_skill_mastery", {}).items():
          if isinstance(category_list, list):
             for skill_group in category_list:
                 skill_name = skill_group.get("skill")
-                if skill_name and skill_name in ALL_SKILLS: # Check if skill is valid
+                if skill_name and skill_name in all_skills_map: # Check against provided map
                      current_skill_rank = skills_complete.get(skill_name, 0)
                      for talent in skill_group.get("talents", []):
-                        tier_name = talent.get("tier")
+                        # Check both 'tier' and 'prerequisite_mt' keys for flexibility
+                        tier_name = talent.get("tier", talent.get("prerequisite_mt"))
                         req_rank = 99
                         if tier_name and tier_name.startswith("MT"):
-                            try:
-                                req_rank = int(tier_name.replace("MT", ""))
+                            try: req_rank = int(tier_name.replace("MT", ""))
                             except ValueError: pass
 
                         if current_skill_rank >= req_rank:
                             unlocked_talents.append(TalentInfo(
-                                name=talent.get("name", "Unknown Talent"),
+                                name=talent.get("talent_name", "Unknown Talent"), # Check 'talent_name' field
                                 source=f"Skill: {skill_name} ({tier_name})",
                                 effect=talent.get("effect", "")
                             ))
                 elif skill_name:
-                    print(f"Warning: Skill '{skill_name}' from talent data not found in master skill list.")
-
+                    print(f"Warning: Skill '{skill_name}' from talent data not found in master skill map.")
 
     return unlocked_talents

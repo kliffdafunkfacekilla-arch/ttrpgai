@@ -3,15 +3,6 @@ import json
 from typing import Dict, List, Any
 import os
 
-# --- Global Variables to Hold Rulebook Data ---
-STATS_LIST: List[str] = []
-SKILL_CATEGORIES: Dict[str, List[str]] = {}
-ALL_SKILLS: Dict[str, Dict[str, str]] = {}
-ABILITY_DATA: Dict[str, Any] = {}
-TALENT_DATA: Dict[str, Any] = {}
-KINGDOM_DATA: Dict[str, Any] = {}
-FEATURE_STATS_MAP: Dict[str, Any] = {}
-
 # --- File Path Setup ---
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.join(BASE_DIR, 'data')
@@ -51,99 +42,95 @@ def _correct_stat_names_in_mods(mods: Dict[str, List[str]]) -> Dict[str, List[st
              corrected_mods[key] = stats
     return corrected_mods
 
-# --- REMOVED _correct_stat_names_in_talents function ---
+# --- Processing Functions ---
 
-def _process_kingdom_features():
-    """Processes kingdom data into a flat map, correcting stat names."""
-    global FEATURE_STATS_MAP, KINGDOM_DATA
-    KINGDOM_DATA = _load_json("kingdom_features.json")
-    FEATURE_STATS_MAP = {}
-    if not isinstance(KINGDOM_DATA, dict):
+def _process_kingdom_features() -> Dict[str, Any]:
+    """Processes kingdom data into a flat map AND RETURNS IT."""
+    kingdom_data = _load_json("kingdom_features.json")
+    feature_stats_map = {}
+    if not isinstance(kingdom_data, dict):
          print("FATAL ERROR: kingdom_features.json did not load as a dictionary.")
-         return
+         return {}
 
-    for category_data in KINGDOM_DATA.values():
+    for category_data in kingdom_data.values():
         if not isinstance(category_data, dict): continue
-        for kingdom_data in category_data.values():
-            if isinstance(kingdom_data, list):
-                for feature in kingdom_data:
+        for kingdom_list in category_data.values():
+            if isinstance(kingdom_list, list):
+                for feature in kingdom_list:
                     if not isinstance(feature, dict): continue
                     feature_name = feature.get("name")
                     if feature_name:
                         if "mods" in feature:
                              feature["mods"] = _correct_stat_names_in_mods(feature["mods"])
-                        FEATURE_STATS_MAP[feature_name] = feature
-    print(f"Processed {len(FEATURE_STATS_MAP)} kingdom features into flat map (Vitality corrected).")
+                        feature_stats_map[feature_name] = feature
+    print(f"Processed {len(feature_stats_map)} kingdom features into flat map (Vitality corrected).")
+    return feature_stats_map
 
-
-def _process_skills():
-    """Processes the categorized skills into a master list."""
-    global ALL_SKILLS, SKILL_CATEGORIES, STATS_LIST
+def _process_skills() -> tuple[List[str], Dict[str, List[str]], Dict[str, Dict[str, str]]]:
+    """Processes skills AND RETURNS stats list, categories dict, and all_skills dict."""
     stats_data = _load_json("stats_and_skills.json")
-    STATS_LIST = stats_data.get("stats", [])
-    SKILL_CATEGORIES = stats_data.get("skill_categories", {})
-    ALL_SKILLS = {}
+    stats_list = stats_data.get("stats", [])
+    skill_categories = stats_data.get("skill_categories", {})
+    all_skills = {}
 
-    if not STATS_LIST:
+    if not stats_list:
         print("FATAL ERROR: 'stats' list not found or empty in stats_and_skills.json")
-        return
+        return [], {}, {}
 
-    for category, skills in SKILL_CATEGORIES.items():
+    for category, skills in skill_categories.items():
         if isinstance(skills, list):
             for i, skill_name in enumerate(skills):
-                stat_index = i % len(STATS_LIST)
-                governing_stat = STATS_LIST[stat_index]
-                ALL_SKILLS[skill_name] = {
+                stat_index = i % len(stats_list)
+                governing_stat = stats_list[stat_index]
+                all_skills[skill_name] = {
                     "category": category,
                     "stat": governing_stat
                 }
         else:
             print(f"Warning: Expected list for skills in category '{category}', got {type(skills)}. Skipping category.")
 
-    print(f"Processed {len(ALL_SKILLS)} skills into master map.")
+    print(f"Processed {len(all_skills)} skills into master map.")
+    return stats_list, skill_categories, all_skills
 
 # --- Main Loading Function ---
 
-def load_data():
-    """Main function called on server startup to load all rules into GLOBAL variables."""
-    global ABILITY_DATA, TALENT_DATA # Declare globals being assigned
-
+def load_data() -> Dict[str, Any]:
+    """Loads all rules data and returns it in a dictionary."""
     print("Starting data loading process...")
+    loaded_data = {}
     try:
-        # Load stats and skills first
-        _process_skills()
-        print(f"DEBUG: STATS_LIST type: {type(STATS_LIST)}, len: {len(STATS_LIST) if STATS_LIST else 0}")
-        print(f"DEBUG: ALL_SKILLS type: {type(ALL_SKILLS)}, len: {len(ALL_SKILLS) if ALL_SKILLS else 0}")
+        # Load stats and skills
+        stats_list, skill_categories, all_skills = _process_skills()
+        loaded_data['stats_list'] = stats_list
+        loaded_data['skill_categories'] = skill_categories
+        loaded_data['all_skills'] = all_skills
+        print(f"DEBUG: STATS_LIST len: {len(stats_list)}")
+        print(f"DEBUG: ALL_SKILLS len: {len(all_skills)}")
 
-        # Load abilities directly as dictionary
-        ABILITY_DATA = _load_json("abilities.json")
-        if not isinstance(ABILITY_DATA, dict):
-            print(f"--- WARNING: ABILITY_DATA did NOT load as a dictionary. Type: {type(ABILITY_DATA)} ---")
-            ABILITY_DATA = {}
-        print(f"DEBUG: ABILITY_DATA type: {type(ABILITY_DATA)}, len: {len(ABILITY_DATA) if ABILITY_DATA else 0}")
+        # Load abilities
+        ability_data = _load_json("abilities.json")
+        if not isinstance(ability_data, dict):
+            print(f"--- WARNING: ABILITY_DATA did NOT load as a dictionary. Type: {type(ability_data)} ---")
+            ability_data = {}
+        loaded_data['ability_data'] = ability_data
+        print(f"DEBUG: ABILITY_DATA len: {len(ability_data)}")
 
         # Load talents
-        TALENT_DATA = _load_json("talents.json")
-        if not isinstance(TALENT_DATA, dict):
-            print(f"--- WARNING: TALENT_DATA did NOT load as a dictionary. Type: {type(TALENT_DATA)} ---")
-            TALENT_DATA = {}
-        print(f"DEBUG: TALENT_DATA type: {type(TALENT_DATA)}, len: {len(TALENT_DATA) if TALENT_DATA else 0}")
+        talent_data = _load_json("talents.json")
+        if not isinstance(talent_data, dict):
+            print(f"--- WARNING: TALENT_DATA did NOT load as a dictionary. Type: {type(talent_data)} ---")
+            talent_data = {}
+        # No need to correct stats here if talents.json is already fixed
+        loaded_data['talent_data'] = talent_data
+        print(f"DEBUG: TALENT_DATA len: {len(talent_data)}")
 
-        # --- REMOVED CALL to _correct_stat_names_in_talents ---
+        # Process kingdom features
+        feature_stats_map = _process_kingdom_features()
+        loaded_data['feature_stats_map'] = feature_stats_map
+        print(f"DEBUG: FEATURE_STATS_MAP len: {len(feature_stats_map)}")
 
-        # Pre-process kingdom features
-        _process_kingdom_features()
-        print(f"DEBUG: FEATURE_STATS_MAP type: {type(FEATURE_STATS_MAP)}, len: {len(FEATURE_STATS_MAP) if FEATURE_STATS_MAP else 0}")
-
-        # Final check
-        if isinstance(ABILITY_DATA, dict) and ABILITY_DATA and isinstance(TALENT_DATA, dict) and TALENT_DATA and isinstance(FEATURE_STATS_MAP, dict) and FEATURE_STATS_MAP:
-            print("--- Rules Engine Data Loaded Successfully (all major components processed) ---")
-        else:
-            print(f"--- WARNING: Final check shows one or more data components did not load correctly. ---")
-            print(f"    ABILITY_DATA type: {type(ABILITY_DATA)}")
-            print(f"    TALENT_DATA type: {type(TALENT_DATA)}")
-            print(f"    FEATURE_STATS_MAP type: {type(FEATURE_STATS_MAP)}")
-
+        print("--- Rules Engine Data Parsed Successfully ---")
+        return loaded_data # Return the dictionary
 
     except Exception as e:
         print(f"FATAL ERROR during load_data execution: {e}")
