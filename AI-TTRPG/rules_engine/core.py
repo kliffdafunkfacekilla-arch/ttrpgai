@@ -15,7 +15,7 @@ from typing import Dict, List, Optional, Any
 # Use relative import for models within the same package
 from .models import RollResult, TalentInfo, FeatureStatsResponse
 # Import globals from data_loader using relative import
-from .data_loader import TALENT_DATA, FEATURE_STATS_MAP, STATS_LIST, SKILL_CATEGORIES, ALL_SKILLS
+from .data_loader import TALENT_DATA, STATS_LIST, SKILL_CATEGORIES, ALL_SKILLS
 
 # --- Dice Rolling ---
 
