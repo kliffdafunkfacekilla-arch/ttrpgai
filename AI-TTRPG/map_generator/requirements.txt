@@ -1,0 +1,4 @@
+fastapi
+uvicorn[standard]
+pydantic
+# Add libraries like 'numpy' or 'noise' here if needed for algorithms
