@@ -1,0 +1,40 @@
+[
+{
+"id": "skill_forest_easy_chasm",
+"tags": ["forest", "easy", "skill", "travel"],
+"description": "A wide chasm blocks the path, a rickety rope bridge sways in the wind.",
+"title": "Cross the Chasm",
+"success_threshold": 2,
+"stages": [
+{
+"description": "Test the bridge's stability.",
+"skill": "Logic", "dc": 12
+},
+{
+"description": "Cross the swaying bridge.",
+"skill": "Athletics", "dc": 14
+},
+{
+"description": "Avoid a snapping rope.",
+"skill": "Reflexes", "dc": 13
+}
+]
+},
+{
+"id": "skill_cave_medium_rubble",
+"tags": ["cave", "medium", "skill", "exploration"],
+"description": "The tunnel ahead has collapsed into a pile of dangerous, unstable rubble.",
+"title": "Clear the Rubble",
+"success_threshold": 2,
+"stages": [
+{
+"description": "Find a stable path through the rocks.",
+"skill": "Awareness", "dc": 15
+},
+{
+"description": "Heave the largest boulder out of the way.",
+"skill": "Might", "dc": 16
+}
+]
+}
+]

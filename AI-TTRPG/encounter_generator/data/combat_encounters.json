@@ -1,0 +1,20 @@
+[
+{
+"id": "combat_forest_easy_goblins",
+"tags": ["forest", "day", "easy", "combat"],
+"description": "A pair of goblin scouts leap from the bushes, surprised!",
+"npcs_to_spawn": ["goblin_scout", "goblin_scout"]
+},
+{
+"id": "combat_forest_medium_spiders",
+"tags": ["forest", "night", "medium", "combat"],
+"description": "Thick webs block the path. A massive, chittering Forest Stalker descends.",
+"npcs_to_spawn": ["forest_stalker_spider", "spiderling", "spiderling"]
+},
+{
+"id": "combat_cave_hard_cultists",
+"tags": ["cave", "dark", "hard", "combat", "humanoid"],
+"description": "A dark ritual is underway. A Cultist Acolyte and two bodyguards turn to face you, their eyes glowing.",
+"npcs_to_spawn": ["cultist_acolyte", "cultist_brute", "cultist_brute"]
+}
+]

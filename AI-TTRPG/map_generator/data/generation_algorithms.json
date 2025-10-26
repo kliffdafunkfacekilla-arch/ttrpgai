@@ -1,0 +1,33 @@
+{
+"algorithms": [
+{
+"name": "Forest Clearing",
+"required_tags": ["forest", "outside", "clearing"],
+"algorithm": "cellular_automata",
+"parameters": {
+"width": 30,
+"height": 20,
+"initial_density": 0.45,
+"iterations": 4,
+"birth_limit": 4,
+"death_limit": 3,
+"wall_tile_id": 1,
+"floor_tile_id": 0
+},
+"post_processing": ["add_border_trees", "clear_center"]
+},
+{
+"name": "Simple Cave",
+"required_tags": ["cave", "inside", "dungeon"],
+"algorithm": "drunkards_walk",
+"parameters": {
+"width": 25,
+"height": 25,
+"walk_steps": 500,
+"wall_tile_id": 4,
+"floor_tile_id": 3
+},
+"post_processing": ["fill_unreachable"]
+}
+]
+}
