@@ -1,8 +1,34 @@
 # core.py
 import random
+import math
 from typing import Dict, List, Optional, Any
 # Use relative import for models within the same package
+from . import models
+from .data_loader import INJURY_EFFECTS
 from .models import RollResult, TalentInfo, FeatureStatsResponse
+
+
+# ADD THIS FUNCTION
+def calculate_modifier(score: int) -> int:
+    """Calculates the attribute modifier from a score based on floor((Score - 10) / 2)."""
+    if not isinstance(score, int):
+        # Basic type check for safety
+        print(f"Warning: calculate_modifier received non-integer score: {score}. Using 10.")
+        score = 10
+    return math.floor((score - 10) / 2)
+
+
+# ADD THIS FUNCTION
+def calculate_skill_mt_bonus(rank: int) -> int:
+    """
+    Calculates Skill Mastery Tier bonus from rank.
+    Assumption: Bonus = floor(Rank / 3).
+    Rank 0-2 = +0, Rank 3-5 = +1, Rank 6-8 = +2, etc.
+    """
+    if not isinstance(rank, int) or rank < 0:
+        print(f"Warning: calculate_skill_mt_bonus received invalid rank: {rank}. Using 0.")
+        rank = 0
+    return math.floor(rank / 3)
 
 # --- Dice Rolling ---
 
@@ -11,6 +37,150 @@ def _roll_d20() -> int:
 
 def _roll_d6() -> int:
     return random.randint(1, 6)
+
+def parse_dice_string(dice_str: str) -> (int, int):
+    """Parses a dice string like '2d6' into (number_of_dice, dice_sides). Handles '0' for no roll."""
+    if dice_str == "0":
+        return 0, 0
+    if 'd' not in dice_str:
+        raise ValueError(f"Invalid dice string format: '{dice_str}'")
+
+    parts = dice_str.lower().split('d')
+    if len(parts) != 2 or not parts[0].isdigit() or not parts[1].isdigit():
+        raise ValueError(f"Invalid dice string format: '{dice_str}'")
+
+    return int(parts[0]), int(parts[1])
+
+def _roll_dice(num_dice: int, sides: int) -> int:
+    """Rolls a specified number of dice with a given number of sides."""
+    if num_dice == 0:
+        return 0
+    return sum(random.randint(1, sides) for _ in range(num_dice))
+
+def calculate_contested_attack(attack_data: models.ContestedAttackRequest) -> models.ContestedAttackResponse:
+    """
+    Performs a contested d20 attack roll based on Fulcrum rules.
+    Determines Hit, Solid Hit, Critical Hit, Miss, or Fumble.
+    """
+    attacker_roll = _roll_d20()
+    defender_roll = _roll_d20()
+
+    # Calculate Attacker Modifiers and Total
+    attacker_stat_mod = calculate_modifier(attack_data.attacker_attacking_stat_score)
+    attacker_skill_bonus = calculate_skill_mt_bonus(attack_data.attacker_skill_rank)
+    attacker_total_modifier = (
+        attacker_stat_mod
+        + attacker_skill_bonus
+        + attack_data.attacker_misc_bonus
+        - attack_data.attacker_misc_penalty
+    )
+    attacker_final_total = attacker_roll + attacker_total_modifier
+
+    # Calculate Defender Modifiers and Total
+    defender_stat_mod = calculate_modifier(attack_data.defender_armor_stat_score)
+    defender_skill_bonus = calculate_skill_mt_bonus(attack_data.defender_armor_skill_rank)
+    # Note: defender_weapon_penalty is subtracted (making it typically add to the defender's effective total if negative)
+    defender_total_modifier = (
+        defender_stat_mod
+        + defender_skill_bonus
+        - attack_data.defender_weapon_penalty # Subtracting the (usually negative) penalty
+        + attack_data.defender_misc_bonus
+        - attack_data.defender_misc_penalty
+    )
+    defender_final_total = defender_roll + defender_total_modifier
+
+    margin = attacker_final_total - defender_final_total
+    outcome = "miss" # Default outcome
+
+    # Determine outcome based on rules
+    if attacker_roll == 1:
+        outcome = "critical_fumble"
+    elif attacker_roll == 20:
+        outcome = "critical_hit" # Nat 20 always crits (implies hit)
+        # We can set a high margin for clarity on crits if desired, or leave as calculated
+        # margin = 20 # Optional override for crit margin display
+    elif margin >= 5:
+        outcome = "solid_hit"
+    elif margin >= 0: # Attacker Total >= Defender Total (Margin 0 to 4)
+        outcome = "hit"
+    # If margin < 0, outcome remains "miss"
+
+    return models.ContestedAttackResponse(
+        attacker_roll=attacker_roll,
+        attacker_stat_mod=attacker_stat_mod,
+        attacker_skill_bonus=attacker_skill_bonus,
+        attacker_total_modifier=attacker_total_modifier,
+        attacker_final_total=attacker_final_total,
+        defender_roll=defender_roll,
+        defender_stat_mod=defender_stat_mod,
+        defender_skill_bonus=defender_skill_bonus,
+        defender_total_modifier=defender_total_modifier,
+        defender_final_total=defender_final_total,
+        outcome=outcome,
+        margin=margin
+    )
+
+# ADD THIS FUNCTION
+def calculate_damage(damage_data: models.DamageRequest) -> models.DamageResponse:
+    """
+    Calculates final damage after rolling dice, adding mods, and applying DR.
+    """
+    # 1. Roll Base Damage
+    num_dice, sides = parse_dice_string(damage_data.base_damage_roll)
+    base_roll = _roll_dice(num_dice, sides)
+
+    # 2. Calculate Stat Modifier
+    stat_mod = calculate_modifier(damage_data.damage_stat_score)
+
+    # 3. Calculate Subtotal
+    subtotal = base_roll + stat_mod + damage_data.misc_damage_bonus
+
+    # 4. Apply Damage Reduction
+    dr_applied = min(subtotal, damage_data.target_damage_reduction)
+
+    # 5. Calculate Final Damage (cannot be negative)
+    final_damage = max(0, subtotal - damage_data.target_damage_reduction)
+
+    return models.DamageResponse(
+        base_roll_total=base_roll,
+        stat_modifier=stat_mod,
+        subtotal_damage=subtotal,
+        damage_reduction_applied=dr_applied,
+        final_damage=final_damage
+    )
+
+def calculate_initiative(stats: models.InitiativeRequest) -> models.InitiativeResponse:
+    """
+    Calculates initiative based on the Fulcrum rules:
+    d20 + B Mod + D Mod + F Mod + H Mod + J Mod + L Mod
+    """
+    roll = _roll_d20()
+
+    # Calculate modifiers using the helper function
+    mod_b = calculate_modifier(stats.endurance)
+    mod_d = calculate_modifier(stats.agility)
+    mod_f = calculate_modifier(stats.fortitude)
+    mod_h = calculate_modifier(stats.logic)
+    mod_j = calculate_modifier(stats.intuition)
+    mod_l = calculate_modifier(stats.willpower)
+
+    modifier_details = {
+        "Endurance (B) Mod": mod_b,
+        "Agility (D) Mod": mod_d,
+        "Fortitude (F) Mod": mod_f,
+        "Logic (H) Mod": mod_h,
+        "Intuition (J) Mod": mod_j,
+        "Willpower (L) Mod": mod_l,
+    }
+
+    total_modifier = sum(modifier_details.values())
+    total_initiative = roll + total_modifier
+
+    return models.InitiativeResponse(
+        roll_value=roll,
+        modifier_details=modifier_details,
+        total_initiative=total_initiative
+    )
 
 # --- Core Validation Logic ---
 
@@ -68,6 +238,26 @@ def get_skills_by_category(skill_categories_map: Dict[str, List[str]]) -> Dict[s
     if not skill_categories_map:
         raise ValueError("Skill categories map not provided or empty.")
     return skill_categories_map
+
+def get_injury_effects(request: models.InjuryLookupRequest) -> models.InjuryEffectResponse:
+    """Looks up injury effects from the loaded injury data."""
+    location_data = INJURY_EFFECTS.get(request.location)
+    if not location_data:
+        raise ValueError(f"Invalid injury location: '{request.location}'")
+
+    sub_location_data = location_data.get(request.sub_location)
+    if not sub_location_data:
+        raise ValueError(f"Invalid sub-location '{request.sub_location}' for location '{request.location}'")
+
+    severity_data = sub_location_data.get(str(request.severity))
+    if not severity_data:
+        # This case should ideally not be hit if request model validation is working (ge=1, le=5)
+        raise ValueError(f"Invalid severity '{request.severity}' for injury at '{request.location} - {request.sub_location}'")
+
+    return models.InjuryEffectResponse(
+        severity_name=severity_data.get("name", "Unknown"),
+        effects=severity_data.get("effects", [])
+    )
 
 def find_eligible_talents(stats_in: Dict[str, int],
                            skills_in: Dict[str, int], # {skill_name: rank}

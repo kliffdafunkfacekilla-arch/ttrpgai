@@ -1,0 +1,74 @@
+{
+  "Great Weapons": {
+    "skill_stat": "Might",
+    "damage": "2d6",
+    "penalty": -2,
+    "properties": ["High Damage", "Bulky", "Slow"]
+  },
+  "Long Arms": {
+    "skill_stat": "Might",
+    "damage": "1d12",
+    "penalty": -1,
+    "properties": ["Reach", "Two-Handed"]
+  },
+  "Resolute Edge": {
+    "skill_stat": "Might",
+    "damage": "1d10",
+    "penalty": -1,
+    "properties": ["Versatile", "Reliable"]
+  },
+  "Close Quarters": {
+    "skill_stat": "Might",
+    "damage": "1d8",
+    "penalty": 0,
+    "properties": ["Fast", "Light"]
+  },
+  "Quick Pair": {
+    "skill_stat": "Agility",
+    "damage": "1d4+1d4",
+    "penalty": 0,
+    "properties": ["Dual Wield", "Fast", "Low Damage"]
+  },
+  "Shield Bearer": {
+    "skill_stat": "Endurance",
+    "damage": "1d6",
+    "penalty": 0,
+    "properties": ["Defensive", "Shield Bash"]
+  },
+  "Chain Lash": {
+    "skill_stat": "Agility",
+    "damage": "1d8",
+    "penalty": -1,
+    "properties": ["Reach", "Entangle"]
+  },
+  "Impact Spear": {
+    "skill_stat": "Logic",
+    "damage": "0",
+    "penalty": 0,
+    "properties": ["Stun", "Non-Lethal"]
+  },
+  "Razor Wire": {
+    "skill_stat": "Intuition",
+    "damage": "1d6",
+    "penalty": 0,
+    "properties": ["Area Denial", "Bleed"]
+  },
+  "Hidden Blade": {
+    "skill_stat": "Agility",
+    "damage": "1d4",
+    "penalty": 0,
+    "properties": ["Concealed", "Stealth"]
+  },
+  "Heavy Chain": {
+    "skill_stat": "Endurance",
+    "damage": "1d10",
+    "penalty": -2,
+    "properties": ["Heavy", "Momentum"]
+  },
+  "Wrecking Ball": {
+    "skill_stat": "Fortitude",
+    "damage": "1d12",
+    "penalty": -3,
+    "properties": ["Siege", "Destructive"]
+  }
+}

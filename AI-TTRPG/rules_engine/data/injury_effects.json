@@ -1,0 +1,66 @@
+{
+  "Head": {
+    "Skull": {
+      "1": { "name": "Graze", "effects": ["composure_damage:1"] },
+      "2": { "name": "Minor Wound", "effects": ["composure_damage:1d4-1"] },
+      "3": { "name": "Wound", "effects": ["status_inflict:Staggered", "composure_damage:1d4"] },
+      "4": { "name": "Major Wound", "effects": ["status_inflict:Staggered:permanent", "composure_damage:1d6"] },
+      "5": { "name": "Critical Wound", "effects": ["unconscious_check:true", "permanent_penalty:max_hp:-1d4", "composure_damage:2d6"] }
+    },
+    "Face": {
+      "1": { "name": "Graze", "effects": ["composure_damage:1"] },
+      "2": { "name": "Minor Wound", "effects": ["composure_damage:1d4-1"] },
+      "3": { "name": "Wound", "effects": ["attack_roll_penalty:-1", "composure_damage:1d4"] },
+      "4": { "name": "Major Wound", "effects": ["attack_roll_penalty:-2:permanent", "composure_damage:1d6"] },
+      "5": { "name": "Critical Wound", "effects": ["status_inflict:Blinded", "permanent_penalty:max_hp:-1d4", "composure_damage:2d6"] }
+    }
+  },
+  "Torso": {
+    "Chest": {
+      "1": { "name": "Graze", "effects": ["composure_damage:1"] },
+      "2": { "name": "Minor Wound", "effects": ["composure_damage:1d4-1"] },
+      "3": { "name": "Wound", "effects": ["movement_speed_multiplier:0.75", "composure_damage:1d4"] },
+      "4": { "name": "Major Wound", "effects": ["lose_major_action:true", "composure_damage:1d6"] },
+      "5": { "name": "Critical Wound", "effects": ["unconscious_check:true", "permanent_penalty:max_hp:-1d6", "composure_damage:2d6"] }
+    },
+    "Abdomen": {
+      "1": { "name": "Graze", "effects": ["composure_damage:1"] },
+      "2": { "name": "Minor Wound", "effects": ["composure_damage:1d4-1"] },
+      "3": { "name": "Wound", "effects": ["status_inflict:Weakened", "composure_damage:1d4"] },
+      "4": { "name": "Major Wound", "effects": ["status_inflict:Weakened:permanent", "composure_damage:1d6"] },
+      "5": { "name": "Critical Wound", "effects": ["unconscious_check:true", "permanent_penalty:max_hp:-1d6", "composure_damage:2d6"] }
+    }
+  },
+  "Arms": {
+    "Shoulder": {
+      "1": { "name": "Graze", "effects": ["composure_damage:1"] },
+      "2": { "name": "Minor Wound", "effects": ["composure_damage:1d4-1"] },
+      "3": { "name": "Wound", "effects": ["attack_roll_penalty:-1:this_arm", "composure_damage:1d4"] },
+      "4": { "name": "Major Wound", "effects": ["attack_roll_penalty:-2:this_arm", "composure_damage:1d6"] },
+      "5": { "name": "Critical Wound", "effects": ["item_drop:this_arm", "arm_disabled:true", "permanent_penalty:max_hp:-1d4", "composure_damage:2d6"] }
+    },
+    "Hand": {
+      "1": { "name": "Graze", "effects": ["composure_damage:1"] },
+      "2": { "name": "Minor Wound", "effects": ["composure_damage:1d4-1"] },
+      "3": { "name": "Wound", "effects": ["item_drop_check:true", "composure_damage:1d4"] },
+      "4": { "name": "Major Wound", "effects": ["lose_minor_action:true", "composure_damage:1d6"] },
+      "5": { "name": "Critical Wound", "effects": ["item_drop:this_arm", "hand_disabled:true", "permanent_penalty:max_hp:-1d4", "composure_damage:2d6"] }
+    }
+  },
+  "Legs": {
+    "Thigh": {
+      "1": { "name": "Graze", "effects": ["composure_damage:1"] },
+      "2": { "name": "Minor Wound", "effects": ["composure_damage:1d4-1"] },
+      "3": { "name": "Wound", "effects": ["movement_speed_multiplier:0.5", "composure_damage:1d4"] },
+      "4": { "name": "Major Wound", "effects": ["prone_check_minor_action:true", "composure_damage:1d6"] },
+      "5": { "name": "Critical Wound", "effects": ["movement_speed_set:2", "permanent_penalty:max_hp:-1d4", "composure_damage:2d6"] }
+    },
+    "Foot": {
+      "1": { "name": "Graze", "effects": ["composure_damage:1"] },
+      "2": { "name": "Minor Wound", "effects": ["composure_damage:1d4-1"] },
+      "3": { "name": "Wound", "effects": ["prone_check_minor_action:true", "composure_damage:1d4"] },
+      "4": { "name": "Major Wound", "effects": ["movement_speed_set:4", "composure_damage:1d6"] },
+      "5": { "name": "Critical Wound", "effects": ["movement_speed_set:2", "permanent_penalty:max_hp:-1d4", "composure_damage:2d6"] }
+    }
+  }
+}

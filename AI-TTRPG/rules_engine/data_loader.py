@@ -93,44 +93,77 @@ def _process_skills() -> tuple[List[str], Dict[str, List[str]], Dict[str, Dict[s
     return stats_list, skill_categories, all_skills
 
 # --- Main Loading Function ---
+# Global variables to hold the loaded data
+STATS_LIST: List[str] = []
+SKILL_CATEGORIES: Dict[str, List[str]] = {}
+ALL_SKILLS: Dict[str, Dict[str, str]] = {}
+ABILITY_DATA: Dict[str, Any] = {}
+TALENT_DATA: Dict[str, Any] = {}
+FEATURE_STATS_MAP: Dict[str, Any] = {}
+MELEE_WEAPONS: Dict[str, Any] = {}
+RANGED_WEAPONS: Dict[str, Any] = {}
+ARMOR: Dict[str, Any] = {}
+INJURY_EFFECTS: Dict[str, Any] = {}
+
 
 def load_data() -> Dict[str, Any]:
     """Loads all rules data and returns it in a dictionary."""
+    global STATS_LIST, SKILL_CATEGORIES, ALL_SKILLS, ABILITY_DATA, TALENT_DATA, FEATURE_STATS_MAP
+    global MELEE_WEAPONS, RANGED_WEAPONS, ARMOR, INJURY_EFFECTS
     print("Starting data loading process...")
-    loaded_data = {}
+
     try:
         # Load stats and skills
-        stats_list, skill_categories, all_skills = _process_skills()
-        loaded_data['stats_list'] = stats_list
-        loaded_data['skill_categories'] = skill_categories
-        loaded_data['all_skills'] = all_skills
-        print(f"DEBUG: STATS_LIST len: {len(stats_list)}")
-        print(f"DEBUG: ALL_SKILLS len: {len(all_skills)}")
+        STATS_LIST, SKILL_CATEGORIES, ALL_SKILLS = _process_skills()
 
         # Load abilities
-        ability_data = _load_json("abilities.json")
-        if not isinstance(ability_data, dict):
-            print(f"--- WARNING: ABILITY_DATA did NOT load as a dictionary. Type: {type(ability_data)} ---")
-            ability_data = {}
-        loaded_data['ability_data'] = ability_data
-        print(f"DEBUG: ABILITY_DATA len: {len(ability_data)}")
+        ABILITY_DATA = _load_json("abilities.json")
+        if not isinstance(ABILITY_DATA, dict):
+            print(f"--- WARNING: ABILITY_DATA did NOT load as a dictionary. Type: {type(ABILITY_DATA)} ---")
+            ABILITY_DATA = {}
 
         # Load talents
-        talent_data = _load_json("talents.json")
-        if not isinstance(talent_data, dict):
-            print(f"--- WARNING: TALENT_DATA did NOT load as a dictionary. Type: {type(talent_data)} ---")
-            talent_data = {}
-        # No need to correct stats here if talents.json is already fixed
-        loaded_data['talent_data'] = talent_data
-        print(f"DEBUG: TALENT_DATA len: {len(talent_data)}")
+        TALENT_DATA = _load_json("talents.json")
+        if not isinstance(TALENT_DATA, dict):
+            print(f"--- WARNING: TALENT_DATA did NOT load as a dictionary. Type: {type(TALENT_DATA)} ---")
+            TALENT_DATA = {}
 
         # Process kingdom features
-        feature_stats_map = _process_kingdom_features()
-        loaded_data['feature_stats_map'] = feature_stats_map
-        print(f"DEBUG: FEATURE_STATS_MAP len: {len(feature_stats_map)}")
+        FEATURE_STATS_MAP = _process_kingdom_features()
+
+        # Load combat data
+        MELEE_WEAPONS = _load_json("melee_weapons.json")
+        RANGED_WEAPONS = _load_json("ranged_weapons.json")
+        ARMOR = _load_json("armor.json")
+
+        # Load injury data
+        INJURY_EFFECTS = _load_json("injury_effects.json")
+
+        loaded_data = {
+            'stats_list': STATS_LIST,
+            'skill_categories': SKILL_CATEGORIES,
+            'all_skills': ALL_SKILLS,
+            'ability_data': ABILITY_DATA,
+            'talent_data': TALENT_DATA,
+            'feature_stats_map': FEATURE_STATS_MAP,
+            'melee_weapons': MELEE_WEAPONS,
+            'ranged_weapons': RANGED_WEAPONS,
+            'armor': ARMOR,
+            'injury_effects': INJURY_EFFECTS
+        }
+
+        print(f"DEBUG: STATS_LIST len: {len(STATS_LIST)}")
+        print(f"DEBUG: ALL_SKILLS len: {len(ALL_SKILLS)}")
+        print(f"DEBUG: ABILITY_DATA len: {len(ABILITY_DATA)}")
+        print(f"DEBUG: TALENT_DATA len: {len(TALENT_DATA)}")
+        print(f"DEBUG: FEATURE_STATS_MAP len: {len(FEATURE_STATS_MAP)}")
+        print(f"Loaded {len(MELEE_WEAPONS)} melee weapon categories.")
+        print(f"Loaded {len(RANGED_WEAPONS)} ranged weapon categories.")
+        print(f"Loaded {len(ARMOR)} armor categories.")
+        print(f"Loaded {len(INJURY_EFFECTS)} major injury locations.")
 
         print("--- Rules Engine Data Parsed Successfully ---")
-        return loaded_data # Return the dictionary
+        return loaded_data
 
     except Exception as e:
         print(f"FATAL ERROR during load_data execution: {e}")
