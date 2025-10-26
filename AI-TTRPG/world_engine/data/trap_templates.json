@@ -1,0 +1,4 @@
+{
+"pit_trap_t1": { "name": "Simple Pit Trap", "detection_dc": 13, "disarm_dc": 12, "effect": {"type": "damage", "amount": "1d6"}, "tags": ["mechanical"]},
+"poison_dart_t2": { "name": "Poison Dart Trap", "detection_dc": 15, "disarm_dc": 14, "effect": {"type": "status", "status_id": "poison_t1"}, "tags": ["mechanical", "poison"]}
+}

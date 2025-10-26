@@ -62,6 +62,15 @@ def update_location_map(db: Session, location_id: int, map_update: schemas.Locat
         db.refresh(db_loc)
     return db_loc
 
+def update_location_annotations(db: Session, location_id: int, annotations: dict) -> Optional[models.Location]:
+    db_loc = get_location(db, location_id)
+    if db_loc:
+        db_loc.ai_annotations = annotations
+        flag_modified(db_loc, "ai_annotations")
+        db.commit()
+        db.refresh(db_loc)
+    return db_loc
+
 # --- NPC Instance ---
 def get_npc(db: Session, npc_id: int) -> Optional[models.NpcInstance]:
     return db.query(models.NpcInstance).filter(models.NpcInstance.id == npc_id).first()
@@ -75,7 +84,8 @@ def spawn_npc(db: Session, npc: schemas.NpcSpawnRequest) -> models.NpcInstance:
         location_id=npc.location_id,
         name_override=npc.name_override,
         current_hp=npc.current_hp or 10, # Placeholder default
-        max_hp=npc.max_hp or 10 # Placeholder default
+        max_hp=npc.max_hp or 10, # Placeholder default
+        behavior_tags=npc.behavior_tags
     )
     db.add(db_npc)
     db.commit()
@@ -114,6 +124,28 @@ def delete_npc(db: Session, npc_id: int) -> bool:
         db.commit()
         return True
     return False
+
+# --- Trap Instance ---
+def create_trap(db: Session, trap: schemas.TrapInstanceCreate) -> models.TrapInstance:
+    db_trap = models.TrapInstance(**trap.dict())
+    db.add(db_trap)
+    db.commit()
+    db.refresh(db_trap)
+    return db_trap
+
+def get_trap(db: Session, trap_id: int) -> Optional[models.TrapInstance]:
+    return db.query(models.TrapInstance).filter(models.TrapInstance.id == trap_id).first()
+
+def get_traps_for_location(db: Session, location_id: int) -> List[models.TrapInstance]:
+    return db.query(models.TrapInstance).filter(models.TrapInstance.location_id == location_id).all()
+
+def update_trap_status(db: Session, trap_id: int, status: str) -> Optional[models.TrapInstance]:
+    db_trap = get_trap(db, trap_id)
+    if db_trap:
+        db_trap.status = status
+        db.commit()
+        db.refresh(db_trap)
+    return db_trap
 
 # --- Item Instance ---
 def spawn_item(db: Session, item: schemas.ItemSpawnRequest) -> models.ItemInstance:

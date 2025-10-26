@@ -46,6 +46,21 @@ def read_location(location_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Location not found")
     return db_loc
 
+@app.put("/v1/locations/{location_id}/annotations", response_model=schemas.Location)
+def update_location_ai_annotations(
+    location_id: int,
+    annotation_update: schemas.LocationAnnotationUpdate,
+    db: Session = Depends(get_db)
+):
+    """
+    Used by the story_engine to save its own notes, descriptions,
+    or flags about a location.
+    """
+    db_loc = crud.update_location_annotations(db, location_id, annotation_update.ai_annotations)
+    if db_loc is None:
+        raise HTTPException(status_code=404, detail="Location not found")
+    return db_loc
+
 @app.put("/v1/locations/{location_id}/map", response_model=schemas.Location)
 def update_location_generated_map(
     location_id: int,
@@ -162,3 +177,27 @@ def read_faction(faction_id: int, db: Session = Depends(get_db)):
     if db_faction is None:
         raise HTTPException(status_code=404, detail="Faction not found")
     return db_faction
+
+# --- Trap Endpoints ---
+
+@app.post("/v1/traps/spawn", response_model=schemas.TrapInstance, status_code=201)
+def spawn_new_trap(trap: schemas.TrapInstanceCreate, db: Session = Depends(get_db)):
+    """Used by the story_engine to create a new trap in the world."""
+    return crud.create_trap(db=db, trap=trap)
+
+@app.put("/v1/traps/{trap_id}", response_model=schemas.TrapInstance)
+def update_existing_trap(
+    trap_id: int,
+    updates: schemas.TrapUpdate,
+    db: Session = Depends(get_db)
+):
+    """Used to update a trap (disarm, trigger, etc.)"""
+    db_trap = crud.update_trap_status(db, trap_id, updates.status)
+    if db_trap is None:
+        raise HTTPException(status_code=404, detail="Trap not found")
+    return db_trap
+
+@app.get("/v1/locations/{loc_id}/traps", response_model=List[schemas.TrapInstance])
+def read_traps_for_location(loc_id: int, db: Session = Depends(get_db)):
+    """Get all traps for a single location by its ID."""
+    return crud.get_traps_for_location(db, location_id=loc_id)

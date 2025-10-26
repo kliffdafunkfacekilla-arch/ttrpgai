@@ -4,6 +4,17 @@ from sqlalchemy.orm import relationship
 # Import the 'Base' we created in database.py
 from .database import Base
 
+class TrapInstance(Base):
+    __tablename__ = "trap_instances"
+    id = Column(Integer, primary_key=True, index=True)
+    template_id = Column(String, index=True) # e.g., "pit_trap_t1"
+    location_id = Column(Integer, ForeignKey("locations.id"))
+    coordinates = Column(JSON, nullable=True) # e.g., [x, y] or [[x1,y1],[x2,y2]]
+    status = Column(String, default="armed", index=True) # armed, disarmed, triggered
+
+    # Relationships
+    location = relationship("Location", back_populates="trap_instances")
+
 class Faction(Base):
     """
     Tracks factions like 'The Silver Hand'.
@@ -54,6 +65,8 @@ class Location(Base):
     region = relationship("Region", back_populates="locations")
     npc_instances = relationship("NpcInstance", back_populates="location")
     item_instances = relationship("ItemInstance", back_populates="location")
+    trap_instances = relationship("TrapInstance", back_populates="location") # Add this line
+    ai_annotations = Column(JSON, nullable=True) # Store descriptions, interactions flags etc.
 
 class NpcInstance(Base):
     """
@@ -71,6 +84,7 @@ class NpcInstance(Base):
 
     # This links the NPC to the Location it is currently in
     location_id = Column(Integer, ForeignKey("locations.id"))
+    behavior_tags = Column(JSON, default=[]) # Store tags like ["aggressive"]
 
     location = relationship("Location", back_populates="npc_instances")
     # This links the NPC to the Items it is carrying (its inventory)
