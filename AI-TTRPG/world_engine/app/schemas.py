@@ -4,6 +4,23 @@ from typing import Dict, List, Any, Optional
 # Pydantic models are used to validate data.
 # 'BaseModel' is the class they inherit from.
 
+class TrapInstanceBase(BaseModel):
+    template_id: str
+    location_id: int
+    coordinates: Optional[Any] = None
+    status: str = "armed"
+
+class TrapInstance(TrapInstanceBase):
+    id: int
+    class Config:
+        from_attributes = True # or orm_mode = True
+
+class TrapInstanceCreate(TrapInstanceBase):
+    pass
+
+class TrapUpdate(BaseModel):
+    status: Optional[str] = None
+
 # --- Base Models ---
 # These models define how data should be READ from the database.
 # 'orm_mode = True' tells Pydantic to read data from
@@ -55,6 +72,7 @@ class NpcInstance(NpcInstanceBase):
     # This automatically includes the list of items
     # from the database relationship
     item_instances: List[ItemInstance] = []
+    behavior_tags: List[str] = [] # Add this
     class Config:
         orm_mode = True
 
@@ -72,6 +90,8 @@ class Location(LocationBase):
     region: Region
     npc_instances: List[NpcInstance] = []
     item_instances: List[ItemInstance] = []
+    trap_instances: List[TrapInstance] = [] # Add this
+    ai_annotations: Optional[Dict[str, Any]] = None # Add this
 
     class Config:
         orm_mode = True
@@ -100,6 +120,10 @@ class NpcSpawnRequest(BaseModel):
     # the story_engine should get them from the rules.
     current_hp: Optional[int] = None
     max_hp: Optional[int] = None
+    behavior_tags: List[str] = [] # Add this
+
+class LocationAnnotationUpdate(BaseModel):
+    ai_annotations: Dict[str, Any]
 
 class NpcUpdate(BaseModel):
     # All fields are optional. We only update what is provided.

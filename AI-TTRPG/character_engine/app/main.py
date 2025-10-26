@@ -3,6 +3,7 @@ from fastapi import Depends, FastAPI, HTTPException
 from sqlalchemy.orm import Session
 from typing import List, Dict, Any
 import logging
+from typing import List
 from pydantic import BaseModel
 from sqlalchemy.orm.attributes import flag_modified
 
@@ -232,3 +233,40 @@ async def add_sre_to_character(char_id: int, sre_request: SreRequest, db: Sessio
          raise HTTPException(status_code=500, detail="Failed to update character sheet after adding SRE.")
 
     return {"message": message, "new_rank": new_rank, "new_sre": new_sre}
+
+# Add endpoint to list characters
+@app.get("/v1/characters/", response_model=List[schemas.CharacterResponse])
+async def list_all_characters(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    characters = crud.list_characters(db, skip=skip, limit=limit)
+    return characters
+
+# Add endpoint to add item
+@app.post("/v1/characters/{char_id}/inventory/add", response_model=schemas.CharacterResponse)
+async def add_inventory_item(char_id: int, item_update: schemas.InventoryUpdateRequest, db: Session = Depends(get_db)):
+    db_character = crud.get_character(db, char_id=char_id)
+    if db_character is None:
+        raise HTTPException(status_code=404, detail="Character not found")
+    return crud.add_item_to_inventory(db, db_character, item_update.item_id, item_update.quantity)
+
+# Add endpoint to remove item
+@app.post("/v1/characters/{char_id}/inventory/remove", response_model=schemas.CharacterResponse)
+async def remove_inventory_item(char_id: int, item_update: schemas.InventoryUpdateRequest, db: Session = Depends(get_db)):
+    db_character = crud.get_character(db, char_id=char_id)
+    if db_character is None:
+        raise HTTPException(status_code=404, detail="Character not found")
+
+    sheet = dict(db_character.character_sheet)
+    inventory = sheet.get("inventory", [])
+
+    item_found = False
+    for item in inventory:
+        if item.get("item_id") == item_update.item_id:
+            item_found = True
+            if item.get("quantity", 0) < item_update.quantity:
+                raise HTTPException(status_code=400, detail=f"Not enough {item_update.item_id} in inventory.")
+            break
+
+    if not item_found:
+        raise HTTPException(status_code=400, detail=f"{item_update.item_id} not found in inventory.")
+
+    return crud.remove_item_from_inventory(db, db_character, item_update.item_id, item_update.quantity)

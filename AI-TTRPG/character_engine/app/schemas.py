@@ -8,6 +8,14 @@ class CharacterCreateRequest(BaseModel):
     capstone_stat: str
     background_skills: List[str]
 
+class InventoryItem(BaseModel):
+    item_id: str # Corresponds to template_id in world_engine/item_templates.json
+    quantity: int
+
+class InventoryUpdateRequest(BaseModel):
+    item_id: str
+    quantity: int
+
 class CharacterResponse(BaseModel):
     id: int
     name: str
@@ -15,4 +23,4 @@ class CharacterResponse(BaseModel):
     character_sheet: Dict[str, Any]
 
     class Config:
-        orm_mode = True
+        from_attributes = True
