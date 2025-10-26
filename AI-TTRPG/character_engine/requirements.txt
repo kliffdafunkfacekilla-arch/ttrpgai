@@ -4,4 +4,4 @@ sqlalchemy
 pydantic
 requests
 alembic
-pysqlite3
+

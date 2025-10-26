@@ -61,6 +61,23 @@ def update_location_generated_map(
         raise HTTPException(status_code=404, detail="Location not found")
     return db_loc
 
+
+@app.post("/v1/locations/", response_model=schemas.Location, status_code=201)
+def create_new_location(
+    location: schemas.LocationCreate, db: Session = Depends(get_db)
+):
+    """
+    Create a new location within a specific region.
+    You must create a Region first via POST /v1/regions/.
+    """
+    # Optional: Check if region_id exists
+    db_region = crud.get_region(db, region_id=location.region_id)
+    if db_region is None:
+        raise HTTPException(status_code=404, detail=f"Region with id {location.region_id} not found. Cannot create location.")
+
+    return crud.create_location(db=db, loc=location)
+
+
 # --- NPC Endpoints ---
 
 @app.post("/v1/npcs/spawn", response_model=schemas.NpcInstance, status_code=201)

@@ -3,7 +3,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 # This is our new, separate database for story and quests.
-DATABASE_URL = "sqlite:///./story.db"
+DATABASE_URL = "sqlite:///./story_engine/story.db"
 
 # connect_args is needed for SQLite.
 engine = create_engine(
