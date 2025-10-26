@@ -1,0 +1,86 @@
+{
+  "Heavy Artillery": {
+    "skill_stat": "Logic",
+    "damage": "3d10",
+    "penalty": -3,
+    "range_m": 150,
+    "properties": ["Siege", "AoE", "Slow"]
+  },
+  "Long Bow": {
+    "skill_stat": "Agility",
+    "damage": "1d10",
+    "penalty": -1,
+    "range_m": 100,
+    "properties": ["Long Range", "Accurate"]
+  },
+  "Short Bow": {
+    "skill_stat": "Agility",
+    "damage": "1d8",
+    "penalty": 0,
+    "range_m": 50,
+    "properties": ["Fast", "Mobile"]
+  },
+  "Crossbow": {
+    "skill_stat": "Endurance",
+    "damage": "1d12",
+    "penalty": -2,
+    "range_m": 80,
+    "properties": ["High Power", "Slow Reload"]
+  },
+  "Thrown Weapons": {
+    "skill_stat": "Might",
+    "damage": "1d6",
+    "penalty": 0,
+    "range_m": 20,
+    "properties": ["Versatile", "Quick"]
+  },
+  "Elemental Edge": {
+    "skill_stat": "Knowledge",
+    "damage": "1d10",
+    "penalty": -1,
+    "range_m": 30,
+    "properties": ["Elemental Damage", "Focus"]
+  },
+  "Needle Launcher": {
+    "skill_stat": "Agility",
+    "damage": "3d4",
+    "penalty": 0,
+    "range_m": 40,
+    "properties": ["Multi-shot", "Poison"]
+  },
+  "Sonic Blast": {
+    "skill_stat": "Willpower",
+    "damage": "2d6",
+    "penalty": 0,
+    "range_m": 15,
+    "properties": ["AoE", "Stun"]
+  },
+  "Gravity Well": {
+    "skill_stat": "Knowledge",
+    "damage": "0",
+    "penalty": -2,
+    "range_m": 25,
+    "properties": ["Control", "Displacement"]
+  },
+  "Crystal Shards": {
+    "skill_stat": "Intuition",
+    "damage": "2d8",
+    "penalty": -1,
+    "range_m": 35,
+    "properties": ["Armor Piercing", "Bleed"]
+  },
+  "Distortion Field": {
+    "skill_stat": "Logic",
+    "damage": "1d4",
+    "penalty": 0,
+    "range_m": 10,
+    "properties": ["Debuff", "Hazard"]
+  },
+  "Force Push": {
+    "skill_stat": "Willpower",
+    "damage": "1d6",
+    "penalty": 0,
+    "range_m": 20,
+    "properties": ["Knockback", "Control"]
+  }
+}

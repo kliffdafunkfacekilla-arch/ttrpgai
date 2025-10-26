@@ -1,6 +1,6 @@
 # main.py
 from fastapi import FastAPI, HTTPException, Request # Import Request
-from typing import List, Dict
+from typing import List, Dict, Any
 from contextlib import asynccontextmanager
 import logging
 logger = logging.getLogger("uvicorn.error")
@@ -8,6 +8,7 @@ logger = logging.getLogger("uvicorn.error")
 # Use relative imports for local modules
 from . import core
 from . import data_loader
+from . import models
 from .models import (
     SkillCheckRequest, AbilityCheckRequest, TalentLookupRequest,
     RollResult, TalentInfo, FeatureStatsResponse, SkillCategoryResponse,
@@ -28,6 +29,10 @@ async def lifespan(app: FastAPI):
         app.state.ability_data = loaded_rules.get('ability_data', {})
         app.state.talent_data = loaded_rules.get('talent_data', {})
         app.state.feature_stats_map = loaded_rules.get('feature_stats_map', {})
+        app.state.melee_weapons = loaded_rules.get('melee_weapons', {})
+        app.state.ranged_weapons = loaded_rules.get('ranged_weapons', {})
+        app.state.armor = loaded_rules.get('armor', {})
+        app.state.injury_effects = loaded_rules.get('injury_effects', {})
         print("INFO:     Rules data loaded successfully and stored in app.state.")
     except Exception as e:
         print(f"FATAL:    Failed to load rules data on startup: {e}")
@@ -38,6 +43,10 @@ async def lifespan(app: FastAPI):
         app.state.ability_data = {}
         app.state.talent_data = {}
         app.state.feature_stats_map = {}
+        app.state.melee_weapons = {}
+        app.state.ranged_weapons = {}
+        app.state.armor = {}
+        app.state.injury_effects = {}
         # Optionally re-raise to prevent server start on load failure
         # raise
     yield
@@ -73,14 +82,23 @@ async def get_status(request: Request):
         ability_data = getattr(request.app.state, 'ability_data', {})
         talent_data = getattr(request.app.state, 'talent_data', {})
         feature_stats_map = getattr(request.app.state, 'feature_stats_map', {})
+        melee_weapons = getattr(request.app.state, 'melee_weapons', {})
+        ranged_weapons = getattr(request.app.state, 'ranged_weapons', {})
+        armor = getattr(request.app.state, 'armor', {})
+        injury_effects = getattr(request.app.state, 'injury_effects', {})
+
 
         stats_loaded = bool(stats_list)
         skills_loaded = bool(all_skills)
         abilities_loaded = bool(ability_data)
         talents_loaded = bool(talent_data)
         features_loaded = bool(feature_stats_map)
+        melee_weapons_loaded = bool(melee_weapons)
+        ranged_weapons_loaded = bool(ranged_weapons)
+        armor_loaded = bool(armor)
+        injury_effects_loaded = bool(injury_effects)
 
-        if not all([stats_loaded, skills_loaded, abilities_loaded, talents_loaded, features_loaded]):
+        if not all([stats_loaded, skills_loaded, abilities_loaded, talents_loaded, features_loaded, melee_weapons_loaded, ranged_weapons_loaded, armor_loaded, injury_effects_loaded]):
              status_msg = "error - data loading incomplete"
         else:
              status_msg = "online"
@@ -92,7 +110,11 @@ async def get_status(request: Request):
             "skills_loaded_count": len(all_skills),
             "abilities_loaded_count": len(ability_data),
             "talents_loaded": talents_loaded, # Keep simple boolean for TALENT_DATA check
-            "features_loaded_count": len(feature_stats_map)
+            "features_loaded_count": len(feature_stats_map),
+            "melee_weapons_loaded_count": len(melee_weapons),
+            "ranged_weapons_loaded_count": len(ranged_weapons),
+            "armor_loaded_count": len(armor),
+            "injury_effects_loaded_count": len(injury_effects)
         }
     except Exception as e:
          logger.exception(f"Error in get_status accessing app.state: {e}")
@@ -214,3 +236,105 @@ async def api_get_all_ability_schools(request: Request):
     except Exception as e:
          logger.exception(f"Unexpected ERROR in api_get_all_ability_schools: {e}")
          raise HTTPException(status_code=500, detail=f"Internal server error getting ability schools list.")
+
+
+# ADD THIS ENDPOINT
+@app.post("/v1/roll/initiative", response_model=models.InitiativeResponse, tags=["Combat Rolls"])
+async def api_roll_initiative(request_data: models.InitiativeRequest):
+    """
+    Rolls initiative based on the provided attribute scores according to Fulcrum rules.
+    Requires Endurance(B), Agility(D), Fortitude(F), Logic(H), Intuition(J), Willpower(L).
+    """
+    logger.info(f"Received initiative roll request with data: {request_data.dict()}")
+    try:
+        # The core.calculate_initiative function is self-contained and doesn't rely
+        # on loaded data files, so no need for check_state_loaded here.
+        result = core.calculate_initiative(request_data)
+        logger.info(f"Calculated initiative result: {result.dict()}")
+        return result
+    except Exception as e:
+        logger.exception(f"Error calculating initiative: {e}") # Use logger.exception for traceback
+        # Provide a more specific error message if possible
+        raise HTTPException(status_code=500, detail=f"Internal server error calculating initiative: {str(e)}")
+
+
+# ADD THIS ENDPOINT
+@app.post("/v1/roll/contested_attack", response_model=models.ContestedAttackResponse, tags=["Combat Rolls"])
+async def api_roll_contested_attack(request_data: models.ContestedAttackRequest):
+    """
+    Performs a contested attack roll based on Fulcrum rules.
+    Requires attacker's attacking stat/skill and defender's armor stat/skill, plus weapon penalty.
+    Determines outcome: critical_fumble, miss, hit, solid_hit (margin >= 5), critical_hit (nat 20).
+    """
+    logger.info(f"Received contested attack roll request.")
+    # Log request data carefully if needed, avoid logging sensitive info in production
+    # logger.debug(f"Request data: {request_data.dict()}")
+    try:
+        result = core.calculate_contested_attack(request_data)
+        logger.info(f"Calculated contested attack result: Outcome={result.outcome}, Margin={result.margin}")
+        return result
+    except ValueError as ve: # Catch potential validation errors passed up
+        logger.warning(f"Validation error during contested attack: {ve}")
+        raise HTTPException(status_code=400, detail=str(ve))
+    except Exception as e:
+        logger.exception(f"Error calculating contested attack: {e}")
+        raise HTTPException(status_code=500, detail=f"Internal server error calculating contested attack: {str(e)}")
+
+
+# ADD THIS ENDPOINT
+@app.post("/v1/calculate/damage", response_model=models.DamageResponse, tags=["Combat Calculations"])
+async def api_calculate_damage(request_data: models.DamageRequest):
+    """
+    Calculates final damage from a dice roll, stat, bonus, and target DR.
+    """
+    logger.info(f"Received damage calculation request.")
+    try:
+        result = core.calculate_damage(request_data)
+        logger.info(f"Calculated damage result: {result.dict()}")
+        return result
+    except ValueError as ve:
+        logger.warning(f"Validation error during damage calculation: {ve}")
+        raise HTTPException(status_code=400, detail=str(ve))
+    except Exception as e:
+        logger.exception(f"Error calculating damage: {e}")
+        raise HTTPException(status_code=500, detail=f"Internal server error calculating damage: {str(e)}")
+
+
+@app.get("/v1/lookup/melee_weapon/{category_name}", response_model=Dict[str, Any], tags=["Lookups"])
+async def api_get_melee_weapon(request: Request, category_name: str):
+    """Looks up the stats for a specific melee weapon category."""
+    check_state_loaded(request)
+    weapons = getattr(request.app.state, 'melee_weapons', {})
+    if category_name in weapons:
+        return weapons[category_name]
+    raise HTTPException(status_code=404, detail=f"Melee weapon category '{category_name}' not found.")
+
+@app.get("/v1/lookup/ranged_weapon/{category_name}", response_model=Dict[str, Any], tags=["Lookups"])
+async def api_get_ranged_weapon(request: Request, category_name: str):
+    """Looks up the stats for a specific ranged weapon category."""
+    check_state_loaded(request)
+    weapons = getattr(request.app.state, 'ranged_weapons', {})
+    if category_name in weapons:
+        return weapons[category_name]
+    raise HTTPException(status_code=404, detail=f"Ranged weapon category '{category_name}' not found.")
+
+@app.get("/v1/lookup/armor/{category_name}", response_model=Dict[str, Any], tags=["Lookups"])
+async def api_get_armor(request: Request, category_name: str):
+    """Looks up the stats for a specific armor category."""
+    check_state_loaded(request)
+    armor = getattr(request.app.state, 'armor', {})
+    if category_name in armor:
+        return armor[category_name]
+    raise HTTPException(status_code=404, detail=f"Armor category '{category_name}' not found.")
+
+
+@app.post("/v1/lookup/injury_effects", response_model=models.InjuryEffectResponse, tags=["Lookups"])
+async def api_get_injury_effects(request_data: models.InjuryLookupRequest):
+    """Looks up the mechanical effects of a specific injury."""
+    try:
+        return core.get_injury_effects(request_data)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        logger.exception(f"Error in api_get_injury_effects: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error looking up injury effects.")
