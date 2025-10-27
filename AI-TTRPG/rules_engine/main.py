@@ -33,6 +33,7 @@ async def lifespan(app: FastAPI):
         app.state.ranged_weapons = loaded_rules.get('ranged_weapons', {})
         app.state.armor = loaded_rules.get('armor', {})
         app.state.injury_effects = loaded_rules.get('injury_effects', {})
+        app.state.status_effects = loaded_rules.get('status_effects', {})
         print("INFO:     Rules data loaded successfully and stored in app.state.")
     except Exception as e:
         print(f"FATAL:    Failed to load rules data on startup: {e}")
@@ -338,3 +339,21 @@ async def api_get_injury_effects(request_data: models.InjuryLookupRequest):
     except Exception as e:
         logger.exception(f"Error in api_get_injury_effects: {e}")
         raise HTTPException(status_code=500, detail="Internal server error looking up injury effects.")
+
+
+@app.get("/v1/lookup/status_effect/{status_name}", response_model=models.StatusEffectResponse, tags=["Lookups"])
+async def api_get_status_effect(status_name: str, request: Request):
+    """Looks up the definition and effects for a status by name (e.g., 'Staggered', 'Bleeding')."""
+    # Ensure status data loaded during startup
+    if not hasattr(request.app.state, 'status_effects') or not getattr(request.app.state, 'status_effects'):
+         raise HTTPException(status_code=503, detail="Status effects data not available.")
+    logger.info(f"Looking up status effect: {status_name}")
+    try:
+        result = core.get_status_effect(status_name)
+        return result
+    except ValueError as e: # Catch not found errors from core function
+        logger.warning(f"Status effect lookup failed: {e}")
+        raise HTTPException(status_code=404, detail=str(e))
+    except Exception as e:
+        logger.exception(f"Error looking up status effect: {e}")
+        raise HTTPException(status_code=500, detail=f"Internal server error looking up status effect: {str(e)}")

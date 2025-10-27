@@ -66,3 +66,48 @@ def set_flag(db: Session, flag: schemas.StoryFlagBase) -> models.StoryFlag:
     db.commit()
     db.refresh(db_flag)
     return db_flag
+
+
+# ADD THESE FUNCTIONS for Combat State
+def create_combat_encounter(db: Session, location_id: int, turn_order: List[str]) -> models.CombatEncounter:
+    """Creates a new combat encounter record."""
+    db_combat = models.CombatEncounter(
+        location_id=location_id,
+        status="active",
+        turn_order=turn_order,
+        current_turn_index=0
+    )
+    db.add(db_combat)
+    db.commit()
+    db.refresh(db_combat)
+    return db_combat
+
+def create_combat_participant(db: Session, combat_id: int, actor_id: str, actor_type: str, initiative: int) -> models.CombatParticipant:
+    """Adds a participant to a specific combat encounter."""
+    db_participant = models.CombatParticipant(
+        combat_id=combat_id,
+        actor_id=actor_id,
+        actor_type=actor_type,
+        initiative_roll=initiative
+    )
+    db.add(db_participant)
+    db.commit()
+    db.refresh(db_participant)
+    return db_participant
+
+def get_combat_encounter(db: Session, combat_id: int) -> Optional[models.CombatEncounter]:
+    """Retrieves a combat encounter by its ID, including participants."""
+    # Use options to load relationships if needed, or rely on lazy loading
+    return db.query(models.CombatEncounter).filter(models.CombatEncounter.id == combat_id).first()
+
+def update_combat_encounter(db: Session, combat_id: int, updates: dict) -> Optional[models.CombatEncounter]:
+    """Updates fields of a combat encounter (e.g., turn index, status)."""
+    db_combat = get_combat_encounter(db, combat_id)
+    if db_combat:
+        for key, value in updates.items():
+            setattr(db_combat, key, value)
+        if "turn_order" in updates: # Mark JSON field if updated
+            flag_modified(db_combat, "turn_order")
+        db.commit()
+        db.refresh(db_combat)
+    return db_combat

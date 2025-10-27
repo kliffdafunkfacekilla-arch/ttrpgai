@@ -9,13 +9,13 @@ def test_create_character_success():
         json={
             "name": "Jules",
             "kingdom": "Engineer",
-            "f_stats": {"F1": "Strength"},
-            "capstone_stat": "Strength",
-            "background_skills": ["Coding", "Debugging"],
+            "f_stats": {"F1": "Predator's Gaze"},
+            "capstone_stat": "Might",
+            "background_skills": ["Great Weapons", "Plate Armor", "Intimidation", "Athletics", "Endurance", "History", "Logic", "Investigation", "Awareness", "Intuition", "Charm", "Willpower"],
         },
     )
-    assert response.status_code == 200
+    assert response.status_code == 201
     data = response.json()
     assert data["name"] == "Jules"
     assert data["kingdom"] == "Engineer"
-    assert "valid_ability_schools" in data["character_sheet"]
+    assert "stats" in data["character_sheet"]

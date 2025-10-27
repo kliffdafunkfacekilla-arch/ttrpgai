@@ -1,9 +1,10 @@
 from fastapi import Depends, FastAPI, HTTPException
 from sqlalchemy.orm import Session
 from typing import List, Dict, Any
+import logging
 
 # Import all our other files
-from . import crud, models, schemas, services
+from . import crud, models, schemas, services, combat_handler
 from .database import SessionLocal, engine
 
 # This creates the FastAPI application instance
@@ -11,6 +12,8 @@ app = FastAPI(
     title="Story Engine",
     description="Manages campaign state, quests, and orchestrates other services."
 )
+
+logger = logging.getLogger("uvicorn.error")
 
 # --- Dependency ---
 def get_db():
@@ -122,3 +125,64 @@ async def get_location_context(location_id: int):
         return await services.get_world_location_context(location_id)
     except Exception as e:
         raise HTTPException(status_code=503, detail=f"Error calling world_engine: {e}")
+
+# ADD THIS ENDPOINT for starting combat
+@app.post("/v1/combat/start", response_model=schemas.CombatEncounter, status_code=201, tags=["Combat Orchestration"])
+async def api_start_new_combat(start_request: schemas.CombatStartRequest, db: Session = Depends(get_db)):
+    """
+    (AI DM) Starts a new combat encounter:
+    - Spawns requested NPCs via world_engine.
+    - Rolls initiative for players and NPCs via rules_engine.
+    - Creates combat state records in story_engine DB.
+    Returns the initial state of the combat encounter.
+    """
+    logger.info(f"Received request to start combat at location {start_request.location_id}")
+    try:
+        # Call the combat handler function to do the work
+        combat_state = await combat_handler.start_combat(db, start_request)
+        if combat_state is None: # Should be handled by exceptions in handler, but belts-and-suspenders
+             raise HTTPException(status_code=500, detail="Combat handler failed to return state.")
+        logger.info(f"Combat started with ID: {combat_state.id}")
+        # The combat_state object from DB should match the response_model
+        return combat_state
+    except HTTPException as he:
+         # Re-raise HTTPExceptions raised by services or the handler
+         logger.error(f"HTTPException during combat start: {he.detail}")
+         raise he
+    except Exception as e:
+        logger.exception(f"Unexpected error starting combat: {e}") # Log full traceback
+        raise HTTPException(status_code=500, detail=f"Internal server error starting combat: {str(e)}")
+
+
+@app.post("/v1/combat/{combat_id}/player_action", response_model=Dict, tags=["Combat Orchestration"])
+async def handle_player_combat_action(
+    combat_id: int,
+    action_request: schemas.PlayerActionRequest,
+    db: Session = Depends(get_db)
+    # TODO: Add way to identify player_id (e.g., from auth token)
+):
+    """Receives and processes a player's action during their turn."""
+    logger.info(f"Received player action for combat {combat_id}: {action_request.dict()}")
+
+    # TODO: Verify it's actually this player's turn based on combat state
+    player_id = "player_1" # Placeholder - get actual player ID
+
+    try:
+        # Call the main execution logic
+        action_result = await combat_handler.execute_combat_action(
+            db, combat_id, player_id, action_request
+        )
+
+        # TODO: After successful action, advance the turn
+        # await combat_handler.advance_turn(db, combat_id)
+
+        logger.info(f"Action result: {action_result.get('message')}")
+        # Return the detailed result
+        return action_result
+
+    except HTTPException as he:
+         logger.error(f"HTTPException during player action: {he.detail}")
+         raise he
+    except Exception as e:
+         logger.exception(f"Unexpected error during player action: {e}")
+         raise HTTPException(status_code=500, detail=f"Internal server error processing player action: {str(e)}")

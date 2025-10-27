@@ -75,3 +75,44 @@ def remove_item_from_inventory(db: Session, character: models.Character, item_id
 def list_characters(db: Session, skip: int = 0, limit: int = 100) -> List[models.Character]:
     """Retrieves a list of characters."""
     return db.query(models.Character).offset(skip).limit(limit).all()
+
+
+def apply_damage_to_character(db: Session, character: models.Character, damage_amount: int) -> models.Character:
+    """Subtracts damage from HP, stored in character_sheet."""
+    if damage_amount <= 0: return character # No damage
+
+    sheet = dict(character.character_sheet)
+    stats = sheet.get("stats", {}) # Assuming HP stored under stats for now
+    current_hp = stats.get("current_hp", stats.get("max_hp", 0)) # Need clear HP structure
+
+    # --- Placeholder HP structure ---
+    # TODO: Define where current_hp and max_hp are stored in character_sheet
+    # Example assumes {"stats": {"current_hp": X, "max_hp": Y, ...}}
+    new_hp = current_hp - damage_amount
+    print(f"Applying {damage_amount} damage to {character.name}. HP: {current_hp} -> {new_hp}")
+    stats["current_hp"] = new_hp
+    # Add logic here to check for Downed/Dying state if new_hp <= 0
+
+    sheet["stats"] = stats
+    character.character_sheet = sheet
+    flag_modified(character, "character_sheet")
+    db.commit()
+    db.refresh(character)
+    return character
+
+def apply_status_to_character(db: Session, character: models.Character, status_id: str) -> models.Character:
+    """Adds a status effect to the character_sheet."""
+    sheet = dict(character.character_sheet)
+    status_effects = sheet.get("status_effects", [])
+
+    # Avoid duplicate statuses? Or allow stacking? Rule dependent.
+    if status_id not in status_effects:
+         status_effects.append(status_id)
+         print(f"Applying status '{status_id}' to {character.name}")
+
+    sheet["status_effects"] = status_effects # Need defined place in sheet
+    character.character_sheet = sheet
+    flag_modified(character, "character_sheet")
+    db.commit()
+    db.refresh(character)
+    return character
