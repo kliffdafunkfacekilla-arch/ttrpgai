@@ -256,3 +256,14 @@ class InjuryEffectResponse(BaseModel):
     """The mechanical effects of a specific injury."""
     severity_name: str = Field(description="The descriptive name of the injury severity (e.g., 'Wound').")
     effects: List[str] = Field(description="A list of machine-readable effect strings.")
+
+
+# ADD THIS MODEL for Status Effects
+class StatusEffectResponse(BaseModel):
+    """Output describing the definition of a status effect."""
+    name: str
+    description: str
+    effects: List[str] = Field(description="List of machine-readable effect strings.")
+    type: str = Field(description="e.g., 'detrimental', 'beneficial'")
+    duration_type: str = Field(description="How duration is tracked ('turns', 'condition', 'encounter').")
+    default_duration: Optional[int] = Field(None, description="Default duration in turns, if applicable.")

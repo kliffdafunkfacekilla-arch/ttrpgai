@@ -4,7 +4,7 @@ import math
 from typing import Dict, List, Optional, Any
 # Use relative import for models within the same package
 from . import models
-from .data_loader import INJURY_EFFECTS
+from .data_loader import INJURY_EFFECTS, STATUS_EFFECTS
 from .models import RollResult, TalentInfo, FeatureStatsResponse
 
 
@@ -238,6 +238,30 @@ def get_skills_by_category(skill_categories_map: Dict[str, List[str]]) -> Dict[s
     if not skill_categories_map:
         raise ValueError("Skill categories map not provided or empty.")
     return skill_categories_map
+
+
+def get_status_effect(status_name: str) -> models.StatusEffectResponse:
+    """Looks up the definition and effects for a specific status by name."""
+
+    # Find the status definition (case-insensitive keys if needed)
+    status_data = None
+    for key, value in STATUS_EFFECTS.items():
+         if key.lower() == status_name.lower():
+              status_data = value
+              break # Found match
+
+    if not status_data:
+        raise ValueError(f"Status effect '{status_name}' not found in rules data.")
+
+    # Construct the response model from the loaded dictionary
+    return models.StatusEffectResponse(
+        name=status_data.get("name", status_name), # Use provided name or key
+        description=status_data.get("description", "No description available."),
+        effects=status_data.get("effects", []),
+        type=status_data.get("type", "unknown"),
+        duration_type=status_data.get("duration_type", "condition"),
+        default_duration=status_data.get("default_duration") # Will be None if not present
+    )
 
 def get_injury_effects(request: models.InjuryLookupRequest) -> models.InjuryEffectResponse:
     """Looks up injury effects from the loaded injury data."""

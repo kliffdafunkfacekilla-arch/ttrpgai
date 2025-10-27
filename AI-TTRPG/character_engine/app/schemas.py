@@ -24,3 +24,12 @@ class CharacterResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class ApplyDamageRequest(BaseModel):
+    damage_amount: int
+    damage_type: str | None = None
+
+class ApplyStatusRequest(BaseModel):
+    status_id: str
+    duration: int | None = None # Or maybe specific end condition

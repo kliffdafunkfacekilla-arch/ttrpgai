@@ -1,0 +1,59 @@
+{
+  "Staggered": {
+    "name": "Staggered",
+    "description": "Character loses their next Major Action.",
+    "effects": ["lose_major_action:1"],
+    "type": "detrimental",
+    "duration_type": "turns",
+    "default_duration": 1
+  },
+  "Prone": {
+    "name": "Prone",
+    "description": "Character is lying on the ground. Melee attacks against them have Advantage, Ranged attacks against them have Disadvantage. Movement costs double. Requires action to stand.",
+    "effects": ["melee_attack_advantage:true", "ranged_attack_disadvantage:true", "movement_cost_multiplier:2", "action_to_stand:Minor"],
+    "type": "detrimental",
+    "duration_type": "condition"
+  },
+  "Bleeding": {
+    "name": "Bleeding",
+    "description": "Character takes damage at the start of their turn.",
+    "effects": ["damage_over_time:start_turn:1:Bleed"],
+    "type": "detrimental",
+    "duration_type": "condition"
+  },
+  "Shaken": {
+    "name": "Shaken",
+    "description": "Character suffers penalties due to fear or shock.",
+    "effects": ["composure_check_penalty:-2", "initiative_penalty:-2"],
+    "type": "detrimental",
+    "duration_type": "condition"
+  },
+  "Blinded": {
+    "name": "Blinded",
+    "description": "Character cannot see.",
+    "effects": ["action_disadvantage:all", "defense_roll_penalty:-4", "auto_fail:sight_perception"],
+    "type": "detrimental",
+    "duration_type": "condition"
+  },
+  "Unconscious": {
+    "name": "Unconscious",
+    "description": "Character is incapacitated and unaware.",
+    "effects": ["incapacitated:true", "cannot_act:true", "defense_roll_set:5"],
+    "type": "detrimental",
+    "duration_type": "condition"
+  },
+  "Immobilized": {
+    "name": "Immobilized",
+    "description": "Character cannot move from their current position.",
+    "effects": ["movement_incapable:all"],
+    "type": "detrimental",
+    "duration_type": "condition"
+  },
+  "Silenced": {
+    "name": "Silenced",
+    "description": "Character cannot produce sound (specify type).",
+    "effects": ["cannot_speak:true"],
+    "type": "detrimental",
+    "duration_type": "condition"
+  }
+}

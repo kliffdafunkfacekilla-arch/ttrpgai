@@ -270,3 +270,26 @@ async def remove_inventory_item(char_id: int, item_update: schemas.InventoryUpda
         raise HTTPException(status_code=400, detail=f"{item_update.item_id} not found in inventory.")
 
     return crud.remove_item_from_inventory(db, db_character, item_update.item_id, item_update.quantity)
+
+
+@app.put("/v1/characters/{char_id}/apply_damage", response_model=schemas.CharacterResponse, tags=["Combat Integration"])
+async def apply_damage(char_id: int, damage_request: schemas.ApplyDamageRequest, db: Session = Depends(get_db)):
+     """Applies HP damage to a character."""
+     db_character = crud.get_character(db, char_id=char_id)
+     if not db_character: raise HTTPException(404, "Character not found")
+     # Add validation: Ensure damage_amount is non-negative
+     if damage_request.damage_amount < 0:
+         raise HTTPException(status_code=400, detail="Damage amount cannot be negative.")
+
+     return crud.apply_damage_to_character(db, db_character, damage_request.damage_amount)
+
+@app.put("/v1/characters/{char_id}/apply_status", response_model=schemas.CharacterResponse, tags=["Combat Integration"])
+async def apply_status(char_id: int, status_request: schemas.ApplyStatusRequest, db: Session = Depends(get_db)):
+     """Applies a status effect to a character."""
+     db_character = crud.get_character(db, char_id=char_id)
+     if not db_character: raise HTTPException(404, "Character not found")
+     # Add validation: Ensure status_id is valid?
+     if not status_request.status_id:
+          raise HTTPException(status_code=400, detail="Status ID cannot be empty.")
+
+     return crud.apply_status_to_character(db, db_character, status_request.status_id)
