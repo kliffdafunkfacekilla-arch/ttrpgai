@@ -173,9 +173,6 @@ async def handle_player_combat_action(
             db, combat_id, player_id, action_request
         )
 
-        # TODO: After successful action, advance the turn
-        # await combat_handler.advance_turn(db, combat_id)
-
         logger.info(f"Action result: {action_result.get('message')}")
         # Return the detailed result
         return action_result

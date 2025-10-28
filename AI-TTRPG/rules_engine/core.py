@@ -8,6 +8,56 @@ from .data_loader import INJURY_EFFECTS, STATUS_EFFECTS
 from .models import RollResult, TalentInfo, FeatureStatsResponse
 
 
+# Maps Weapon/Armor Category Name (Keys) used everywhere
+# to the Skill Name (Values) used for Rank lookups in stats_and_skills.json
+EQUIPMENT_CATEGORY_TO_SKILL_MAP: Dict[str, str] = {
+    # Melee Weapons (Key = Thematic Name, Value = Thematic Name/Skill Name)
+    "Great Weapons": "Great Weapons",
+    "Polearms & Shields": "Polearms & Shields",
+    "Precision Blades": "Precision Blades",
+    "Quick Pair": "Quick Pair",
+    "Adept Staves": "Adept Staves",
+    "Brawling Weapons": "Brawling Weapons",
+    "Elemental Edges": "Elemental Edges",
+    "Utilitarian Weapons": "Utilitarian Weapons",
+    "Binding Weapons": "Binding Weapons",
+    "Visceral Weapons": "Visceral Weapons",
+    "Performance Weapons": "Performance Weapons",
+    "Resolute Edges": "Resolute Edges",
+
+    # Ranged Weapons (Key = Thematic Name, Value = Thematic Name/Skill Name)
+    "Heavy Artillery": "Heavy Artillery",
+    "Area Projectors": "Area Projectors",
+    "Subtle Projectiles": "Subtle Projectiles",
+    "Quick Throws": "Quick Throws",
+    "Explosives & Vials": "Explosives & Vials",
+    "Returning Projectiles": "Returning Projectiles",
+    "Clockwork Weapons": "Clockwork Weapons",
+    "Impact Spears": "Impact Spears",
+    "Precision Archery": "Precision Archery",
+    "Restraint Weapons": "Restraint Weapons",
+    "Concussive Firearms": "Concussive Firearms",
+    "Sustained Defense": "Sustained Defense",
+
+    # Armor (Key = Thematic Category Name, Value = Thematic Skill Name - Now 1:1)
+    "Scale/Band Mail": "Scale/Band Mail",
+    "Plate Armor": "Plate Armor",
+    "Camouflage": "Camouflage",
+    "Clothing/Utility": "Clothing/Utility",
+    "Wood and Stone": "Wood and Stone",
+    "Natural/Unarmored": "Natural/Unarmored", # Key added, maps to skill
+    "Robes/Cloaks": "Robes/Cloaks",
+    "Chainmail": "Chainmail",
+    "Leather/Hides": "Leather/Hides",
+    "Tribal/Spirit": "Tribal/Spirit",
+    "Ornate/Showy": "Ornate/Showy",
+    "Reinforced": "Reinforced",
+    # We map "Unarmored" request input to the correct skill as well
+    "Unarmored": "Natural/Unarmored"
+    # "Heavy Cloaks" key is now removed entirely
+}
+
+
 # ADD THIS FUNCTION
 def calculate_modifier(score: int) -> int:
     """Calculates the attribute modifier from a score based on floor((Score - 10) / 2)."""
@@ -58,92 +108,92 @@ def _roll_dice(num_dice: int, sides: int) -> int:
     return sum(random.randint(1, sides) for _ in range(num_dice))
 
 def calculate_contested_attack(attack_data: models.ContestedAttackRequest) -> models.ContestedAttackResponse:
-    """
-    Performs a contested d20 attack roll based on Fulcrum rules.
-    Determines Hit, Solid Hit, Critical Hit, Miss, or Fumble.
-    """
+    """Performs a contested d20 attack roll using pre-aggregated modifiers."""
+
+    # NOTE: We no longer need to look up weapon/armor data here,
+    # as the necessary stats (Stat Scores, Skill Ranks, Weapon Penalty)
+    # and aggregated bonuses/penalties are provided directly in attack_data.
+
+    # --- Roll Dice ---
     attacker_roll = _roll_d20()
     defender_roll = _roll_d20()
 
-    # Calculate Attacker Modifiers and Total
+    # --- Calculate Attacker Total ---
     attacker_stat_mod = calculate_modifier(attack_data.attacker_attacking_stat_score)
-    attacker_skill_bonus = calculate_skill_mt_bonus(attack_data.attacker_skill_rank)
+    attacker_skill_bonus = calculate_skill_mt_bonus(attack_data.attacker_skill_rank) # Still uses +1 per rank
     attacker_total_modifier = (
-        attacker_stat_mod
-        + attacker_skill_bonus
-        + attack_data.attacker_misc_bonus
-        - attack_data.attacker_misc_penalty
+        attacker_stat_mod + attacker_skill_bonus +
+        attack_data.attacker_attack_roll_bonus - attack_data.attacker_attack_roll_penalty # Use new specific fields
     )
     attacker_final_total = attacker_roll + attacker_total_modifier
 
-    # Calculate Defender Modifiers and Total
+    # --- Calculate Defender Total ---
     defender_stat_mod = calculate_modifier(attack_data.defender_armor_stat_score)
-    defender_skill_bonus = calculate_skill_mt_bonus(attack_data.defender_armor_skill_rank)
-    # Note: defender_weapon_penalty is subtracted (making it typically add to the defender's effective total if negative)
+    defender_skill_bonus = calculate_skill_mt_bonus(attack_data.defender_armor_skill_rank) # Still uses +1 per rank
+    # Weapon penalty still comes from request (story_engine looks it up)
     defender_total_modifier = (
-        defender_stat_mod
-        + defender_skill_bonus
-        - attack_data.defender_weapon_penalty # Subtracting the (usually negative) penalty
-        + attack_data.defender_misc_bonus
-        - attack_data.defender_misc_penalty
+        defender_stat_mod + defender_skill_bonus - attack_data.defender_weapon_penalty +
+        attack_data.defender_defense_roll_bonus - attack_data.defender_defense_roll_penalty # Use new specific fields
     )
     defender_final_total = defender_roll + defender_total_modifier
 
+    # --- Determine Outcome (Logic remains the same) ---
     margin = attacker_final_total - defender_final_total
-    outcome = "miss" # Default outcome
+    outcome = "miss"
+    if attacker_roll == 1: outcome = "critical_fumble"
+    elif attacker_roll == 20: outcome = "critical_hit"
+    elif margin >= 5: outcome = "solid_hit"
+    elif margin >= 0: outcome = "hit"
 
-    # Determine outcome based on rules
-    if attacker_roll == 1:
-        outcome = "critical_fumble"
-    elif attacker_roll == 20:
-        outcome = "critical_hit" # Nat 20 always crits (implies hit)
-        # We can set a high margin for clarity on crits if desired, or leave as calculated
-        # margin = 20 # Optional override for crit margin display
-    elif margin >= 5:
-        outcome = "solid_hit"
-    elif margin >= 0: # Attacker Total >= Defender Total (Margin 0 to 4)
-        outcome = "hit"
-    # If margin < 0, outcome remains "miss"
-
+    # --- Return Response (Remains the same structure) ---
     return models.ContestedAttackResponse(
-        attacker_roll=attacker_roll,
-        attacker_stat_mod=attacker_stat_mod,
-        attacker_skill_bonus=attacker_skill_bonus,
-        attacker_total_modifier=attacker_total_modifier,
-        attacker_final_total=attacker_final_total,
-        defender_roll=defender_roll,
-        defender_stat_mod=defender_stat_mod,
-        defender_skill_bonus=defender_skill_bonus,
-        defender_total_modifier=defender_total_modifier,
-        defender_final_total=defender_final_total,
-        outcome=outcome,
-        margin=margin
+        attacker_roll=attacker_roll, attacker_stat_mod=attacker_stat_mod, attacker_skill_bonus=attacker_skill_bonus,
+        attacker_total_modifier=attacker_total_modifier, attacker_final_total=attacker_final_total,
+        defender_roll=defender_roll, defender_stat_mod=defender_stat_mod, defender_skill_bonus=defender_skill_bonus,
+        defender_total_modifier=defender_total_modifier, defender_final_total=defender_final_total,
+        outcome=outcome, margin=margin
     )
 
-# ADD THIS FUNCTION
 def calculate_damage(damage_data: models.DamageRequest) -> models.DamageResponse:
-    """
-    Calculates final damage after rolling dice, adding mods, and applying DR.
-    """
-    # 1. Roll Base Damage
-    num_dice, sides = parse_dice_string(damage_data.base_damage_roll)
-    base_roll = _roll_dice(num_dice, sides)
+    """Calculates final damage using pre-aggregated modifiers."""
 
-    # 2. Calculate Stat Modifier
-    stat_mod = calculate_modifier(damage_data.damage_stat_score)
+    # NOTE: We no longer need to look up weapon/armor data here,
+    # as base dice, relevant stat, damage bonus, DR modifier, and base DR
+    # are provided directly in damage_data.
 
-    # 3. Calculate Subtotal
-    subtotal = base_roll + stat_mod + damage_data.misc_damage_bonus
+    # --- 1. Parse Dice String & Roll ---
+    try:
+        # Handle multi-hit like '(x2)'? Assume caller handles this or provides combined dice.
+        # Handle AoE? Assume single target damage here.
+        # We just parse the dice string provided.
+        num_dice, die_type = parse_dice_string(damage_data.base_damage_dice)
+    except ValueError as e:
+        print(f"Error parsing dice string in core calculate_damage: {e}")
+        # Return zero damage
+        return models.DamageResponse(damage_roll_details=[], base_roll_total=0, stat_bonus=0, misc_bonus=0, subtotal_damage=0, damage_reduction_applied=0, final_damage=0)
 
-    # 4. Apply Damage Reduction
-    dr_applied = min(subtotal, damage_data.target_damage_reduction)
+    rolls, roll_total = _roll_dice(num_dice, die_type)
 
-    # 5. Calculate Final Damage (cannot be negative)
-    final_damage = max(0, subtotal - damage_data.target_damage_reduction)
+    # --- 2. Calculate Stat Bonus ---
+    stat_bonus = calculate_modifier(damage_data.relevant_stat_score)
 
+    # --- 3. Calculate Subtotal ---
+    subtotal = (
+        roll_total + stat_bonus +
+        damage_data.attacker_damage_bonus - damage_data.attacker_damage_penalty # Use new specific fields
+    )
+
+    # --- 4. Apply Modified DR ---
+    # Calculate effective DR after applying attacker's modifier (e.g., from Great Weapons)
+    effective_dr = max(0, damage_data.defender_base_dr - damage_data.attacker_dr_modifier)
+
+    dr_applied = min(subtotal, effective_dr) # DR applied cannot exceed subtotal
+    final_damage = max(0, subtotal - effective_dr) # Final damage is at least 0
+
+    # --- 5. Return Response (Remains the same structure) ---
     return models.DamageResponse(
-        base_roll_total=base_roll,
-        stat_modifier=stat_mod,
+        damage_roll_details=rolls, base_roll_total=roll_total, stat_bonus=stat_bonus,
+        misc_bonus=damage_data.attacker_damage_bonus - damage_data.attacker_damage_penalty, # Reflect net bonus in response
         subtotal_damage=subtotal,
         damage_reduction_applied=dr_applied,
         final_damage=final_damage
@@ -241,27 +291,38 @@ def get_skills_by_category(skill_categories_map: Dict[str, List[str]]) -> Dict[s
 
 
 def get_status_effect(status_name: str) -> models.StatusEffectResponse:
-    """Looks up the definition and effects for a specific status by name."""
+    """Looks up the definition and effects for a specific status by name from loaded data."""
 
-    # Find the status definition (case-insensitive keys if needed)
     status_data = None
+    found_key = None
+    # Case-insensitive lookup
     for key, value in STATUS_EFFECTS.items():
-         if key.lower() == status_name.lower():
-              status_data = value
-              break # Found match
+        if key.lower() == status_name.lower():
+            status_data = value
+            found_key = key # Store the original key casing
+            break
 
     if not status_data:
-        raise ValueError(f"Status effect '{status_name}' not found in rules data.")
+        raise ValueError(f"Status effect '{status_name}' not found in loaded status_effects.json.")
 
-    # Construct the response model from the loaded dictionary
-    return models.StatusEffectResponse(
-        name=status_data.get("name", status_name), # Use provided name or key
-        description=status_data.get("description", "No description available."),
-        effects=status_data.get("effects", []),
-        type=status_data.get("type", "unknown"),
-        duration_type=status_data.get("duration_type", "condition"),
-        default_duration=status_data.get("default_duration") # Will be None if not present
-    )
+    # Construct the response model using data from the found dictionary.
+    # Ensure the keys used here (.get("field_name")) exactly match the keys
+    # within each status object in your status_effects.json
+    try:
+        response_data = {
+            "name": status_data.get("name", found_key), # Use defined name or fallback to the key
+            "description": status_data.get("description", "No description."),
+            "effects": status_data.get("effects", []),
+            "type": status_data.get("type", "unknown"),
+            "duration_type": status_data.get("duration_type", "condition"),
+            "default_duration": status_data.get("default_duration") # Will be None if missing
+            # Add mappings for any other fields you added to the StatusEffectResponse model
+        }
+        return models.StatusEffectResponse(**response_data)
+    except Exception as e:
+        # This might happen if the JSON data doesn't match the Pydantic model
+        print(f"Error creating StatusEffectResponse for '{found_key}': {e}")
+        raise ValueError(f"Data structure mismatch for status '{found_key}'. Check JSON against models.py. Error: {e}")
 
 def get_injury_effects(request: models.InjuryLookupRequest) -> models.InjuryEffectResponse:
     """Looks up injury effects from the loaded injury data."""

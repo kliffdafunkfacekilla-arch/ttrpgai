@@ -1,24 +1,5 @@
-# Environments
-.env
-.venv
-venv/
-env/
-
-# IDEs and editors
-.idea/
-.vscode/
-*.swp
-*.swo
-
-# Python artifacts
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-
-# Databases
 *.db
-*.sqlite3
-
-# Logs
+*.db-journal
 *.log
+__pycache__/
+.pytest_cache/

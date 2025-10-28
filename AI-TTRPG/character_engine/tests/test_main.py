@@ -11,7 +11,7 @@ def test_create_character_success():
             "kingdom": "Engineer",
             "f_stats": {"F1": "Predator's Gaze"},
             "capstone_stat": "Might",
-            "background_skills": ["Great Weapons", "Plate Armor", "Intimidation", "Athletics", "Endurance", "History", "Logic", "Investigation", "Awareness", "Intuition", "Charm", "Willpower"],
+            "background_skills": ["Great Weapons", "Plate Armor", "Intimidation", "Athletics", "Resilience", "Lore: Common Folk", "Debate", "Insight", "Empathy", "Persuasion", "Negotiations", "Discipline"],
         },
     )
     assert response.status_code == 201

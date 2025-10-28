@@ -179,29 +179,29 @@ class InitiativeResponse(BaseModel):
 
 # ADD THESE MODELS for Contested Attack
 class ContestedAttackRequest(BaseModel):
-    """
-    Input required for a contested attack roll based on Fulcrum rules.
-    Attacker: d20 + Attacking Stat Mod + Skill MT Bonus + Mods
-    Defender: d20 + Armor Stat Mod + Armor Skill MT Bonus - Weapon Penalty + Mods
-    """
+    """Input required for a contested attack roll, using specific aggregated modifiers."""
     # Attacker Info
-    attacker_attacking_stat_score: int = Field(..., description="Score of the stat used for the attack (e.g., Might for Great Weapons).")
-    attacker_skill_rank: int = Field(..., description="Rank of the relevant Melee/Ranged skill.")
-    attacker_misc_bonus: int = Field(default=0, description="Sum of other bonuses for the attacker (e.g., Talents, situational advantages).")
-    attacker_misc_penalty: int = Field(default=0, description="Sum of other penalties for the attacker (e.g., Injuries, situational disadvantages).")
+    attacker_attacking_stat_score: int = Field(...)
+    attacker_skill_rank: int = Field(...)
+    # --- MODIFIED: Specific Bonuses/Penalties ---
+    attacker_attack_roll_bonus: int = Field(default=0, description="Sum of bonuses DIRECTLY affecting the attacker's d20 roll (e.g., from Steady Aim, Bless).")
+    attacker_attack_roll_penalty: int = Field(default=0, description="Sum of penalties DIRECTLY affecting the attacker's d20 roll (e.g., from Shaken, Blinded).")
+    # --- END MODIFIED ---
 
     # Defender Info
-    defender_armor_stat_score: int = Field(..., description="Score of the stat associated with the defender's armor type (e.g., Endurance for Plate).")
-    defender_armor_skill_rank: int = Field(..., description="Rank of the relevant Armor skill.")
-    defender_weapon_penalty: int = Field(default=0, description="Penalty imposed by the attacker's weapon (e.g., -2 for Great Weapons). This value should be negative or zero.")
-    defender_misc_bonus: int = Field(default=0, description="Sum of other bonuses for the defender (e.g., Cover).")
-    defender_misc_penalty: int = Field(default=0, description="Sum of other penalties for the defender (e.g., Injuries).")
+    defender_armor_stat_score: int = Field(...)
+    defender_armor_skill_rank: int = Field(...)
+    defender_weapon_penalty: int = Field(default=0, description="Base penalty from the attacker's weapon category.")
+    # --- MODIFIED: Specific Bonuses/Penalties ---
+    defender_defense_roll_bonus: int = Field(default=0, description="Sum of bonuses DIRECTLY affecting the defender's d20 roll (e.g., from Cover, situational bonuses).")
+    defender_defense_roll_penalty: int = Field(default=0, description="Sum of penalties DIRECTLY affecting the defender's d20 roll (e.g., from Prone vs Melee, injuries).")
+    # --- END MODIFIED ---
 
+    # Removed target_hit_location, attacker_steady_aim_active, is_ranged_attack
+    # The effects of these are now expected to be included in the bonus/penalty fields by the caller (story_engine)
     @validator('defender_weapon_penalty')
     def validate_weapon_penalty(cls, v):
-        if v > 0:
-            # Weapon penalty should typically be negative or zero
-            raise ValueError("defender_weapon_penalty should not be positive.")
+        if v > 0: raise ValueError("defender_weapon_penalty should not be positive.")
         return v
 
 class ContestedAttackResponse(BaseModel):
@@ -224,23 +224,51 @@ class ContestedAttackResponse(BaseModel):
     margin: int = Field(description="Attacker's Final Total - Defender's Final Total.")
 
 
+def _core_parse_dice_string(dice_str: str) -> (int, int):
+    """Helper for model validation. Parses a dice string like '2d6' into (number_of_dice, dice_sides)."""
+    if dice_str == "0":
+        return 0, 0
+    if 'd' not in dice_str:
+        raise ValueError(f"Invalid dice string format: '{dice_str}'")
+    parts = dice_str.lower().split('d')
+    if len(parts) != 2 or not parts[0].isdigit() or not parts[1].isdigit():
+        raise ValueError(f"Invalid dice string format: '{dice_str}'")
+    return int(parts[0]), int(parts[1])
+
+
 # ADD THESE MODELS for Damage Calculation
 class DamageRequest(BaseModel):
-    """
-    Input required to calculate damage based on Fulcrum rules.
-    Rule: Base Damage (XdY) + Stat Mod + Misc Bonus - Target DR
-    """
-    base_damage_roll: str = Field(..., description="The dice string for base damage (e.g., '2d6', '1d10', '0').")
-    damage_stat_score: int = Field(..., description="The score of the attribute adding to damage (e.g., Might).")
-    misc_damage_bonus: int = Field(default=0, description="Sum of other bonuses (e.g., from Talents).")
-    target_damage_reduction: int = Field(default=0, ge=0, description="The target's DR from armor and other effects.")
+    """Input required for calculating damage, using specific aggregated modifiers."""
+    # Attacker Info
+    base_damage_dice: str = Field(...)
+    relevant_stat_score: int = Field(...)
+    # --- MODIFIED: Specific Bonuses/Penalties ---
+    attacker_damage_bonus: int = Field(default=0, description="Sum of flat damage bonuses (talents, abilities, weapon properties NOT included in dice).")
+    attacker_damage_penalty: int = Field(default=0, description="Sum of flat damage penalties.")
+    attacker_dr_modifier: int = Field(default=0, description="Value to subtract from target's DR (e.g., 1 for Great Weapons/Heavy Artillery). Should be positive.")
+    # --- END MODIFIED ---
+
+    # Defender Info
+    defender_base_dr: int = Field(default=0, description="Target's base Damage Reduction from armor.")
+    # Future: Add 'defender_resistance_multiplier', 'damage_type'
+    @validator('base_damage_dice')
+    def validate_dice_string(cls, v):
+        try: _core_parse_dice_string(v) # Use local helper
+        except ValueError as e: raise ValueError(str(e))
+        return v
+    @validator('defender_base_dr', 'attacker_dr_modifier')
+    def validate_non_negative(cls, v):
+        if v < 0: raise ValueError("DR values cannot be negative.")
+        return v
 
 class DamageResponse(BaseModel):
     """
     Output of the damage calculation.
     """
+    damage_roll_details: List[int] = Field(description="The result of each damage die roll.")
     base_roll_total: int = Field(description="The result of rolling the base damage dice.")
-    stat_modifier: int = Field(description="The modifier from the damage stat score.")
+    stat_bonus: int = Field(description="The modifier from the damage stat score.")
+    misc_bonus: int = Field(description="The net bonus from talents, abilities, etc.")
     subtotal_damage: int = Field(description="Damage before reduction (roll + stat mod + bonus).")
     damage_reduction_applied: int = Field(description="How much of the target's DR was applied.")
     final_damage: int = Field(description="The final damage dealt to the target's HP (cannot be negative).")
@@ -260,10 +288,17 @@ class InjuryEffectResponse(BaseModel):
 
 # ADD THIS MODEL for Status Effects
 class StatusEffectResponse(BaseModel):
-    """Output describing the definition of a status effect."""
+    """Output describing the definition of a status effect, based on status_effects.json."""
+    # --- Adjust these fields based on your status_effects.json ---
     name: str
     description: str
     effects: List[str] = Field(description="List of machine-readable effect strings.")
     type: str = Field(description="e.g., 'detrimental', 'beneficial'")
     duration_type: str = Field(description="How duration is tracked ('turns', 'condition', 'encounter').")
     default_duration: Optional[int] = Field(None, description="Default duration in turns, if applicable.")
+    # Add any other fields that exist in your JSON structure (e.g., "icon_ref", "severity_scaling")
+    # --- End adjustments ---
+
+    class Config:
+        from_attributes = True # Use this for Pydantic V2+
+        # orm_mode = True # Use this for Pydantic V1

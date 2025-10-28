@@ -1,34 +1,82 @@
 {
-"base_stats_by_kingdom": {
-"mammal": {"Might": 10, "Endurance": 10, "Finesse": 10, "Reflexes": 10, "Vitality": 10, "Fortitude": 10, "Knowledge": 8, "Logic": 8, "Awareness": 10, "Intuition": 10, "Charm": 8, "Willpower": 8},
-"reptile": {"Might": 9, "Endurance": 11, "Finesse": 9, "Reflexes": 11, "Vitality": 11, "Fortitude": 11, "Knowledge": 8, "Logic": 8, "Awareness": 9, "Intuition": 9, "Charm": 8, "Willpower": 8},
-"insect": {"Might": 8, "Endurance": 8, "Finesse": 11, "Reflexes": 11, "Vitality": 8, "Fortitude": 8, "Knowledge": 10, "Logic": 10, "Awareness": 11, "Intuition": 11, "Charm": 8, "Willpower": 8}
-},
-"stat_modifiers_by_style": {
-"offense": {
-"melee_heavy": {"Might": "+4", "Reflexes": "-1"},
-"ranged_support": {"Reflexes": "+3", "Awareness": "+2", "Might": "-2"},
-"debuff": {"Knowledge": "+3", "Intuition": "+2", "Might": "-1", "Endurance": "-1"}
-},
-"defense": {
-"heavy_armor": {"Endurance": "+3", "Fortitude": "+2", "Reflexes": "-2"},
-"evasive": {"Reflexes": "+4", "Finesse": "+2", "Endurance": "-2"},
-"regenerative": {"Vitality": "+4", "Endurance": "+1"}
-}
-},
-"hp_scaling_by_difficulty": {
-"easy": 0.75,
-"medium": 1.0,
-"hard": 1.5,
-"boss": 3.0
-},
-"ability_suggestions": {
-"Force": ["Force T1: Minor Shove", "Force T2: Repel Step"],
-"Biomancy": ["Biomancy T1: Minor Poison", "Biomancy T2: Pain Receptor Spike"]
-},
-"behavior_map": {
-"aggressive": ["charges", "focuses_highest_threat"],
-"cowardly": ["flees_at_low_hp", "targets_weakest"],
-"territorial": ["defends_area", "warns_before_attack"]
-}
+  "base_stats_by_kingdom": {
+    "mammal": {"Might": 10, "Endurance": 10, "Finesse": 10, "Reflexes": 10, "Vitality": 10, "Fortitude": 10, "Knowledge": 8, "Logic": 8, "Awareness": 10, "Intuition": 10, "Charm": 8, "Willpower": 8},
+    "reptile": {"Might": 9, "Endurance": 11, "Finesse": 9, "Reflexes": 11, "Vitality": 11, "Fortitude": 11, "Knowledge": 8, "Logic": 8, "Awareness": 9, "Intuition": 9, "Charm": 8, "Willpower": 8},
+    "insect": {"Might": 8, "Endurance": 8, "Finesse": 11, "Reflexes": 11, "Vitality": 8, "Fortitude": 8, "Knowledge": 10, "Logic": 10, "Awareness": 11, "Intuition": 11, "Charm": 8, "Willpower": 8}
+  },
+  "stat_modifiers_by_style": {
+    "offense": {
+      "melee_heavy": {"Might": "+4", "Reflexes": "-1"},
+      "ranged_support": {"Reflexes": "+3", "Awareness": "+2", "Might": "-2"},
+      "debuff": {"Knowledge": "+3", "Intuition": "+2", "Might": "-1", "Endurance": "-1"}
+    },
+    "defense": {
+      "heavy_armor": {"Endurance": "+3", "Fortitude": "+2", "Reflexes": "-2"},
+      "evasive": {"Reflexes": "+4", "Finesse": "+2", "Endurance": "-2"},
+      "regenerative": {"Vitality": "+4", "Endurance": "+1"}
+    }
+  },
+  "skills_by_style_and_difficulty": {
+    "offense": {
+      "melee_heavy": {
+        "easy": ["Strength", "Heavy Bludgeons"],
+        "medium": ["Strength", "Heavy Bludgeons", "Intimidation"],
+        "hard": ["Strength", "Heavy Bludgeons", "Intimidation", "Athletics"],
+        "boss": ["Strength", "Heavy Bludgeons", "Intimidation", "Athletics", "Resilience"]
+      },
+      "ranged_support": {
+        "easy": ["Bows", "Awareness"],
+        "medium": ["Bows", "Awareness", "Survival"],
+        "hard": ["Bows", "Awareness", "Survival", "Communication"],
+        "boss": ["Bows", "Awareness", "Survival", "Communication", "Nature Sense"]
+      },
+      "debuff": {
+        "easy": ["Alchemic Grenades", "Knowledge"],
+        "medium": ["Alchemic Grenades", "Knowledge", "Lore: Science & Acad."],
+        "hard": ["Alchemic Grenades", "Knowledge", "Lore: Science & Acad.", "Security"],
+        "boss": ["Alchemic Grenades", "Knowledge", "Lore: Science & Acad.", "Security", "Artifice"]
+      }
+    },
+    "defense": {
+       "heavy_armor": {
+        "easy": ["Plate"],
+        "medium": ["Plate", "Resilience"],
+        "hard": ["Plate", "Resilience", "Endurance"],
+        "boss": ["Plate", "Resilience", "Endurance", "Discipline"]
+      },
+      "evasive": {
+        "easy": ["Evasion"],
+        "medium": ["Evasion", "Athletics"],
+        "hard": ["Evasion", "Athletics", "Slight of Hand"],
+        "boss": ["Evasion", "Athletics", "Slight of Hand", "Security"]
+      },
+      "regenerative": {
+        "easy": ["Resilience"],
+        "medium": ["Resilience", "Survival"],
+        "hard": ["Resilience", "Survival", "Provisioning"],
+        "boss": ["Resilience", "Survival", "Provisioning", "Nature Sense"]
+      }
+    },
+    "skill_ranks": {
+       "easy": 1,
+       "medium": 2,
+       "hard": 3,
+       "boss": 4
+    }
+  },
+  "hp_scaling_by_difficulty": {
+    "easy": 0.75,
+    "medium": 1.0,
+    "hard": 1.5,
+    "boss": 3.0
+  },
+  "ability_suggestions": {
+    "Force": ["Force T1: Minor Shove", "Force T2: Repel Step"],
+    "Biomancy": ["Biomancy T1: Minor Poison", "Biomancy T2: Pain Receptor Spike"]
+  },
+  "behavior_map": {
+    "aggressive": ["charges", "focuses_highest_threat"],
+    "cowardly": ["flees_at_low_hp", "targets_weakest"],
+    "territorial": ["defends_area", "warns_before_attack"]
+  }
 }
