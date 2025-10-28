@@ -8,14 +8,15 @@ from . import core, data_loader, models
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Load map generation data on startup."""
-    print("INFO: Loading map generation data...")
+    print("INFO: Lifespan startup...")
     try:
+        print("INFO: Calling data_loader.load_data()...")
         data_loader.load_data()
-        print("INFO: Map data loaded.")
+        print("INFO: Map data loaded successfully.")
     except Exception as e:
-        print(f"FATAL: Failed to load map data: {e}")
+        print(f"FATAL: Failed to load map data during lifespan startup: {e}")
     yield
-    print("INFO: Shutting down Map Generator.")
+    print("INFO: Lifespan shutdown. Shutting down Map Generator.")
 
 # Create the FastAPI app
 app = FastAPI(
