@@ -193,7 +193,7 @@ class ContestedAttackRequest(BaseModel):
     defender_armor_skill_rank: int = Field(...)
     defender_weapon_penalty: int = Field(default=0, description="Base penalty from the attacker's weapon category.")
     # --- MODIFIED: Specific Bonuses/Penalties ---
-    defender_defense_roll_bonus: int = Field(default=0, description="Sum of bonuses DIRECTLY affecting the defender's d20 roll (e.g., from Cover, situational bonuses).")
+    defender_defense_roll_bonus: int = Field(default=0, description="Sum of bonuses DIRECTLY affecting the defender's d20 roll (e.g., from Cover, Heavy Cloaks vs Ranged).")
     defender_defense_roll_penalty: int = Field(default=0, description="Sum of penalties DIRECTLY affecting the defender's d20 roll (e.g., from Prone vs Melee, injuries).")
     # --- END MODIFIED ---
 
