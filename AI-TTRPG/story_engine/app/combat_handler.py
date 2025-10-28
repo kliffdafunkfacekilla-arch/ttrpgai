@@ -247,8 +247,8 @@ async def check_combat_end(db: Session, combat_id: int, client: httpx.AsyncClien
             actor_type, context = await get_actor_context(client, p.actor_id)
             # Check HP based on type
             if actor_type == "player":
-                # TODO: Refine HP location in character_sheet
-                hp = context.get("character_sheet", {}).get("stats", {}).get("current_hp", 1)
+                # --- MODIFIED HP PATH ---
+                hp = context.get("character_sheet", {}).get("combat_stats", {}).get("current_hp", 1)
                 if hp > 0: players_alive = True
             elif actor_type == "npc":
                 hp = context.get("current_hp", 1)
@@ -308,35 +308,63 @@ async def advance_turn(db: Session, combat_id: int):
 
 async def determine_npc_action(npc_context: Dict, participants: List[models.CombatParticipant], client: httpx.AsyncClient) -> Tuple[str, Optional[str]]:
     """
-    VERY basic NPC AI. Determines action (currently just attack) and target.
+    Basic NPC AI. Determines action (attack) and target based on behavior tags.
     Returns (action_type: str, target_id: Optional[str])
     """
     behavior_tags = npc_context.get("behavior_tags", [])
-    npc_id = f"npc_{npc_context.get('id')}"
+    npc_id_str = f"npc_{npc_context.get('id')}" # Use f-string for clarity
+    npc_current_hp = npc_context.get("current_hp", 1)
+    npc_max_hp = npc_context.get("max_hp", 1) # Needed for 'cowardly' check
 
-    # Simple logic: Find first living player
+    action_type = "wait" # Default action
     target_id = None
-    living_players = []
-    for p in participants:
-         if p.actor_id.startswith("player_"):
-              try:
-                  _, p_context = await get_actor_context(client, p.actor_id)
-                  # TODO: Refine HP location
-                  hp = p_context.get("character_sheet", {}).get("stats", {}).get("current_hp", 1)
-                  if hp > 0:
-                       living_players.append(p.actor_id)
-              except HTTPException:
-                   logger.warning(f"Could not get context for potential target {p.actor_id}")
-                   continue # Skip if context fails
 
-    if living_players:
-         # Add logic based on behavior_tags later (e.g., target lowest HP if 'targets_weakest')
-         target_id = random.choice(living_players)
-         logger.info(f"NPC {npc_id} targeting Player {target_id} based on simple AI.")
-         return "attack", target_id
+    # 1. Gather potential targets (living players) and their HP
+    living_players_with_hp = []
+    for p in participants:
+        if p.actor_id.startswith("player_"):
+            try:
+                _, p_context = await get_actor_context(client, p.actor_id)
+                hp = p_context.get("character_sheet", {}).get("combat_stats", {}).get("current_hp", 0) # Use correct path
+                if hp > 0:
+                    living_players_with_hp.append({"id": p.actor_id, "hp": hp})
+            except HTTPException:
+                logger.warning(f"Could not get context for potential target {p.actor_id} in NPC AI.")
+                continue
+
+    if not living_players_with_hp:
+        logger.info(f"NPC {npc_id_str} found no living players to target.")
+        return "wait", None # No targets, wait
+
+    # 2. Apply behavior logic
+    if "cowardly" in behavior_tags and npc_current_hp < npc_max_hp * 0.3: # Example: flee below 30% HP
+        logger.info(f"NPC {npc_id_str} is cowardly and low HP, attempting to flee (action 'wait' for now).")
+        # TODO: Implement actual flee logic (e.g., move away)
+        action_type = "wait" # Placeholder for flee
+        target_id = None
+    elif "targets_weakest" in behavior_tags or "cowardly" in behavior_tags:
+        # Find player with lowest HP
+        living_players_with_hp.sort(key=lambda p: p["hp"])
+        target_id = living_players_with_hp[0]["id"]
+        action_type = "attack"
+        logger.info(f"NPC {npc_id_str} targets weakest Player {target_id} (HP: {living_players_with_hp[0]['hp']}).")
+    elif "aggressive" in behavior_tags or "focuses_highest_threat" in behavior_tags: # Simple: attack random living player
+        target_id = random.choice(living_players_with_hp)["id"]
+        action_type = "attack"
+        logger.info(f"NPC {npc_id_str} aggressively targets random Player {target_id}.")
+    # Add 'territorial' logic (attack closest?), 'support' logic, etc. later
+    else: # Default: attack random if no specific behavior matches
+        target_id = random.choice(living_players_with_hp)["id"]
+        action_type = "attack"
+        logger.info(f"NPC {npc_id_str} using default behavior, targets random Player {target_id}.")
+
+
+    # 3. Final check if a target was selected for attack
+    if action_type == "attack" and target_id:
+        return "attack", target_id
     else:
-         logger.info(f"NPC {npc_id} found no living players to target.")
-         return "wait", None # No target, just wait
+        # If logic decided not to attack (e.g., flee), return wait
+        return "wait", None
 
 async def execute_npc_turn(db: Session, combat_id: int, npc_actor_id: str):
     """Determines and executes an NPC's action for the current turn."""
@@ -433,7 +461,8 @@ async def execute_combat_action(db: Session, combat_id: int, actor_id: str, acti
                 if target_type == "npc":
                     target_hp = defender_context.get("current_hp", 1)
                 elif target_type == "player":
-                    target_hp = defender_context.get("character_sheet", {}).get("stats", {}).get("current_hp", 1) # TODO: Refine HP path
+                    # --- MODIFIED HP PATH ---
+                    target_hp = defender_context.get("character_sheet", {}).get("combat_stats", {}).get("current_hp", 1)
 
                 if target_hp <= 0:
                     return {"success": False, "message": f"Target {target_id} is already defeated.", "log": results_log}
@@ -461,26 +490,32 @@ async def execute_combat_action(db: Session, combat_id: int, actor_id: str, acti
 
                 # 4. Prepare Contested Attack Request
                 attack_stat = weapon_data.get("skill_stat")
-                armor_stat = armor_data.get("skill_stat")
+                armor_stat = armor_data.get("skill_stat") # Usually Endurance or Agility from armor.json
 
-                # *** Placeholder Skill Mapping - NEEDS REPLACEMENT ***
-                # This logic needs to be accurate based on your rules/data structure
-                weapon_skill = weapon_category # Simplistic: Assumes skill name matches category
-                armor_skill = armor_category   # Simplistic: Assumes skill name matches category
-                logger.warning(f"Using simplistic skill mapping: Weapon='{weapon_skill}', Armor='{armor_skill}'")
-                # *** End Placeholder ***
+                # --- NEW Skill Mapping Logic ---
+                # TODO: FIXME: This is a significant simplification and likely incorrect!
+                # Assumes skill name matches category name. A proper implementation requires:
+                # 1. Item templates defining the specific skill used (preferred).
+                # OR
+                # 2. Adding a 'skill_used' field to rules_engine weapon/armor JSON definitions.
+                # Current assumption will lead to incorrect skill ranks being used for some items.
+                weapon_skill = weapon_category
+                armor_skill = armor_category if armor_category else "No Armor" # Use category name or default
+
+                logger.warning(f"FIXME: Using simplified skill mapping: Weapon='{weapon_skill}', Armor='{armor_skill}'")
+                # --- End NEW Skill Mapping ---
 
                 attack_params = {
                     "attacker_attacking_stat_score": get_stat_score(attacker_context, attack_stat),
-                    "attacker_skill_rank": get_skill_rank(attacker_context, weapon_skill),
+                    "attacker_skill_rank": get_skill_rank(attacker_context, weapon_skill), # Use derived skill
                     "attacker_misc_bonus": 0, # TODO: Add bonuses (status effects, talents)
                     "attacker_misc_penalty": 0, # TODO: Add penalties
 
                     "defender_armor_stat_score": get_stat_score(defender_context, armor_stat),
-                    "defender_armor_skill_rank": get_skill_rank(defender_context, armor_skill),
-                    "defender_weapon_penalty": weapon_data.get("penalty", 0), # Use correct key from JSON
-                    "defender_misc_bonus": 0, # TODO: Add bonuses (cover, status)
-                    "defender_misc_penalty": 0, # TODO: Add penalties
+                    "defender_armor_skill_rank": get_skill_rank(defender_context, armor_skill), # Use derived skill
+                    "defender_weapon_penalty": weapon_data.get("penalty", 0), # Ensure key matches JSON ('penalty')
+                    "defender_misc_bonus": 0,
+                    "defender_misc_penalty": 0,
                 }
 
                 # 5. Call rules_engine: Contested Attack Roll
@@ -542,12 +577,14 @@ async def execute_combat_action(db: Session, combat_id: int, actor_id: str, acti
 
                     # 9. Apply Damage (Total)
                     if final_damage_dealt > 0:
-                         if target_type == "player":
-                              target_hp_before = get_stat_score(defender_context, "current_hp") # TODO: Refine HP path
-                              new_hp = target_hp_before - final_damage_dealt
-                              results_log.append(f"Applying {final_damage_dealt} damage to Player {target_id} (HP: {target_hp_before} -> {new_hp}).")
-                              await services.apply_damage_to_character(client, target_id, final_damage_dealt)
-                         elif target_type == "npc":
+                        if target_type == "player":
+                            # --- MODIFIED HP PATH ---
+                            target_hp_before = defender_context.get("character_sheet", {}).get("combat_stats", {}).get("current_hp", 0)
+                            new_hp = target_hp_before - final_damage_dealt
+                            new_hp = max(0, new_hp) # Clamp at 0
+                            results_log.append(f"Applying {final_damage_dealt} damage to Player {target_id} (HP: {target_hp_before} -> {new_hp}).")
+                            await services.apply_damage_to_character(client, target_id, final_damage_dealt)
+                        elif target_type == "npc":
                               target_hp_before = defender_context.get("current_hp", 0)
                               new_hp = target_hp_before - final_damage_dealt
                               results_log.append(f"Applying {final_damage_dealt} damage to NPC {target_id} (HP: {target_hp_before} -> {new_hp}).")

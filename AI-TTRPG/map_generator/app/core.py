@@ -79,28 +79,42 @@ def generate_cellular_automata(params: Dict[str, Any], width: int, height: int, 
 
     return grid
 
-# --- Drunkard's Walk (Placeholder - Keep for future implementation) ---
+# --- Drunkard's Walk Implementation ---
 def generate_drunkards_walk(params: Dict[str, Any], width: int, height: int, seed: str) -> np.ndarray:
-    """Placeholder for Drunkard's Walk algorithm."""
-    random.seed(seed)
-    wall_id = params.get("wall_tile_id", 4)
+    """
+    Generates a map using the Drunkard's Walk algorithm.
+    Carves out floor tiles by simulating random walks.
+    """
+    random.seed(seed) # Use the seed for Python's random
+    # Note: numpy's random is not heavily used here, but seeding both is good practice
+
+    wall_id = params.get("wall_tile_id", 4) # Default for cave from generation_algorithms.json
     floor_id = params.get("floor_tile_id", 3)
     walk_steps = params.get("walk_steps", 500)
+    # Optional: Add parameters like number of drunkards, floor target percentage
 
-    # Initialize grid full of walls
+    # 1. Initialize grid full of walls
     grid = np.full((height, width), wall_id, dtype=int)
 
-    # Simple walk placeholder
+    # 2. Perform the walk(s)
+    # Start near the center
     x, y = width // 2, height // 2
+
     for _ in range(walk_steps):
-         if 0 <= y < height and 0 <= x < width:
-             grid[y, x] = floor_id
-         # Move randomly
-         dx, dy = random.choice([(0, 1), (0, -1), (1, 0), (-1, 0)])
-         x, y = x + dx, y + dy
-         # Clamp to bounds (optional, prevents going out)
-         x = max(0, min(width - 1, x))
-         y = max(0, min(height - 1, y))
+        # Ensure current position is within bounds before carving
+        if 0 <= y < height and 0 <= x < width:
+            grid[y, x] = floor_id # Carve floor
+
+        # Move randomly (N, S, E, W)
+        dx, dy = random.choice([(0, 1), (0, -1), (1, 0), (-1, 0)])
+        new_x, new_y = x + dx, y + dy
+
+        # Stay within bounds (important!)
+        x = max(0, min(width - 1, new_x))
+        y = max(0, min(height - 1, new_y))
+
+    # Optional: Add multiple drunkards starting from different points
+    # Optional: Add target floor percentage check to stop early
 
     return grid
 

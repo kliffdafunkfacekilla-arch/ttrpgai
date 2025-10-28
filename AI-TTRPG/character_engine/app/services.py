@@ -80,3 +80,8 @@ async def get_base_resources() -> Dict[str, Dict[str, int]]:
         "Tactics": {"current": 5, "max": 5},
         "Instinct": {"current": 5, "max": 5}
     }
+
+# --- Local Calculation Helpers ---
+def calculate_modifier(score: int) -> int:
+    """Calculates the attribute modifier based on the score."""
+    return (score - 10) // 2

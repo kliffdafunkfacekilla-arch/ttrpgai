@@ -1,53 +1,46 @@
 import random
-import httpx # Import httpx
+import httpx # Ensure this is imported
+import asyncio # Add asyncio for running async function
+from fastapi import HTTPException # Add for error handling
 from . import models
 from .data_loader import GENERATION_RULES
 
 # --- Configuration (Add this) ---
-# RULES_ENGINE_URL = "http://127.0.0.1:8000" # URL of your running Rules Engine
+RULES_ENGINE_URL = "http://127.0.0.1:8000" # URL of your running Rules Engine
 
-# --- Helper to get all skills (Placeholder - Ideally fetch from rules_engine) ---
-# async def get_all_skill_names_from_rules() -> list[str]:
-#     """(Placeholder) Fetches the master skill list from the Rules Engine."""
-#     # url = f"{RULES_ENGINE_URL}/v1/lookup/all_skills"
-#     # try:
-#     #     async with httpx.AsyncClient() as client:
-#     #         response = await client.get(url)
-#     #         response.raise_for_status()
-#     #         return list(response.json().keys())
-#     # except Exception as e:
-#     #     print(f"ERROR: Could not fetch skill list from rules_engine: {e}")
-#     #     # Fallback to a basic list if rules_engine is unavailable
-#     #     return ["Strength", "Survival", "Athletics", "Intimidation", "Bows", "Awareness", "Plate", "Resilience"] # Example fallback
-#     # --- Simplified Placeholder ---
-#     print("Warning: Using placeholder skill list in npc_generator.")
-#     # Return a representative list based on stats_and_skills.json
-#     # Ideally, this list should exactly match the one in rules_engine
-#     return [
-#         "Intimidation", "Resilience", "Slight of Hand", "Evasion", "Comfort", "Discipline",
-#         "Debate", "Rhetoric", "Insight", "Empathy", "Persuasion", "Negotiations",
-#         "Strength", "Survival", "Artifice", "Athletics", "Provisioning", "Resourcefulness",
-#         "Navigation", "Pathfinding", "Security", "Nature Sense", "Communication", "Expedition",
-#         "Lore: Tribal & Outlaw", "Lore: Common Folk", "Lore: Outlaw/Criminal", "Lore: Travel & Routes",
-#         "Lore: Agricul. & Wilds", "Lore: Miners & Geology", "Lore: Science & Acad.", "Lore: Trades & Eng.",
-#         "Lore: Merchant/Trade", "Lore: Religion & Spirit", "Lore: Nobility/Court", "Lore: Royalty/Political",
-#         "Band/Scale/Ringmail", "Plate", "Camouflage", "Clothing/Utility", "Wood and Stone",
-#         "None (Just Clothing)", "Robes/Cloaks", "Chainmail", "Leather/Hides", "Tribal/Spirit",
-#         "Ornate/Showy", "Reinforced",
-#         "Heavy Bludgeons", "Shields & Polearms", "Dueling Blades", "Dual Knives", "Staves & Rods",
-#         "Unarmed & Fist Weapons", "Tech Blades", "Defensive/Chemical Weapons", "Hooks & Axes", "Swinging Weapons",
-#         "Whips & Scepters", "Two-Handed Cleavers",
-#         "Heavy Crossbows", "Flame-Based", "Hand Crossbows/Darts", "Throwing Knives", "Alchemic Grenades",
-#         "Flying Strikes", "Thrown Spears", "Nets & Bolas", "Bows", "Boomerangs & Chakrams",
-#         "Muskets", "Siege Weapons"
-#     ]
+# --- Helper to get all skills ---
+async def get_all_skill_names_from_rules() -> list[str]:
+    """Fetches the master skill list from the Rules Engine."""
+    url = f"{RULES_ENGINE_URL}/v1/lookup/all_skills"
+    try:
+        async with httpx.AsyncClient() as client:
+            print(f"NPC Generator: Fetching skill list from {url}") # Add print statement
+            response = await client.get(url)
+            response.raise_for_status()
+            # The endpoint returns a dict {skill: {details}}, we need the keys
+            skills_dict = response.json()
+            skill_names = list(skills_dict.keys())
+            print(f"NPC Generator: Successfully fetched {len(skill_names)} skills.") # Add print statement
+            return skill_names
+    except httpx.RequestError as e:
+        print(f"ERROR: NPC Generator could not connect to Rules Engine at {url}: {e}")
+        raise HTTPException(status_code=503, detail=f"Rules Engine service unavailable: {e}")
+    except httpx.HTTPStatusError as e:
+        print(f"ERROR: Rules Engine returned error {e.response.status_code} fetching skills: {e.response.text}")
+        raise HTTPException(status_code=e.response.status_code, detail=f"Rules Engine error fetching skills: {e.response.text}")
+    except Exception as e:
+        print(f"ERROR: Unexpected error fetching skill list from rules_engine: {e}")
+        # Fallback to a basic list if rules_engine is unavailable? Or raise error?
+        # Raising error is safer to indicate dependency failure.
+        raise HTTPException(status_code=500, detail=f"Unexpected error fetching skills: {e}")
 
+# --- Modify generate_npc_template ---
+# Make the main function synchronous for FastAPI, but call the async helper inside
 def generate_npc_template(
     request: models.NpcGenerationRequest) -> models.NpcTemplateResponse:
     """
     Core logic to generate an NPC template based on request parameters.
     """
-
     # --- 1. Determine Base Stats ---
     base_stats = GENERATION_RULES.get("base_stats_by_kingdom", {}).get(
         request.kingdom.lower(),
@@ -85,47 +78,39 @@ def generate_npc_template(
 
     # --- 5. Determine Skills (NEW LOGIC) ---
     skills = {}
-    # Initialize all known skills to rank 0 (using placeholder list for now)
-    # In a future step, replace get_all_skill_names_from_rules() with an actual async call
-    all_skill_names = await get_all_skill_names_from_rules() # If using async call
-    # all_skill_names = [ # Using placeholder list directly for now
-    #     "Intimidation", "Resilience", "Slight of Hand", "Evasion", "Comfort", "Discipline",
-    #     "Debate", "Rhetoric", "Insight", "Empathy", "Persuasion", "Negotiations",
-    #     "Strength", "Survival", "Artifice", "Athletics", "Provisioning", "Resourcefulness",
-    #     "Navigation", "Pathfinding", "Security", "Nature Sense", "Communication", "Expedition",
-    #     "Lore: Tribal & Outlaw", "Lore: Common Folk", "Lore: Outlaw/Criminal", "Lore: Travel & Routes",
-    #     "Lore: Agricul. & Wilds", "Lore: Miners & Geology", "Lore: Science & Acad.", "Lore: Trades & Eng.",
-    #     "Lore: Merchant/Trade", "Lore: Religion & Spirit", "Lore: Nobility/Court", "Lore: Royalty/Political",
-    #     "Band/Scale/Ringmail", "Plate", "Camouflage", "Clothing/Utility", "Wood and Stone",
-    #     "None (Just Clothing)", "Robes/Cloaks", "Chainmail", "Leather/Hides", "Tribal/Spirit",
-    #     "Ornate/Showy", "Reinforced",
-    #     "Heavy Bludgeons", "Shields & Polearms", "Dueling Blades", "Dual Knives", "Staves & Rods",
-    #     "Unarmed & Fist Weapons", "Tech Blades", "Defensive/Chemical Weapons", "Hooks & Axes", "Swinging Weapons",
-    #     "Whips & Scepters", "Two-Handed Cleavers",
-    #     "Heavy Crossbows", "Flame-Based", "Hand Crossbows/Darts", "Throwing Knives", "Alchemic Grenades",
-    #     "Flying Strikes", "Thrown Spears", "Nets & Bolas", "Bows", "Boomerangs & Chakrams",
-    #     "Muskets", "Siege Weapons"
-    # ]
-    for skill_name in all_skill_names:
-        skills[skill_name] = 0 # Initialize all skills to rank 0
+    try:
+        # Run the async function to get skill names
+        all_skill_names = asyncio.run(get_all_skill_names_from_rules())
+    except HTTPException as e:
+        # If fetching fails, we cannot proceed reliably
+        print(f"FATAL: Failed to get skill list during NPC generation: {e.detail}")
+        # Re-raise or handle differently? For now, re-raise to signal failure.
+        raise HTTPException(status_code=e.status_code, detail=f"Dependency Error: {e.detail}")
 
-    # Get relevant skills based on styles and difficulty
+    # Initialize all fetched skills to rank 0
+    for skill_name in all_skill_names:
+        skills[skill_name] = 0
+
+    # Get relevant skills based on styles and difficulty (logic remains the same)
     skill_rules = GENERATION_RULES.get("skills_by_style_and_difficulty", {})
     offense_skills_for_diff = skill_rules.get("offense", {}).get(request.offense_style.lower(), {}).get(request.difficulty.lower(), [])
     defense_skills_for_diff = skill_rules.get("defense", {}).get(request.defense_style.lower(), {}).get(request.difficulty.lower(), [])
-
-    # Get the rank value for this difficulty
-    skill_rank_value = skill_rules.get("skill_ranks", {}).get(request.difficulty.lower(), 1) # Default rank 1
+    skill_rank_value = skill_rules.get("skill_ranks", {}).get(request.difficulty.lower(), 1)
+    skills_to_rank = set(offense_skills_for_diff + defense_skills_for_diff)
 
     # Assign ranks
-    skills_to_rank = set(offense_skills_for_diff + defense_skills_for_diff)
     for skill_name in skills_to_rank:
         if skill_name in skills:
             skills[skill_name] = skill_rank_value
         else:
-             print(f"Warning: Skill '{skill_name}' defined in rules but not in master list.")
+            # This warning is now more important, as the list comes from rules_engine
+            print(f"Warning: Skill '{skill_name}' defined in NPC rules but not found in list from rules_engine.")
 
-    # --- 6. Generate ID, Name, Description (Unchanged) ---
+    # --- (ID, Name, Description, Behavior Tags logic remains the same) ---
+    # ...
+
+    # --- 8. Build Response ---
+    # ... (remains the same) ...
     generated_id = f"procgen_{request.biome or 'unk'}_{request.kingdom}_{request.offense_style}_{request.difficulty}_{random.randint(100,999)}"
     name = request.custom_name or f"{request.difficulty.capitalize()} {request.kingdom.capitalize()} {request.offense_style.replace('_',' ').title()}"
     description = f"A {request.difficulty} {request.kingdom} exhibiting a {request.offense_style} style and {request.defense_style} defense."

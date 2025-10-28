@@ -87,20 +87,34 @@ async def create_character( # Make endpoint async
         logger.info(f"Found {len(initial_talents)} starting talents.")
 
         # --- 6. Construct Character Sheet ---
+        logger.info("Constructing character sheet...")
+        # --- Placeholder Base HP Calculation (e.g., based on Vitality) ---
+        # TODO: Move HP calculation potentially to rules_engine or refine here
+        base_hp = 10 + services.calculate_modifier(final_stats.get("Vitality", 10)) * 2 # Example rule
+        max_hp = max(5, base_hp) # Ensure minimum HP
+        # --- End Placeholder HP ---
+
         character_sheet_data = {
             "stats": final_stats,
             "skills": final_skills,
             "abilities": final_abilities,
             "resources": final_resources,
-            "choices": { # Store original choices for reference
-                 "features": character_request.f_stats,
-                 "capstone": character_request.capstone_stat,
-                 "background_skills": character_request.background_skills
+            "combat_stats": { # <--- ADD THIS STRUCTURE
+                "max_hp": max_hp,
+                "current_hp": max_hp, # Start at full health
+                "status_effects": [] # Start with no status effects
+            },
+            "inventory": [], # <--- Initialize inventory
+            "equipment": {}, # <--- Initialize equipment
+            "choices": {
+                "features": character_request.f_stats,
+                "capstone": character_request.capstone_stat,
+                "background_skills": character_request.background_skills
             },
             "unlocked_talents": initial_talents,
-            "location": "STARTING_ZONE", # Default start location
-            # Add other base fields if needed: description, image_url, inventory=[]
+            "location": "STARTING_ZONE",
         }
+        logger.info("Character sheet constructed.")
 
         # --- 7. Save to Database via CRUD ---
         logger.info("Saving character to database...")
