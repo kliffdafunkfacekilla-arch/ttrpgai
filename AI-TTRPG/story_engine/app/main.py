@@ -4,7 +4,7 @@ from typing import List, Dict, Any
 import logging
 
 # Import all our other files
-from . import crud, models, schemas, services, combat_handler
+from . import crud, models, schemas, services, combat_handler, interaction_handler # ADD interaction_handler
 from .database import SessionLocal, engine
 
 # This creates the FastAPI application instance
@@ -183,3 +183,26 @@ async def handle_player_combat_action(
     except Exception as e:
          logger.exception(f"Unexpected error during player action: {e}")
          raise HTTPException(status_code=500, detail=f"Internal server error processing player action: {str(e)}")
+
+# --- ADD THIS ENDPOINT for Interactions ---
+@app.post("/v1/actions/interact", response_model=schemas.InteractionResponse, tags=["Player Actions"])
+async def handle_player_interaction(
+    interaction_request: schemas.InteractionRequest,
+    # db: Session = Depends(get_db) # May need DB later for complex interactions
+):
+    """
+    (Player Interface) Processes player interactions with annotated objects in the world.
+    Fetches location state, checks annotations, and orchestrates updates.
+    """
+    logger.info(f"Received interaction request: {interaction_request.dict()}")
+    try:
+        # Call the handler function to do the work
+        result = await interaction_handler.handle_interaction(interaction_request)
+        return result
+    except HTTPException as he:
+        # Re-raise HTTPExceptions raised by services or the handler
+        logger.error(f"HTTPException during interaction: {he.detail}")
+        raise he
+    except Exception as e:
+        logger.exception(f"Unexpected error handling interaction: {e}")
+        raise HTTPException(status_code=500, detail=f"Internal server error handling interaction: {str(e)}")

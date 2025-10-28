@@ -78,41 +78,42 @@ def list_characters(db: Session, skip: int = 0, limit: int = 100) -> List[models
 
 
 def apply_damage_to_character(db: Session, character: models.Character, damage_amount: int) -> models.Character:
-    """Subtracts damage from HP, stored in character_sheet."""
+    """Subtracts damage from current_hp within character_sheet['combat_stats']."""
     if damage_amount <= 0: return character # No damage
 
-    sheet = dict(character.character_sheet)
-    stats = sheet.get("stats", {}) # Assuming HP stored under stats for now
-    current_hp = stats.get("current_hp", stats.get("max_hp", 0)) # Need clear HP structure
+    sheet = dict(character.character_sheet) # Get a mutable copy
+    combat_stats = sheet.get("combat_stats", {}) # Get combat_stats dict
 
-    # --- Placeholder HP structure ---
-    # TODO: Define where current_hp and max_hp are stored in character_sheet
-    # Example assumes {"stats": {"current_hp": X, "max_hp": Y, ...}}
+    current_hp = combat_stats.get("current_hp", combat_stats.get("max_hp", 0)) # Get HP
     new_hp = current_hp - damage_amount
-    print(f"Applying {damage_amount} damage to {character.name}. HP: {current_hp} -> {new_hp}")
-    stats["current_hp"] = new_hp
-    # Add logic here to check for Downed/Dying state if new_hp <= 0
+    # Add logic here: Clamp HP to 0 minimum? Check for Downed/Dying state?
+    new_hp = max(0, new_hp) # Clamp HP at 0
 
-    sheet["stats"] = stats
-    character.character_sheet = sheet
-    flag_modified(character, "character_sheet")
+    print(f"Applying {damage_amount} damage to {character.name}. HP: {current_hp} -> {new_hp}")
+    combat_stats["current_hp"] = new_hp # Update HP in the combat_stats dict
+
+    sheet["combat_stats"] = combat_stats # Put the updated combat_stats back into the sheet
+    character.character_sheet = sheet # Assign the modified sheet back
+    flag_modified(character, "character_sheet") # Mark as modified
     db.commit()
     db.refresh(character)
     return character
 
 def apply_status_to_character(db: Session, character: models.Character, status_id: str) -> models.Character:
-    """Adds a status effect to the character_sheet."""
+    """Adds a status effect ID to character_sheet['combat_stats']['status_effects']."""
     sheet = dict(character.character_sheet)
-    status_effects = sheet.get("status_effects", [])
+    combat_stats = sheet.get("combat_stats", {})
+    status_effects = combat_stats.get("status_effects", [])
 
-    # Avoid duplicate statuses? Or allow stacking? Rule dependent.
+    # Avoid duplicate statuses? Or allow stacking? Rule dependent. Assume no duplicates for now.
     if status_id not in status_effects:
-         status_effects.append(status_id)
-         print(f"Applying status '{status_id}' to {character.name}")
+        status_effects.append(status_id)
+        print(f"Applying status '{status_id}' to {character.name}")
 
-    sheet["status_effects"] = status_effects # Need defined place in sheet
-    character.character_sheet = sheet
-    flag_modified(character, "character_sheet")
+    combat_stats["status_effects"] = status_effects # Update status list in combat_stats
+    sheet["combat_stats"] = combat_stats # Put combat_stats back into the sheet
+    character.character_sheet = sheet # Assign modified sheet back
+    flag_modified(character, "character_sheet") # Mark as modified
     db.commit()
     db.refresh(character)
     return character

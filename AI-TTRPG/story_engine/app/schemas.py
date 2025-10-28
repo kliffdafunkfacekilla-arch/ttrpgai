@@ -78,3 +78,53 @@ class OrchestrationWorldContext(BaseModel):
     generated_map_data: Optional[Any] = None
     npcs: List[Any] = []
     items: List[Any] = []
+
+# --- ADD THESE SCHEMAS FOR INTERACTIONS ---
+class InteractionRequest(BaseModel):
+    """
+    Request sent from player interface to interact with something.
+    """
+    actor_id: str # e.g., "player_1"
+    location_id: int
+    target_object_id: str # The key within ai_annotations, e.g., "door_1", "lever_A"
+    interaction_type: str = "use" # e.g., "use", "examine", "talk" (expand later)
+
+class InteractionResponse(BaseModel):
+    """
+    Response summarizing the outcome of an interaction.
+    """
+    success: bool
+    message: str # Narrative description of what happened
+    updated_annotations: Optional[Dict[str, Any]] = None # The new state if changed
+    items_added: Optional[List[Dict]] = None # Items added to player inventory
+    items_removed: Optional[List[Dict]] = None # Items removed from player inventory
+    # Add other potential outcomes like quests updated, flags set, etc. later
+
+# --- Ensure Combat Schemas are also present if not already added ---
+# (Add these if they are missing from your schemas.py)
+class CombatStartRequest(BaseModel):
+    location_id: int
+    player_ids: List[str] # e.g., ["player_1"]
+    npc_template_ids: List[str] # e.g., ["goblin_scout", "goblin_scout"]
+
+class CombatParticipantResponse(BaseModel):
+    actor_id: str
+    actor_type: str
+    initiative_roll: int
+    class Config:
+        from_attributes = True # or orm_mode = True
+
+class CombatEncounter(BaseModel):
+    id: int
+    location_id: int
+    status: str # active, players_win, npcs_win, etc.
+    turn_order: List[str]
+    current_turn_index: int
+    participants: List[CombatParticipantResponse] = []
+    class Config:
+        from_attributes = True # or orm_mode = True
+
+class PlayerActionRequest(BaseModel):
+    action: str # e.g., "attack", "move", "use_ability", "wait"
+    target_id: Optional[str] = None # e.g., "npc_12", "player_2"
+    # Add other fields like ability_id, position, etc. as needed

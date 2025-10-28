@@ -147,3 +147,39 @@ async def apply_status_to_npc(client: httpx.AsyncClient, npc_id: int, status_lis
     return await _call_api(client, "PUT", url, json={"status_effects": status_list})
 
     # --- Add other needed service calls (e.g., delete_item_in_world, add_item_to_character) ---
+# --- Add this function within the 'Calls to world_engine' section ---
+async def update_location_annotations(client: httpx.AsyncClient, location_id: int, annotations: Dict[str, Any]) -> Dict:
+    """Calls world_engine to update the AI annotations for a location."""
+    url = f"{WORLD_ENGINE_URL}/v1/locations/{location_id}/annotations"
+    payload = {"ai_annotations": annotations}
+    # Assuming world_engine endpoint expects {"ai_annotations": {...}}
+    return await _call_api(client, "PUT", url, json=payload)
+
+# --- Ensure other necessary functions from previous steps are present ---
+# (Like get_world_location_context, add_item_to_character (needs adding?), etc.)
+# --- Add this function if not present - Needed for interaction results ---
+async def add_item_to_character(client: httpx.AsyncClient, char_id: str, item_id: str, quantity: int) -> Dict:
+    """Calls character_engine to add an item to a character's inventory."""
+    # Ensure char_id is just the number if character_engine expects that
+    char_db_id = -1
+    try:
+        # Assumes format "player_X"
+        char_db_id = int(char_id.split('_')[1])
+    except (IndexError, ValueError):
+        raise HTTPException(status_code=400, detail=f"Invalid character ID format for service call: {char_id}")
+
+    url = f"{CHARACTER_ENGINE_URL}/v1/characters/{char_db_id}/inventory/add"
+    payload = {"item_id": item_id, "quantity": quantity}
+    return await _call_api(client, "POST", url, json=payload)
+
+async def remove_item_from_character(client: httpx.AsyncClient, char_id: str, item_id: str, quantity: int) -> Dict:
+    """Calls character_engine to remove an item from a character's inventory."""
+    char_db_id = -1
+    try:
+        char_db_id = int(char_id.split('_')[1])
+    except (IndexError, ValueError):
+        raise HTTPException(status_code=400, detail=f"Invalid character ID format for service call: {char_id}")
+
+    url = f"{CHARACTER_ENGINE_URL}/v1/characters/{char_db_id}/inventory/remove" # Uses the existing endpoint
+    payload = {"item_id": item_id, "quantity": quantity}
+    return await _call_api(client, "POST", url, json=payload) # Assumes POST method matches character_engine
