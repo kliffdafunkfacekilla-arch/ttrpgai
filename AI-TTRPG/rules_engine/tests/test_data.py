@@ -24,7 +24,7 @@ class TestDataLoader(unittest.TestCase):
         self.assertTrue(data_loader.ALL_SKILLS, "ALL_SKILLS should not be empty")
         self.assertIsInstance(data_loader.ALL_SKILLS, dict, "ALL_SKILLS should be a dictionary")
         self.assertIn("Athletics", data_loader.ALL_SKILLS, "Sample skill 'Athletics' should be in ALL_SKILLS")
-        self.assertEqual(data_loader.ALL_SKILLS["Athletics"]["stat"], "Reflexes", "Athletics governing stat should be 'Reflexes'")
+        self.assertEqual(data_loader.ALL_SKILLS["Athletics"]["stat"], "Agility", "Athletics governing stat should be 'Agility'")
 
     def test_abilities_loaded(self):
         """Test that ability data is loaded into a dictionary."""

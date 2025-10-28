@@ -1,62 +1,14 @@
 {
-  "No Armor": {
-    "skill_stat": "Agility",
-    "dr": 0,
-    "properties": ["Unarmored", "Fast Movement"]
-  },
-  "Light Armor": {
-    "skill_stat": "Agility",
-    "dr": 1,
-    "properties": ["Lightweight", "Flexible"]
-  },
-  "Medium Armor": {
-    "skill_stat": "Endurance",
-    "dr": 2,
-    "properties": ["Balanced", "Standard Issue"]
-  },
-  "Heavy Armor": {
-    "skill_stat": "Endurance",
-    "dr": 3,
-    "properties": ["Heavy", "Protective", "Slow"]
-  },
-  "Plate Armor": {
-    "skill_stat": "Fortitude",
-    "dr": 4,
-    "properties": ["Full Plate", "Bulky", "Maximum Protection"]
-  },
-  "Shield": {
-    "skill_stat": "Might",
-    "dr": 1,
-    "properties": ["Defensive", "Block"]
-  },
-  "Energy Shield": {
-    "skill_stat": "Logic",
-    "dr": 2,
-    "properties": ["Rechargeable", "Tech"]
-  },
-  "Warding Robes": {
-    "skill_stat": "Willpower",
-    "dr": 0,
-    "properties": ["Magical Defense", "No Armor"]
-  },
-  "Shadow Weave": {
-    "skill_stat": "Intuition",
-    "dr": 1,
-    "properties": ["Stealthy", "Light"]
-  },
-  "Kinetic Weave": {
-    "skill_stat": "Knowledge",
-    "dr": 2,
-    "properties": ["Impact Resistant", "Advanced"]
-  },
-  "Chitin Plating": {
-    "skill_stat": "Fortitude",
-    "dr": 3,
-    "properties": ["Natural Armor", "Heavy"]
-  },
-  "Riot Gear": {
-    "skill_stat": "Might",
-    "dr": 2,
-    "properties": ["Non-lethal", "Crowd Control"]
-  }
+"Scale/Band Mail": {"skill_stat": "Might", "dr": 2, "agility_penalty": -1, "stealth_penalty": -1, "specialty": "Retaliation"},
+"Plate Armor": {"skill_stat": "Endurance", "dr": 3, "agility_penalty": -2, "stealth_penalty": -2, "specialty": "Bracing"},
+"Camouflage": {"skill_stat": "Finesse", "dr": 1, "agility_penalty": 0, "stealth_penalty": 0, "specialty": "Concealment"},
+"Clothing/Utility": {"skill_stat": "Agility", "dr": 0, "agility_penalty": 0, "stealth_penalty": 0, "specialty": "Free Movement"},
+"Wood and Stone": {"skill_stat": "Constitution", "dr": 2, "agility_penalty": -1, "stealth_penalty": -1, "specialty": "Sustain"},
+"Natural/Unarmored": {"skill_stat": "Fortitude", "dr": 1, "agility_penalty": 0, "stealth_penalty": -1, "specialty": "Deflection"},
+"Robes/Cloaks": {"skill_stat": "Knowledge", "dr": 0, "agility_penalty": 0, "stealth_penalty": 0, "specialty": "Attunement"},
+"Chainmail": {"skill_stat": "Logic", "dr": 1, "agility_penalty": -1, "stealth_penalty": -1, "specialty": "Psychic Ward"},
+"Leather/Hides": {"skill_stat": "Awareness", "dr": 1, "agility_penalty": 0, "stealth_penalty": -1, "specialty": "Vigilance"},
+"Tribal/Spirit": {"skill_stat": "Intuition", "dr": 0, "agility_penalty": 0, "stealth_penalty": 0, "specialty": "Primal Ward"},
+"Ornate/Showy": {"skill_stat": "Charm", "dr": 1, "agility_penalty": 0, "stealth_penalty": 0, "specialty": "Distraction"},
+"Reinforced": {"skill_stat": "Willpower", "dr": 2, "agility_penalty": -1, "stealth_penalty": -1, "specialty": "Iron Will"}
 }

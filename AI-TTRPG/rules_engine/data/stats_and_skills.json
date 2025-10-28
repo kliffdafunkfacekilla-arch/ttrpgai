@@ -1,39 +1,40 @@
 {
-  "stats": [
-    "Might", "Endurance", "Finesse", "Reflexes", "Vitality",
-    "Fortitude", "Knowledge", "Logic", "Awareness", "Intuition",
-    "Charm", "Willpower"
-  ],
-  "skill_categories": {
-    "Conversational": [
-      "Intimidation", "Resilience", "Slight of Hand", "Evasion", "Comfort",
-      "Discipline", "Debate", "Rhetoric", "Insight", "Empathy",
-      "Persuasion", "Negotiations"
-    ],
-    "Utility": [
-      "Strength", "Survival", "Artifice", "Athletics", "Provisioning",
-      "Resourcefulness", "Navigation", "Pathfinding", "Security", "Nature Sense",
-      "Communication", "Expedition"
-    ],
-    "Lore": [
-      "Lore: Tribal & Outlaw", "Lore: Common Folk", "Lore: Outlaw/Criminal", "Lore: Travel & Routes",
-      "Lore: Agricul. & Wilds", "Lore: Miners & Geology", "Lore: Science & Acad.", "Lore: Trades & Eng.",
-      "Lore: Merchant/Trade", "Lore: Religion & Spirit", "Lore: Nobility/Court", "Lore: Royalty/Political"
-    ],
-    "Armor": [
-      "Band/Scale/Ringmail", "Plate", "Camouflage", "Clothing/Utility", "Wood and Stone",
-      "None (Just Clothing)", "Robes/Cloaks", "Chainmail", "Leather/Hides", "Tribal/Spirit",
-      "Ornate/Showy", "Reinforced"
-    ],
-    "Melee": [
-      "Heavy Bludgeons", "Shields & Polearms", "Dueling Blades", "Dual Knives", "Staves & Rods",
-      "Unarmed & Fist Weapons", "Tech Blades", "Defensive/Chemical Weapons", "Hooks & Axes", "Swinging Weapons",
-      "Whips & Scepters", "Two-Handed Cleavers"
-    ],
-    "Ranged": [
-      "Heavy Crossbows", "Flame-Based", "Hand Crossbows/Darts", "Throwing Knives", "Alchemic Grenades",
-      "Flying Strikes", "Thrown Spears", "Nets & Bolas", "Bows", "Boomerangs & Chakrams",
-      "Muskets", "Siege Weapons"
-    ]
-  }
+"stats": [
+"Might", "Endurance", "Finesse", "Agility", "Constitution",
+"Fortitude", "Knowledge", "Logic", "Awareness", "Intuition",
+"Charm", "Willpower"
+],
+"skill_categories": {
+"Conversational": [
+"Intimidation", "Resilience", "Slight of Hand", "Evasion", "Comfort",
+"Discipline", "Debate", "Rhetoric", "Insight", "Empathy",
+"Persuasion", "Negotiations"
+],
+"Utility": [
+"Strength", "Survival", "Artifice", "Athletics", "Provisioning",
+"Resourcefulness", "Navigation", "Pathfinding", "Security", "Nature Sense",
+"Communication", "Expedition"
+],
+"Lore": [
+"Lore: Tribal & Outlaw", "Lore: Common Folk", "Lore: Outlaw/Criminal", "Lore: Travel & Routes",
+"Lore: Agricul. & Wilds", "Lore: Miners & Geology", "Lore: Science & Acad.", "Lore: Trades & Eng.",
+"Lore: Merchant/Trade", "Lore: Religion & Spirit", "Lore: Nobility/Court", "Lore: Royalty/Political"
+],
+"Armor": [
+"Scale/Band Mail", "Plate Armor", "Camouflage", "Clothing/Utility", "Wood and Stone",
+"Natural/Unarmored",
+"Robes/Cloaks", "Chainmail", "Leather/Hides", "Tribal/Spirit",
+"Ornate/Showy", "Reinforced"
+],
+"Melee": [
+"Great Weapons", "Polearms & Shields", "Precision Blades", "Quick Pair", "Adept Staves",
+"Brawling Weapons", "Elemental Edges", "Utilitarian Weapons", "Binding Weapons", "Visceral Weapons",
+"Performance Weapons", "Resolute Edges"
+],
+"Ranged": [
+"Heavy Artillery", "Area Projectors", "Subtle Projectiles", "Quick Throws", "Explosives & Vials",
+"Returning Projectiles", "Clockwork Weapons", "Impact Spears", "Precision Archery", "Restraint Weapons",
+"Concussive Firearms", "Sustained Defense"
+]
+}
 }

@@ -141,7 +141,21 @@ def load_data() -> Dict[str, Any]:
         INJURY_EFFECTS = _load_json("injury_effects.json")
 
         # Load Status Effects
-        STATUS_EFFECTS = _load_json("status_effects.json")
+        status_file = os.path.join(DATA_DIR, 'status_effects.json')
+        try:
+            if os.path.exists(status_file):
+                with open(status_file, 'r', encoding='utf-8') as f:
+                    STATUS_EFFECTS = json.load(f)
+                print(f"Loaded {len(STATUS_EFFECTS)} status effect definitions from status_effects.json.")
+            else:
+                print(f"WARNING: status_effects.json not found at {status_file}. Status lookup will fail.")
+                STATUS_EFFECTS = {}
+        except json.JSONDecodeError as e:
+            print(f"ERROR decoding status_effects.json: {e}. Status lookup will fail.")
+            STATUS_EFFECTS = {}
+        except Exception as e:
+            print(f"ERROR loading status_effects.json: {e}. Status lookup will fail.")
+            STATUS_EFFECTS = {}
 
         loaded_data = {
             'stats_list': STATS_LIST,
