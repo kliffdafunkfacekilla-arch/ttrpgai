@@ -48,6 +48,7 @@ async def lifespan(app: FastAPI):
         app.state.ranged_weapons = {}
         app.state.armor = {}
         app.state.injury_effects = {}
+        app.state.status_effects = {}
         # Optionally re-raise to prevent server start on load failure
         # raise
     yield
@@ -344,16 +345,28 @@ async def api_get_injury_effects(request_data: models.InjuryLookupRequest):
 @app.get("/v1/lookup/status_effect/{status_name}", response_model=models.StatusEffectResponse, tags=["Lookups"])
 async def api_get_status_effect(status_name: str, request: Request):
     """Looks up the definition and effects for a status by name (e.g., 'Staggered', 'Bleeding')."""
-    # Ensure status data loaded during startup
-    if not hasattr(request.app.state, 'status_effects') or not getattr(request.app.state, 'status_effects'):
-         raise HTTPException(status_code=503, detail="Status effects data not available.")
+
+    # Verify status data loaded during startup
+    # Accessing via app.state where data_loader placed it
+    loaded_statuses = getattr(request.app.state, 'STATUS_EFFECTS', None)
+    if loaded_statuses is None: # Check if attribute exists at all
+        raise HTTPException(status_code=503, detail="Status effects data structure not initialized in app state.")
+    if not loaded_statuses: # Check if it's empty (e.g., file not found or empty)
+        # Logged warning during startup, return appropriate error now
+        raise HTTPException(status_code=404, detail="Status effects data is not loaded or is empty. Check server logs.")
+
     logger.info(f"Looking up status effect: {status_name}")
     try:
+        # Call the core logic function
         result = core.get_status_effect(status_name)
         return result
-    except ValueError as e: # Catch not found errors from core function
-        logger.warning(f"Status effect lookup failed: {e}")
-        raise HTTPException(status_code=404, detail=str(e))
+    except ValueError as e: # Catch 'not found' or data structure errors from core function
+        logger.warning(f"Status effect lookup failed for '{status_name}': {e}")
+        # Use 404 if it's a 'not found' error, 400/500 for data issues
+        if "not found" in str(e):
+            raise HTTPException(status_code=404, detail=str(e))
+        else: # Likely a data structure mismatch
+            raise HTTPException(status_code=500, detail=f"Data error retrieving status '{status_name}': {e}")
     except Exception as e:
-        logger.exception(f"Error looking up status effect: {e}")
+        logger.exception(f"Unexpected error looking up status effect '{status_name}': {e}")
         raise HTTPException(status_code=500, detail=f"Internal server error looking up status effect: {str(e)}")
