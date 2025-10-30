@@ -19,13 +19,15 @@ def load_data():
         # Load Tile Definitions
         tile_file = os.path.join(DATA_DIR, 'tile_definitions.json')
         with open(tile_file, 'r') as f:
-            TILE_DEFINITIONS = json.load(f)
+            TILE_DEFINITIONS.clear()
+            TILE_DEFINITIONS.update(json.load(f))
         print(f"Loaded {len(TILE_DEFINITIONS)} tile definitions.")
 
         # Load Generation Algorithms
         algo_file = os.path.join(DATA_DIR, 'generation_algorithms.json')
         with open(algo_file, 'r') as f:
-            GENERATION_ALGORITHMS = json.load(f).get("algorithms", [])
+            GENERATION_ALGORITHMS.clear()
+            GENERATION_ALGORITHMS.extend(json.load(f).get("algorithms", []))
         print(f"Loaded {len(GENERATION_ALGORITHMS)} generation algorithms.")
 
     except FileNotFoundError as e:
