@@ -31,6 +31,31 @@ def update_character_sheet(db: Session, character: models.Character, full_sheet_
     db.commit()
     db.refresh(character)
     return character
+
+# --- ADD THIS NEW FUNCTION ---
+def update_character_location_and_coords(
+    db: Session,
+    character: models.Character,
+    new_location_id: int,
+    new_coordinates: List[int]) -> models.Character:
+    """Updates the 'location' object within the character_sheet JSON."""
+    sheet = dict(character.character_sheet) # Get a mutable copy
+
+    # Get the location object, or create it if it's the old string format
+    location_data = sheet.get("location", {})
+    if not isinstance(location_data, dict):
+        location_data = {} # Overwrite old string format
+
+    location_data["current_location_id"] = new_location_id
+    location_data["coordinates"] = new_coordinates
+
+    sheet["location"] = location_data # Put the updated location object back
+
+    character.character_sheet = sheet # Assign the modified sheet back
+    flag_modified(character, "character_sheet") # Mark as modified
+    db.commit()
+    db.refresh(character)
+    return character
 # --- ---
 
 def add_item_to_inventory(db: Session, character: models.Character, item_id: str, quantity: int) -> models.Character:

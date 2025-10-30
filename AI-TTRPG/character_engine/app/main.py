@@ -111,7 +111,16 @@ async def create_character( # Make endpoint async
                 "background_skills": character_request.background_skills
             },
             "unlocked_talents": initial_talents,
-            "location": "STARTING_ZONE",
+
+            # --- MODIFICATION ---
+            # Change 'location' from a string to an object
+            # We assume the "STARTING_ZONE" (from initial_locations.json) has an ID of 1
+            # and a default spawn point of [5, 5] (x, y).
+            "location": {
+                "current_location_id": 1,
+                "coordinates": [5, 5]
+            },
+            # --- END MODIFICATION ---
         }
         logger.info("Character sheet constructed.")
 
@@ -306,3 +315,21 @@ async def apply_status(char_id: int, status_request: schemas.ApplyStatusRequest,
           raise HTTPException(status_code=400, detail="Status ID cannot be empty.")
 
      return crud.apply_status_to_character(db, db_character, status_request.status_id)
+
+# --- ADD NEW ENDPOINT FOR MOVEMENT ---
+@app.put("/v1/characters/{char_id}/location", response_model=schemas.CharacterResponse, tags=["Location"])
+async def update_character_location(
+    char_id: int,
+    location_update: schemas.LocationUpdateRequest,
+    db: Session = Depends(get_db)):
+    """Updates the character's current location ID and coordinates."""
+    db_character = crud.get_character(db, char_id=char_id)
+    if not db_character:
+        raise HTTPException(status_code=404, detail="Character not found")
+
+    return crud.update_character_location_and_coords(
+        db,
+        db_character,
+        location_update.location_id,
+        location_update.coordinates
+    )

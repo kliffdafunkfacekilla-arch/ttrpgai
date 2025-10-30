@@ -53,6 +53,8 @@ class ItemInstanceBase(BaseModel):
     quantity: int
     location_id: Optional[int] = None
     npc_id: Optional[int] = None
+    # --- ADD THIS LINE ---
+    coordinates: Optional[Any] = None # Expecting [x, y]
 
 class ItemInstance(ItemInstanceBase):
     id: int
@@ -66,6 +68,8 @@ class NpcInstanceBase(BaseModel):
     max_hp: int
     status_effects: List[str]
     location_id: int
+    # --- ADD THIS LINE ---
+    coordinates: Optional[Any] = None # Expecting [x, y]
 
 class NpcInstance(NpcInstanceBase):
     id: int
@@ -120,7 +124,9 @@ class NpcSpawnRequest(BaseModel):
     # the story_engine should get them from the rules.
     current_hp: Optional[int] = None
     max_hp: Optional[int] = None
-    behavior_tags: List[str] = [] # Add this
+    behavior_tags: List[str] = []
+    # --- ADD THIS LINE ---
+    coordinates: Optional[Any] = None # Expecting [x, y]
 
 class LocationAnnotationUpdate(BaseModel):
     ai_annotations: Dict[str, Any]
@@ -130,6 +136,8 @@ class NpcUpdate(BaseModel):
     current_hp: Optional[int] = None
     status_effects: Optional[List[str]] = None
     location_id: Optional[int] = None
+    # --- ADD THIS LINE ---
+    coordinates: Optional[Any] = None # To allow moving NPCs
 
 class ItemSpawnRequest(ItemInstanceBase):
     pass # Inherits all fields
