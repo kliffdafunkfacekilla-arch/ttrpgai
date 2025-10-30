@@ -34,6 +34,7 @@ async def lifespan(app: FastAPI):
         app.state.armor = loaded_rules.get('armor', {})
         app.state.injury_effects = loaded_rules.get('injury_effects', {})
         app.state.status_effects = loaded_rules.get('status_effects', {})
+        app.state.equipment_category_to_skill_map = loaded_rules.get('equipment_category_to_skill_map', {})
         print("INFO:     Rules data loaded successfully and stored in app.state.")
     except Exception as e:
         print(f"FATAL:    Failed to load rules data on startup: {e}")
@@ -328,6 +329,17 @@ async def api_get_armor(request: Request, category_name: str):
     if category_name in armor:
         return armor[category_name]
     raise HTTPException(status_code=404, detail=f"Armor category '{category_name}' not found.")
+
+
+@app.get("/v1/lookup/skill_for_category/{category_name}", response_model=str, tags=["Lookups"])
+async def api_get_skill_for_category(request: Request, category_name: str):
+    """Looks up the skill for a given equipment category."""
+    check_state_loaded(request)
+    skill_map = getattr(request.app.state, 'equipment_category_to_skill_map', {})
+    try:
+        return core.get_skill_for_category(category_name, skill_map)
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
 
 
 @app.post("/v1/lookup/injury_effects", response_model=models.InjuryEffectResponse, tags=["Lookups"])

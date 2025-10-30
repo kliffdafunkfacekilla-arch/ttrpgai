@@ -8,56 +8,6 @@ from .data_loader import INJURY_EFFECTS, STATUS_EFFECTS
 from .models import RollResult, TalentInfo, FeatureStatsResponse
 
 
-# Maps Weapon/Armor Category Name (Keys) used everywhere
-# to the Skill Name (Values) used for Rank lookups in stats_and_skills.json
-EQUIPMENT_CATEGORY_TO_SKILL_MAP: Dict[str, str] = {
-    # Melee Weapons (Key = Thematic Name, Value = Thematic Name/Skill Name)
-    "Great Weapons": "Great Weapons",
-    "Polearms & Shields": "Polearms & Shields",
-    "Precision Blades": "Precision Blades",
-    "Quick Pair": "Quick Pair",
-    "Adept Staves": "Adept Staves",
-    "Brawling Weapons": "Brawling Weapons",
-    "Elemental Edges": "Elemental Edges",
-    "Utilitarian Weapons": "Utilitarian Weapons",
-    "Binding Weapons": "Binding Weapons",
-    "Visceral Weapons": "Visceral Weapons",
-    "Performance Weapons": "Performance Weapons",
-    "Resolute Edges": "Resolute Edges",
-
-    # Ranged Weapons (Key = Thematic Name, Value = Thematic Name/Skill Name)
-    "Heavy Artillery": "Heavy Artillery",
-    "Area Projectors": "Area Projectors",
-    "Subtle Projectiles": "Subtle Projectiles",
-    "Quick Throws": "Quick Throws",
-    "Explosives & Vials": "Explosives & Vials",
-    "Returning Projectiles": "Returning Projectiles",
-    "Clockwork Weapons": "Clockwork Weapons",
-    "Impact Spears": "Impact Spears",
-    "Precision Archery": "Precision Archery",
-    "Restraint Weapons": "Restraint Weapons",
-    "Concussive Firearms": "Concussive Firearms",
-    "Sustained Defense": "Sustained Defense",
-
-    # Armor (Key = Thematic Category Name, Value = Thematic Skill Name - Now 1:1)
-    "Scale/Band Mail": "Scale/Band Mail",
-    "Plate Armor": "Plate Armor",
-    "Camouflage": "Camouflage",
-    "Clothing/Utility": "Clothing/Utility",
-    "Wood and Stone": "Wood and Stone",
-    "Natural/Unarmored": "Natural/Unarmored", # Key added, maps to skill
-    "Robes/Cloaks": "Robes/Cloaks",
-    "Chainmail": "Chainmail",
-    "Leather/Hides": "Leather/Hides",
-    "Tribal/Spirit": "Tribal/Spirit",
-    "Ornate/Showy": "Ornate/Showy",
-    "Reinforced": "Reinforced",
-    # We map "Unarmored" request input to the correct skill as well
-    "Unarmored": "Natural/Unarmored"
-    # "Heavy Cloaks" key is now removed entirely
-}
-
-
 # ADD THIS FUNCTION
 def calculate_modifier(score: int) -> int:
     """Calculates the attribute modifier from a score based on floor((Score - 10) / 2)."""
@@ -288,6 +238,15 @@ def get_skills_by_category(skill_categories_map: Dict[str, List[str]]) -> Dict[s
     if not skill_categories_map:
         raise ValueError("Skill categories map not provided or empty.")
     return skill_categories_map
+
+
+def get_skill_for_category(category_name: str, skill_map: Dict[str, str]) -> str:
+    """Looks up the skill for a given equipment category."""
+    if not skill_map:
+        raise ValueError("Skill map not provided or empty.")
+    if category_name not in skill_map:
+        raise ValueError(f"Category '{category_name}' not found in skill map.")
+    return skill_map[category_name]
 
 
 def get_status_effect(status_name: str) -> models.StatusEffectResponse:
