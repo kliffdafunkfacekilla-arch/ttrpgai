@@ -1,105 +1,112 @@
 // src/components/EntityRenderer.tsx
 import React from 'react';
-import { type NpcInstance, type ItemInstance } from '../types/apiTypes';
+// --- 1. IMPORT CharacterContextResponse ---
+import { type NpcInstance, type ItemInstance, type CharacterContextResponse } from '../types/apiTypes';
+import { getSpriteRenderInfo, TILE_SIZE } from '../assets/assetLoader';
 
 interface EntityRendererProps {
   npcs: NpcInstance[];
   items: ItemInstance[];
-  // We'll add player position later
+  // --- 2. ADD player PROP ---
+  player: CharacterContextResponse | null;
 }
 
-// Simple function to get a visual representation for an entity
-// In the future, this will use the assetLoader like the MapRenderer
-const getEntityStyle = (templateId: string): React.CSSProperties => {
-  if (templateId.includes('goblin')) {
-    return { backgroundColor: 'green', opacity: 0.8 };
-  }
-  if (templateId.includes('spider')) {
-    return { backgroundColor: 'darkred', opacity: 0.8 };
-  }
-  if (templateId.includes('potion')) {
-    return { backgroundColor: 'blue', opacity: 0.7, borderRadius: '50%' };
-  }
-  return { backgroundColor: 'gray', opacity: 0.7 };
-};
-
-const EntityRenderer: React.FC<EntityRendererProps> = ({ npcs, items }) => {
-  // For now, we assume entities don't have specific map coordinates
-  // and we'll just render placeholder indicators.
-  // A future step is to add coordinates to NPCs/Items in the world_engine
-  // and render them at the correct [x, y] position.
-
-  // --- THIS IS A PLACEHOLDER RENDER ---
-  // We'll update this when entities have coordinates.
-  // For now, let's just list what's in the room.
-
-  return (
-    <div className="absolute top-0 left-0 p-4 bg-black bg-opacity-50 text-white pointer-events-none">
-      <h3 className="text-lg font-bold">Entities Present:</h3>
-
-      {/* Render NPCs */}
-      <ul className="list-disc pl-5">
-        {npcs.map((npc) => (
-          <li key={npc.id} style={{ color: getEntityStyle(npc.template_id).backgroundColor || 'white' }}>
-            {npc.name_override || npc.template_id} (HP: {npc.current_hp}/{npc.max_hp})
-          </li>
-        ))}
-      </ul>
-
-      {/* Render Items */}
-      <ul className="list-disc pl-5 mt-2">
-        {items.map((item) => (
-          <li key={item.id} style={{ color: getEntityStyle(item.template_id).backgroundColor || 'cyan' }}>
-            {item.template_id} (x{item.quantity})
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-
-  /* // --- FUTURE IMPLEMENTATION (when entities have coordinates) ---
-  // This is what we're working towards:
+const EntityRenderer: React.FC<EntityRendererProps> = ({ npcs, items, player }) => {
 
   return (
     <>
-      {npcs.map((npc) => {
-        // Assuming npc.coordinates exists, e.g., [x, y]
-        if (!npc.coordinates) return null;
+      {/* --- 3. ADD PLAYER RENDER LOGIC --- */}
+      {player && player.character_sheet.location && (
+        (() => {
+          const { coordinates } = player.character_sheet.location;
+          // Use "player_default" as the template_id from entity_definitions.json
+          const renderInfo = getSpriteRenderInfo("player_default");
 
+          if (!renderInfo) {
+            console.warn("No render info for 'player_default'");
+            return null;
+          }
+
+          if (!coordinates || !Array.isArray(coordinates) || coordinates.length < 2) {
+             console.warn("Player has no coordinates. Skipping render.");
+             return null;
+          }
+
+          const style = {
+            left: `${coordinates[0] * TILE_SIZE}px`,
+            top: `${coordinates[1] * TILE_SIZE}px`,
+            width: `${TILE_SIZE}px`,
+            height: `${TILE_SIZE}px`,
+            backgroundImage: `url(${renderInfo.sheetUrl})`,
+            backgroundPosition: `-${renderInfo.sx}px -${renderInfo.sy}px`,
+          };
+
+          return (
+            <div
+              key={`player-${player.id}`}
+              className="absolute z-20" // z-20 so Player is above tiles and items
+              style={style}
+              title={player.name}
+            />
+          );
+        })()
+      )}
+
+      {/* Render NPCs */}
+      {npcs.map((npc) => {
+        // --- 4. FIX HACK: Use the new coordinates field ---
+        const { coordinates } = (npc as any);
+        if (!coordinates || !Array.isArray(coordinates) || coordinates.length < 2) {
+            // ... (console.warn) ...
+            return null;
+        }
+
+        const renderInfo = getSpriteRenderInfo(npc.template_id);
+        // ... (render logic) ...
         const style = {
-          ...getEntityStyle(npc.template_id),
-          left: `${npc.coordinates[0] * TILE_SIZE}px`,
-          top: `${npc.coordinates[1] * TILE_SIZE}px`,
+          left: `${coordinates[0] * TILE_SIZE}px`,
+          top: `${coordinates[1] * TILE_SIZE}px`,
           width: `${TILE_SIZE}px`,
           height: `${TILE_SIZE}px`,
+          backgroundImage: `url(${renderInfo.sheetUrl})`,
+          backgroundPosition: `-${renderInfo.sx}px -${renderInfo.sy}px`,
         };
 
         return (
           <div
             key={`npc-${npc.id}`}
-            className="absolute z-10"
+            className="absolute z-10" // z-10 so NPCs are above tiles
             style={style}
             title={npc.name_override || npc.template_id}
           />
         );
       })}
 
+      {/* Render Items */}
       {items.map((item) => {
-        // Assuming item.coordinates exists, e.g., [x, y]
-        if (!item.coordinates) return null;
+        // --- 5. FIX HACK: Use the new coordinates field ---
+        const { coordinates } = (item as any);
+        if (!coordinates || !Array.isArray(coordinates) || coordinates.length < 2) {
+            // ... (console.warn) ...
+            return null;
+        }
 
+        const renderInfo = getSpriteRenderInfo(item.template_id);
+        // ... (render logic) ...
         const style = {
-          ...getEntityStyle(item.template_id),
-          left: `${item.coordinates[0] * TILE_SIZE + TILE_SIZE / 4}px`, // Offset for items
-          top: `${item.coordinates[1] * TILE_SIZE + TILE_SIZE / 4}px`,
+          left: `${coordinates[0] * TILE_SIZE + TILE_SIZE / 4}px`,
+          top: `${coordinates[1] * TILE_SIZE + TILE_SIZE / 4}px`,
           width: `${TILE_SIZE / 2}px`,
           height: `${TILE_SIZE / 2}px`,
+          backgroundImage: `url(${renderInfo.sheetUrl})`,
+          backgroundPosition: `-${renderInfo.sx / 2}px -${renderInfo.sy / 2}px`,
+          backgroundSize: `${renderInfo.sWidth}px ${renderInfo.sHeight}px`,
         };
 
         return (
           <div
             key={`item-${item.id}`}
-            className="absolute z-5"
+            className="absolute z-5" // z-5 so items are above tiles but below NPCs
             style={style}
             title={item.template_id}
           />
@@ -107,7 +114,6 @@ const EntityRenderer: React.FC<EntityRendererProps> = ({ npcs, items }) => {
       })}
     </>
   );
-  */
 };
 
 export default EntityRenderer;

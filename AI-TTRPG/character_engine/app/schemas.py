@@ -32,4 +32,9 @@ class ApplyDamageRequest(BaseModel):
 
 class ApplyStatusRequest(BaseModel):
     status_id: str
+
+# --- ADD THIS NEW SCHEMA ---
+class LocationUpdateRequest(BaseModel):
+    location_id: int
+    coordinates: List[int] # [x, y]
     duration: int | None = None # Or maybe specific end condition

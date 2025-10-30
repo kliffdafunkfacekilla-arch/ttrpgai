@@ -16,7 +16,13 @@ export interface CharacterSheet {
   equipment: Record<string, any>; // Consider defining more strictly (e.g., { slot: { item_id: string, name: string } })
   choices: Record<string, any>; // Stores creation choices
   unlocked_talents: Array<{ name: string; source: string; effect: string }>;
-  location: string; // Current location ID or name
+
+  // --- MODIFICATION ---
+  location: {
+    current_location_id: number;
+    coordinates: [number, number]; // [x, y]
+  };
+  // --- END MODIFICATION ---
 }
 
 // Response from GET /v1/context/character/{char_id}

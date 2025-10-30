@@ -86,6 +86,10 @@ class NpcInstance(Base):
     location_id = Column(Integer, ForeignKey("locations.id"))
     behavior_tags = Column(JSON, default=[]) # Store tags like ["aggressive"]
 
+
+    # --- ADD THIS LINE ---
+    coordinates = Column(JSON, nullable=True) # e.g., [10, 5]
+
     location = relationship("Location", back_populates="npc_instances")
     # This links the NPC to the Items it is carrying (its inventory)
     item_instances = relationship("ItemInstance", back_populates="npc")
@@ -105,6 +109,10 @@ class ItemInstance(Base):
     location_id = Column(Integer, ForeignKey("locations.id"), nullable=True)
     # OR it can be in an NPC's inventory (npc_id is set)
     npc_id = Column(Integer, ForeignKey("npc_instances.id"), nullable=True)
+
+
+    # --- ADD THIS LINE ---
+    coordinates = Column(JSON, nullable=True) # e.g., [12, 8]
 
     location = relationship("Location", back_populates="item_instances")
     npc = relationship("NpcInstance", back_populates="item_instances")

@@ -56,12 +56,16 @@ class OrchestrationSpawnNpc(BaseModel):
     template_id: str
     location_id: int
     name_override: Optional[str] = None
+    # --- ADD THIS LINE ---
+    coordinates: Optional[Any] = None # e.g., [x, y]
 
 class OrchestrationSpawnItem(BaseModel):
     template_id: str
     location_id: Optional[int] = None
     npc_id: Optional[int] = None
     quantity: int = 1
+    # --- ADD THIS LINE ---
+    coordinates: Optional[Any] = None # e.g., [x, y]
 
 class OrchestrationCharacterContext(BaseModel):
     # This is a schema for the *response* from character_engine
