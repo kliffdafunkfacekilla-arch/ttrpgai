@@ -1,0 +1,203 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    font-family: 'Inter', sans-serif;
+  }
+}
+
+@layer utilities {
+  /* Custom backgrounds */
+  .bg-dungeon {
+    background: radial-gradient(ellipse at center, #1c1917 0%, #0c0a09 70%, #000000 100%);
+  }
+
+  .bg-noise {
+    background-image: 
+      radial-gradient(circle at 25% 25%, #292524 0%, transparent 50%),
+      radial-gradient(circle at 75% 75%, #1c1917 0%, transparent 50%),
+      radial-gradient(circle at 75% 25%, #44403c 0%, transparent 50%),
+      radial-gradient(circle at 25% 75%, #292524 0%, transparent 50%);
+    background-size: 200px 200px;
+    animation: noise 8s infinite linear;
+  }
+
+  @keyframes noise {
+    0% { transform: translate(0, 0) rotate(0deg); }
+    25% { transform: translate(-2px, 2px) rotate(1deg); }
+    50% { transform: translate(2px, -2px) rotate(-1deg); }
+    75% { transform: translate(-2px, -2px) rotate(1deg); }
+    100% { transform: translate(0, 0) rotate(0deg); }
+  }
+
+  /* Typography */
+  .font-medieval {
+    font-family: 'Cinzel', serif;
+  }
+
+  /* Glowing effects */
+  .glow-text {
+    text-shadow: 0 0 10px currentColor, 0 0 20px currentColor, 0 0 30px currentColor;
+  }
+
+  .glow-stat {
+    text-shadow: 0 0 5px currentColor, 0 0 10px currentColor;
+  }
+
+  .glow-icon {
+    filter: drop-shadow(0 0 8px currentColor);
+  }
+
+  .glow-border {
+    box-shadow: 0 0 15px rgba(251, 191, 36, 0.5), inset 0 0 15px rgba(251, 191, 36, 0.1);
+  }
+
+  .glow-purple {
+    box-shadow: 0 0 10px rgba(147, 51, 234, 0.5);
+  }
+
+  .shadow-glow {
+    box-shadow: 0 0 8px currentColor;
+  }
+
+  /* Stone panels */
+  .stone-panel {
+    background: linear-gradient(145deg, #292524, #1c1917);
+    border: 2px solid #44403c;
+    box-shadow: 
+      inset 0 1px 0 rgba(255, 255, 255, 0.1),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.2),
+      0 4px 8px rgba(0, 0, 0, 0.3);
+    position: relative;
+  }
+
+  .stone-panel::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+      radial-gradient(circle at 20% 20%, rgba(68, 64, 60, 0.3) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(41, 37, 36, 0.3) 0%, transparent 50%);
+    pointer-events: none;
+    border-radius: inherit;
+  }
+
+  /* Stone buttons */
+  .stone-button {
+    background: linear-gradient(145deg, #44403c, #292524);
+    border: 2px solid #57534e;
+    box-shadow: 
+      0 4px 0 #1c1917,
+      0 4px 8px rgba(0, 0, 0, 0.3),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+    position: relative;
+    color: #d6d3d1;
+    transform: translateY(0);
+  }
+
+  .stone-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+      radial-gradient(circle at 30% 30%, rgba(87, 83, 78, 0.4) 0%, transparent 70%),
+      radial-gradient(circle at 70% 70%, rgba(68, 64, 60, 0.3) 0%, transparent 70%);
+    border-radius: inherit;
+    pointer-events: none;
+  }
+
+  .stone-button:hover {
+    background: linear-gradient(145deg, #57534e, #44403c);
+    border-color: #78716c;
+    color: #fbbf24;
+    text-shadow: 0 0 8px #fbbf24, 0 1px 2px rgba(0, 0, 0, 0.8);
+    box-shadow: 
+      0 4px 0 #1c1917,
+      0 4px 12px rgba(251, 191, 36, 0.3),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  }
+
+  .stone-button:active, .stone-button.active {
+    transform: translateY(2px);
+    background: linear-gradient(145deg, #292524, #1c1917);
+    border-color: #fbbf24;
+    color: #fbbf24;
+    text-shadow: 0 0 10px #fbbf24, 0 1px 2px rgba(0, 0, 0, 0.8);
+    box-shadow: 
+      0 2px 0 #0c0a09,
+      0 2px 8px rgba(251, 191, 36, 0.4),
+      inset 0 1px 0 rgba(0, 0, 0, 0.2);
+  }
+
+  /* Stat items */
+  .stat-item {
+    @apply text-center p-3 bg-stone-800/30 rounded border border-stone-700 hover:border-amber-600/50 transition-colors;
+  }
+
+  /* Inventory items */
+  .inventory-item:hover {
+    background: rgba(41, 37, 36, 0.5);
+    box-shadow: 0 0 15px rgba(251, 191, 36, 0.2);
+  }
+
+  /* Equipment slots */
+  .equipment-slot:hover {
+    border-color: rgba(251, 191, 36, 0.6);
+    background: rgba(41, 37, 36, 0.7);
+  }
+
+  /* Quest card */
+  .quest-card:hover {
+    border-color: rgba(251, 191, 36, 0.5);
+    box-shadow: 0 0 20px rgba(251, 191, 36, 0.1);
+  }
+
+  /* Dice animations */
+  .dice-rolling {
+    animation: rollDice 1s ease-in-out infinite;
+  }
+
+  .dice-result {
+    animation: diceResult 0.5s ease-out;
+  }
+
+  @keyframes rollDice {
+    0%, 100% { transform: rotate(0deg) scale(1); }
+    25% { transform: rotate(90deg) scale(1.1); }
+    50% { transform: rotate(180deg) scale(1.2); }
+    75% { transform: rotate(270deg) scale(1.1); }
+  }
+
+  @keyframes diceResult {
+    0% { transform: scale(0.8); opacity: 0; }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); opacity: 1; }
+  }
+
+  /* Responsive design */
+  @media (max-width: 768px) {
+    .stone-button {
+      padding: 0.5rem 1rem;
+      font-size: 0.75rem;
+    }
+
+    .stat-item {
+      padding: 0.5rem;
+    }
+
+    .inventory-item, .equipment-slot {
+      padding: 0.75rem;
+    }
+  }
+}
