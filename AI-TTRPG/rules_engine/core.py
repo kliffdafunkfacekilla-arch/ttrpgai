@@ -371,3 +371,38 @@ def find_eligible_talents(stats_in: Dict[str, int],
                     print(f"Warning: Skill '{skill_name}' from talent data not found in master skill map.")
 
     return unlocked_talents
+
+
+# ADD THIS FUNCTION
+def calculate_base_vitals(stats: Dict[str, int]) -> models.BaseVitalsResponse:
+    """
+    Calculates Max HP and Base Resource Pools based on final stat scores.
+    This replaces the placeholder logic from character_engine.
+    """
+
+    # --- 1. Calculate HP ---
+    # Rule: Base 5 + Vitality Score + Endurance Modifier
+    vit_score = stats.get("Vitality", 10)
+    end_mod = calculate_modifier(stats.get("Endurance", 10))
+    max_hp = 5 + vit_score + end_mod
+    max_hp = max(1, max_hp) # Ensure HP is at least 1
+
+    # --- 2. Calculate Resources ---
+    # Rule: Base 5 + Modifier of associated stat
+    resources = {
+        "Presence": {"max": 5 + calculate_modifier(stats.get("Charm", 10))},
+        "Stamina":  {"max": 5 + calculate_modifier(stats.get("Endurance", 10))},
+        "Chi":      {"max": 5 + calculate_modifier(stats.get("Finesse", 10))},
+        "Guile":    {"max": 5 + calculate_modifier(stats.get("Knowledge", 10))},
+        "Tactics":  {"max": 5 + calculate_modifier(stats.get("Logic", 10))},
+        "Instinct": {"max": 5 + calculate_modifier(stats.get("Intuition", 10))}
+    }
+
+    # Set current to max for initial creation
+    for pool in resources.values():
+        pool["current"] = pool["max"]
+
+    return models.BaseVitalsResponse(
+        max_hp=max_hp,
+        resources=resources
+    )

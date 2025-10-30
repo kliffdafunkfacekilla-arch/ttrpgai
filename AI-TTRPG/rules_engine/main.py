@@ -242,6 +242,25 @@ async def api_get_all_ability_schools(request: Request):
 
 
 # ADD THIS ENDPOINT
+@app.post("/v1/calculate/base_vitals", response_model=models.BaseVitalsResponse, tags=["Combat Calculations"])
+async def api_calculate_base_vitals(request_data: models.BaseVitalsRequest):
+    """
+    Calculates Max HP and all 6 Resource Pools based on a character's stats.
+    Called by character_engine during character creation.
+    """
+    logger.info(f"Received base vitals calculation request.")
+    try:
+        result = core.calculate_base_vitals(request_data.stats)
+        logger.info(f"Calculated base vitals: HP={result.max_hp}")
+        return result
+    except ValueError as ve:
+        logger.warning(f"Validation error during base vitals calculation: {ve}")
+        raise HTTPException(status_code=400, detail=str(ve))
+    except Exception as e:
+        logger.exception(f"Error calculating base vitals: {e}")
+        raise HTTPException(status_code=500, detail=f"Internal server error calculating base vitals: {str(e)}")
+
+
 @app.post("/v1/roll/initiative", response_model=models.InitiativeResponse, tags=["Combat Rolls"])
 async def api_roll_initiative(request_data: models.InitiativeRequest):
     """

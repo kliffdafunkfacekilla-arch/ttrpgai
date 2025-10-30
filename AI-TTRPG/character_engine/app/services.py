@@ -68,18 +68,16 @@ async def get_eligible_talents(stats: Dict[str, int], skills: Dict[str, int]) ->
         json_data=request_data
     )
 
-async def get_base_resources() -> Dict[str, Dict[str, int]]:
-    """Gets the base resource pool max values. (Placeholder - Needs rules)"""
-    # TODO: Fetch this from Rules Engine or define actual base rules
-    logger.warning("Using placeholder base resources!")
-    return {
-        "Presence": {"current": 5, "max": 5},
-        "Stamina": {"current": 5, "max": 5},
-        "Chi": {"current": 5, "max": 5},
-        "Guile": {"current": 5, "max": 5},
-        "Tactics": {"current": 5, "max": 5},
-        "Instinct": {"current": 5, "max": 5}
-    }
+async def get_base_vitals_from_rules(stats: Dict[str, int]) -> Dict:
+    """Fetches calculated Max HP and Resource Pools from the Rules Engine."""
+    request_data = {"stats": stats}
+    response = await _call_rules_engine(
+        "POST",
+        "/v1/calculate/base_vitals",
+        json_data=request_data
+    )
+    # response will be {"max_hp": X, "resources": {...}}
+    return response
 
 # --- Local Calculation Helpers ---
 def calculate_modifier(score: int) -> int:

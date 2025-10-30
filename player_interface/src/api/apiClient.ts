@@ -1,13 +1,12 @@
 // src/api/apiClient.ts
 import axios, { AxiosError } from 'axios';
 import {
-    CharacterContextResponse,
-    LocationContextResponse,
-    InteractionRequestPayload,
-    InteractionResponse,
-    CombatEncounterResponse,
-    PlayerActionRequestPayload,
-    PlayerActionResponse,
+    type CharacterContextResponse,
+    type LocationContextResponse,
+    type InteractionRequestPayload,
+    type InteractionResponse,
+    type PlayerActionRequestPayload,
+    type PlayerActionResponse,
 } from '../types/apiTypes'; // Adjust path as needed
 
 const STORY_ENGINE_BASE_URL = 'http://127.0.0.1:8003'; // Your story_engine URL
