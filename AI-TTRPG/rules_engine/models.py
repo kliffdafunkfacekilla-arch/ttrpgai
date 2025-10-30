@@ -302,3 +302,28 @@ class StatusEffectResponse(BaseModel):
     class Config:
         from_attributes = True # Use this for Pydantic V2+
         # orm_mode = True # Use this for Pydantic V1
+
+
+# ADD THESE MODELS for Base Vitals Calculation
+class BaseVitalsRequest(BaseModel):
+    """
+    Input required for calculating base HP and Resources.
+    Requires all 12 stat scores.
+    """
+    stats: Dict[str, int] = Field(..., description="Dictionary of all 12 stats and their scores")
+
+    @validator('stats')
+    def validate_stats(cls, v):
+        if len(v) < 12:
+            raise ValueError("Must provide all 12 stats.")
+        # Add checks for specific stats if needed
+        if "Vitality" not in v or "Endurance" not in v:
+            raise ValueError("Stats dictionary missing required Vitality or Endurance.")
+        return v
+
+class BaseVitalsResponse(BaseModel):
+    """
+    Output of the base vitals calculation.
+    """
+    max_hp: int
+    resources: Dict[str, Dict[str, int]] = Field(description="Dictionary of all 6 resource pools with current/max values.")

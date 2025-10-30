@@ -1,14 +1,98 @@
 {
-"Scale/Band Mail": {"skill_stat": "Might", "dr": 2, "agility_penalty": -1, "stealth_penalty": -1, "specialty": "Retaliation"},
-"Plate Armor": {"skill_stat": "Endurance", "dr": 3, "agility_penalty": -2, "stealth_penalty": -2, "specialty": "Bracing"},
-"Camouflage": {"skill_stat": "Finesse", "dr": 1, "agility_penalty": 0, "stealth_penalty": 0, "specialty": "Concealment"},
-"Clothing/Utility": {"skill_stat": "Agility", "dr": 0, "agility_penalty": 0, "stealth_penalty": 0, "specialty": "Free Movement"},
-"Wood and Stone": {"skill_stat": "Constitution", "dr": 2, "agility_penalty": -1, "stealth_penalty": -1, "specialty": "Sustain"},
-"Natural/Unarmored": {"skill_stat": "Fortitude", "dr": 1, "agility_penalty": 0, "stealth_penalty": -1, "specialty": "Deflection"},
-"Robes/Cloaks": {"skill_stat": "Knowledge", "dr": 0, "agility_penalty": 0, "stealth_penalty": 0, "specialty": "Attunement"},
-"Chainmail": {"skill_stat": "Logic", "dr": 1, "agility_penalty": -1, "stealth_penalty": -1, "specialty": "Psychic Ward"},
-"Leather/Hides": {"skill_stat": "Awareness", "dr": 1, "agility_penalty": 0, "stealth_penalty": -1, "specialty": "Vigilance"},
-"Tribal/Spirit": {"skill_stat": "Intuition", "dr": 0, "agility_penalty": 0, "stealth_penalty": 0, "specialty": "Primal Ward"},
-"Ornate/Showy": {"skill_stat": "Charm", "dr": 1, "agility_penalty": 0, "stealth_penalty": 0, "specialty": "Distraction"},
-"Reinforced": {"skill_stat": "Willpower", "dr": 2, "agility_penalty": -1, "stealth_penalty": -1, "specialty": "Iron Will"}
+  "Scale/Band Mail": {
+    "skill": "Scale/Band Mail",
+    "skill_stat": "Might",
+    "dr": 2,
+    "agility_penalty": -1,
+    "stealth_penalty": -1,
+    "specialty": "Retaliation"
+  },
+  "Plate Armor": {
+    "skill": "Plate Armor",
+    "skill_stat": "Endurance",
+    "dr": 3,
+    "agility_penalty": -2,
+    "stealth_penalty": -2,
+    "specialty": "Bracing"
+  },
+  "Camouflage": {
+    "skill": "Camouflage",
+    "skill_stat": "Finesse",
+    "dr": 1,
+    "agility_penalty": 0,
+    "stealth_penalty": 0,
+    "specialty": "Concealment"
+  },
+  "Clothing/Utility": {
+    "skill": "Clothing/Utility",
+    "skill_stat": "Reflexes",
+    "dr": 0,
+    "agility_penalty": 0,
+    "stealth_penalty": 0,
+    "specialty": "Free Movement"
+  },
+  "Wood and Stone": {
+    "skill": "Wood and Stone",
+    "skill_stat": "Vitality",
+    "dr": 2,
+    "agility_penalty": -1,
+    "stealth_penalty": -1,
+    "specialty": "Sustain"
+  },
+  "Natural/Unarmored": {
+    "skill": "Natural/Unarmored",
+    "skill_stat": "Fortitude",
+    "dr": 1,
+    "agility_penalty": 0,
+    "stealth_penalty": -1,
+    "specialty": "Deflection"
+  },
+  "Robes/Cloaks": {
+    "skill": "Robes/Cloaks",
+    "skill_stat": "Knowledge",
+    "dr": 0,
+    "agility_penalty": 0,
+    "stealth_penalty": 0,
+    "specialty": "Attunement"
+  },
+  "Chainmail": {
+    "skill": "Chainmail",
+    "skill_stat": "Logic",
+    "dr": 1,
+    "agility_penalty": -1,
+    "stealth_penalty": -1,
+    "specialty": "Psychic Ward"
+  },
+  "Leather/Hides": {
+    "skill": "Leather/Hides",
+    "skill_stat": "Awareness",
+    "dr": 1,
+    "agility_penalty": 0,
+    "stealth_penalty": -1,
+    "specialty": "Vigilance"
+  },
+  "Tribal/Spirit": {
+    "skill": "Tribal/Spirit",
+    "skill_stat": "Intuition",
+    "dr": 0,
+    "agility_penalty": 0,
+    "stealth_penalty": 0,
+    "specialty": "Primal Ward"
+  },
+  "Ornate/Showy": {
+    "skill": "Ornate/Showy",
+    "skill_stat": "Charm",
+    "dr": 1,
+    "agility_penalty": 0,
+    "stealth_penalty": 0,
+    "specialty": "Distraction"
+  },
+  "Reinforced": {
+    "skill": "Reinforced",
+    "skill_stat": "Willpower",
+    "dr": 2,
+    "agility_penalty": -1,
+    "stealth_penalty": -1,
+    "specialty": "Iron Will"
+  }
 }

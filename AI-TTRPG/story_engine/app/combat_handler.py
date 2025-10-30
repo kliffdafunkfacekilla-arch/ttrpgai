@@ -493,16 +493,12 @@ async def execute_combat_action(db: Session, combat_id: int, actor_id: str, acti
                 armor_stat = armor_data.get("skill_stat") # Usually Endurance or Agility from armor.json
 
                 # --- NEW Skill Mapping Logic ---
-                # TODO: FIXME: This is a significant simplification and likely incorrect!
-                # Assumes skill name matches category name. A proper implementation requires:
-                # 1. Item templates defining the specific skill used (preferred).
-                # OR
-                # 2. Adding a 'skill_used' field to rules_engine weapon/armor JSON definitions.
-                # Current assumption will lead to incorrect skill ranks being used for some items.
-                weapon_skill = weapon_category
-                armor_skill = armor_category if armor_category else "No Armor" # Use category name or default
-
-                logger.warning(f"FIXME: Using simplified skill mapping: Weapon='{weapon_skill}', Armor='{armor_skill}'")
+                weapon_skill = weapon_data.get("skill")
+                if not weapon_skill:
+                    logger.error(f"Weapon category {weapon_category} is missing a 'skill' field in rules_engine data!")
+                    return {"success": False, "message": f"Data error: Weapon {weapon_category} has no skill defined.", "log": results_log}
+                armor_skill = armor_data.get("skill", "Natural/Unarmored") # Get skill from data, default to Natural/Unarmored
+                # Skill mapping is now read directly from weapon/armor data.
                 # --- End NEW Skill Mapping ---
 
                 attack_params = {

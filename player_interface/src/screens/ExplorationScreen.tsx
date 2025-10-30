@@ -1,8 +1,9 @@
 // src/screens/ExplorationScreen.tsx
 import React, { useState, useEffect } from 'react';
 import { getLocationContext } from '../api/apiClient';
-import { LocationContextResponse } from '../types/apiTypes';
+import { type LocationContextResponse } from '../types/apiTypes';
 import MapRenderer from '../components/MapRenderer'; // Import the MapRenderer
+import EntityRenderer from '../components/EntityRenderer'; // --- IMPORT NEW COMPONENT ---
 
 const ExplorationScreen: React.FC = () => {
   const [location, setLocation] = useState<LocationContextResponse | null>(null);
@@ -48,10 +49,12 @@ const ExplorationScreen: React.FC = () => {
         <h1 className="text-2xl font-bold">
           Exploring: {location.name} (ID: {location.id})
         </h1>
+        <p className="text-sm text-gray-400">{location.region.name}</p>
       </header>
 
       {/* Container for the map with scrolling */}
-      <div className="map-container flex-grow overflow-auto bg-gray-800 border border-gray-700">
+      {/* --- MODIFICATION: Make container relative --- */}
+      <div className="map-container relative flex-grow overflow-auto bg-gray-800 border border-gray-700">
         {location.generated_map_data ? (
             <MapRenderer mapData={location.generated_map_data} />
         ) : (
@@ -59,7 +62,21 @@ const ExplorationScreen: React.FC = () => {
                 <p>Map data is missing for this location.</p>
             </div>
         )}
+
+        {/* --- ADD ENTITY RENDERER --- */}
+        {/* It will overlay on top of the MapRenderer */}
+        <EntityRenderer
+          npcs={location.npc_instances}
+          items={location.item_instances}
+        />
       </div>
+
+      {/* --- ADD UI PANEL (Placeholder) --- */}
+      <footer className="mt-4 h-32 bg-gray-800 border border-gray-700 p-4">
+        <h3 className="font-bold">Event Log</h3>
+        <p className="text-gray-400">You have entered the {location.name}.</p>
+        {/* We will populate this log with messages from interactions and combat */}
+      </footer>
     </div>
   );
 };

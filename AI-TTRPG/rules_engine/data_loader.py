@@ -105,12 +105,13 @@ RANGED_WEAPONS: Dict[str, Any] = {}
 ARMOR: Dict[str, Any] = {}
 INJURY_EFFECTS: Dict[str, Any] = {}
 STATUS_EFFECTS: Dict[str, Any] = {}
+EQUIPMENT_CATEGORY_TO_SKILL_MAP: Dict[str, str] = {}
 
 
 def load_data() -> Dict[str, Any]:
     """Loads all rules data and returns it in a dictionary."""
     global STATS_LIST, SKILL_CATEGORIES, ALL_SKILLS, ABILITY_DATA, TALENT_DATA, FEATURE_STATS_MAP
-    global MELEE_WEAPONS, RANGED_WEAPONS, ARMOR, INJURY_EFFECTS, STATUS_EFFECTS
+    global MELEE_WEAPONS, RANGED_WEAPONS, ARMOR, INJURY_EFFECTS, STATUS_EFFECTS, EQUIPMENT_CATEGORY_TO_SKILL_MAP
     print("Starting data loading process...")
     loaded_data = {}
     try:
@@ -136,6 +137,9 @@ def load_data() -> Dict[str, Any]:
         MELEE_WEAPONS = _load_json("melee_weapons.json")
         RANGED_WEAPONS = _load_json("ranged_weapons.json")
         ARMOR = _load_json("armor.json")
+
+        # Load skill mappings
+        EQUIPMENT_CATEGORY_TO_SKILL_MAP = _load_json("skill_mappings.json")
 
         # Load injury data
         INJURY_EFFECTS = _load_json("injury_effects.json")
@@ -168,7 +172,8 @@ def load_data() -> Dict[str, Any]:
             'ranged_weapons': RANGED_WEAPONS,
             'armor': ARMOR,
             'injury_effects': INJURY_EFFECTS,
-            'status_effects': STATUS_EFFECTS
+            'status_effects': STATUS_EFFECTS,
+            'equipment_category_to_skill_map': EQUIPMENT_CATEGORY_TO_SKILL_MAP
         }
 
         print(f"DEBUG: STATS_LIST len: {len(STATS_LIST)}")
@@ -179,6 +184,7 @@ def load_data() -> Dict[str, Any]:
         print(f"Loaded {len(MELEE_WEAPONS)} melee weapon categories.")
         print(f"Loaded {len(RANGED_WEAPONS)} ranged weapon categories.")
         print(f"Loaded {len(ARMOR)} armor categories.")
+        print(f"Loaded {len(EQUIPMENT_CATEGORY_TO_SKILL_MAP)} skill mappings.")
         print(f"Loaded {len(INJURY_EFFECTS)} major injury locations.")
         print(f"Loaded {len(STATUS_EFFECTS)} status effect definitions.")
 

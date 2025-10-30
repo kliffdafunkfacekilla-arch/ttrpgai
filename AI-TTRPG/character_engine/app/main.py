@@ -77,7 +77,10 @@ async def create_character( # Make endpoint async
 
         # --- 4. Initialize Resources ---
         logger.info("Initializing resources...")
-        final_resources = await services.get_base_resources()
+        # Call the new rules_engine endpoint to get HP and Resources
+        vitals_data = await services.get_base_vitals_from_rules(final_stats)
+        final_resources = vitals_data.get("resources")
+        max_hp = vitals_data.get("max_hp")
         logger.info("Resources initialized.")
 
         # --- 5. Get Initial Talents ---
@@ -88,24 +91,20 @@ async def create_character( # Make endpoint async
 
         # --- 6. Construct Character Sheet ---
         logger.info("Constructing character sheet...")
-        # --- Placeholder Base HP Calculation (e.g., based on Vitality) ---
-        # TODO: Move HP calculation potentially to rules_engine or refine here
-        base_hp = 10 + services.calculate_modifier(final_stats.get("Vitality", 10)) * 2 # Example rule
-        max_hp = max(5, base_hp) # Ensure minimum HP
-        # --- End Placeholder HP ---
+        # HP is now fetched from get_base_vitals_from_rules
 
         character_sheet_data = {
             "stats": final_stats,
             "skills": final_skills,
             "abilities": final_abilities,
-            "resources": final_resources,
-            "combat_stats": { # <--- ADD THIS STRUCTURE
-                "max_hp": max_hp,
+            "resources": final_resources, # Fetched from rules_engine
+            "combat_stats": {
+                "max_hp": max_hp, # Fetched from rules_engine
                 "current_hp": max_hp, # Start at full health
-                "status_effects": [] # Start with no status effects
+                "status_effects": []
             },
-            "inventory": [], # <--- Initialize inventory
-            "equipment": {}, # <--- Initialize equipment
+            "inventory": [],
+            "equipment": {},
             "choices": {
                 "features": character_request.f_stats,
                 "capstone": character_request.capstone_stat,
