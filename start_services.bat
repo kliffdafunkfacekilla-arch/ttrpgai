@@ -1,57 +1,96 @@
 @echo off
-setlocal enabledelayedexpansion
-
-
+setlocal
 
 REM Define the directory CONTAINING the services
-set SERVICES_PARENT_DIR=%~dp0AI-TTRPG
+set "SERVICES_PARENT_DIR=%~dp0AI-TTRPG"
 
 REM Check if the AI-TTRPG directory exists
-if not exist "!SERVICES_PARENT_DIR!" (
+if not exist "%SERVICES_PARENT_DIR%" (
     echo ERROR: AI-TTRPG directory not found inside the current directory.
     echo Please ensure AI-TTRPG is in the same folder as this script.
     pause
     exit /b 1
 )
 
+echo Starting all 7 services...
+echo.
 
-REM Function-like section to start a service
-:start_service
-    set SERVICE_NAME=%~1
-    set PORT=%~2
-    echo -------------------------------------
-    echo Starting !SERVICE_NAME! on port !PORT!...
-    echo -------------------------------------
+REM --- We are now starting each service manually to avoid batch file bugs ---
 
-    set SERVICE_PATH=!SERVICES_PARENT_DIR!\!SERVICE_NAME!
+REM 1. rules_engine (Special case: main.py is in root)
+echo Starting rules_engine on port 8000...
+set "SERVICE_PATH=%SERVICES_PARENT_DIR%\rules_engine"
+if exist "%SERVICE_PATH%\main.py" (
+    start "Uvicorn rules_engine" cmd /k "pushd "%SERVICE_PATH%" && uvicorn main:app --host 127.0.0.1 --port 8000 --reload"
+) else (
+    echo WARNING: rules_engine not found at %SERVICE_PATH%\main.py. Skipping.
+)
+timeout /t 3 /nobreak > nul 2>&1
 
-    if not exist "!SERVICE_PATH!" (
-        echo WARNING: Directory not found for service: !SERVICE_NAME!. Skipping.
-        goto :eof
-    )
+REM 2. character_engine
+echo Starting character_engine on port 8001...
+set "SERVICE_PATH=%SERVICES_PARENT_DIR%\character_engine"
+if exist "%SERVICE_PATH%\app\main.py" (
+    start "Uvicorn character_engine" cmd /k "pushd "%SERVICE_PATH%" && uvicorn app.main:app --host 127.0.0.1 --port 8001 --reload"
+) else (
+    echo WARNING: character_engine not found at %SERVICE_PATH%\app\main.py. Skipping.
+)
+timeout /t 3 /nobreak > nul 2>&1
 
-    REM *** MODIFIED START COMMAND ***
-    REM Pass the command directly to cmd /k without intermediate echo
-    start "Uvicorn !SERVICE_NAME!" cmd /k "pushd \"!SERVICE_PATH!\" && uvicorn app.main:app --host 127.0.0.1 --port !PORT! --reload"
+REM 3. world_engine
+echo Starting world_engine on port 8002...
+set "SERVICE_PATH=%SERVICES_PARENT_DIR%\world_engine"
+if exist "%SERVICE_PATH%\app\main.py" (
+    start "Uvicorn world_engine" cmd /k "pushd "%SERVICE_PATH%" && uvicorn app.main:app --host 127.0.0.1 --port 8002 --reload"
+) else (
+    echo WARNING: world_engine not found at %SERVICE_PATH%\app\main.py. Skipping.
+)
+timeout /t 3 /nobreak > nul 2>&1
 
-    REM Correct timeout syntax
-    timeout /t 3 /nobreak > nul 2>&1
-    goto :eof
+REM 4. story_engine
+echo Starting story_engine on port 8003...
+set "SERVICE_PATH=%SERVICES_PARENT_DIR%\story_engine"
+if exist "%SERVICE_PATH%\app\main.py" (
+    start "Uvicorn story_engine" cmd /k "pushd "%SERVICE_PATH%" && uvicorn app.main:app --host 127.0.0.1 --port 8003 --reload"
+) else (
+    echo WARNING: story_engine not found at %SERVICE_PATH%\app\main.py. Skipping.
+)
+timeout /t 3 /nobreak > nul 2>&1
 
-REM Start all services
-call :start_service "rules_engine" 8000 #
-call :start_service "character_engine" 8001
-call :start_service "world_engine" 8002
-call :start_service "story_engine" 8003
-call :start_service "encounter_generator" 8004
-call :start_service "npc_generator" 8005
-call :start_service "map_generator" 8006
+REM 5. encounter_generator
+echo Starting encounter_generator on port 8004...
+set "SERVICE_PATH=%SERVICES_PARENT_DIR%\encounter_generator"
+if exist "%SERVICE_PATH%\app\main.py" (
+    start "Uvicorn encounter_generator" cmd /k "pushd "%SERVICE_PATH%" && uvicorn app.main:app --host 127.0.0.1 --port 8004 --reload"
+) else (
+    echo WARNING: encounter_generator not found at %SERVICE_PATH%\app\main.py. Skipping.
+)
+timeout /t 3 /nobreak > nul 2>&1
+
+REM 6. npc_generator
+echo Starting npc_generator on port 8005...
+set "SERVICE_PATH=%SERVICES_PARENT_DIR%\npc_generator"
+if exist "%SERVICE_PATH%\app\main.py" (
+    start "Uvicorn npc_generator" cmd /k "pushd "%SERVICE_PATH%" && uvicorn app.main:app --host 127.0.0.1 --port 8005 --reload"
+) else (
+    echo WARNING: npc_generator not found at %SERVICE_PATH%\app\main.py. Skipping.
+)
+timeout /t 3 /nobreak > nul 2>&1
+
+REM 7. map_generator
+echo Starting map_generator on port 8006...
+set "SERVICE_PATH=%SERVICES_PARENT_DIR%\map_generator"
+if exist "%SERVICE_PATH%\app\main.py" (
+    start "Uvicorn map_generator" cmd /k "pushd "%SERVICE_PATH%" && uvicorn app.main:app --host 127.0.0.1 --port 8006 --reload"
+) else (
+    echo WARNING: map_generator not found at %SERVICE_PATH%\app\main.py. Skipping.
+)
+timeout /t 3 /nobreak > nul 2>&1
 
 echo -------------------------------------
 echo All services started in separate windows.
-echo Each window shows the output for its service.
 echo Close each window manually to stop the services.
 echo -------------------------------------
 
 endlocal
-pause REM Keep this window open until user presses a key
+pause
