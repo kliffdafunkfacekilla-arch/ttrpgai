@@ -1,79 +1,48 @@
-AI-TTRPG Project
-This project provides a comprehensive backend system for a tabletop role-playing game (TTRPG), built using a microservice architecture. It is composed of two primary services: the Rules Engine and the Character Engine.
+# Rules Engine Service
 
-Architecture Overview
-The system is split into two distinct FastAPI applications that communicate with each other:
+## 1. Overview
 
-Rules Engine (/AI-TTRPG/rules_engine/): A stateless service that acts as a "calculator" and data source for all game mechanics. It loads all game data (stats, skills, abilities, talents) into memory on startup.
+The Rules Engine is a stateless FastAPI service that functions as the single source of truth for all game mechanics, data, and calculations. It is designed to be a fast, reliable "calculator" that other services can call to resolve game actions.
 
-Character Engine (/AI-TTRPG/character_engine/): A stateful service responsible for creating, managing, and updating persistent character sheets. It uses a SQLite database (characters.db) for storage and calls the Rules Engine to get the necessary data for calculations.
+-   **Stateless:** The service maintains no persistent state. It loads all game data from a comprehensive set of JSON files in its `data/` directory into memory on startup.
+-   **Calculator & Data Source:** Its sole purpose is to perform complex game calculations and provide detailed lookups for game data like items, skills, and status effects.
 
-1. Rules Engine
-Path: AI-TTRPG/rules_engine/
+## 2. Core Responsibilities
 
-This module is the stateless "calculator" for the Fulcrum System. It knows all the rules and performs all calculations.
+-   **Data Loading:** On startup, it loads all core game data, including stats, skills, abilities, talents, weapons, armor, injuries, and status effects, into `app.state` for quick access.
+-   **Combat Calculation:** It provides endpoints to handle all the core logic of the combat system, including initiative rolls, contested attack rolls, and damage calculation.
+-   **Rules Lookups:** Offers a wide array of endpoints to allow other services to query game data, ensuring that all parts of the system are working with the same information.
+-   **Character Vitals:** Calculates a character's starting HP and resource pools based on their final stats, a critical step during character creation.
 
-Key Features
-Data Loading: Loads all game rules from JSON files (abilities.json, kingdom_features.json, stats_and_skills.json, talents.json) into memory on startup.
+## 3. Key API Endpoints
 
-Validation Endpoints:
+### Combat Calculations & Rolls
 
-/v1/validate/skill_check: Performs a d20 skill check against a DC.
+-   `POST /v1/roll/initiative`: Calculates a participant's initiative score based on their stats.
+-   `POST /v1/roll/contested_attack`: The core combat endpoint. It takes attacker and defender stats and returns a detailed outcome (e.g., `critical_hit`, `miss`) and the margin of success.
+-   `POST /v1/calculate/damage`: Calculates the final damage dealt to a target after considering the base weapon damage, relevant stats, and the target's Damage Reduction (DR).
+-   `POST /v1/calculate/base_vitals`: Calculates a character's `max_hp` and resource pools, called by the `character_engine` during creation.
 
-/v1/validate/ability_check: Performs a d20 ability check against a tiered DC.
+### Data Lookups
 
-Lookup Endpoints:
+-   `GET /v1/lookup/all_stats`, `/all_skills`, `/all_ability_schools`: Return the master lists for these core character attributes.
+-   `GET /v1/lookup/melee_weapon/{category_name}`: Returns the complete data for a melee weapon (damage, skill used, properties).
+-   `GET /v1/lookup/armor/{category_name}`: Returns the complete data for a piece of armor (Damage Reduction, skill used).
+-   `POST /v1/lookup/injury_effects`: Returns the mechanical effects of a specific injury.
+-   `GET /v1/lookup/status_effect/{status_name}`: Returns the description and effects of a status like "Staggered" or "Bleeding".
+-   `POST /v1/lookup/talents`: Finds which talents a character is eligible for based on their current stats and skills.
 
-/v1/lookup/kingdom_feature_stats: Returns the stat modifiers for a given feature name.
+## 4. Data Sources
 
-/v1/lookup/talents: Finds eligible talents based on a character's stats and skill ranks.
+The Rules Engine is entirely data-driven. All of its knowledge comes from the JSON files located in the `AI-TTRPG/rules_engine/data/` directory. Key files include:
 
-/v1/lookup/all_stats: Returns the list of all 12 core stats.
+-   `stats_and_skills.json`: Defines the core character stats and the master list of all skills.
+-   `melee_weapons.json` & `ranged_weapons.json`: Contains the stats for all weapon categories.
+-   `armor.json`: Contains the stats for all armor categories.
+-   `talents.json`: Defines the prerequisites and effects of all available talents.
+-   `injuries.json` & `status_effects.json`: Define the mechanical impacts of combat afflictions.
+-   `skill_mappings.json`: Defines the mapping between equipment categories and the skills used to wield them.
 
-/v1/lookup/all_skills: Returns the master map of all 72 skills.
+## 5. Dependencies
 
-/v1/lookup/all_ability_schools: Returns the list of all 12 ability schools.
-
-Setup and Run
-(Instructions from AI-TTRPG/rules_engine/README.md)
-
-Navigate to the AI-TTRPG/rules_engine/ directory.
-
-Install dependencies: pip install -r requirements.txt
-
-Run the server: uvicorn main:app --reload --port 8000
-
-Test the API at http://127.0.0.1:8000/docs.
-
-2. Character Engine
-Path: AI-TTRPG/character_engine/
-
-This module is responsible for managing character sheets. It handles the creation, storage, and modification of player characters.
-
-Key Features
-Database: Uses SQLAlchemy and Alembic to manage a SQLite database (characters.db). The characters table stores the character's name, kingdom, and the entire character sheet as a JSON blob.
-
-Rules Engine Integration: This service is dependent on the Rules Engine. It makes httpx calls to the Rules Engine (assumed to be running on http://127.0.0.1:8000) to fetch rules data needed for character creation.
-
-API Endpoints:
-
-POST /v1/characters/: Creates a new character. This endpoint receives the player's choices (name, kingdom, features, skills), calls the Rules Engine to get stat mods and skill lists, calculates the final character sheet, and saves it to the database.
-
-GET /v1/characters/{char_id}: Retrieves a specific character's full data from the database.
-
-POST /v1/characters/{char_id}/add_sre: Adds a Skill Rank Experience (SRE) point to a character's skill, handles skill rank-ups, and checks for newly unlocked talents by calling the Rules Engine.
-
-Setup and Run
-(Instructions from AI-TTRPG/character_engine/README.md)
-
-Note: The Rules Engine must be running on port 8000 for this service to function.
-
-Navigate to the AI-TTRPG/character_engine/ directory.
-
-Install dependencies: pip install -r requirements.txt
-
-Initialize the database: alembic upgrade head
-
-Run the server: uvicorn app.main:app --host 127.0.0.1 --port 8001
-
-Test the API at http://127.0.0.1:8001/docs.
+The Rules Engine is a foundational service and has **no dependencies** on any other service in the system.

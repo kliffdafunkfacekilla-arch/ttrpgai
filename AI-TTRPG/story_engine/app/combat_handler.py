@@ -10,6 +10,34 @@ import logging # Import logging
 
 logger = logging.getLogger("uvicorn.error") # Get the uvicorn logger
 
+# --- Helper function to find valid spawn tiles ---
+def _find_spawn_points(map_data: List[List[int]], num_points: int) -> List[List[int]]:
+    """
+    Finds valid, random spawn points on a map.
+    Valid tiles are 0 (Grass) and 3 (Stone Floor) based on tile_definitions.json.
+    """
+    if not map_data:
+        logger.warning("Map data is empty, cannot find spawn points.")
+        return [[5, 5]] * num_points # Fallback to a default coordinate
+
+    valid_spawns = []
+    height = len(map_data)
+    width = len(map_data[0]) if height > 0 else 0
+
+    for y in range(height):
+        for x in range(width):
+            tile_id = map_data[y][x]
+            if tile_id in [0, 3]: # 0=Grass, 3=Stone Floor
+                valid_spawns.append([x, y]) # Store as [x, y]
+
+    if not valid_spawns:
+        logger.warning("No valid spawn tiles found on map. Falling back to default.")
+        return [[5, 5]] * num_points
+
+    random.shuffle(valid_spawns)
+
+    # Return the requested number of points, reusing if necessary
+    return [valid_spawns[i % len(valid_spawns)] for i in range(num_points)]
 # Helper function to extract initiative stats (adjust keys if needed)
 def _extract_initiative_stats(stats_dict: Dict) -> Dict:
     """Extracts the 6 stats needed for initiative from a stats dictionary."""
@@ -26,10 +54,11 @@ def _extract_initiative_stats(stats_dict: Dict) -> Dict:
 async def start_combat(db: Session, start_request: schemas.CombatStartRequest) -> models.CombatEncounter:
     """
     Initiates combat:
-    1. Spawns requested NPCs in world_engine.
-    2. Fetches stats for all participants (players & NPCs).
-    3. Rolls initiative for all using rules_engine.
-    4. Creates combat state records in story_engine DB.
+    1. Fetches map data to find spawn points.
+    2. Spawns requested NPCs in world_engine *with coordinates*.
+    3. Fetches stats for all participants (players & NPCs).
+    4. Rolls initiative for all using rules_engine.
+    5. Creates combat state records in story_engine DB.
     Returns the created CombatEncounter database object.
     """
     logger.info(f"Starting combat at location {start_request.location_id}")
@@ -37,17 +66,34 @@ async def start_combat(db: Session, start_request: schemas.CombatStartRequest) -
     spawned_npc_details: List[Dict] = [] # Store full details of spawned NPCs
 
     async with httpx.AsyncClient() as client:
-        # 1. Spawn NPCs requested
+
+        # --- 1. Get Location Context to find map & spawn points ---
+        spawn_points = []
+        try:
+            location_context = await services.get_world_location_context(client, start_request.location_id)
+            map_data = location_context.get("generated_map_data")
+            num_npcs = len(start_request.npc_template_ids)
+            spawn_points = _find_spawn_points(map_data, num_npcs)
+            logger.info(f"Found {len(spawn_points)} spawn points for {num_npcs} NPCs.")
+        except Exception as e:
+            logger.exception(f"Error finding spawn points: {e}. NPCs will spawn at default location.")
+            spawn_points = [[5, 5]] * len(start_request.npc_template_ids) # Fallback
+
+        # --- 2. Spawn NPCs requested ---
         logger.info(f"Spawning NPCs: {start_request.npc_template_ids}")
-        for template_id in start_request.npc_template_ids:
+        for i, template_id in enumerate(start_request.npc_template_ids):
             try:
+                # Get the coordinate for this NPC
+                coords = spawn_points[i]
+
                 spawn_data = schemas.OrchestrationSpawnNpc(
                     template_id=template_id,
-                    location_id=start_request.location_id
+                    location_id=start_request.location_id,
+                    coordinates=coords  # --- PASS COORDINATES ---
                 )
                 npc_instance_data = await services.spawn_npc_in_world(client, spawn_data)
                 spawned_npc_details.append(npc_instance_data)
-                logger.info(f"Spawned NPC instance ID: {npc_instance_data.get('id')} from template: {template_id}")
+                logger.info(f"Spawned NPC instance ID: {npc_instance_data.get('id')} at {coords} from template: {template_id}")
             except HTTPException as e:
                 logger.error(f"Failed to spawn NPC template '{template_id}': {e.detail}")
                 continue
@@ -55,7 +101,7 @@ async def start_combat(db: Session, start_request: schemas.CombatStartRequest) -
                 logger.exception(f"Unexpected error spawning NPC template '{template_id}': {e}")
                 continue
 
-        # 2. Roll Initiative for Players
+        # --- 3. Roll Initiative for Players ---
         logger.info(f"Rolling initiative for players: {start_request.player_ids}")
         for player_id_str in start_request.player_ids: # Ensure player_id is string
             try:
@@ -493,16 +539,12 @@ async def execute_combat_action(db: Session, combat_id: int, actor_id: str, acti
                 armor_stat = armor_data.get("skill_stat") # Usually Endurance or Agility from armor.json
 
                 # --- NEW Skill Mapping Logic ---
-                # TODO: FIXME: This is a significant simplification and likely incorrect!
-                # Assumes skill name matches category name. A proper implementation requires:
-                # 1. Item templates defining the specific skill used (preferred).
-                # OR
-                # 2. Adding a 'skill_used' field to rules_engine weapon/armor JSON definitions.
-                # Current assumption will lead to incorrect skill ranks being used for some items.
-                weapon_skill = weapon_category
-                armor_skill = armor_category if armor_category else "No Armor" # Use category name or default
-
-                logger.warning(f"FIXME: Using simplified skill mapping: Weapon='{weapon_skill}', Armor='{armor_skill}'")
+                weapon_skill = weapon_data.get("skill")
+                if not weapon_skill:
+                    logger.error(f"Weapon category {weapon_category} is missing a 'skill' field in rules_engine data!")
+                    return {"success": False, "message": f"Data error: Weapon {weapon_category} has no skill defined.", "log": results_log}
+                armor_skill = armor_data.get("skill", "Natural/Unarmored") # Get skill from data, default to Natural/Unarmored
+                # Skill mapping is now read directly from weapon/armor data.
                 # --- End NEW Skill Mapping ---
 
                 attack_params = {

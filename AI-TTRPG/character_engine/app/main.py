@@ -77,7 +77,10 @@ async def create_character( # Make endpoint async
 
         # --- 4. Initialize Resources ---
         logger.info("Initializing resources...")
-        final_resources = await services.get_base_resources()
+        # Call the new rules_engine endpoint to get HP and Resources
+        vitals_data = await services.get_base_vitals_from_rules(final_stats)
+        final_resources = vitals_data.get("resources")
+        max_hp = vitals_data.get("max_hp")
         logger.info("Resources initialized.")
 
         # --- 5. Get Initial Talents ---
@@ -88,31 +91,36 @@ async def create_character( # Make endpoint async
 
         # --- 6. Construct Character Sheet ---
         logger.info("Constructing character sheet...")
-        # --- Placeholder Base HP Calculation (e.g., based on Vitality) ---
-        # TODO: Move HP calculation potentially to rules_engine or refine here
-        base_hp = 10 + services.calculate_modifier(final_stats.get("Vitality", 10)) * 2 # Example rule
-        max_hp = max(5, base_hp) # Ensure minimum HP
-        # --- End Placeholder HP ---
+        # HP is now fetched from get_base_vitals_from_rules
 
         character_sheet_data = {
             "stats": final_stats,
             "skills": final_skills,
             "abilities": final_abilities,
-            "resources": final_resources,
-            "combat_stats": { # <--- ADD THIS STRUCTURE
-                "max_hp": max_hp,
+            "resources": final_resources, # Fetched from rules_engine
+            "combat_stats": {
+                "max_hp": max_hp, # Fetched from rules_engine
                 "current_hp": max_hp, # Start at full health
-                "status_effects": [] # Start with no status effects
+                "status_effects": []
             },
-            "inventory": [], # <--- Initialize inventory
-            "equipment": {}, # <--- Initialize equipment
+            "inventory": [],
+            "equipment": {},
             "choices": {
                 "features": character_request.f_stats,
                 "capstone": character_request.capstone_stat,
                 "background_skills": character_request.background_skills
             },
             "unlocked_talents": initial_talents,
-            "location": "STARTING_ZONE",
+
+            # --- MODIFICATION ---
+            # Change 'location' from a string to an object
+            # We assume the "STARTING_ZONE" (from initial_locations.json) has an ID of 1
+            # and a default spawn point of [5, 5] (x, y).
+            "location": {
+                "current_location_id": 1,
+                "coordinates": [5, 5]
+            },
+            # --- END MODIFICATION ---
         }
         logger.info("Character sheet constructed.")
 
@@ -307,3 +315,21 @@ async def apply_status(char_id: int, status_request: schemas.ApplyStatusRequest,
           raise HTTPException(status_code=400, detail="Status ID cannot be empty.")
 
      return crud.apply_status_to_character(db, db_character, status_request.status_id)
+
+# --- ADD NEW ENDPOINT FOR MOVEMENT ---
+@app.put("/v1/characters/{char_id}/location", response_model=schemas.CharacterResponse, tags=["Location"])
+async def update_character_location(
+    char_id: int,
+    location_update: schemas.LocationUpdateRequest,
+    db: Session = Depends(get_db)):
+    """Updates the character's current location ID and coordinates."""
+    db_character = crud.get_character(db, char_id=char_id)
+    if not db_character:
+        raise HTTPException(status_code=404, detail="Character not found")
+
+    return crud.update_character_location_and_coords(
+        db,
+        db_character,
+        location_update.location_id,
+        location_update.coordinates
+    )

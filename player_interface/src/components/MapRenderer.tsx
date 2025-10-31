@@ -1,10 +1,10 @@
 // src/components/MapRenderer.tsx
 import React from 'react';
-import { getTileRenderInfo, TILE_SIZE } from '../assets/assetLoader';
+// --- 1. RENAME imported function ---
+import { getSpriteRenderInfo, TILE_SIZE } from '../assets/assetLoader';
 
 interface MapRendererProps {
   mapData: number[][];
-  // We can add tileStateData later if needed, e.g. for open doors
 }
 
 const MapRenderer: React.FC<MapRendererProps> = ({ mapData }) => {
@@ -25,10 +25,10 @@ const MapRenderer: React.FC<MapRendererProps> = ({ mapData }) => {
     >
       {mapData.map((row, y) =>
         row.map((tileId, x) => {
-          const renderInfo = getTileRenderInfo(tileId);
+          // --- 2. RENAME called function ---
+          const renderInfo = getSpriteRenderInfo(tileId);
 
           if (!renderInfo) {
-            // Render a fallback or an empty space if tile info is missing
             return (
               <div
                 key={`${x}-${y}`}

@@ -2,158 +2,139 @@
 
 ## 1. High-Level Architecture
 
-The AI-TTRPG backend system is designed with a modular microservice architecture. It consists of seven distinct services, each responsible for a specific aspect of the game. This separation of concerns allows for independent development, deployment, and scaling of each component. The services are primarily built with Python and FastAPI.
+The AI-TTRPG system is a Python-based backend built on a **microservice architecture**. It consists of seven distinct FastAPI services, each handling a specific domain of the game. This design promotes modularity, independent development, and scalability.
 
-The services can be categorized as follows:
+The services are divided into two primary categories:
 
-* **Stateful Services:** These services manage persistent data and are responsible for the core state of the game. They use SQLite databases managed via SQLAlchemy and Alembic. They include:
-    * `character_engine`: Manages persistent character sheets (`characters.db`).
-    * `world_engine`: Manages the game world's state, including locations, NPCs, items, traps, regions, and factions (`world.db`).
-    * `story_engine`: Manages campaign progress, quests, story flags, and active combat state (`story.db`). Acts as an orchestrator for other services.
+*   **Stateful Services:** These three services manage persistent game data using individual SQLite databases, with schemas and migrations handled by SQLAlchemy and Alembic.
+    *   `character_engine`: Manages the creation, state, and progression of player characters.
+    *   `world_engine`: Manages the state of the game world, including locations, NPCs, and items.
+    *   `story_engine`: Manages campaign state and acts as the central orchestrator for complex actions.
 
-* **Stateless Services:** These services are responsible for generating game content and performing calculations based on data loaded from JSON files at startup. They do not maintain any persistent state of their own. They include:
-    * `rules_engine`: Provides game rules and performs calculations (skill checks, combat rolls, damage, etc.).
-    * `encounter_generator`: Generates combat and skill encounters based on tags.
-    * `npc_generator`: Procedurally generates NPC templates based on parameters.
-    * `map_generator`: Procedurally generates tile maps based on tags (currently uses placeholder logic).
+*   **Stateless Services:** These four services act as data providers and calculators. They load their necessary data from local JSON files upon startup and do not maintain any persistent state of their own.
+    *   `rules_engine`: The single source of truth for all game rules and combat calculations.
+    *   `npc_generator`: Procedurally generates NPC templates based on a set of rules.
+    *   `map_generator`: Procedurally generates tile-based maps using various algorithms.
+    *   `encounter_generator`: (Placeholder) Intended to generate pre-defined encounters.
 
-## 2. Module Breakdown
+### Inter-Service Communication Flow
 
-### `rules_engine`
+Services communicate via synchronous REST API calls, primarily orchestrated by the `story_engine`.
 
-* **Primary Purpose:** Acts as a stateless "calculator" and data source for all game mechanics. It loads extensive game rules (stats, skills, abilities, items, armor, talents, injuries, statuses) into memory on startup and provides endpoints for calculations and lookups.
-* **Key Features/API Endpoints:**
-    * **Validation:**
-        * `POST /v1/validate/skill_check`: Performs a d20 skill check.
-        * `POST /v1/validate/ability_check`: Performs a d20 ability check.
-    * **Combat Rolls & Calculations:**
-        * `POST /v1/roll/initiative`: Rolls initiative based on 6 core stats.
-        * `POST /v1/roll/contested_attack`: Performs a contested attack roll, determining outcome (hit, miss, crit, etc.).
-        * `POST /v1/calculate/damage`: Calculates final damage after dice rolls, mods, and DR.
-    * **Lookups:**
-        * `GET /v1/lookup/kingdom_feature_stats`: Returns stat mods for kingdom features.
-        * `POST /v1/lookup/talents`: Finds eligible talents.
-        * `GET /v1/lookup/all_stats`, `/all_skills`, `/all_ability_schools`: Return master lists.
-        * `GET /v1/lookup/melee_weapon/{category_name}`, `/ranged_weapon/{category_name}`, `/armor/{category_name}`: Returns stats for specific item categories.
-        * `POST /v1/lookup/injury_effects`: Returns mechanical effects for injuries.
-        * `GET /v1/lookup/status_effect/{status_name}`: Returns definition for status effects.
-* **Technologies:** FastAPI.
-* **Database:** None. Loads data from JSON files in its `data` directory on startup.
-* **Data Managed:** Game rules loaded from JSON.
+```
++------------------+      +-----------------+      +-----------------+
+| player_interface |----->|  story_engine   |----->| character_engine|
++------------------+      +-------+---------+      +-----------------+
+                              ^   |                (Player State)
+                              |   |
+                              |   v
+                              |   +---------------->+-----------------+
+                              |                    |   world_engine  |
+                              |                    +-----------------+
+                              |                    (World State)
+                              v
+                      +-------+---------+
+                      |   rules_engine  |
+                      +-----------------+
+                      (Rules & Calculations)
+```
 
-### `character_engine`
+## 2. Service Breakdown
 
-* **Primary Purpose:** A stateful service responsible for creating, managing, and updating persistent character sheets.
-* **Key Features/API Endpoints:**
-    * `POST /v1/characters/`: Creates a new character, calculating initial stats/skills/talents by calling the `rules_engine`.
-    * `GET /v1/characters/{char_id}`: Retrieves a specific character's full data.
-    * `GET /v1/characters/`: Lists existing characters.
-    * `POST /v1/characters/{char_id}/add_sre`: Adds SRE, handles rank-ups, and checks for new talents via `rules_engine`.
-    * `POST /v1/characters/{char_id}/inventory/add`, `/remove`: Manages items in the character's inventory (stored in the character sheet JSON).
-    * `PUT /v1/characters/{char_id}/apply_damage`: Applies HP damage to the character sheet.
-    * `PUT /v1/characters/{char_id}/apply_status`: Adds a status effect to the character sheet.
-* **Technologies:** FastAPI, SQLAlchemy, Alembic, httpx.
-* **Database:** SQLite (`characters.db`).
-* **Data Managed:** Character sheets stored as JSON blobs.
+### `story_engine` (Orchestrator)
 
-### `world_engine`
+*   **Purpose:** Acts as the central nervous system of the application. It directs the flow of gameplay by receiving high-level requests (e.g., "start combat," "move player") and orchestrating the necessary calls to other services.
+*   **Core Endpoints:**
+    *   `POST /v1/combat/start`: Initiates a combat encounter.
+    *   `POST /v1/combat/{id}/player_action`: Processes a player's action during combat.
+    *   `POST /v1/actions/interact`: Handles non-combat interactions with world objects.
+*   **Data:** Manages active campaign state, quests, story flags, and the state of ongoing combat encounters in `story.db`.
+*   **Dependencies:** Calls all other stateful and stateless services to execute gameplay logic.
 
-* **Primary Purpose:** A stateful service that manages the game world's state, including all locations, NPCs, items, traps, regions, and factions.
-* **Key Features/API Endpoints:**
-    * **Locations:**
-        * `POST /v1/locations/`: Creates a new location.
-        * `GET /v1/locations/{location_id}`: Retrieves data for a location (including NPCs, items, traps).
-        * `PUT /v1/locations/{location_id}/map`: Updates a location with a procedurally generated map and seed.
-        * `PUT /v1/locations/{location_id}/annotations`: Updates AI-specific notes/flags for a location.
-    * **NPCs:**
-        * `POST /v1/npcs/spawn`: Creates a new NPC instance with HP, status effects, and behavior tags.
-        * `GET /v1/npcs/{npc_id}`: Retrieves the current status of an NPC.
-        * `PUT /v1/npcs/{npc_id}`: Updates an NPC's state (HP, status effects, location).
-        * `DELETE /v1/npcs/{npc_id}`: Removes an NPC (e.g., on death).
-    * **Items:**
-        * `POST /v1/items/spawn`: Creates a new item instance (on ground or in NPC inventory).
-        * `DELETE /v1/items/{item_id}`: Removes an item (e.g., when picked up).
-    * **Traps:**
-        * `POST /v1/traps/spawn`: Creates a new trap instance at a location.
-        * `PUT /v1/traps/{trap_id}`: Updates a trap's status (armed, disarmed, triggered).
-        * `GET /v1/locations/{loc_id}/traps`: Retrieves all traps for a location.
-    * **Regions/Factions:**
-        * Endpoints exist to create and read regions and factions (primarily for setup via `preload_data.py`).
-* **Technologies:** FastAPI, SQLAlchemy, Alembic.
-* **Database:** SQLite (`world.db`).
-* **Data Managed:** State of all world entities. Includes `preload_data.py` script for initial population.
+### `world_engine` (Stateful)
 
-### `story_engine`
+*   **Purpose:** Manages the persistent state of the game world. It is the source of truth for "what is where."
+*   **Core Endpoints:**
+    *   `GET /v1/locations/{id}`: Retrieves the full state of a location, including all NPCs, items, and map data.
+    *   `POST /v1/npcs/spawn`: Creates a new NPC instance at a specific location.
+    *   `PUT /v1/npcs/{id}`: Updates an NPC's state (e.g., `current_hp`, `status_effects`, `coordinates`).
+    *   `PUT /v1/locations/{id}/annotations`: Updates the metadata for interactable objects.
+*   **Data:** Manages locations, NPCs, items, and their states in `world.db`.
 
-* **Primary Purpose:** A stateful service that manages campaign state, quests, story flags, active combat encounters, and orchestrates other services.
-* **Key Features/API Endpoints:**
-    * **Campaign/Quest/Flag Management:**
-        * CRUD endpoints for `Campaigns`, `ActiveQuests`, and `StoryFlags`.
-    * **Orchestration & Context:**
-        * `POST /v1/actions/spawn_npc`, `/spawn_item`: High-level commands calling `world_engine`.
-        * `GET /v1/context/character/{char_id}`: Fetches full character context from `character_engine`.
-        * `GET /v1/context/location/{location_id}`: Fetches full location context from `world_engine`.
-    * **Combat Orchestration:**
-        * `POST /v1/combat/start`: Initiates combat: spawns NPCs via `world_engine`, gets player/NPC stats, rolls initiative via `rules_engine`, creates `CombatEncounter` and `CombatParticipant` records in its database.
-        * `POST /v1/combat/{combat_id}/player_action`: Processes player actions (currently 'attack'), orchestrating calls to `rules_engine` (contested roll, damage calc), `character_engine` (apply damage/status to player), and `world_engine` (apply damage/status to NPC).
-* **Technologies:** FastAPI, SQLAlchemy, Alembic, httpx.
-* **Database:** SQLite (`story.db`).
-* **Data Managed:** Campaign progress, quests, flags, active combat state (turn order, participants).
+### `character_engine` (Stateful)
 
-### `encounter_generator`
+*   **Purpose:** Manages the persistent state of all player characters.
+*   **Core Endpoints:**
+    *   `POST /v1/characters/`: Creates a new character.
+    *   `GET /v1/characters/{id}`: Retrieves a character's complete sheet.
+    *   `PUT /v1/characters/{id}/apply_damage`: Updates a character's `current_hp`.
+    *   `PUT /v1/characters/{id}/location`: Updates the player's current location and coordinates.
+*   **Data:** Manages character sheets (as a single JSON blob) in `characters.db`.
 
-* **Primary Purpose:** A stateless service that generates combat and skill encounters based on tags.
-* **Key Features/API Endpoints:**
-    * `POST /v1/generate`: Takes a list of tags (e.g., ["forest", "medium", "combat"]) and returns a matching encounter structure (combat or skill challenge).
-* **Technologies:** FastAPI.
-* **Database:** None. Loads encounter templates from JSON files.
-* **Data Managed:** Encounter templates.
+### `rules_engine` (Stateless)
 
-### `npc_generator`
+*   **Purpose:** The definitive source for all game mechanics and calculations. It ensures that combat and other actions are resolved consistently according to the game's ruleset.
+*   **Core Endpoints:**
+    *   `POST /v1/roll/contested_attack`: Performs a complete attack roll, returning the outcome (e.g., "hit", "miss", "critical_hit").
+    *   `POST /v1/calculate/damage`: Calculates the final damage dealt after accounting for stats and armor.
+    *   `GET /v1/lookup/...`: A wide variety of endpoints to look up data for skills, items, statuses, etc.
+*   **Data:** Loads all game rules from its `data/` directory of JSON files on startup.
 
-* **Primary Purpose:** A stateless service that procedurally generates NPC templates.
-* **Key Features/API Endpoints:**
-    * `POST /v1/generate`: Generates an NPC template (stats, HP, basic abilities/skills, behavior tags) based on input parameters (kingdom, styles, difficulty, etc.) using rules from `generation_rules.json`.
-* **Technologies:** FastAPI, httpx (potentially for future calls to `rules_engine` for advanced generation).
-* **Database:** None. Loads generation rules from JSON files.
-* **Data Managed:** NPC generation rules.
+### `npc_generator` (Stateless)
 
-### `map_generator`
+*   **Purpose:** Procedurally generates NPC stat blocks to be used by the `story_engine`.
+*   **Core Endpoints:**
+    *   `POST /v1/generate`: Creates a new NPC template based on input parameters like kingdom, style, and difficulty.
+*   **Data:** Loads generation rules from `generation_rules.json`.
+*   **Dependencies:** Calls the `rules_engine` to get the master list of skills, ensuring generated NPCs are compatible with game rules.
 
-* **Primary Purpose:** A stateless service intended to procedurally generate tile maps.
-* **Key Features/API Endpoints:**
-    * `POST /v1/generate`: Generates a map based on tags, seed, and dimensions. **Currently uses placeholder random generation logic.**
-* **Technologies:** FastAPI.
-* **Database:** None. Loads algorithm definitions and tile definitions from JSON files.
-* **Data Managed:** Map generation algorithms (definitions, not implementations yet) and tile data.
+### `map_generator` (Stateless)
 
-## 3. Inter-Service Communication
+*   **Purpose:** Procedurally generates tile-based maps for game locations.
+*   **Core Endpoints:**
+    *   `POST /v1/generate`: Creates a new tile map using a specified algorithm (e.g., Cellular Automata, Drunkard's Walk).
+*   **Data:** Loads algorithm parameters and tile definitions from JSON files.
 
-Services communicate via synchronous HTTP API calls using `httpx`. Key interactions:
+### `encounter_generator` (Stateless)
 
-* **`character_engine` -> `rules_engine`**: Fetches rules (stats, skills, features, talents) needed for character creation and SRE updates.
-* **`story_engine` -> `rules_engine`**: Calls for initiative rolls, contested attacks, damage calculations, injury/status lookups, and item data during combat orchestration.
-* **`story_engine` -> `character_engine`**: Fetches character context; applies damage and status effects to characters during combat.
-* **`story_engine` -> `world_engine`**: Fetches location/NPC context; spawns NPCs/items; applies damage and status effects to NPCs during combat; potentially updates trap status or AI annotations based on game events.
-* **Potential Future:** `story_engine` or AI DM likely calls generator services (`encounter_generator`, `npc_generator`, `map_generator`) as needed, though direct calls are not explicitly shown in current `story_engine` code. `npc_generator` might call `rules_engine` for advanced generation.
+*   **Purpose:** A placeholder service intended to provide pre-defined combat or skill-based encounters.
+*   **Core Endpoints:**
+    *   `POST /v1/generate`: (Not fully utilized) Returns an encounter structure from a JSON file.
 
-## 4. Project Goals
+## 3. Core Gameplay Loops
 
-* **Create a Modular AI DM Toolkit:** Build a flexible backend for an AI Dungeon Master.
-* **Separation of Concerns:** Clearly define responsibilities for rules, state management, orchestration, and generation.
-* **Procedural Generation:** Enable dynamic content creation for NPCs, encounters, and maps.
-* **Implement Core TTRPG Mechanics:** Provide robust support for character progression, combat, and world interaction based on the defined ruleset.
+### Exploration and Movement
 
-## 5. Current Status
+1.  The `player_interface` renders the current location by fetching data from the `story_engine`, which in turn gets the complete location context (map, NPCs, items) from the `world_engine`.
+2.  The player presses a movement key (e.g., 'W').
+3.  The `player_interface` sends the new coordinates to the `character_engine`'s `PUT /v1/characters/{id}/location` endpoint, persisting the player's new position.
+4.  The interface re-renders the scene.
 
-The project is functional, with all seven microservices running and core communication established. Significant progress has been made on implementing core gameplay features beyond the initial service setup.
+### Turn-Based Combat
 
-* **`rules_engine`:** Functionally rich, providing calculations and lookups for core stats, skills, talents, items, and detailed combat mechanics (initiative, attack, damage, injuries, statuses).
-* **`character_engine`:** Supports character creation, SRE progression (including talent checks), inventory management, and receiving combat effects (damage, status). Character listing is available.
-* **`world_engine`:** Manages world state effectively, including locations, NPCs (with behavior tags), items, and newly added traps. Supports map/annotation updates and data preloading.
-* **`story_engine`:** Core campaign/quest/flag management is functional. **Crucially, it now orchestrates turn-based combat**, initiating encounters and resolving player attack actions by coordinating calls across other services.
-* **`encounter_generator`:** Functionally complete for its defined scope (selecting encounters based on tags).
-* **`npc_generator`:** Core procedural generation logic is implemented based on defined rules, producing basic NPC templates.
-* **`map_generator`:** Service is running, but **core procedural generation algorithms are not yet implemented** (uses placeholder logic).
+This is the most complex interaction, showcasing the full orchestration pattern.
 
-**Overall:** The backend foundation is solid, and key gameplay systems, particularly combat, are integrated across the relevant services. The primary remaining backend tasks involve implementing the actual map generation algorithms and potentially adding more complex interaction logic and basic NPC AI behavior within the `story_engine`. The next major development phase focuses on building the `player_interface` and integrating the AI DM. The `start_services.bat` script allows running the entire system.
+1.  **Initiation:** The player moves into a tile occupied by an "aggressive" NPC. The `player_interface` detects this and calls the `story_engine`'s `POST /v1/combat/start` endpoint.
+2.  **Setup:** The `story_engine` orchestrates the entire combat setup:
+    *   It fetches map data from the `world_engine` to determine valid spawn points for NPCs.
+    *   It calls the `world_engine` to officially spawn the NPC instances into the world state with coordinates.
+    *   It retrieves the full context for all participants (player data from `character_engine`, NPC data from `world_engine`).
+    *   It calls the `rules_engine`'s `/v1/roll/initiative` endpoint for every participant.
+    *   It saves the full encounter state, including the initiative-sorted turn order, to its own `story.db`.
+3.  **Player Turn:** The `player_interface` switches to a combat view. The player clicks an "Attack" button, targeting an NPC.
+    *   The interface calls the `story_engine`'s `POST /v1/combat/{id}/player_action` endpoint with the action details.
+4.  **Action Resolution:** The `story_engine` resolves the attack:
+    *   It fetches the player's equipped weapon and the target's armor from the `character_engine` and `world_engine`.
+    *   It retrieves the detailed stats for that weapon and armor from the `rules_engine`.
+    *   It sends all relevant stats (attacker's skill, defender's armor stat, etc.) to the `rules_engine`'s `/v1/roll/contested_attack` endpoint.
+    *   If the attack is a hit, it calls the `rules_engine`'s `/v1/calculate/damage` endpoint.
+    *   Finally, it applies the damage by calling the appropriate service (`world_engine` for NPCs, `character_engine` for players).
+5.  **Turn Advancement:** The `story_engine` records the results in a combat log, advances the turn index, and returns the log to the `player_interface`.
+6.  **NPC Turn:** If the new turn belongs to an NPC, the `story_engine` runs a simple AI (`determine_npc_action`) and executes the NPC's turn by following the same action resolution steps.
+7.  **Conclusion:** The loop continues until one side is defeated. The `story_engine` marks the combat as "finished," and the `player_interface` returns to the exploration screen.
+
+## 4. Getting Started
+
+-   **Dependencies:** Each service has its own `requirements.txt` file.
+-   **Running the System:** The `start_services.bat` script in the root directory is configured to launch all seven services, each on its own designated port (8000-8006).
+-   **Player Interface:** A React/TypeScript frontend is located in the `player_interface` directory. It must be started separately (`npm run dev`) and connects to the running backend services.

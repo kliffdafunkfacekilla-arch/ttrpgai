@@ -16,7 +16,13 @@ export interface CharacterSheet {
   equipment: Record<string, any>; // Consider defining more strictly (e.g., { slot: { item_id: string, name: string } })
   choices: Record<string, any>; // Stores creation choices
   unlocked_talents: Array<{ name: string; source: string; effect: string }>;
-  location: string; // Current location ID or name
+
+  // --- MODIFICATION ---
+  location: {
+    current_location_id: number;
+    coordinates: [number, number]; // [x, y]
+  };
+  // --- END MODIFICATION ---
 }
 
 // Response from GET /v1/context/character/{char_id}
@@ -43,6 +49,7 @@ export interface ItemInstance {
   quantity: number;
   location_id?: number | null; // Set if on the ground
   npc_id?: number | null; // Set if in NPC inventory
+  coordinates?: [number, number] | null;
 }
 
 // Represents NPC instances within a location
@@ -58,6 +65,7 @@ export interface NpcInstance {
   behavior_tags: string[];
   stats?: Record<string, number>; // Stats might be included directly
   skills?: Record<string, number>; // Skills might be included directly
+  coordinates?: [number, number] | null;
 }
 
 // Represents trap instances within a location
@@ -105,12 +113,13 @@ export interface InteractionResponse {
 }
 
 // --- Combat Types ---
-// Payload for POST /v1/combat/start (add if needed)
-// export interface CombatStartRequestPayload {
-//    location_id: number;
-//    player_ids: string[];
-//    npc_template_ids: string[];
-// }
+// Payload for POST /v1/combat/start
+// --- ADD THIS INTERFACE ---
+export interface CombatStartRequestPayload {
+   location_id: number;
+   player_ids: string[];     // e.g., ["player_1"]
+   npc_template_ids: string[]; // e.g., ["goblin_scout", "goblin_scout"]
+}
 
 // Represents a participant within the CombatEncounterResponse
 export interface CombatParticipantResponse {

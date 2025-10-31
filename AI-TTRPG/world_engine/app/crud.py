@@ -83,9 +83,11 @@ def spawn_npc(db: Session, npc: schemas.NpcSpawnRequest) -> models.NpcInstance:
         template_id=npc.template_id,
         location_id=npc.location_id,
         name_override=npc.name_override,
-        current_hp=npc.current_hp or 10, # Placeholder default
-        max_hp=npc.max_hp or 10, # Placeholder default
-        behavior_tags=npc.behavior_tags
+        current_hp=npc.current_hp or 10,
+        max_hp=npc.max_hp or 10,
+        behavior_tags=npc.behavior_tags,
+        # --- ADD THIS LINE ---
+        coordinates=npc.coordinates # Save the coordinates
     )
     db.add(db_npc)
     db.commit()
@@ -105,9 +107,12 @@ def update_npc(db: Session, npc_id: int, updates: schemas.NpcUpdate) -> Optional
         for key, value in update_data.items():
             setattr(db_npc, key, value)
 
-        # This makes sure JSON fields save correctly
         if "status_effects" in update_data:
             flag_modified(db_npc, "status_effects")
+
+        # --- ADD THIS BLOCK ---
+        if "coordinates" in update_data:
+            flag_modified(db_npc, "coordinates")
 
         db.commit()
         db.refresh(db_npc)
