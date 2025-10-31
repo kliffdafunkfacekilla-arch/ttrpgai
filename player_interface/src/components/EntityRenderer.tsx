@@ -55,9 +55,9 @@ const EntityRenderer: React.FC<EntityRendererProps> = ({ npcs, items, player }) 
       {/* Render NPCs */}
       {npcs.map((npc) => {
         // --- 4. FIX HACK: Use the new coordinates field ---
-        const { coordinates } = (npc as any);
+        const { coordinates } = npc;
         if (!coordinates || !Array.isArray(coordinates) || coordinates.length < 2) {
-            // ... (console.warn) ...
+            console.warn(`NPC ${npc.template_id} (ID: ${npc.id}) has no coordinates. Skipping render.`);
             return null;
         }
 
@@ -68,8 +68,8 @@ const EntityRenderer: React.FC<EntityRendererProps> = ({ npcs, items, player }) 
           top: `${coordinates[1] * TILE_SIZE}px`,
           width: `${TILE_SIZE}px`,
           height: `${TILE_SIZE}px`,
-          backgroundImage: `url(${renderInfo.sheetUrl})`,
-          backgroundPosition: `-${renderInfo.sx}px -${renderInfo.sy}px`,
+          backgroundImage: `url(${renderInfo?.sheetUrl})`,
+          backgroundPosition: `-${renderInfo?.sx}px -${renderInfo?.sy}px`,
         };
 
         return (
@@ -85,13 +85,17 @@ const EntityRenderer: React.FC<EntityRendererProps> = ({ npcs, items, player }) 
       {/* Render Items */}
       {items.map((item) => {
         // --- 5. FIX HACK: Use the new coordinates field ---
-        const { coordinates } = (item as any);
+        const { coordinates } = item;
         if (!coordinates || !Array.isArray(coordinates) || coordinates.length < 2) {
-            // ... (console.warn) ...
+            console.warn(`Item ${item.template_id} (ID: ${item.id}) has no coordinates. Skipping render.`);
             return null;
         }
 
         const renderInfo = getSpriteRenderInfo(item.template_id);
+        if (!renderInfo) {
+             console.warn(`No render info for Item template: ${item.template_id}`);
+             return null;
+        }
         // ... (render logic) ...
         const style = {
           left: `${coordinates[0] * TILE_SIZE + TILE_SIZE / 4}px`,
