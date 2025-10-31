@@ -1,4 +1,4 @@
-from rules_engine.core import calculate_skill_check
+from rules_engine.app.core import calculate_skill_check
 import random
 
 def test_calculate_skill_check_success():

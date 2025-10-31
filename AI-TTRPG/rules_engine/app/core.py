@@ -4,7 +4,6 @@ import math
 from typing import Dict, List, Optional, Any
 # Use relative import for models within the same package
 from . import models
-from .data_loader import INJURY_EFFECTS, STATUS_EFFECTS
 from .models import RollResult, TalentInfo, FeatureStatsResponse
 
 
@@ -249,13 +248,13 @@ def get_skill_for_category(category_name: str, skill_map: Dict[str, str]) -> str
     return skill_map[category_name]
 
 
-def get_status_effect(status_name: str) -> models.StatusEffectResponse:
+def get_status_effect(status_name: str, status_effects_data: Dict[str, Any]) -> models.StatusEffectResponse:
     """Looks up the definition and effects for a specific status by name from loaded data."""
 
     status_data = None
     found_key = None
     # Case-insensitive lookup
-    for key, value in STATUS_EFFECTS.items():
+    for key, value in status_effects_data.items():
         if key.lower() == status_name.lower():
             status_data = value
             found_key = key # Store the original key casing
@@ -283,9 +282,9 @@ def get_status_effect(status_name: str) -> models.StatusEffectResponse:
         print(f"Error creating StatusEffectResponse for '{found_key}': {e}")
         raise ValueError(f"Data structure mismatch for status '{found_key}'. Check JSON against models.py. Error: {e}")
 
-def get_injury_effects(request: models.InjuryLookupRequest) -> models.InjuryEffectResponse:
+def get_injury_effects(request: models.InjuryLookupRequest, injury_effects_data: Dict[str, Any]) -> models.InjuryEffectResponse:
     """Looks up injury effects from the loaded injury data."""
-    location_data = INJURY_EFFECTS.get(request.location)
+    location_data = injury_effects_data.get(request.location)
     if not location_data:
         raise ValueError(f"Invalid injury location: '{request.location}'")
 
