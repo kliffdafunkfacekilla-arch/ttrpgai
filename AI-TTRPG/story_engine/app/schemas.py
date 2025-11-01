@@ -131,4 +131,13 @@ class CombatEncounter(BaseModel):
 class PlayerActionRequest(BaseModel):
     action: str # e.g., "attack", "move", "use_ability", "wait"
     target_id: Optional[str] = None # e.g., "npc_12", "player_2"
+    ability_id: Optional[str] = None
+    item_id: Optional[str] = None
     # Add other fields like ability_id, position, etc. as needed
+
+class PlayerActionResponse(BaseModel):
+    success: bool
+    message: str
+    log: list[str]
+    new_turn_index: int
+    combat_over: bool = False

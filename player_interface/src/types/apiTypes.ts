@@ -149,16 +149,13 @@ export interface PlayerActionRequestPayload {
 }
 
 // Response from POST /v1/combat/{combat_id}/player_action
-export interface PlayerActionResponse {
-    success: boolean; // Did the action processing succeed (even if the action missed)?
-    message: string; // Primary outcome message (e.g., "Hit!", "Miss!")
-    log: string[]; // Detailed step-by-step log of what happened
-    damage_dealt?: number;
-    target_hp_remaining?: number;
-    outcome?: string; // e.g., "hit", "miss", "critical_hit" from rules_engine
-    damage_details?: any[]; // Raw damage calculation details if needed
-    // Add fields for status effects applied, etc. if returned by backend
-}
+export type PlayerActionResponse = {
+    success: boolean;
+    message: string;
+    log: string[];
+    new_turn_index: number;
+    combat_over: boolean;
+};
 
 // --- StoryFlag Types ---
 // Represents a single story flag
