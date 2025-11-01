@@ -49,6 +49,7 @@ class StoryFlag(Base):
     flag_name = Column(String, unique=True, index=True)
     value = Column(String, nullable=True)
 
+<<<<<<< Updated upstream
 class CombatEncounter(Base):
     __tablename__ = "combat_encounters"
     id = Column(Integer, primary_key=True, index=True)
@@ -69,3 +70,38 @@ class CombatParticipant(Base):
 
     combat_id = Column(Integer, ForeignKey("combat_encounters.id"))
     encounter = relationship("CombatEncounter", back_populates="participants")
+=======
+# --- NEW COMBAT MODELS ---
+
+class CombatEncounter(Base):
+    __tablename__ = "combat_encounters"
+
+    id = Column(Integer, primary_key=True, index=True)
+    # Foreign key to world_engine's location. We just store the ID.
+    location_id = Column(Integer, index=True)
+    # "active", "completed", "fled"
+    status = Column(String, default="active", index=True)
+
+    # List of actor IDs (e.g., ["player_1", "npc_goblin_1", "npc_goblin_2"])
+    turn_order = Column(JSON, default=[])
+    current_turn_index = Column(Integer, default=0)
+
+    # This links an Encounter to its many Participants
+    participants = relationship("CombatParticipant", back_populates="encounter", cascade="all, delete-orphan")
+
+class CombatParticipant(Base):
+    __tablename__ = "combat_participants"
+
+    id = Column(Integer, primary_key=True, index=True)
+    
+    # Link to the parent CombatEncounter
+    combat_id = Column(Integer, ForeignKey("combat_encounters.id"))
+    encounter = relationship("CombatEncounter", back_populates="participants")
+
+    # The unique ID for the actor (e.g., "player_1" or "npc_goblin_1")
+    actor_id = Column(String, index=True)
+    # "player" or "npc"
+    actor_type = Column(String)
+    
+    initiative_roll = Column(Integer)
+>>>>>>> Stashed changes

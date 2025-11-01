@@ -14,16 +14,15 @@ if not exist "%SERVICES_PARENT_DIR%" (
 
 echo Starting all 7 services...
 echo.
-
 REM --- We are now starting each service manually to avoid batch file bugs ---
 
-REM 1. rules_engine (Special case: main.py is in root)
+REM 1. rules_engine (FIXED: Pointing directly to app.main:app)
 echo Starting rules_engine on port 8000...
 set "SERVICE_PATH=%SERVICES_PARENT_DIR%\rules_engine"
-if exist "%SERVICE_PATH%\main.py" (
-    start "Uvicorn rules_engine" cmd /k "pushd "%SERVICE_PATH%" && uvicorn main:app --host 127.0.0.1 --port 8000 --reload"
+if exist "%SERVICE_PATH%\app\main.py" (
+    start "Uvicorn rules_engine" cmd /k "pushd "%SERVICE_PATH%" && uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload"
 ) else (
-    echo WARNING: rules_engine not found at %SERVICE_PATH%\main.py. Skipping.
+    echo WARNING: rules_engine not found at %SERVICE_PATH%\app\main.py. Skipping.
 )
 timeout /t 3 /nobreak > nul 2>&1
 
