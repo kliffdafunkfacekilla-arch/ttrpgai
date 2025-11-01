@@ -4,60 +4,101 @@ import './App.css';
 import MainMenuScreen from './screens/MainMenuScreen';
 import ExplorationScreen from './screens/ExplorationScreen';
 import CombatScreen from './screens/CombatScreen';
-import { type CombatEncounterResponse } from './types/apiTypes';
+import {
+    type CombatEncounterResponse,
+    type CharacterContextResponse
+} from './types/apiTypes';
 
-type GameScreen = 'MainMenu' | 'Exploration' | 'Combat' | 'CharacterSheet';
+import CharacterSelectScreen from './screens/CharacterSelectScreen';
+import CharacterCreateScreen from './screens/CharacterCreateScreen';
+// --- 2. IMPORT THE NEW SCREEN ---
+import CharacterSheetScreen from './screens/CharacterSheetScreen';
+
+type GameScreen = 'MainMenu' | 'CharacterSelect' | 'CharacterCreate' | 'Exploration' | 'Combat' | 'CharacterSheet';
 
 function App() {
     const [currentScreen, setCurrentScreen] = useState<GameScreen>('MainMenu');
     const [combatContext, setCombatContext] = useState<CombatEncounterResponse | null>(null);
+    const [activeCharacter, setActiveCharacter] = useState<CharacterContextResponse | null>(null);
 
-    // (handleStartNewGame and handleLoadGame are unchanged) ...
-    const handleStartNewGame = () => {
-        console.log("Starting New Game... Navigating to Exploration screen.");
-        setCurrentScreen('Exploration');
-    };
+    // --- 1. ADD NEW STATE ---
+    const [showCharacterSheet, setShowCharacterSheet] = useState(false);
 
-    const handleLoadGame = () => {
-        console.log("Loading Game...");
-        alert("Load Game clicked (Not implemented)");
-    };
-
+    // ... (handleCombatStart, handleCombatEnd, handleCharacterSelected, etc. are unchanged)
     const handleCombatStart = (combatData: CombatEncounterResponse) => {
-        console.log(`App: Starting combat ${combatData.id}`);
         setCombatContext(combatData);
         setCurrentScreen('Combat');
     };
-
-    // --- 1. ADD HANDLER FOR ENDING COMBAT ---
     const handleCombatEnd = () => {
-        console.log("App: Combat has ended. Returning to Exploration.");
-        setCombatContext(null); // Clear combat state
-        setCurrentScreen('Exploration'); // Switch back to exploration
+        setCombatContext(null);
+        setCurrentScreen('Exploration');
+    };
+    const handleCharacterSelected = (character: CharacterContextResponse) => {
+        console.log(`Character selected: ${character.id} - ${character.name}`);
+        setActiveCharacter(character);
+        setCurrentScreen('Exploration');
+    };
+
+    const handleCharacterCreated = (character: CharacterContextResponse) => {
+        console.log(`Character created: ${character.id} - ${character.name}`);
+        setActiveCharacter(character);
+        setCurrentScreen('Exploration');
+    };
+
+    const handleExitToMenu = () => {
+        console.log("Exiting to Main Menu...");
+        setActiveCharacter(null);
+        setCombatContext(null);
+        setCurrentScreen('MainMenu');
     };
 
     const renderScreen = () => {
         switch (currentScreen) {
             case 'MainMenu':
                 return <MainMenuScreen
-                          onStartNewGame={handleStartNewGame}
-                          onLoadGame={handleLoadGame}
-                        />;
-            case 'Exploration':
-                return <ExplorationScreen onCombatStart={handleCombatStart} />;
+                    onStartNewGame={() => setCurrentScreen('CharacterCreate')}
+                    onLoadGame={() => setCurrentScreen('CharacterSelect')}
+                />;
+            case 'CharacterSelect':
+                return <CharacterSelectScreen
+                    onCharacterSelected={handleCharacterSelected}
+                    onBack={() => setCurrentScreen('MainMenu')}
+                />;
 
-            case 'Combat':
-                if (!combatContext) {
-                    // This should not happen, but good to have a fallback
-                    console.error("In Combat screen but no combat context!");
-                    setCurrentScreen('Exploration'); // Go back
+            case 'CharacterCreate':
+                return <CharacterCreateScreen
+                    onCharacterCreated={handleCharacterCreated}
+                    onBack={() => setCurrentScreen('MainMenu')}
+                />;
+            case 'Exploration':
+                if (!activeCharacter) {
+                    // ... (fallback unchanged)
+                    console.error("In Exploration screen but no active character!");
+                    handleExitToMenu();
                     return null;
                 }
-                // --- 2. PASS NEW HANDLER TO COMBAT SCREEN ---
+                return <ExplorationScreen
+                    key={activeCharacter.id}
+                    activeCharacter={activeCharacter}
+                    onCombatStart={handleCombatStart}
+                    onExitToMenu={handleExitToMenu}
+                    // --- 3. PASS THE HANDLER DOWN ---
+                    onShowCharacterSheet={() => setShowCharacterSheet(true)}
+                />;
+
+            case 'Combat':
+                if (!combatContext || !activeCharacter) {
+                    // ... (fallback unchanged)
+                    console.error("In Combat screen but no combat or character context!");
+                    handleExitToMenu();
+                    return null;
+                }
                 return <CombatScreen
-                          combatContext={combatContext}
-                          onCombatEnd={handleCombatEnd}
-                        />;
+                    combatContext={combatContext}
+                    activeCharacter={activeCharacter}
+                    onCombatEnd={handleCombatEnd}
+                // We could also pass onShowCharacterSheet here if we want to allow it in combat
+                />;
 
             default:
                 return <div>Unknown Screen</div>;
@@ -66,7 +107,20 @@ function App() {
 
     return (
         <div className="app-container w-screen h-screen bg-gray-900 text-white overflow-hidden">
+            {/* The main screen is rendered here */}
             {renderScreen()}
+
+            {/* --- 4. ADD OVERLAY RENDER LOGIC --- */}
+            {/* If showCharacterSheet is true AND we have a character, render the overlay */}
+            {showCharacterSheet && activeCharacter && (
+                // This div is the semi-transparent backdrop
+                <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-75 z-40">
+                    <CharacterSheetScreen
+                        character={activeCharacter}
+                        onClose={() => setShowCharacterSheet(false)}
+                    />
+                </div>
+            )}
         </div>
     );
 }
