@@ -2,7 +2,8 @@
 import React, { useState, useEffect, useCallback } from "react";
 import {
   getLocationContext,
-  getCharacterContext,
+  // --- MODIFIED: Use fetchCharacterContext ---
+  fetchCharacterContext,
   updatePlayerLocation,
   postInteraction,
   startCombat,
@@ -19,19 +20,18 @@ import MapRenderer from "../components/MapRenderer";
 import EntityRenderer from "../components/EntityRenderer";
 import { getTileDefinition } from "../assets/assetLoader";
 
-// --- 1. UPDATE PROPS INTERFACE ---
 interface ExplorationScreenProps {
   onCombatStart: (combatData: CombatEncounterResponse) => void;
   activeCharacter: CharacterContextResponse;
   onExitToMenu: () => void;
-  onShowCharacterSheet: () => void; // <-- ADD THIS
+  onShowCharacterSheet: () => void;
 }
 
 const ExplorationScreen: React.FC<ExplorationScreenProps> = ({
   onCombatStart,
   activeCharacter,
   onExitToMenu,
-  onShowCharacterSheet, // <-- GET PROP
+  onShowCharacterSheet,
 }) => {
   const [location, setLocation] = useState<LocationContextResponse | null>(
     null,
@@ -58,6 +58,7 @@ const ExplorationScreen: React.FC<ExplorationScreenProps> = ({
         addLog(`Loading data for ${player.name}...`);
         const locationId = player.character_sheet.location.current_location_id;
         addLog(`Loading location ${locationId}...`);
+        // This function will now exist
         const locData = await getLocationContext(String(locationId));
         setLocation(locData);
         addLog(`You have entered the ${locData.name}.`);
@@ -140,6 +141,7 @@ const ExplorationScreen: React.FC<ExplorationScreenProps> = ({
       }
       try {
         addLog(`Moving to [${newX}, ${newY}]...`);
+        // This function will now exist
         const updatedPlayer = await updatePlayerLocation(
           player.id,
           String(locId),
@@ -193,7 +195,8 @@ const ExplorationScreen: React.FC<ExplorationScreenProps> = ({
         const newLocData = await getLocationContext(String(locId));
         setLocation(newLocData);
         if (result.items_added && result.items_added.length > 0) {
-          const newPlayerData = await getCharacterContext(String(player.id));
+          // --- MODIFIED: Use fetchCharacterContext ---
+          const newPlayerData = await fetchCharacterContext(String(player.id));
           setPlayer(newPlayerData);
         }
       }
@@ -208,14 +211,12 @@ const ExplorationScreen: React.FC<ExplorationScreenProps> = ({
     }
   }, [player, location, isTakingTurn, addLog]);
 
-  // --- 2. ADD NEW HANDLER FOR SHOWING CHARACTER SHEET ---
   const handleShowCharacterSheet = useCallback(() => {
     if (isTakingTurn) return; // Don't open menu while moving
     addLog("Opening Character Sheet...");
     onShowCharacterSheet(); // Call the prop passed down from App.tsx
   }, [isTakingTurn, onShowCharacterSheet, addLog]);
 
-  // --- 3. UPDATE KEYDOWN EFFECT ---
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (isTakingTurn) return;
@@ -237,7 +238,7 @@ const ExplorationScreen: React.FC<ExplorationScreenProps> = ({
           break;
         case "c":
           handleShowCharacterSheet();
-          break; // <-- ADD THIS CASE
+          break;
       }
     };
     window.addEventListener("keydown", handleKeyDown);
@@ -270,7 +271,6 @@ const ExplorationScreen: React.FC<ExplorationScreenProps> = ({
 
   return (
     <div className="exploration-screen flex flex-col h-full w-full p-4 box-border">
-      {/* --- 4. UPDATE HEADER --- */}
       <header className="mb-4 flex justify-between items-center">
         <div>
           <h1 className="text-2xl font-bold">
@@ -281,9 +281,7 @@ const ExplorationScreen: React.FC<ExplorationScreenProps> = ({
             {player.character_sheet.location.coordinates.join(", ")}]
           </p>
         </div>
-        {/* Button container */}
         <div className="flex space-x-2">
-          {/* ADD THIS BUTTON */}
           <button
             onClick={handleShowCharacterSheet}
             className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded-lg"
