@@ -7,7 +7,7 @@ import os # Import os
 from . import models, schemas
 
 # --- ADDED: Rules Engine Configuration ---
-RULES_ENGINE_URL = os.getenv("RULES_ENGINE_URL", "http://127.0.0.1:8000/v1")
+RULES_ENGINE_URL = os.getenv("RULES_ENGINE_URL", "http://rules_engine:8000/v1")
 CLIENT_TIMEOUT = 10.0
 print(f"Character Engine configured to use Rules Engine at: {RULES_ENGINE_URL}")
 
@@ -62,41 +62,6 @@ def get_character_context(db_character: models.Character) -> schemas.CharacterCo
     )
 
 # --- ADDED: Helper functions for new creation logic ---
-async def _call_rules_engine(method: str, endpoint: str, params: Dict = None, json_data: Dict = None) -> Any:
-    """Generic async helper to call the Rules Engine."""
-    url = f"{RULES_ENGINE_URL}{endpoint}"
-    try:
-        async with httpx.AsyncClient() as client:
-            logger.info(f"Calling Rules Engine: {method} {url}")
-            if method.upper() == "GET":
-                response = await client.get(url, params=params)
-            elif method.upper() == "POST":
-                response = await client.post(url, json=json_data, params=params)
-            else:
-                raise ValueError(f"Unsupported HTTP method: {method}")
-
-            response.raise_for_status() # Raise exception for 4xx/5xx errors
-            logger.info(f"Rules Engine response status: {response.status_code}")
-            return response.json()
-    except httpx.RequestError as e:
-        logger.error(f"Error connecting to Rules Engine at {e.request.url!r}: {e}")
-        # Re-raise as an HTTPException for FastAPI to handle
-        from fastapi import HTTPException
-        raise HTTPException(status_code=503, detail=f"Rules Engine service unavailable: {e}")
-    except httpx.HTTPStatusError as e:
-        logger.error(f"Rules Engine returned error {e.response.status_code}: {e.response.text}")
-        from fastapi import HTTPException
-        raise HTTPException(status_code=e.response.status_code, detail=f"Rules Engine error: {e.response.text}")
-
-async def get_eligible_talents(stats: Dict[str, int], skills: Dict[str, int]) -> List[Dict]:
-    """Fetches eligible talents from the Rules Engine."""
-    request_data = {"stats": stats, "skills": skills} # Pass skill ranks directly
-    return await _call_rules_engine(
-        "POST",
-        "/v1/lookup/talents",
-        json_data=request_data
-    )
-
 def _get_rules_engine_data() -> Dict[str, Any]:
     """
     Fetches all necessary data from the rules_engine service.
@@ -132,7 +97,6 @@ def _get_rules_engine_data() -> Dict[str, Any]:
         # This returns a list. Let's convert to a dict for easy lookup.
         all_talents_list = response.json()
         rules_data["all_talents_map"] = {t['name']: t for t in all_talents_list}
-        print(f"all_talents_map: {rules_data['all_talents_map']}")
 
         # Fetch full ability school data
         school_details = {}
@@ -186,7 +150,7 @@ def _apply_mods(stats: Dict[str, int], mods: Dict[str, List[str]]):
                 print(f"Warning: Stat '{stat_name}' in mods not found in base stats.")
 
 # --- MODIFIED: create_character ---
-def create_character(db: Session, character: schemas.CharacterCreate) -> schemas.CharacterContextResponse:
+def create_character(db: Session, character: schemas.CharacterCreate) -> models.Character:
     """
     Creates a new character in the database after calculating all
     stats and vitals based on user choices.
@@ -298,7 +262,7 @@ def create_character(db: Session, character: schemas.CharacterCreate) -> schemas
         db.commit()
         db.refresh(db_character)
         print(f"Successfully created character {db_character.id} in database.")
-        return get_character_context(db_character)
+        return db_character
     except Exception as e:
         db.rollback()
         print(f"Database error on character save: {e}")

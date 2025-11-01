@@ -61,10 +61,38 @@ def _process_kingdom_features() -> Dict[str, Any]:
                     feature_name = feature.get("name")
                     if feature_name:
                         if "mods" in feature:
+                             # --- MODIFIED ---
+                             # We still correct the mods here for the flat map
                              feature["mods"] = _correct_stat_names_in_mods(feature["mods"])
                         feature_stats_map[feature_name] = feature
     print(f"Processed {len(feature_stats_map)} kingdom features into flat map (Vitality corrected).")
     return feature_stats_map
+
+# --- ADDED FUNCTION ---
+def _load_and_correct_kingdom_features() -> Dict[str, Any]:
+    """Loads kingdom features, corrects stat names, but preserves hierarchy."""
+    kingdom_data = _load_json("kingdom_features.json")
+    if not isinstance(kingdom_data, dict):
+        print("FATAL ERROR: kingdom_features.json did not load as a dictionary.")
+        return {}
+
+    print("Correcting stat names in full kingdom_features.json structure...")
+    # Iterate through the full structure (e.g., "F1", "F2"...)
+    for feature_key, kingdoms in kingdom_data.items():
+        if not isinstance(kingdoms, dict):
+            continue
+        # Iterate kingdoms ("Mammal", "Reptile"...) or "All"
+        for kingdom_name, choices_list in kingdoms.items():
+            if not isinstance(choices_list, list):
+                continue
+            # Iterate choices
+            for choice in choices_list:
+                if isinstance(choice, dict) and "mods" in choice:
+                    choice["mods"] = _correct_stat_names_in_mods(choice["mods"])
+
+    print("Full kingdom_features.json structure corrected.")
+    return kingdom_data
+# --- END ADDED FUNCTION ---
 
 def _process_skills() -> tuple[List[str], Dict[str, List[str]], Dict[str, Dict[str, str]]]:
     """Processes skills AND RETURNS stats list, categories dict, and all_skills dict."""
@@ -100,6 +128,7 @@ ALL_SKILLS: Dict[str, Dict[str, str]] = {}
 ABILITY_DATA: Dict[str, Any] = {}
 TALENT_DATA: Dict[str, Any] = {}
 FEATURE_STATS_MAP: Dict[str, Any] = {}
+KINGDOM_FEATURES_DATA: Dict[str, Any] = {} # --- ADDED ---
 MELEE_WEAPONS: Dict[str, Any] = {}
 RANGED_WEAPONS: Dict[str, Any] = {}
 ARMOR: Dict[str, Any] = {}
@@ -111,7 +140,8 @@ EQUIPMENT_CATEGORY_TO_SKILL_MAP: Dict[str, str] = {}
 def load_data() -> Dict[str, Any]:
     """Loads all rules data and returns it in a dictionary."""
     global STATS_LIST, SKILL_CATEGORIES, ALL_SKILLS, ABILITY_DATA, TALENT_DATA, FEATURE_STATS_MAP
-    global MELEE_WEAPONS, RANGED_WEAPONS, ARMOR, INJURY_EFFECTS, STATUS_EFFECTS, EQUIPMENT_CATEGORY_TO_SKILL_MAP
+    # --- MODIFIED ---
+    global MELEE_WEAPONS, RANGED_WEAPONS, ARMOR, INJURY_EFFECTS, STATUS_EFFECTS, EQUIPMENT_CATEGORY_TO_SKILL_MAP, KINGDOM_FEATURES_DATA
     print("Starting data loading process...")
     loaded_data = {}
     try:
@@ -130,8 +160,13 @@ def load_data() -> Dict[str, Any]:
             print(f"--- WARNING: TALENT_DATA did NOT load as a dictionary. Type: {type(TALENT_DATA)} ---")
             TALENT_DATA = {}
 
-        # Process kingdom features
+        # Process kingdom features (flat map for lookups)
         FEATURE_STATS_MAP = _process_kingdom_features()
+
+        # --- ADDED ---
+        # Load kingdom features (full structure for creation)
+        KINGDOM_FEATURES_DATA = _load_and_correct_kingdom_features()
+        # --- END ADDED ---
 
         # Load combat data
         MELEE_WEAPONS = _load_json("melee_weapons.json")
@@ -168,6 +203,7 @@ def load_data() -> Dict[str, Any]:
             'ability_data': ABILITY_DATA,
             'talent_data': TALENT_DATA,
             'feature_stats_map': FEATURE_STATS_MAP,
+            'kingdom_features_data': KINGDOM_FEATURES_DATA, # --- ADDED ---
             'melee_weapons': MELEE_WEAPONS,
             'ranged_weapons': RANGED_WEAPONS,
             'armor': ARMOR,
@@ -181,6 +217,7 @@ def load_data() -> Dict[str, Any]:
         print(f"DEBUG: ABILITY_DATA len: {len(ABILITY_DATA)}")
         print(f"DEBUG: TALENT_DATA len: {len(TALENT_DATA)}")
         print(f"DEBUG: FEATURE_STATS_MAP len: {len(FEATURE_STATS_MAP)}")
+        print(f"DEBUG: KINGDOM_FEATURES_DATA keys: {len(KINGDOM_FEATURES_DATA.keys())}") # --- ADDED ---
         print(f"Loaded {len(MELEE_WEAPONS)} melee weapon categories.")
         print(f"Loaded {len(RANGED_WEAPONS)} ranged weapon categories.")
         print(f"Loaded {len(ARMOR)} armor categories.")
