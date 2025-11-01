@@ -51,6 +51,7 @@ class StoryFlag(Base):
 
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 class CombatEncounter(Base):
     __tablename__ = "combat_encounters"
     id = Column(Integer, primary_key=True, index=True)
@@ -72,6 +73,8 @@ class CombatParticipant(Base):
     combat_id = Column(Integer, ForeignKey("combat_encounters.id"))
     encounter = relationship("CombatEncounter", back_populates="participants")
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 # --- NEW COMBAT MODELS ---
@@ -107,6 +110,10 @@ class CombatParticipant(Base):
     actor_type = Column(String)
     
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+    initiative_roll = Column(Integer)
+>>>>>>> Stashed changes
+=======
     initiative_roll = Column(Integer)
 >>>>>>> Stashed changes
 =======
