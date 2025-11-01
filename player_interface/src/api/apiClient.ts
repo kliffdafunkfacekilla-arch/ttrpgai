@@ -1,125 +1,132 @@
 // src/api/apiClient.ts
-import axios, { AxiosError } from 'axios';
 import {
     type CharacterContextResponse,
-    type LocationContextResponse,
-    type InteractionRequestPayload,
+    type InteractionRequest,
     type InteractionResponse,
     type CombatEncounterResponse,
-    type CombatStartRequestPayload,
-    type PlayerActionRequestPayload,
-    type PlayerActionResponse,
+    type CombatActionRequest,
+    // --- NEWLY IMPORTED TYPES ---
+    type CharacterCreateRequest,
+    type KingdomFeaturesData,
+    type TalentInfo
 } from '../types/apiTypes';
 
-const STORY_ENGINE_BASE_URL = 'http://127.0.0.1:8003';
-const CHARACTER_ENGINE_BASE_URL = 'http://127.0.0.1:8001';
+// --- Base URLs are unchanged ---
+const BASE_URL = '/api/story'; // Story Engine
+const CHARACTER_API_URL = '/api/character'; // Character Engine
+const RULES_API_URL = '/api/rules'; // Rules Engine
 
-const storyApiClient = axios.create({
-    baseURL: STORY_ENGINE_BASE_URL,
-    timeout: 10000,
-    headers: { 'Content-Type': 'application/json' },
-});
-
-const charApiClient = axios.create({
-    baseURL: CHARACTER_ENGINE_BASE_URL,
-    timeout: 10000,
-    headers: { 'Content-Type': 'application/json' },
-});
-
-import type { AxiosInstance } from 'axios';
-
-export const callApi = async <T>(
-    apiClient: AxiosInstance,
-    method: 'get' | 'post' | 'put' | 'delete',
-    url: string,
-    data?: any,
-    params?: any
-): Promise<T> => {
-    console.log(`API Call: ${method.toUpperCase()} ${apiClient.defaults.baseURL}${url}`, { data, params });
+// --- api helper function is unchanged ---
+async function api<T>(url: string, options: RequestInit = {}): Promise<T> {
     try {
-        const response = await apiClient.request<T>({ method, url, data, params });
-        console.log(`API Response: ${response.status}`, response.data);
-        return response.data;
-    } catch (error) {
-        const axiosError = error as AxiosError;
-        let status = 500;
-        let message = 'An unexpected error occurred';
-        let details: any = null;
-
-        if (axiosError.response) {
-            status = axiosError.response.status;
-            message = `API Error ${status}`;
-            details = axiosError.response.data;
-            console.error(`API Error ${status} for ${method.toUpperCase()} ${url}:`, details || axiosError.message);
-            if (typeof details === 'object' && details !== null && 'detail' in details) {
-                message = details.detail as string;
-            } else if (typeof details === 'string') {
-                message = details;
+        const response = await fetch(url, {
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers,
+            },
+        });
+        if (!response.ok) {
+            let errorBody;
+            try {
+                errorBody = await response.json();
+            } catch (e) {
+                errorBody = { detail: response.statusText };
             }
-        } else if (axiosError.request) {
-            status = 503;
-            message = 'Network Error or Service Unavailable. Is the backend running?';
-            console.error(`Network Error for ${method.toUpperCase()} ${url}:`, axiosError.message);
-        } else {
-            message = axiosError.message || 'Error setting up API request';
-            console.error(`Request Setup Error for ${method.toUpperCase()} ${url}:`, axiosError.message);
+            console.error(`API Error ${response.status}: ${JSON.stringify(errorBody)}`);
+            throw new Error(errorBody.detail || `HTTP error! status: ${response.status}`);
         }
-        throw { status, message, details };
+        // Handle cases where response might be empty
+        const text = await response.text();
+        return text ? (JSON.parse(text) as T) : ({} as T);
+    } catch (err: any) {
+        console.error('API request failed:', err);
+        throw err;
     }
+}
+
+// --- Character Engine Functions ---
+export const fetchCharacters = (): Promise<CharacterContextResponse[]> => {
+    return api<CharacterContextResponse[]>(`${CHARACTER_API_URL}/characters/`);
 };
 
-export const getCharacterContext = (characterId: string): Promise<CharacterContextResponse> => {
-    const endpoint = `/v1/characters/${characterId}`;
-    return callApi<CharacterContextResponse>(charApiClient, 'get', endpoint);
+export const fetchCharacterContext = (characterId: string): Promise<CharacterContextResponse> => {
+    return api<CharacterContextResponse>(`${CHARACTER_API_URL}/characters/${characterId}`);
 };
 
-export const getLocationContext = (locationId: number): Promise<LocationContextResponse> => {
-    const endpoint = `/v1/context/location/${locationId}`;
-    return callApi<LocationContextResponse>(storyApiClient, 'get', endpoint);
+// --- MODIFIED createCharacter ---
+/**
+ * Creates a new character using the full creation payload.
+ * @param payload - The complete set of character creation choices.
+ * @returns The newly created character's full context.
+ */
+export const createCharacter = (payload: CharacterCreateRequest): Promise<CharacterContextResponse> => {
+    return api<CharacterContextResponse>(`${CHARACTER_API_URL}/characters/`, {
+        method: 'POST',
+        body: JSON.stringify(payload),
+    });
 };
 
-export const postInteraction = (payload: InteractionRequestPayload): Promise<InteractionResponse> => {
-    const endpoint = '/v1/actions/interact';
-    return callApi<InteractionResponse>(storyApiClient, 'post', endpoint, payload);
+// --- updateCharacterContext is unchanged ---
+export const updateCharacterContext = (characterId: string, context: CharacterContextResponse): Promise<CharacterContextResponse> => {
+    return api<CharacterContextResponse>(`${CHARACTER_API_URL}/characters/${characterId}`, {
+        method: 'PUT',
+        body: JSON.stringify(context),
+    });
 };
 
-export const postPlayerAction = (combatId: number, payload: PlayerActionRequestPayload): Promise<PlayerActionResponse> => {
-    const endpoint = `/v1/combat/${combatId}/player_action`;
-    return callApi<PlayerActionResponse>(storyApiClient, 'post', endpoint, payload);
+// --- Story Engine Functions are unchanged ---
+export const postInteraction = (request: InteractionRequest): Promise<InteractionResponse> => {
+    return api<InteractionResponse>(`${BASE_URL}/interaction/`, {
+        method: 'POST',
+        body: JSON.stringify(request),
+    });
 };
 
-export const startCombat = (payload: CombatStartRequestPayload): Promise<CombatEncounterResponse> => {
-    const endpoint = '/v1/combat/start';
-    return callApi<CombatEncounterResponse>(storyApiClient, 'post', endpoint, payload);
+export const startCombat = (characterId: string, mapId: string): Promise<CombatEncounterResponse> => {
+    return api<CombatEncounterResponse>(`${BASE_URL}/combat/start`, {
+        method: 'POST',
+        body: JSON.stringify({ character_id: characterId, map_id: mapId }),
+    });
 };
 
-export const updatePlayerLocation = (
-    characterId: number,
-    locationId: number,
-    coordinates: [number, number]
-): Promise<CharacterContextResponse> => {
-    const endpoint = `/v1/characters/${characterId}/location`;
-    const payload = {
-        location_id: locationId,
-        coordinates: coordinates,
-    };
-    return callApi<CharacterContextResponse>(charApiClient, 'put', endpoint, payload);
+export const getCombatState = (encounterId: string): Promise<CombatEncounterResponse> => {
+    return api<CombatEncounterResponse>(`${BASE_URL}/combat/state/${encounterId}`);
 };
 
-export const getCharacterList = (): Promise<CharacterContextResponse[]> => {
-    const endpoint = '/v1/characters/';
-    return callApi<CharacterContextResponse[]>(charApiClient, 'get', endpoint);
+export const postCombatAction = (encounterId: string, action: CombatActionRequest): Promise<CombatEncounterResponse> => {
+    return api<CombatEncounterResponse>(`${BASE_URL}/combat/action/${encounterId}`, {
+        method: 'POST',
+        body: JSON.stringify(action),
+    });
 };
 
-export const createCharacter = (name: string): Promise<CharacterContextResponse> => {
-    const endpoint = '/v1/characters/';
-    const payload = {
-        name: name,
-    };
-    return callApi<CharacterContextResponse>(charApiClient, 'post', endpoint, payload);
+// --- NEW Rules Engine Functions for Character Creation ---
+/**
+ * Fetches the complete hierarchical structure of kingdom features,
+ * including all choices and their stat mods.
+ */
+export const getKingdomFeatures = (): Promise<KingdomFeaturesData> => {
+    return api<KingdomFeaturesData>(`${RULES_API_URL}/v1/lookup/creation/kingdom_features`);
 };
 
-export const postNpcAction = (combatId: number): Promise<PlayerActionResponse> => {
-    const endpoint = `/v1/combat/${combatId}/npc_action`;
-    return callApi<PlayerActionResponse>(storyApiClient, 'post', endpoint, null);
+/**
+ * Fetches the list of all Background-type talents.
+ */
+export const getBackgroundTalents = (): Promise<TalentInfo[]> => {
+    return api<TalentInfo[]>(`${RULES_API_URL}/v1/lookup/creation/background_talents`);
+};
+
+/**
+ * Fetches the list of all Ability-type talents.
+ */
+export const getAbilityTalents = (): Promise<TalentInfo[]> => {
+    return api<TalentInfo[]>(`${RULES_API_URL}/v1/lookup/creation/ability_talents`);
+};
+
+/**
+ * Fetches the list of all Ability School names.
+ */
+export const getAbilitySchools = (): Promise<string[]> => {
+    return api<string[]>(`${RULES_API_URL}/v1/lookup/all_ability_schools`);
 };
