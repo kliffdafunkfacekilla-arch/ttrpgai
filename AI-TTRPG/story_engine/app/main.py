@@ -1,4 +1,5 @@
 from fastapi import Depends, FastAPI, HTTPException, APIRouter
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from typing import List, Dict, Any
 import logging
@@ -9,6 +10,15 @@ from .database import SessionLocal, engine
 app = FastAPI(
     title="Story Engine",
     description="Manages campaign state, quests, and orchestrates other services."
+)
+
+# Add CORSMiddleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],  # The origin of the frontend
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 router = APIRouter()
@@ -128,7 +138,7 @@ async def handle_player_combat_action(combat_id: int, action_request: schemas.Pl
          raise HTTPException(status_code=500, detail=f"Internal server error processing player action: {str(e)}")
 
 @router.post("/v1/combat/{combat_id}/npc_action", response_model=schemas.PlayerActionResponse, summary="Trigger the next NPC action in the turn order", tags=["Combat Orchestration"])
-def post_npc_action(combat_id: int, db: Session = Depends(get_db)):
+async def post_npc_action(combat_id: int, db: Session = Depends(get_db)):
     combat = crud.get_combat_encounter(db, combat_id)
     if not combat:
         raise HTTPException(status_code=404, detail="Combat encounter not found")
@@ -137,10 +147,10 @@ def post_npc_action(combat_id: int, db: Session = Depends(get_db)):
     current_actor_id = combat.turn_order[combat.current_turn_index]
     if current_actor_id.startswith("player_"):
         raise HTTPException(status_code=400, detail="It is not an NPC's turn")
-    npc_action_request = combat_handler.determine_npc_action(db, combat, current_actor_id)
+    npc_action_request = await combat_handler.determine_npc_action(db, combat, current_actor_id)
     if npc_action_request is None:
         return combat_handler.handle_no_action(db, combat, current_actor_id)
-    return combat_handler.handle_player_action(
+    return await combat_handler.handle_player_action(
         db=db,
         combat=combat,
         actor_id=current_actor_id,

@@ -48,3 +48,24 @@ class StoryFlag(Base):
     # The unique name for the flag
     flag_name = Column(String, unique=True, index=True)
     value = Column(String, nullable=True)
+
+class CombatEncounter(Base):
+    __tablename__ = "combat_encounters"
+    id = Column(Integer, primary_key=True, index=True)
+    location_id = Column(Integer, nullable=False)
+    status = Column(String, default="active", index=True) # active, players_win, npcs_win
+    turn_order = Column(JSON, default=[])
+    current_turn_index = Column(Integer, default=0)
+    is_finished = Column(Integer, default=0) # Using Integer for SQLite boolean
+
+    participants = relationship("CombatParticipant", back_populates="encounter")
+
+class CombatParticipant(Base):
+    __tablename__ = "combat_participants"
+    id = Column(Integer, primary_key=True, index=True)
+    actor_id = Column(String, index=True) # e.g., "player_1", "npc_12"
+    actor_type = Column(String) # "player" or "npc"
+    initiative_roll = Column(Integer)
+
+    combat_id = Column(Integer, ForeignKey("combat_encounters.id"))
+    encounter = relationship("CombatEncounter", back_populates="participants")

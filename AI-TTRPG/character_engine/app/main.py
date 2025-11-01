@@ -1,5 +1,6 @@
 # main.py
 from fastapi import Depends, FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from typing import List, Dict, Any
 import logging
@@ -16,6 +17,15 @@ from .database import SessionLocal, engine, Base # Import Base if needed here
 
 app = FastAPI(title="Character Engine")
 logger = logging.getLogger("uvicorn.error")
+
+# Add CORSMiddleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],  # The origin of the frontend
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # --- Dependency ---
 def get_db():
