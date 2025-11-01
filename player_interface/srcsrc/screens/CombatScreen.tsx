@@ -187,7 +187,6 @@ const CombatScreen: React.FC<CombatScreenProps> = ({
     const playerAbilities = activeCharacter.character_sheet.abilities || [];
     const playerInventory = activeCharacter.character_sheet.inventory || [];
 
-    // --- 5. RENDER HELPER FUNCTIONS (New) ---
     const renderMainMenu = () => (
         <div className="flex flex-col space-y-4">
             <h3 className="text-xl">Choose Action:</h3>

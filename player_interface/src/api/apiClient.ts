@@ -120,3 +120,21 @@ export const updatePlayerLocation = (
     // Use charApiClient
     return callApi<CharacterContextResponse>(charApiClient, 'put', endpoint, payload);
 };
+
+// --- 1. ADD getCharacterList FUNCTION ---
+export const getCharacterList = (): Promise<CharacterContextResponse[]> => {
+const endpoint = '/v1/characters/';
+// Use charApiClient, expects an array of characters
+return callApi<CharacterContextResponse[]>(charApiClient, 'get', endpoint);
+};
+// --- 2. ADD createCharacter FUNCTION ---
+// For now, we only pass a name. This can be expanded.
+export const createCharacter = (name: string): Promise<CharacterContextResponse> => {
+const endpoint = '/v1/characters/';
+const payload = {
+name: name,
+// The backend will fill in default stats
+};
+// Use charApiClient
+return callApi<CharacterContextResponse>(charApiClient, 'post', endpoint, payload);
+};
