@@ -4,35 +4,22 @@ import {
   type CombatEncounterResponse,
   type CharacterContextResponse,
   type InventoryItem,
+  // --- ADDED: Import new types ---
+  type PlayerActionRequestPayload,
+  type PlayerActionResponse,
+  type NpcInstance,
+  type LocationContextResponse,
 } from "../types/apiTypes";
 import {
-  getCharacterContext,
-  // These functions do not exist in the current apiClient, but are kept
-  // to fix linting issues without a major refactor.
-  // @ts-expect-error - getLocationContext is not exported
+  // --- MODIFIED: Use fetchCharacterContext ---
+  fetchCharacterContext,
+  // --- These will now be imported correctly ---
   getLocationContext,
-  // @ts-expect-error - postPlayerAction is not exported
-  postPlayerAction,
-  // @ts-expect-error - postNpcAction is not exported
+  postCombatAction,
   postNpcAction,
 } from "../api/apiClient";
 
-// Local definitions to solve linting errors, since these types are missing from the main apiTypes
-// and the component is out of sync.
-interface PlayerActionRequestPayload {
-  action: "attack" | "use_ability" | "use_item";
-  target_id: string;
-  ability_id?: string;
-  item_id?: string;
-}
-
-interface NpcInstance {
-  id: string;
-  template_id: string;
-  current_hp: number;
-  max_hp: number;
-}
-// End local definitions
+// Local definitions are no longer needed as they are in apiTypes.ts
 
 interface CombatScreenProps {
   combatContext: CombatEncounterResponse;
@@ -92,14 +79,18 @@ const CombatScreen: React.FC<CombatScreenProps> = ({
     for (const actorId of combatContext.turn_order) {
       try {
         if (actorId.startsWith("player_")) {
-          const charData = await getCharacterContext(actorId.split("_")[1]);
+          // --- MODIFIED: Use fetchCharacterContext ---
+          const charData = await fetchCharacterContext(actorId.split("_")[1]);
           fullParticipantData.push({
             ...charData,
             actor_id: actorId,
             actor_type: "player",
           });
         } else if (actorId.startsWith("npc_")) {
-          const locData = await getLocationContext(combatContext.location_id);
+          // --- This will now work ---
+          const locData: LocationContextResponse = await getLocationContext(
+            String(combatContext.location_id),
+          );
           const npcData = locData.npc_instances.find(
             (npc: NpcInstance) => `npc_${npc.id}` === actorId,
           );
@@ -131,7 +122,9 @@ const CombatScreen: React.FC<CombatScreenProps> = ({
     const livingPlayers = participants.filter(
       (p) =>
         p.actor_type === "player" &&
-        (p as CharacterContextResponse).current_hp > 0,
+        // --- MODIFIED: Access HP correctly ---
+        (p as CharacterContextResponse).character_sheet.combat_stats.current_hp >
+          0,
     ).length;
     const livingNpcs = participants.filter(
       (p) => p.actor_type === "npc" && (p as NpcInstance).current_hp > 0,
@@ -159,7 +152,10 @@ const CombatScreen: React.FC<CombatScreenProps> = ({
       addLog(`Waiting for ${currentActorId}...`);
       setTimeout(async () => {
         try {
-          const result = await postNpcAction(combatContext.id);
+          // --- This will now work ---
+          const result: PlayerActionResponse = await postNpcAction(
+            combatContext.id,
+          );
           result.log.forEach(addLog);
           if (!result.combat_over) {
             setTurn(result.new_turn_index);
@@ -216,7 +212,11 @@ const CombatScreen: React.FC<CombatScreenProps> = ({
         return;
     }
     try {
-      const result = await postPlayerAction(combatContext.id, payload);
+      // --- MODIFIED: Use postCombatAction ---
+      const result: PlayerActionResponse = await postCombatAction(
+        combatContext.id,
+        payload,
+      );
       result.log.forEach(addLog);
       if (!result.combat_over) {
         setTurn(result.new_turn_index);
@@ -264,7 +264,8 @@ const CombatScreen: React.FC<CombatScreenProps> = ({
 
   const getParticipantHP = (p: ParticipantFullState) => {
     if (p.actor_type === "player") {
-      const stats = p as CharacterContextResponse;
+      // --- MODIFIED: Access HP correctly ---
+      const stats = (p as CharacterContextResponse).character_sheet.combat_stats;
       return `${stats.current_hp} / ${stats.max_hp}`;
     } else {
       const stats = p as NpcInstance;
@@ -283,8 +284,9 @@ const CombatScreen: React.FC<CombatScreenProps> = ({
   const livingNpcs = participants.filter(
     (p) => p.actor_type === "npc" && (p as NpcInstance).current_hp > 0,
   );
-  const playerAbilities = activeCharacter.abilities || [];
-  const playerInventory = activeCharacter.inventory || {};
+  // --- MODIFIED: Access abilities/inventory correctly ---
+  const playerAbilities = activeCharacter.character_sheet.abilities || [];
+  const playerInventory = activeCharacter.character_sheet.inventory || {};
 
   const renderMainMenu = () => (
     <div className="flex flex-col space-y-4">
@@ -415,7 +417,9 @@ const CombatScreen: React.FC<CombatScreenProps> = ({
         {participants.map((p) => (
           <div
             key={p.actor_id}
-            className={`p-2 my-1 ${p.actor_id === currentActorId ? "border-2 border-yellow-400" : ""}`}
+            className={`p-2 my-1 ${
+              p.actor_id === currentActorId ? "border-2 border-yellow-400" : ""
+            }`}
           >
             <span
               className={
