@@ -1,0 +1,63 @@
+{
+  "player_default": {
+    "name": "Player",
+    "sheet": "player_character.png",
+    "col": 1,
+    "row": 1
+  },
+  "goblin_scout": {
+    "name": "Goblin Scout",
+    "sheet": "monsters_1.png",
+    "col": 1,
+    "row": 1
+  },
+  "forest_stalker_spider": {
+    "name": "Forest Stalker",
+    "sheet": "monsters_1.png",
+    "col": 2,
+    "row": 1
+  },
+  "potion_health_small": {
+    "name": "Small Health Potion",
+    "sheet": "items_1.png",
+    "col": 1,
+    "row": 1
+  },
+  "key_A": {
+    "name": "Iron Key",
+    "sheet": "items_1.png",
+    "col": 2,
+    "row": 1
+  },
+  "fallback": {
+    "name": "Missing Graphic",
+    "sheet": "fallback.png",
+    "col": 1,
+    "row": 1
+  },
+  "character_1": { "name": "Character 1", "sheet": "character1.png", "col": 0, "row": 0 },
+  "character_2": { "name": "Character 2", "sheet": "character1.png", "col": 1, "row": 0 },
+  "character_3": { "name": "Character 3", "sheet": "character1.png", "col": 2, "row": 0 },
+  "character_4": { "name": "Character 4", "sheet": "character1.png", "col": 3, "row": 0 },
+  "character_5": { "name": "Character 5", "sheet": "character1.png", "col": 4, "row": 0 },
+  "character_6": { "name": "Character 6", "sheet": "character1.png", "col": 0, "row": 1 },
+  "character_7": { "name": "Character 7", "sheet": "character1.png", "col": 1, "row": 1 },
+  "character_8": { "name": "Character 8", "sheet": "character1.png", "col": 2, "row": 1 },
+  "character_9": { "name": "Character 9", "sheet": "character1.png", "col": 3, "row": 1 },
+  "character_10": { "name": "Character 10", "sheet": "character1.png", "col": 4, "row": 1 },
+  "character_11": { "name": "Character 11", "sheet": "character1.png", "col": 0, "row": 2 },
+  "character_12": { "name": "Character 12", "sheet": "character1.png", "col": 1, "row": 2 },
+  "character_13": { "name": "Character 13", "sheet": "character1.png", "col": 2, "row": 2 },
+  "character_14": { "name": "Character 14", "sheet": "character1.png", "col": 3, "row": 2 },
+  "character_15": { "name": "Character 15", "sheet": "character1.png", "col": 4, "row": 2 },
+  "character_16": { "name": "Character 16", "sheet": "character1.png", "col": 0, "row": 3 },
+  "character_17": { "name": "Character 17", "sheet": "character1.png", "col": 1, "row": 3 },
+  "character_18": { "name": "Character 18", "sheet": "character1.png", "col": 2, "row": 3 },
+  "character_19": { "name": "Character 19", "sheet": "character1.png", "col": 3, "row": 3 },
+  "character_20": { "name": "Character 20", "sheet": "character1.png", "col": 4, "row": 3 },
+  "character_21": { "name": "Character 21", "sheet": "character1.png", "col": 0, "row": 4 },
+  "character_22": { "name": "Character 22", "sheet": "character1.png", "col": 1, "row": 4 },
+  "character_23": { "name": "Character 23", "sheet": "character1.png", "col": 2, "row": 4 },
+  "character_24": { "name": "Character 24", "sheet": "character1.png", "col": 3, "row": 4 },
+  "character_25": { "name": "Character 25", "sheet": "character1.png", "col": 4, "row": 4 }
+}
