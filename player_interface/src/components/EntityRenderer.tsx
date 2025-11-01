@@ -1,8 +1,12 @@
 // src/components/EntityRenderer.tsx
-import React from 'react';
+import React from "react";
 // --- 1. IMPORT CharacterContextResponse ---
-import { type NpcInstance, type ItemInstance, type CharacterContextResponse } from '../types/apiTypes';
-import { getSpriteRenderInfo, TILE_SIZE } from '../assets/assetLoader';
+import {
+  type NpcInstance,
+  type ItemInstance,
+  type CharacterContextResponse,
+} from "../types/apiTypes";
+import { getSpriteRenderInfo, TILE_SIZE } from "../assets/assetLoader";
 
 interface EntityRendererProps {
   npcs: NpcInstance[];
@@ -11,12 +15,16 @@ interface EntityRendererProps {
   player: CharacterContextResponse | null;
 }
 
-const EntityRenderer: React.FC<EntityRendererProps> = ({ npcs, items, player }) => {
-
+const EntityRenderer: React.FC<EntityRendererProps> = ({
+  npcs,
+  items,
+  player,
+}) => {
   return (
     <>
       {/* --- 3. ADD PLAYER RENDER LOGIC --- */}
-      {player && player.character_sheet.location && (
+      {player &&
+        player.character_sheet.location &&
         (() => {
           const { coordinates } = player.character_sheet.location;
           // Use "player_default" as the template_id from entity_definitions.json
@@ -27,9 +35,13 @@ const EntityRenderer: React.FC<EntityRendererProps> = ({ npcs, items, player }) 
             return null;
           }
 
-          if (!coordinates || !Array.isArray(coordinates) || coordinates.length < 2) {
-             console.warn("Player has no coordinates. Skipping render.");
-             return null;
+          if (
+            !coordinates ||
+            !Array.isArray(coordinates) ||
+            coordinates.length < 2
+          ) {
+            console.warn("Player has no coordinates. Skipping render.");
+            return null;
           }
 
           const style = {
@@ -49,16 +61,21 @@ const EntityRenderer: React.FC<EntityRendererProps> = ({ npcs, items, player }) 
               title={player.name}
             />
           );
-        })()
-      )}
+        })()}
 
       {/* Render NPCs */}
       {npcs.map((npc) => {
         // --- 4. FIX HACK: Use the new coordinates field ---
         const { coordinates } = npc;
-        if (!coordinates || !Array.isArray(coordinates) || coordinates.length < 2) {
-            console.warn(`NPC ${npc.template_id} (ID: ${npc.id}) has no coordinates. Skipping render.`);
-            return null;
+        if (
+          !coordinates ||
+          !Array.isArray(coordinates) ||
+          coordinates.length < 2
+        ) {
+          console.warn(
+            `NPC ${npc.template_id} (ID: ${npc.id}) has no coordinates. Skipping render.`,
+          );
+          return null;
         }
 
         const renderInfo = getSpriteRenderInfo(npc.template_id);
@@ -86,15 +103,21 @@ const EntityRenderer: React.FC<EntityRendererProps> = ({ npcs, items, player }) 
       {items.map((item) => {
         // --- 5. FIX HACK: Use the new coordinates field ---
         const { coordinates } = item;
-        if (!coordinates || !Array.isArray(coordinates) || coordinates.length < 2) {
-            console.warn(`Item ${item.template_id} (ID: ${item.id}) has no coordinates. Skipping render.`);
-            return null;
+        if (
+          !coordinates ||
+          !Array.isArray(coordinates) ||
+          coordinates.length < 2
+        ) {
+          console.warn(
+            `Item ${item.template_id} (ID: ${item.id}) has no coordinates. Skipping render.`,
+          );
+          return null;
         }
 
         const renderInfo = getSpriteRenderInfo(item.template_id);
         if (!renderInfo) {
-             console.warn(`No render info for Item template: ${item.template_id}`);
-             return null;
+          console.warn(`No render info for Item template: ${item.template_id}`);
+          return null;
         }
         // ... (render logic) ...
         const style = {

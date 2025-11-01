@@ -1,7 +1,7 @@
 // src/components/MapRenderer.tsx
-import React from 'react';
+import React from "react";
 // --- 1. RENAME imported function ---
-import { getSpriteRenderInfo, TILE_SIZE } from '../assets/assetLoader';
+import { getSpriteRenderInfo, TILE_SIZE } from "../assets/assetLoader";
 
 interface MapRendererProps {
   mapData: number[][];
@@ -38,7 +38,7 @@ const MapRenderer: React.FC<MapRendererProps> = ({ mapData }) => {
                   top: `${y * TILE_SIZE}px`,
                   width: `${TILE_SIZE}px`,
                   height: `${TILE_SIZE}px`,
-                  backgroundColor: 'purple', // Easy to spot missing tiles
+                  backgroundColor: "purple", // Easy to spot missing tiles
                 }}
               />
             );
@@ -58,7 +58,7 @@ const MapRenderer: React.FC<MapRendererProps> = ({ mapData }) => {
               }}
             />
           );
-        })
+        }),
       )}
     </div>
   );

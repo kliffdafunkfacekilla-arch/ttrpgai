@@ -5,16 +5,17 @@ import os
 
 # --- File Path Setup ---
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DATA_DIR = os.path.join(BASE_DIR, 'data')
+DATA_DIR = os.path.join(BASE_DIR, "data")
 
 # --- Helper Functions ---
+
 
 def _load_json(filename: str) -> Any:
     """Helper function to load a JSON file from the data directory."""
     filepath = os.path.join(DATA_DIR, filename)
     print(f"Attempting to load: {filepath}")
     try:
-        with open(filepath, "r", encoding='utf-8') as f:
+        with open(filepath, "r", encoding="utf-8") as f:
             data = json.load(f)
             print(f"Successfully loaded {filename}")
             return data
@@ -22,51 +23,69 @@ def _load_json(filename: str) -> Any:
         print(f"FATAL ERROR: Rules data file not found: {filepath}")
         raise
     except json.JSONDecodeError as e:
-        print(f"FATAL ERROR: Failed to decode JSON from {filepath}. Error at char {e.pos}: {e.msg}")
+        print(
+            f"FATAL ERROR: Failed to decode JSON from {filepath}. Error at char {e.pos}: {e.msg}"
+        )
         raise
     except Exception as e:
         print(f"FATAL ERROR: Unexpected error loading {filepath}: {e}")
         raise
 
+
 def _correct_stat_names_in_mods(mods: Dict[str, List[str]]) -> Dict[str, List[str]]:
     """Replaces 'Constitution' with 'Vitality' in stat modifier lists."""
     corrected_mods = {}
     if not isinstance(mods, dict):
-        print(f"Warning: Expected dict for mods, got {type(mods)}. Skipping correction.")
+        print(
+            f"Warning: Expected dict for mods, got {type(mods)}. Skipping correction."
+        )
         return mods
     for key, stats in mods.items():
         if isinstance(stats, list):
-             corrected_mods[key] = ["Vitality" if stat == "Constitution" else stat for stat in stats]
+            corrected_mods[key] = [
+                "Vitality" if stat == "Constitution" else stat for stat in stats
+            ]
         else:
-             print(f"Warning: Expected list for stats under key '{key}', got {type(stats)}. Keeping original.")
-             corrected_mods[key] = stats
+            print(
+                f"Warning: Expected list for stats under key '{key}', got {type(stats)}. Keeping original."
+            )
+            corrected_mods[key] = stats
     return corrected_mods
 
+
 # --- Processing Functions ---
+
 
 def _process_kingdom_features() -> Dict[str, Any]:
     """Processes kingdom data into a flat map AND RETURNS IT."""
     kingdom_data = _load_json("kingdom_features.json")
     feature_stats_map = {}
     if not isinstance(kingdom_data, dict):
-         print("FATAL ERROR: kingdom_features.json did not load as a dictionary.")
-         return {}
+        print("FATAL ERROR: kingdom_features.json did not load as a dictionary.")
+        return {}
 
     for category_data in kingdom_data.values():
-        if not isinstance(category_data, dict): continue
+        if not isinstance(category_data, dict):
+            continue
         for kingdom_list in category_data.values():
             if isinstance(kingdom_list, list):
                 for feature in kingdom_list:
-                    if not isinstance(feature, dict): continue
+                    if not isinstance(feature, dict):
+                        continue
                     feature_name = feature.get("name")
                     if feature_name:
                         if "mods" in feature:
-                             # --- MODIFIED ---
-                             # We still correct the mods here for the flat map
-                             feature["mods"] = _correct_stat_names_in_mods(feature["mods"])
+                            # --- MODIFIED ---
+                            # We still correct the mods here for the flat map
+                            feature["mods"] = _correct_stat_names_in_mods(
+                                feature["mods"]
+                            )
                         feature_stats_map[feature_name] = feature
-    print(f"Processed {len(feature_stats_map)} kingdom features into flat map (Vitality corrected).")
+    print(
+        f"Processed {len(feature_stats_map)} kingdom features into flat map (Vitality corrected)."
+    )
     return feature_stats_map
+
 
 # --- ADDED FUNCTION ---
 def _load_and_correct_kingdom_features() -> Dict[str, Any]:
@@ -92,9 +111,14 @@ def _load_and_correct_kingdom_features() -> Dict[str, Any]:
 
     print("Full kingdom_features.json structure corrected.")
     return kingdom_data
+
+
 # --- END ADDED FUNCTION ---
 
-def _process_skills() -> tuple[List[str], Dict[str, List[str]], Dict[str, Dict[str, str]]]:
+
+def _process_skills() -> (
+    tuple[List[str], Dict[str, List[str]], Dict[str, Dict[str, str]]]
+):
     """Processes skills AND RETURNS stats list, categories dict, and all_skills dict."""
     stats_data = _load_json("stats_and_skills.json")
     stats_list = stats_data.get("stats", [])
@@ -110,15 +134,15 @@ def _process_skills() -> tuple[List[str], Dict[str, List[str]], Dict[str, Dict[s
             for i, skill_name in enumerate(skills):
                 stat_index = i % len(stats_list)
                 governing_stat = stats_list[stat_index]
-                all_skills[skill_name] = {
-                    "category": category,
-                    "stat": governing_stat
-                }
+                all_skills[skill_name] = {"category": category, "stat": governing_stat}
         else:
-            print(f"Warning: Expected list for skills in category '{category}', got {type(skills)}. Skipping category.")
+            print(
+                f"Warning: Expected list for skills in category '{category}', got {type(skills)}. Skipping category."
+            )
 
     print(f"Processed {len(all_skills)} skills into master map.")
     return stats_list, skill_categories, all_skills
+
 
 # --- Main Loading Function ---
 # Global variables to hold the loaded data
@@ -128,7 +152,7 @@ ALL_SKILLS: Dict[str, Dict[str, str]] = {}
 ABILITY_DATA: Dict[str, Any] = {}
 TALENT_DATA: Dict[str, Any] = {}
 FEATURE_STATS_MAP: Dict[str, Any] = {}
-KINGDOM_FEATURES_DATA: Dict[str, Any] = {} # --- ADDED ---
+KINGDOM_FEATURES_DATA: Dict[str, Any] = {}  # --- ADDED ---
 MELEE_WEAPONS: Dict[str, Any] = {}
 RANGED_WEAPONS: Dict[str, Any] = {}
 ARMOR: Dict[str, Any] = {}
@@ -151,13 +175,17 @@ def load_data() -> Dict[str, Any]:
         # Load abilities
         ABILITY_DATA = _load_json("abilities.json")
         if not isinstance(ABILITY_DATA, dict):
-            print(f"--- WARNING: ABILITY_DATA did NOT load as a dictionary. Type: {type(ABILITY_DATA)} ---")
+            print(
+                f"--- WARNING: ABILITY_DATA did NOT load as a dictionary. Type: {type(ABILITY_DATA)} ---"
+            )
             ABILITY_DATA = {}
 
         # Load talents
         TALENT_DATA = _load_json("talents.json")
         if not isinstance(TALENT_DATA, dict):
-            print(f"--- WARNING: TALENT_DATA did NOT load as a dictionary. Type: {type(TALENT_DATA)} ---")
+            print(
+                f"--- WARNING: TALENT_DATA did NOT load as a dictionary. Type: {type(TALENT_DATA)} ---"
+            )
             TALENT_DATA = {}
 
         # Process kingdom features (flat map for lookups)
@@ -180,14 +208,18 @@ def load_data() -> Dict[str, Any]:
         INJURY_EFFECTS = _load_json("injury_effects.json")
 
         # Load Status Effects
-        status_file = os.path.join(DATA_DIR, 'status_effects.json')
+        status_file = os.path.join(DATA_DIR, "status_effects.json")
         try:
             if os.path.exists(status_file):
-                with open(status_file, 'r', encoding='utf-8') as f:
+                with open(status_file, "r", encoding="utf-8") as f:
                     STATUS_EFFECTS = json.load(f)
-                print(f"Loaded {len(STATUS_EFFECTS)} status effect definitions from status_effects.json.")
+                print(
+                    f"Loaded {len(STATUS_EFFECTS)} status effect definitions from status_effects.json."
+                )
             else:
-                print(f"WARNING: status_effects.json not found at {status_file}. Status lookup will fail.")
+                print(
+                    f"WARNING: status_effects.json not found at {status_file}. Status lookup will fail."
+                )
                 STATUS_EFFECTS = {}
         except json.JSONDecodeError as e:
             print(f"ERROR decoding status_effects.json: {e}. Status lookup will fail.")
@@ -197,19 +229,19 @@ def load_data() -> Dict[str, Any]:
             STATUS_EFFECTS = {}
 
         loaded_data = {
-            'stats_list': STATS_LIST,
-            'skill_categories': SKILL_CATEGORIES,
-            'all_skills': ALL_SKILLS,
-            'ability_data': ABILITY_DATA,
-            'talent_data': TALENT_DATA,
-            'feature_stats_map': FEATURE_STATS_MAP,
-            'kingdom_features_data': KINGDOM_FEATURES_DATA, # --- ADDED ---
-            'melee_weapons': MELEE_WEAPONS,
-            'ranged_weapons': RANGED_WEAPONS,
-            'armor': ARMOR,
-            'injury_effects': INJURY_EFFECTS,
-            'status_effects': STATUS_EFFECTS,
-            'equipment_category_to_skill_map': EQUIPMENT_CATEGORY_TO_SKILL_MAP
+            "stats_list": STATS_LIST,
+            "skill_categories": SKILL_CATEGORIES,
+            "all_skills": ALL_SKILLS,
+            "ability_data": ABILITY_DATA,
+            "talent_data": TALENT_DATA,
+            "feature_stats_map": FEATURE_STATS_MAP,
+            "kingdom_features_data": KINGDOM_FEATURES_DATA,  # --- ADDED ---
+            "melee_weapons": MELEE_WEAPONS,
+            "ranged_weapons": RANGED_WEAPONS,
+            "armor": ARMOR,
+            "injury_effects": INJURY_EFFECTS,
+            "status_effects": STATUS_EFFECTS,
+            "equipment_category_to_skill_map": EQUIPMENT_CATEGORY_TO_SKILL_MAP,
         }
 
         print(f"DEBUG: STATS_LIST len: {len(STATS_LIST)}")
@@ -217,7 +249,9 @@ def load_data() -> Dict[str, Any]:
         print(f"DEBUG: ABILITY_DATA len: {len(ABILITY_DATA)}")
         print(f"DEBUG: TALENT_DATA len: {len(TALENT_DATA)}")
         print(f"DEBUG: FEATURE_STATS_MAP len: {len(FEATURE_STATS_MAP)}")
-        print(f"DEBUG: KINGDOM_FEATURES_DATA keys: {len(KINGDOM_FEATURES_DATA.keys())}") # --- ADDED ---
+        print(
+            f"DEBUG: KINGDOM_FEATURES_DATA keys: {len(KINGDOM_FEATURES_DATA.keys())}"
+        )  # --- ADDED ---
         print(f"Loaded {len(MELEE_WEAPONS)} melee weapon categories.")
         print(f"Loaded {len(RANGED_WEAPONS)} ranged weapon categories.")
         print(f"Loaded {len(ARMOR)} armor categories.")
