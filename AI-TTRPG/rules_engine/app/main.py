@@ -1,5 +1,6 @@
 # main.py
-from fastapi import FastAPI, HTTPException, Request # Import Request
+from fastapi import FastAPI, HTTPException, Request
+from fastapi.middleware.cors import CORSMiddleware
 from typing import List, Dict, Any
 from contextlib import asynccontextmanager
 import logging
@@ -61,6 +62,15 @@ app = FastAPI(
     description="Stateless rules calculator for the Fulcrum System. (v1)",
     version="1.0.0",
     lifespan=lifespan
+)
+
+# Add CORSMiddleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],  # The origin of the frontend
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 # --- Helper Function (Dependency) to Check State ---
