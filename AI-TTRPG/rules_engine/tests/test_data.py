@@ -2,6 +2,7 @@
 from fastapi.testclient import TestClient
 from rules_engine.app.main import app
 
+
 def test_read_status():
     with TestClient(app) as client:
         response = client.get("/")

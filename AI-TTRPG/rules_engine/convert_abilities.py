@@ -3,19 +3,21 @@ import os
 
 # Get the directory where this script is located
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = os.path.join(BASE_DIR, 'data')
-INPUT_FILE = os.path.join(DATA_DIR, 'abilities.json')
-OUTPUT_FILE = os.path.join(DATA_DIR, 'abilities_dict.json') # Save to a new file first
+DATA_DIR = os.path.join(BASE_DIR, "data")
+INPUT_FILE = os.path.join(DATA_DIR, "abilities.json")
+OUTPUT_FILE = os.path.join(DATA_DIR, "abilities_dict.json")  # Save to a new file first
 
 print(f"Loading list from: {INPUT_FILE}")
 
 try:
-    with open(INPUT_FILE, 'r', encoding='utf-8') as f_in:
+    with open(INPUT_FILE, "r", encoding="utf-8") as f_in:
         ability_list = json.load(f_in)
 
     # Check if it's actually a list
     if not isinstance(ability_list, list):
-        print(f"Error: {INPUT_FILE} is not a JSON list. No conversion needed or file is corrupt.")
+        print(
+            f"Error: {INPUT_FILE} is not a JSON list. No conversion needed or file is corrupt."
+        )
         exit()
 
     # Convert list to dictionary
@@ -32,11 +34,13 @@ try:
     print(f"Converted {len(ability_dict)} schools to dictionary format.")
 
     # Save the new dictionary structure to a new file
-    with open(OUTPUT_FILE, 'w', encoding='utf-8') as f_out:
-        json.dump(ability_dict, f_out, indent=2) # Use indent for readability
+    with open(OUTPUT_FILE, "w", encoding="utf-8") as f_out:
+        json.dump(ability_dict, f_out, indent=2)  # Use indent for readability
 
     print(f"Successfully saved dictionary structure to: {OUTPUT_FILE}")
-    print("Please review abilities_dict.json, then rename it to abilities.json if correct.")
+    print(
+        "Please review abilities_dict.json, then rename it to abilities.json if correct."
+    )
 
 except FileNotFoundError:
     print(f"Error: Input file not found at {INPUT_FILE}")

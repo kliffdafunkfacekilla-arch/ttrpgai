@@ -1,64 +1,77 @@
 // src/types/apiTypes.ts
 
+// --- NEW SPECIFIC TYPES ---
+export interface InventoryItem {
+  name: string;
+  description: string;
+  quantity: number;
+}
+
+export interface Injury {
+  location: string;
+  severity: string;
+  description: string;
+}
+
 // --- UNCHANGED TYPES ---
 export interface CharacterContextResponse {
-    id: string;
-    name: string;
-    kingdom: string | null;
-    level: number;
-    stats: { [key: string]: number };
-    skills: { [key: string]: number };
-    max_hp: number;
-    current_hp: number;
-    resource_pools: { [key: string]: { current: number, max: number } };
-    talents: string[];
-    abilities: string[];
-    inventory: { [key: string]: any };
-    equipment: { [key: string]: any };
-    status_effects: string[];
-    injuries: { [key: string]: any }[];
-    position_x: number;
-    position_y: number;
+  id: string;
+  name: string;
+  kingdom: string | null;
+  level: number;
+  stats: { [key: string]: number };
+  skills: { [key: string]: number };
+  max_hp: number;
+  current_hp: number;
+  resource_pools: { [key: string]: { current: number; max: number } };
+  talents: string[];
+  abilities: string[];
+  inventory: { [key: string]: InventoryItem };
+  equipment: { [key: string]: InventoryItem };
+  status_effects: string[];
+  injuries: Injury[];
+  position_x: number;
+  position_y: number;
 }
 
 export interface InteractionRequest {
-    character_id: string;
-    action: string;
-    target_id?: string;
-    context: string;
+  character_id: string;
+  action: string;
+  target_id?: string;
+  context: string;
 }
 
 export interface InteractionResponse {
-    narrative: string;
-    options: string[];
-    // ... other potential fields
+  narrative: string;
+  options: string[];
+  // ... other potential fields
 }
 
 export interface CombatNpc {
-    id: string;
-    name: string;
-    hp: number;
-    max_hp: number;
-    position: { x: number, y: number };
-    // ... other combat-relevant fields
+  id: string;
+  name: string;
+  hp: number;
+  max_hp: number;
+  position: { x: number; y: number };
+  // ... other combat-relevant fields
 }
 
 export interface CombatEncounterResponse {
-    encounter_id: string;
-    player_character: CharacterContextResponse;
-    npcs: CombatNpc[];
-    current_turn: string; // 'player' or npc_id
-    log: string[];
-    grid_size: { width: number, height: number };
+  encounter_id: string;
+  player_character: CharacterContextResponse;
+  npcs: CombatNpc[];
+  current_turn: string; // 'player' or npc_id
+  log: string[];
+  grid_size: { width: number; height: number };
 }
 
 export interface CombatActionRequest {
-    character_id: string;
-    action_type: string; // 'move', 'attack', 'ability', 'item'
-    target_id?: string;
-    position?: { x: number, y: number };
-    ability_name?: string;
-    item_name?: string;
+  character_id: string;
+  action_type: string; // 'move', 'attack', 'ability', 'item'
+  target_id?: string;
+  position?: { x: number; y: number };
+  ability_name?: string;
+  item_name?: string;
 }
 
 // --- NEW CHARACTER CREATION TYPES ---
@@ -67,8 +80,8 @@ export interface CombatActionRequest {
  * Matches schemas.FeatureChoice in character_engine.
  */
 export interface FeatureChoiceRequest {
-    feature_id: string; // e.g., "F1", "F9"
-    choice_name: string; // e.g., "Predator's Gaze", "Capstone: +2 Might"
+  feature_id: string; // e.g., "F1", "F9"
+  choice_name: string; // e.g., "Predator's Gaze", "Capstone: +2 Might"
 }
 
 /**
@@ -76,12 +89,12 @@ export interface FeatureChoiceRequest {
  * Matches schemas.CharacterCreate in character_engine.
  */
 export interface CharacterCreateRequest {
-    name: string;
-    kingdom: string;
-    feature_choices: FeatureChoiceRequest[];
-    background_talent: string;
-    ability_school: string;
-    ability_talent: string;
+  name: string;
+  kingdom: string;
+  feature_choices: FeatureChoiceRequest[];
+  background_talent: string;
+  ability_school: string;
+  ability_talent: string;
 }
 
 /**
@@ -89,26 +102,26 @@ export interface CharacterCreateRequest {
  * (This type may already exist, but ensuring it's here).
  */
 export interface TalentInfo {
-    name: string;
-    description: string;
-    // Note: The rules_engine endpoints from Module 1 only return these fields.
+  name: string;
+  description: string;
+  // Note: The rules_engine endpoints from Module 1 only return these fields.
 }
 
 /**
  * The modifiers block for a single feature choice.
  */
 export interface FeatureMods {
-    "+2"?: string[];
-    "+1"?: string[];
-    "-1"?: string[];
+  "+2"?: string[];
+  "+1"?: string[];
+  "-1"?: string[];
 }
 
 /**
  * A single selectable choice within a kingdom for a feature.
  */
 export interface KingdomFeatureChoice {
-    name: string;
-    mods: FeatureMods;
+  name: string;
+  mods: FeatureMods;
 }
 
 /**
@@ -117,7 +130,7 @@ export interface KingdomFeatureChoice {
  * or { "All": [KingdomFeatureChoice...] } for F9.
  */
 export interface KingdomFeatureSet {
-    [kingdom: string]: KingdomFeatureChoice[];
+  [kingdom: string]: KingdomFeatureChoice[];
 }
 
 /**
@@ -125,5 +138,5 @@ export interface KingdomFeatureSet {
  * e.g., { "F1": KingdomFeatureSet, "F2": KingdomFeatureSet, ... }
  */
 export interface KingdomFeaturesData {
-    [feature_id: string]: KingdomFeatureSet;
+  [feature_id: string]: KingdomFeatureSet;
 }
