@@ -61,6 +61,10 @@ export const fetchCharacters = (): Promise<CharacterContextResponse[]> => {
   return api<CharacterContextResponse[]>(`${CHARACTER_API_URL}/v1/characters/`);
 };
 
+// --- Character Engine Functions (UNCHANGED) ---
+export const fetchCharacters = (): Promise<CharacterContextResponse[]> => {
+  return api<CharacterContextResponse[]>(`${CHARACTER_API_URL}/v1/characters/`);
+};
 export const fetchCharacterContext = (
   characterId: string,
 ): Promise<CharacterContextResponse> => {
@@ -68,7 +72,6 @@ export const fetchCharacterContext = (
     `${CHARACTER_API_URL}/v1/characters/${characterId}`,
   );
 };
-
 export const createCharacter = (
   payload: CharacterCreateRequest,
 ): Promise<CharacterContextResponse> => {
@@ -77,7 +80,6 @@ export const createCharacter = (
     body: JSON.stringify(payload),
   });
 };
-
 export const updateCharacterContext = (
   characterId: string,
   context: CharacterContextResponse,
@@ -110,6 +112,7 @@ export const updatePlayerLocation = (
 };
 
 // --- Story Engine Functions ---
+// --- Story Engine Functions (UNCHANGED) ---
 export const getLocationContext = (
   locationId: string,
 ): Promise<LocationContextResponse> => {
@@ -117,7 +120,6 @@ export const getLocationContext = (
     `${BASE_URL}/v1/context/location/${locationId}`,
   );
 };
-
 export const postInteraction = (
   request: InteractionRequest,
 ): Promise<InteractionResponse> => {
@@ -126,7 +128,6 @@ export const postInteraction = (
     body: JSON.stringify(request),
   });
 };
-
 export const startCombat = (
   payload: CombatStartRequestPayload,
 ): Promise<CombatEncounterResponse> => {
@@ -135,7 +136,6 @@ export const startCombat = (
     body: JSON.stringify(payload),
   });
 };
-
 export const getCombatState = (
   encounterId: string,
 ): Promise<CombatEncounterResponse> => {
@@ -167,7 +167,6 @@ export const postNpcAction = (
     },
   );
 };
-
 // --- Rules Engine Functions ---
 export const getKingdomFeatures = (): Promise<KingdomFeaturesData> => {
   return api<KingdomFeaturesData>(
@@ -177,12 +176,12 @@ export const getKingdomFeatures = (): Promise<KingdomFeaturesData> => {
 
 // --- REMOVED: getBackgroundTalents ---
 
+// --- REMOVED: getBackgroundTalents ---
 export const getAbilityTalents = (): Promise<TalentInfo[]> => {
   return api<TalentInfo[]>(
     `${RULES_API_URL}/v1/lookup/creation/ability_talents`,
   );
 };
-
 export const getAbilitySchools = (): Promise<string[]> => {
   return api<string[]>(`${RULES_API_URL}/v1/lookup/all_ability_schools`);
 };

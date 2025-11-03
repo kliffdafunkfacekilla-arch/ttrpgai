@@ -3,11 +3,13 @@ import React, { useState, useEffect, useMemo } from "react"; // --- IMPORT useMe
 import {
   createCharacter,
   getKingdomFeatures,
+  // --- MODIFIED: Remove old, add new ---
   getOriginChoices,
   getChildhoodChoices,
   getComingOfAgeChoices,
   getTrainingChoices,
   getDevotionChoices,
+  // --- END MODIFIED ---
   getAbilityTalents,
   getAbilitySchools,
   getAllSkills, // --- ADDED ---
@@ -21,6 +23,7 @@ import {
   type FeatureChoiceRequest,
   type BackgroundChoiceInfo,
   type FeatureMods, // --- IMPORT FeatureMods ---
+  type BackgroundChoiceInfo, // --- ADDED ---
 } from "../types/apiTypes";
 
 // --- Component Props ---
@@ -33,11 +36,13 @@ interface CharacterCreationScreenProps {
 type CreationStep =
   | "kingdom"
   | "features"
+  // --- MODIFIED: Add 5 new steps ---
   | "origin"
   | "childhood"
   | "comingOfAge"
   | "training"
   | "devotion"
+  // --- END MODIFIED ---
   | "school"
   | "talent"
   | "name"
@@ -51,11 +56,15 @@ type LoadingState = {
 // --- MODIFIED: Add all_skills and ability_school_stats ---
 type RulesData = {
   kingdomFeatures: KingdomFeaturesData | null;
+type RulesData = {
+  kingdomFeatures: KingdomFeaturesData | null;
+  // --- MODIFIED: Remove backgroundTalents, add 5 new arrays ---
   originChoices: BackgroundChoiceInfo[];
   childhoodChoices: BackgroundChoiceInfo[];
   comingOfAgeChoices: BackgroundChoiceInfo[];
   trainingChoices: BackgroundChoiceInfo[];
   devotionChoices: BackgroundChoiceInfo[];
+  // --- END MODIFIED ---
   abilityTalents: TalentInfo[];
   abilitySchools: string[];
   all_skills: { [key: string]: { stat: string } }; // --- ADDED: To hold skill->stat map ---
@@ -65,11 +74,13 @@ type RulesData = {
 type Choices = {
   kingdom: string | null;
   featureChoices: FeatureChoiceRequest[];
+  // --- MODIFIED: Remove backgroundTalent, add 5 new choices ---
   originChoice: string | null;
   childhoodChoice: string | null;
   comingOfAgeChoice: string | null;
   trainingChoice: string | null;
   devotionChoice: string | null;
+  // --- END MODIFIED ---
   abilitySchool: string | null;
   abilityTalent: string | null;
   name: string;
@@ -130,11 +141,13 @@ const CharacterCreationScreen: React.FC<CharacterCreationScreenProps> = ({
   });
   const [rulesData, setRulesData] = useState<RulesData>({
     kingdomFeatures: null,
+    // --- MODIFIED: Initialize new state ---
     originChoices: [],
     childhoodChoices: [],
     comingOfAgeChoices: [],
     trainingChoices: [],
     devotionChoices: [],
+    // --- END MODIFIED ---
     abilityTalents: [],
     abilitySchools: [],
     all_skills: {}, // --- ADDED ---
@@ -143,11 +156,13 @@ const CharacterCreationScreen: React.FC<CharacterCreationScreenProps> = ({
   const [choices, setChoices] = useState<Choices>({
     kingdom: null,
     featureChoices: [],
+    // --- MODIFIED: Initialize new choices ---
     originChoice: null,
     childhoodChoice: null,
     comingOfAgeChoice: null,
     trainingChoice: null,
     devotionChoice: null,
+    // --- END MODIFIED ---
     abilitySchool: null,
     abilityTalent: null,
     name: "",
@@ -172,11 +187,15 @@ const CharacterCreationScreen: React.FC<CharacterCreationScreenProps> = ({
           allSkills, // --- ADDED ---
         ] = await Promise.all([
           getKingdomFeatures(),
+        ] = await Promise.all([
+          getKingdomFeatures(),
+          // --- MODIFIED: Call 5 new functions ---
           getOriginChoices(),
           getChildhoodChoices(),
           getComingOfAgeChoices(),
           getTrainingChoices(),
           getDevotionChoices(),
+          // --- END MODIFIED ---
           getAbilityTalents(),
           getAbilitySchools(),
           getAllSkills(), // --- ADDED ---
@@ -184,11 +203,13 @@ const CharacterCreationScreen: React.FC<CharacterCreationScreenProps> = ({
 
         setRulesData({
           kingdomFeatures: features,
+          // --- MODIFIED: Set new data ---
           originChoices: origins,
           childhoodChoices: childhoods,
           comingOfAgeChoices: comingOfAges,
           trainingChoices: trainings,
           devotionChoices: devotions,
+          // --- END MODIFIED ---
           abilityTalents: abTalents,
           abilitySchools: schools,
           all_skills: allSkills, // --- ADDED ---
@@ -343,6 +364,7 @@ const CharacterCreationScreen: React.FC<CharacterCreationScreenProps> = ({
   // --- Selection Handlers (Unchanged) ---
   const selectKingdom = (kingdom: string) => {
     setChoices((c) => ({ ...c, kingdom, featureChoices: [] }));
+    setChoices((c) => ({ ...c, kingdom, featureChoices: [] })); // Reset features
     handleNext();
   };
   const selectFeatureChoice = (
@@ -365,6 +387,8 @@ const CharacterCreationScreen: React.FC<CharacterCreationScreenProps> = ({
       handleNext();
     }
   };
+
+  // --- ADDED: 5 new selection handlers ---
   const selectOrigin = (choiceName: string) => {
     setChoices((c) => ({ ...c, originChoice: choiceName }));
     handleNext();
@@ -385,6 +409,18 @@ const CharacterCreationScreen: React.FC<CharacterCreationScreenProps> = ({
     setChoices((c) => ({ ...c, devotionChoice: choiceName }));
     handleNext();
   };
+    handleNext();
+  };
+  const selectTraining = (choiceName: string) => {
+    setChoices((c) => ({ ...c, trainingChoice: choiceName }));
+    handleNext();
+  };
+  const selectDevotion = (choiceName: string) => {
+    setChoices((c) => ({ ...c, devotionChoice: choiceName }));
+    handleNext();
+  };
+  // --- END ADD ---
+
   const selectSchool = (schoolName: string) => {
     setChoices((c) => ({
       ...c,
@@ -521,6 +557,8 @@ const CharacterCreationScreen: React.FC<CharacterCreationScreenProps> = ({
       </div>
     );
   };
+
+  // --- ADDED: Generic renderer for 5 new steps ---
   const renderBackgroundChoice = (
     stepTitle: string,
     choices: BackgroundChoiceInfo[],
@@ -547,6 +585,7 @@ const CharacterCreationScreen: React.FC<CharacterCreationScreenProps> = ({
       </div>
     </div>
   );
+  // --- END ADD ---
 
   // --- MODIFIED: renderSchoolSelect ---
   const renderSchoolSelect = () => {
@@ -605,6 +644,21 @@ const CharacterCreationScreen: React.FC<CharacterCreationScreenProps> = ({
             );
           })}
         </div>
+  const renderSchoolSelect = () => (
+    <div>
+      <h2 className="text-3xl font-bold mb-6 text-center text-amber-300 glow-text font-medieval">
+        Step 8: Choose Ability School
+      </h2>
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+        {rulesData.abilitySchools.map((school) => (
+          <button
+            key={school}
+            onClick={() => selectSchool(school)}
+            className="stone-button p-4 text-lg"
+          >
+            {capitalize(school)}
+          </button>
+        ))}
       </div>
     );
   };
@@ -644,6 +698,7 @@ const CharacterCreationScreen: React.FC<CharacterCreationScreenProps> = ({
 
     // TODO: Filter talents based on stats/skills
     // This is a placeholder. The real logic will be complex.
+    // TODO: Filter talents based on stats/skills
     const availableTalents = rulesData.abilityTalents;
 
     return (
@@ -735,6 +790,28 @@ const CharacterCreationScreen: React.FC<CharacterCreationScreenProps> = ({
       </div>
     );
   };
+  const renderNameInput = () => (
+    <div>
+      <h2 className="text-3xl font-bold mb-6 text-center text-amber-300 glow-text font-medieval">
+        Step 10: Choose Your Name
+      </h2>
+      <input
+        type="text"
+        value={choices.name}
+        onChange={(e) => setChoices((c) => ({ ...c, name: e.target.value }))}
+        className="w-full p-4 bg-stone-800 border border-stone-600 rounded-lg text-white text-xl"
+        placeholder="Enter character name"
+      />
+      <button
+        onClick={handleNext}
+        disabled={!choices.name.trim()}
+        className="w-full mt-4 stone-button"
+      >
+        Review Character
+      </button>
+    </div>
+  );
+
   const isReviewComplete = () => {
     const f9Choice = choices.featureChoices.find((f) => f.feature_id === "F9");
     return (
@@ -775,6 +852,16 @@ const CharacterCreationScreen: React.FC<CharacterCreationScreenProps> = ({
             / 8 chosen
           </p>
           <hr className="border-stone-600 my-2" />
+          <p>
+            <strong>Origin:</strong> {choices.originChoice || "..."}
+          </p>
+          <hr className="border-stone-600 my-2" />
+          <p>
+            <strong>Childhood:</strong> {choices.childhoodChoice || "..."}
+          </p>
+          <p>
+            <strong>Coming of Age:</strong> {choices.comingOfAgeChoice || "..."}
+          </p>
           <p>
             <strong>Origin:</strong> {choices.originChoice || "..."}
           </p>

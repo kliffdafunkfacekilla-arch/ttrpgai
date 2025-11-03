@@ -1,18 +1,19 @@
 // src/types/apiTypes.ts
 
 // --- Core Character & World Types ---
+// --- NEW SPECIFIC TYPES ---
 export interface InventoryItem {
   name: string; // This seems to be used by CharacterSheetScreen
   description?: string; // Adding as optional
   quantity: number;
 }
-
 export interface Injury {
   location: string;
   severity: string;
   description: string;
 }
 
+// --- UNCHANGED TYPES ---
 export interface CharacterContextResponse {
   id: string;
   name: string;
@@ -80,6 +81,18 @@ export interface NpcInstance {
 }
 
 export interface ItemInstance {
+export interface InteractionRequest {
+  character_id: string;
+  action: string;
+  target_id?: string;
+  context: string;
+}
+export interface InteractionResponse {
+  narrative: string;
+  options: string[];
+  // ... other potential fields
+}
+export interface CombatNpc {
   id: string;
   template_id: string;
   coordinates: [number, number];
@@ -108,7 +121,6 @@ export interface CombatStartRequestPayload {
   player_ids: string[];
   npc_template_ids: string[];
 }
-
 export interface CombatEncounterResponse {
   id: number;
   location_id: string;
@@ -125,6 +137,9 @@ export interface CombatEncounterResponse {
 
 export interface PlayerActionRequestPayload {
   action: "attack" | "use_ability" | "use_item" | "wait";
+export interface CombatActionRequest {
+  character_id: string;
+  action_type: string; // 'move', 'attack', 'ability', 'item'
   target_id?: string;
   ability_id?: string;
   item_id?: string;
@@ -139,11 +154,20 @@ export interface PlayerActionResponse {
 }
 
 // --- Types for Character Creation ---
+// --- NEW CHARACTER CREATION TYPES ---
+/**
+ * Represents a single choice for a feature, sent to the character_engine.
+ * Matches schemas.FeatureChoice in character_engine.
+ */
 export interface FeatureChoiceRequest {
   feature_id: string; // e.g., "F1", "F9"
   choice_name: string; // e.g., "Predator's Gaze", "Capstone: +2 Might"
 }
 
+/**
+ * The full payload for creating a new character.
+ * Matches schemas.CharacterCreate in character_engine.
+ */
 export interface CharacterCreateRequest {
   name: string;
   kingdom: string;
@@ -161,6 +185,9 @@ export interface CharacterCreateRequest {
   ability_talent: string;
 }
 
+/**
+ * A simple talent structure returned by the rules_engine.
+ */
 export interface TalentInfo {
   name: string;
   description: string; // Changed from 'effect' to match UI
@@ -176,12 +203,28 @@ export interface BackgroundChoiceInfo {
 }
 // --- END ADD ---
 
+// --- ADDED THIS TYPE ---
+/**
+ * A simple background choice structure returned by the rules_engine.
+ */
+export interface BackgroundChoiceInfo {
+  name: string;
+  description: string;
+  skills: string[];
+}
+// --- END ADD ---
+/**
+ * The modifiers block for a single feature choice.
+ */
 export interface FeatureMods {
   "+2"?: string[];
   "+1"?: string[];
   "-1"?: string[];
 }
 
+/**
+ * A single selectable choice within a kingdom for a feature.
+ */
 export interface KingdomFeatureChoice {
   name: string;
   mods: FeatureMods;
@@ -191,6 +234,18 @@ export interface KingdomFeatureSet {
   [kingdom: string]: KingdomFeatureChoice[];
 }
 
+/**
+ * The set of choices for a given feature, keyed by Kingdom.
+ * e.g., { "Mammal": [KingdomFeatureChoice...], "Reptile": [...] }
+ * or { "All": [KingdomFeatureChoice...] } for F9.
+ */
+export interface KingdomFeatureSet {
+  [kingdom: string]: KingdomFeatureChoice[];
+}
+/**
+ * The complete kingdom features data structure fetched from the rules_engine.
+ * e.g., { "F1": KingdomFeatureSet, "F2": KingdomFeatureSet, ... }
+ */
 export interface KingdomFeaturesData {
   [feature_id: string]: KingdomFeatureSet;
 }
