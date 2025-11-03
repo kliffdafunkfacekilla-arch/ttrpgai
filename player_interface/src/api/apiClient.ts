@@ -1,15 +1,14 @@
 // src/api/apiClient.ts
 import {
   type CharacterContextResponse,
-  type InteractionRequest,
+  // --- MODIFIED: Use InteractionRequestPayload ---
+  type InteractionRequestPayload as InteractionRequest,
   type InteractionResponse,
   type CombatEncounterResponse,
-  // --- MODIFIED: Renamed CombatActionRequest to align with story_engine ---
-  type PlayerActionRequest as CombatActionRequest,
+  type PlayerActionRequest as CombatActionRequest, // This seems unused, but we'll leave it
   type CharacterCreateRequest,
   type KingdomFeaturesData,
   type TalentInfo,
-  // --- ADDED: New types needed for the missing functions ---
   type LocationContextResponse,
   type PlayerActionResponse,
   type CombatStartRequestPayload,
@@ -57,6 +56,11 @@ async function api<T>(url: string, options: RequestInit = {}): Promise<T> {
   }
 }
 
+// --- Character Engine Functions ---
+export const fetchCharacters = (): Promise<CharacterContextResponse[]> => {
+  return api<CharacterContextResponse[]>(`${CHARACTER_API_URL}/v1/characters/`);
+};
+
 // --- Character Engine Functions (UNCHANGED) ---
 export const fetchCharacters = (): Promise<CharacterContextResponse[]> => {
   return api<CharacterContextResponse[]>(`${CHARACTER_API_URL}/v1/characters/`);
@@ -88,12 +92,14 @@ export const updateCharacterContext = (
     },
   );
 };
+
 export const updatePlayerLocation = (
   characterId: string,
   locationId: string,
   coordinates: [number, number],
 ): Promise<CharacterContextResponse> => {
   return api<CharacterContextResponse>(
+    // --- MODIFIED: Use character ID from context ---
     `${CHARACTER_API_URL}/v1/characters/${characterId}/location`,
     {
       method: "PUT",
@@ -104,6 +110,8 @@ export const updatePlayerLocation = (
     },
   );
 };
+
+// --- Story Engine Functions ---
 // --- Story Engine Functions (UNCHANGED) ---
 export const getLocationContext = (
   locationId: string,
@@ -135,6 +143,7 @@ export const getCombatState = (
     `${BASE_URL}/v1/combat/state/${encounterId}`,
   );
 };
+
 export const postCombatAction = (
   encounterId: number,
   action: PlayerActionRequestPayload,
@@ -147,6 +156,7 @@ export const postCombatAction = (
     },
   );
 };
+
 export const postNpcAction = (
   encounterId: number,
 ): Promise<PlayerActionResponse> => {
@@ -163,6 +173,9 @@ export const getKingdomFeatures = (): Promise<KingdomFeaturesData> => {
     `${RULES_API_URL}/v1/lookup/creation/kingdom_features`,
   );
 };
+
+// --- REMOVED: getBackgroundTalents ---
+
 // --- REMOVED: getBackgroundTalents ---
 export const getAbilityTalents = (): Promise<TalentInfo[]> => {
   return api<TalentInfo[]>(
@@ -172,30 +185,42 @@ export const getAbilityTalents = (): Promise<TalentInfo[]> => {
 export const getAbilitySchools = (): Promise<string[]> => {
   return api<string[]>(`${RULES_API_URL}/v1/lookup/all_ability_schools`);
 };
+
 // --- ADDED: 5 new functions ---
 export const getOriginChoices = (): Promise<BackgroundChoiceInfo[]> => {
   return api<BackgroundChoiceInfo[]>(
     `${RULES_API_URL}/v1/lookup/creation/origin_choices`,
   );
 };
+
 export const getChildhoodChoices = (): Promise<BackgroundChoiceInfo[]> => {
   return api<BackgroundChoiceInfo[]>(
     `${RULES_API_URL}/v1/lookup/creation/childhood_choices`,
   );
 };
+
 export const getComingOfAgeChoices = (): Promise<BackgroundChoiceInfo[]> => {
   return api<BackgroundChoiceInfo[]>(
     `${RULES_API_URL}/v1/lookup/creation/coming_of_age_choices`,
   );
 };
+
 export const getTrainingChoices = (): Promise<BackgroundChoiceInfo[]> => {
   return api<BackgroundChoiceInfo[]>(
     `${RULES_API_URL}/v1/lookup/creation/training_choices`,
   );
 };
+
 export const getDevotionChoices = (): Promise<BackgroundChoiceInfo[]> => {
   return api<BackgroundChoiceInfo[]>(
     `${RULES_API_URL}/v1/lookup/creation/devotion_choices`,
+  );
+};
+
+// --- ADDED: The missing function ---
+export const getAllSkills = (): Promise<{ [key: string]: { stat: string } }> => {
+  return api<{ [key: string]: { stat: string } }>(
+    `${RULES_API_URL}/v1/lookup/all_skills`,
   );
 };
 // --- END ADD ---
