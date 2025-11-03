@@ -1,0 +1,17 @@
+[
+  {
+    "name": "Street Urchin",
+    "description": "You grew up fending for yourself, learning to be quick with your hands and your words.",
+    "skills": ["Slight of Hand", "Intimidation"]
+  },
+  {
+    "name": "Noble Scion",
+    "description": "Your childhood was one of privilege and education, focused on rhetoric and debate.",
+    "skills": ["Persuasion", "Debate"]
+  },
+  {
+    "name": "Apprentice Artificer",
+    "description": "You spent your youth tinkering with mechanisms and learning from a master.",
+    "skills": ["Artifice", "Security"]
+  }
+]
