@@ -5,6 +5,11 @@ import uuid
 import httpx  # Import httpx
 import os  # Import os
 from . import models, schemas
+import logging  # --- ADD LOGGING ---
+
+
+# --- ADDED: Logger ---
+logger = logging.getLogger("uvicorn.error")
 
 # --- ADDED: Rules Engine Configuration ---
 RULES_ENGINE_URL = os.getenv("RULES_ENGINE_URL", "http://127.0.0.1:8000/v1")
@@ -101,7 +106,7 @@ def get_character_context(
     )
 
 
-# --- ADDED: Helper functions for new creation logic ---
+# --- UNCHANGED: Helper functions for new creation logic ---
 async def _call_rules_engine(
     method: str, endpoint: str, params: Dict = None, json_data: Dict = None
 ) -> Any:
@@ -157,13 +162,21 @@ def _get_rules_engine_data() -> Dict[str, Any]:
     print("Fetching all creation data from Rules Engine...")
     endpoints = {
         "kingdom_features": "/lookup/creation/kingdom_features",
-        "background_talents_list": "/lookup/creation/background_talents",
-        "ability_talents_list": "/lookup/creation/ability_talents",
+        # --- REMOVED OLD TALENT ENDPOINTS ---
+        # "background_talents_list": "/lookup/creation/background_talents",
+        # "ability_talents_list": "/lookup/creation/ability_talents",
         "ability_schools": "/lookup/all_ability_schools",  # Returns a list of names
         "stats_list": "/lookup/all_stats",
         "all_skills": "/lookup/all_skills",
         "all_talents": "/v1/lookup/talents",  # POST, needs empty body to get all
         "all_abilities_full": "/lookup/all_ability_schools",  # Re-using, need to get full data
+        # --- ADD NEW BACKGROUND CHOICE ENDPOINTS ---
+        "origin_choices": "/lookup/creation/origin_choices",
+        "childhood_choices": "/lookup/creation/childhood_choices",
+        "coming_of_age_choices": "/lookup/creation/coming_of_age_choices",
+        "training_choices": "/lookup/creation/training_choices",
+        "devotion_choices": "/lookup/creation/devotion_choices",
+        # --- END ADD ---
     }
 
     rules_data = {}
@@ -294,17 +307,69 @@ def create_character(
                 f"Error applying feature {choice.feature_id} ({choice.choice_name}): {e}"
             )
 
-    # 4. Apply Background Talent mods
-    print(f"Applying Background Talent mods for: {character.background_talent}")
-    bg_talent_data = rules.get("all_talents_map", {}).get(character.background_talent)
-    if bg_talent_data and "mods" in bg_talent_data:
-        _apply_mods(base_stats, bg_talent_data["mods"])
-    else:
-        print(
-            f"Warning: No mod data found for background talent {character.background_talent}"
-        )
+    # 4. Apply Background Skills
+    print("Applying background skills...")
+    background_skills_to_add = []
+
+    # Create master map for easy lookup
+    background_choices_map = {
+        "origin": {item["name"]: item for item in rules.get("origin_choices", [])},
+        "childhood": {
+            item["name"]: item for item in rules.get("childhood_choices", [])
+        },
+        "coming_of_age": {
+            item["name"]: item for item in rules.get("coming_of_age_choices", [])
+        },
+        "training": {item["name"]: item for item in rules.get("training_choices", [])},
+        "devotion": {item["name"]: item for item in rules.get("devotion_choices", [])},
+    }
+
+    # Look up each choice
+    origin_skills = (
+        background_choices_map["origin"]
+        .get(character.origin_choice, {})
+        .get("skills", [])
+    )
+    childhood_skills = (
+        background_choices_map["childhood"]
+        .get(character.childhood_choice, {})
+        .get("skills", [])
+    )
+    coming_of_age_skills = (
+        background_choices_map["coming_of_age"]
+        .get(character.coming_of_age_choice, {})
+        .get("skills", [])
+    )
+    training_skills = (
+        background_choices_map["training"]
+        .get(character.training_choice, {})
+        .get("skills", [])
+    )
+    devotion_skills = (
+        background_choices_map["devotion"]
+        .get(character.devotion_choice, {})
+        .get("skills", [])
+    )
+
+    # Combine all 10 skills
+    all_background_skills = (
+        origin_skills
+        + childhood_skills
+        + coming_of_age_skills
+        + training_skills
+        + devotion_skills
+    )
+
+    for skill_name in all_background_skills:
+        if skill_name in base_skills:
+            base_skills[skill_name] = 1  # Set rank to 1
+            print(f"Granted Rank 1 in skill: {skill_name}")
+        else:
+            print(f"Warning: Background choice granted unknown skill '{skill_name}'")
 
     # 5. Apply Ability Talent mods
+    # Note: We still apply stat mods from the *Ability* talent.
+    # The *Background* talent is now replaced by the 5 background choices.
     print(f"Applying Ability Talent mods for: {character.ability_talent}")
     ab_talent_data = rules.get("all_talents_map", {}).get(character.ability_talent)
     if ab_talent_data and "mods" in ab_talent_data:
@@ -315,6 +380,7 @@ def create_character(
         )
 
     print(f"Final calculated stats: {base_stats}")
+    print(f"Final skills with rank 1: {all_background_skills}")
 
     # 6. Get Vitals from Rules Engine
     print("Calculating vitals...")
@@ -349,11 +415,11 @@ def create_character(
         kingdom=character.kingdom,
         level=1,
         stats=base_stats,
-        skills=base_skills,
+        skills=base_skills,  # This now contains the 10 skills at rank 1
         max_hp=max_hp,
         current_hp=max_hp,  # Start at full health
         resource_pools=resource_pools,
-        talents=[character.background_talent, character.ability_talent],
+        talents=[character.ability_talent],  # Only save the ability talent
         abilities=base_abilities,
         # Set defaults for the rest
         inventory={},

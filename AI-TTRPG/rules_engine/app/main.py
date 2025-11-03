@@ -16,6 +16,7 @@ from .models import (
     FeatureStatsResponse,
     SkillCategoryResponse,
     AbilitySchoolResponse,
+    BackgroundChoice,  # --- ADD THIS IMPORT ---
 )
 
 # Use relative imports for local modules
@@ -46,6 +47,14 @@ async def lifespan(app: FastAPI):
         app.state.equipment_category_to_skill_map = loaded_rules.get(
             "equipment_category_to_skill_map", {}
         )
+        # --- ADD NEW BACKGROUND STATES ---
+        app.state.origin_choices = loaded_rules.get("origin_choices", [])
+        app.state.childhood_choices = loaded_rules.get("childhood_choices", [])
+        app.state.coming_of_age_choices = loaded_rules.get("coming_of_age_choices", [])
+        app.state.training_choices = loaded_rules.get("training_choices", [])
+        app.state.devotion_choices = loaded_rules.get("devotion_choices", [])
+        # --- END ADD ---
+
         print("INFO: Rules data loaded successfully and stored in app.state.")
     except Exception as e:
         print(f"FATAL: Failed to load rules data on startup: {e}")
@@ -62,6 +71,14 @@ async def lifespan(app: FastAPI):
         app.state.armor = {}
         app.state.injury_effects = {}
         app.state.status_effects = {}
+        # --- ADD EMPTY BACKGROUND STATES ---
+        app.state.origin_choices = []
+        app.state.childhood_choices = []
+        app.state.coming_of_age_choices = []
+        app.state.training_choices = []
+        app.state.devotion_choices = []
+        # --- END ADD ---
+
         # Optionally re-raise to prevent server start on load failure
         # raise
     yield
@@ -88,6 +105,11 @@ def check_state_loaded(request: Request):
         "talent_data",
         "feature_stats_map",
         "kingdom_features_data",
+        "origin_choices",  # --- ADD ---
+        "childhood_choices",  # --- ADD ---
+        "coming_of_age_choices",  # --- ADD ---
+        "training_choices",  # --- ADD ---
+        "devotion_choices",  # --- ADD ---
     ]
     # --- END MODIFIED ---
     missing = [
@@ -119,6 +141,15 @@ async def get_status(request: Request):
         ranged_weapons = getattr(request.app.state, "ranged_weapons", {})
         armor = getattr(request.app.state, "armor", {})
         injury_effects = getattr(request.app.state, "injury_effects", {})
+        # --- ADD NEW BACKGROUND STATES ---
+        origin_choices = getattr(request.app.state, "origin_choices", [])
+        childhood_choices = getattr(request.app.state, "childhood_choices", [])
+        coming_of_age_choices = getattr(
+            request.app.state, "coming_of_age_choices", []
+        )
+        training_choices = getattr(request.app.state, "training_choices", [])
+        devotion_choices = getattr(request.app.state, "devotion_choices", [])
+        # --- END ADD ---
 
         stats_loaded = bool(stats_list)
         skills_loaded = bool(all_skills)
@@ -130,6 +161,17 @@ async def get_status(request: Request):
         ranged_weapons_loaded = bool(ranged_weapons)
         armor_loaded = bool(armor)
         injury_effects_loaded = bool(injury_effects)
+        # --- ADD NEW BACKGROUND CHECKS ---
+        background_choices_loaded = all(
+            [
+                bool(origin_choices),
+                bool(childhood_choices),
+                bool(coming_of_age_choices),
+                bool(training_choices),
+                bool(devotion_choices),
+            ]
+        )
+        # --- END ADD ---
 
         # --- MODIFIED ---
         if not all(
@@ -144,6 +186,7 @@ async def get_status(request: Request):
                 ranged_weapons_loaded,
                 armor_loaded,
                 injury_effects_loaded,
+                background_choices_loaded,  # --- ADD ---
             ]
         ):
             # --- END MODIFIED ---
@@ -166,6 +209,13 @@ async def get_status(request: Request):
             "ranged_weapons_loaded_count": len(ranged_weapons),
             "armor_loaded_count": len(armor),
             "injury_effects_loaded_count": len(injury_effects),
+            # --- ADD NEW COUNTS ---
+            "origin_choices_loaded_count": len(origin_choices),
+            "childhood_choices_loaded_count": len(childhood_choices),
+            "coming_of_age_choices_loaded_count": len(coming_of_age_choices),
+            "training_choices_loaded_count": len(training_choices),
+            "devotion_choices_loaded_count": len(devotion_choices),
+            # --- END ADD ---
         }
     except Exception as e:
         logger.exception(f"Error in get_status accessing app.state: {e}")
@@ -385,6 +435,7 @@ async def api_get_background_talents(request: Request):
             background_talents.append(
                 TalentInfo(
                     name=talent_name,
+                    source=f"Talent Type: Background",
                     description=talent_info.get("description", "No description."),
                 )
             )
@@ -420,6 +471,7 @@ async def api_get_ability_talents(request: Request):
             ability_talents.append(
                 TalentInfo(
                     name=talent_name,
+                    source=f"Talent Type: Ability",
                     description=talent_info.get("description", "No description."),
                     # We can add more fields if TalentInfo model is expanded
                 )
@@ -427,6 +479,62 @@ async def api_get_ability_talents(request: Request):
 
     logger.info(f"Returning {len(ability_talents)} ability talents.")
     return ability_talents
+
+
+# --- ADD NEW BACKGROUND CHOICE ENDPOINTS ---
+@app.get(
+    "/v1/lookup/creation/origin_choices",
+    response_model=List[models.BackgroundChoice],
+    tags=["Character Creation"],
+)
+async def api_get_origin_choices(request: Request):
+    """Returns all Origin background choices."""
+    check_state_loaded(request)
+    return request.app.state.origin_choices
+
+
+@app.get(
+    "/v1/lookup/creation/childhood_choices",
+    response_model=List[models.BackgroundChoice],
+    tags=["Character Creation"],
+)
+async def api_get_childhood_choices(request: Request):
+    """Returns all Childhood background choices."""
+    check_state_loaded(request)
+    return request.app.state.childhood_choices
+
+
+@app.get(
+    "/v1/lookup/creation/coming_of_age_choices",
+    response_model=List[models.BackgroundChoice],
+    tags=["Character Creation"],
+)
+async def api_get_coming_of_age_choices(request: Request):
+    """Returns all Coming of Age background choices."""
+    check_state_loaded(request)
+    return request.app.state.coming_of_age_choices
+
+
+@app.get(
+    "/v1/lookup/creation/training_choices",
+    response_model=List[models.BackgroundChoice],
+    tags=["Character Creation"],
+)
+async def api_get_training_choices(request: Request):
+    """Returns all Training background choices."""
+    check_state_loaded(request)
+    return request.app.state.training_choices
+
+
+@app.get(
+    "/v1/lookup/creation/devotion_choices",
+    response_model=List[models.BackgroundChoice],
+    tags=["Character Creation"],
+)
+async def api_get_devotion_choices(request: Request):
+    """Returns all Devotion background choices."""
+    check_state_loaded(request)
+    return request.app.state.devotion_choices
 
 
 # --- END ADDED ENDPOINTS ---
