@@ -14,6 +14,7 @@ import {
   type PlayerActionResponse,
   type CombatStartRequestPayload,
   type PlayerActionRequestPayload,
+  type BackgroundChoiceInfo, // --- ADDED ---
 } from "../types/apiTypes";
 
 // --- Base URLs are unchanged ---
@@ -56,13 +57,10 @@ async function api<T>(url: string, options: RequestInit = {}): Promise<T> {
   }
 }
 
-// --- Character Engine Functions ---
-// Renamed from fetchCharacters to match old import
+// --- Character Engine Functions (UNCHANGED) ---
 export const fetchCharacters = (): Promise<CharacterContextResponse[]> => {
   return api<CharacterContextResponse[]>(`${CHARACTER_API_URL}/v1/characters/`);
 };
-
-// Renamed from fetchCharacterContext to match old import
 export const fetchCharacterContext = (
   characterId: string,
 ): Promise<CharacterContextResponse> => {
@@ -70,7 +68,6 @@ export const fetchCharacterContext = (
     `${CHARACTER_API_URL}/v1/characters/${characterId}`,
   );
 };
-
 export const createCharacter = (
   payload: CharacterCreateRequest,
 ): Promise<CharacterContextResponse> => {
@@ -79,7 +76,6 @@ export const createCharacter = (
     body: JSON.stringify(payload),
   });
 };
-
 export const updateCharacterContext = (
   characterId: string,
   context: CharacterContextResponse,
@@ -92,8 +88,6 @@ export const updateCharacterContext = (
     },
   );
 };
-
-// --- ADDED: Missing function for ExplorationScreen ---
 export const updatePlayerLocation = (
   characterId: string,
   locationId: string,
@@ -110,9 +104,7 @@ export const updatePlayerLocation = (
     },
   );
 };
-
-// --- Story Engine Functions ---
-// --- ADDED: Missing function for ExplorationScreen & CombatScreen ---
+// --- Story Engine Functions (UNCHANGED) ---
 export const getLocationContext = (
   locationId: string,
 ): Promise<LocationContextResponse> => {
@@ -120,17 +112,14 @@ export const getLocationContext = (
     `${BASE_URL}/v1/context/location/${locationId}`,
   );
 };
-
 export const postInteraction = (
   request: InteractionRequest,
 ): Promise<InteractionResponse> => {
-  // Assuming InteractionRequest is the correct payload type for /v1/actions/interact
   return api<InteractionResponse>(`${BASE_URL}/v1/actions/interact`, {
     method: "POST",
     body: JSON.stringify(request),
   });
 };
-
 export const startCombat = (
   payload: CombatStartRequestPayload,
 ): Promise<CombatEncounterResponse> => {
@@ -139,22 +128,17 @@ export const startCombat = (
     body: JSON.stringify(payload),
   });
 };
-
 export const getCombatState = (
   encounterId: string,
 ): Promise<CombatEncounterResponse> => {
-  // This endpoint doesn't seem to exist on story_engine/main.py, but we'll leave the function
   return api<CombatEncounterResponse>(
     `${BASE_URL}/v1/combat/state/${encounterId}`,
   );
 };
-
-// Renamed from postCombatAction to match old import
 export const postCombatAction = (
-  encounterId: number, // Changed to number to match CombatScreen
-  action: PlayerActionRequestPayload, // Changed to match CombatScreen
+  encounterId: number,
+  action: PlayerActionRequestPayload,
 ): Promise<PlayerActionResponse> => {
-  // Changed to match CombatScreen
   return api<PlayerActionResponse>(
     `${BASE_URL}/v1/combat/${encounterId}/player_action`,
     {
@@ -163,8 +147,6 @@ export const postCombatAction = (
     },
   );
 };
-
-// --- ADDED: Missing function for CombatScreen ---
 export const postNpcAction = (
   encounterId: number,
 ): Promise<PlayerActionResponse> => {
@@ -175,26 +157,45 @@ export const postNpcAction = (
     },
   );
 };
-
 // --- Rules Engine Functions ---
 export const getKingdomFeatures = (): Promise<KingdomFeaturesData> => {
   return api<KingdomFeaturesData>(
     `${RULES_API_URL}/v1/lookup/creation/kingdom_features`,
   );
 };
-
-export const getBackgroundTalents = (): Promise<TalentInfo[]> => {
-  return api<TalentInfo[]>(
-    `${RULES_API_URL}/v1/lookup/creation/background_talents`,
-  );
-};
-
+// --- REMOVED: getBackgroundTalents ---
 export const getAbilityTalents = (): Promise<TalentInfo[]> => {
   return api<TalentInfo[]>(
     `${RULES_API_URL}/v1/lookup/creation/ability_talents`,
   );
 };
-
 export const getAbilitySchools = (): Promise<string[]> => {
   return api<string[]>(`${RULES_API_URL}/v1/lookup/all_ability_schools`);
 };
+// --- ADDED: 5 new functions ---
+export const getOriginChoices = (): Promise<BackgroundChoiceInfo[]> => {
+  return api<BackgroundChoiceInfo[]>(
+    `${RULES_API_URL}/v1/lookup/creation/origin_choices`,
+  );
+};
+export const getChildhoodChoices = (): Promise<BackgroundChoiceInfo[]> => {
+  return api<BackgroundChoiceInfo[]>(
+    `${RULES_API_URL}/v1/lookup/creation/childhood_choices`,
+  );
+};
+export const getComingOfAgeChoices = (): Promise<BackgroundChoiceInfo[]> => {
+  return api<BackgroundChoiceInfo[]>(
+    `${RULES_API_URL}/v1/lookup/creation/coming_of_age_choices`,
+  );
+};
+export const getTrainingChoices = (): Promise<BackgroundChoiceInfo[]> => {
+  return api<BackgroundChoiceInfo[]>(
+    `${RULES_API_URL}/v1/lookup/creation/training_choices`,
+  );
+};
+export const getDevotionChoices = (): Promise<BackgroundChoiceInfo[]> => {
+  return api<BackgroundChoiceInfo[]>(
+    `${RULES_API_URL}/v1/lookup/creation/devotion_choices`,
+  );
+};
+// --- END ADD ---
