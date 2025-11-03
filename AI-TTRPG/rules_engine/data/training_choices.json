@@ -1,0 +1,17 @@
+[
+  {
+    "name": "Soldier's Discipline",
+    "description": "You were trained in the regimented arts of the shield and polearm.",
+    "skills": ["Polearms & Shields", "Plate Armor"]
+  },
+  {
+    "name": "Assassin's Shadow",
+    "description": "You learned to move unseen and strike from the dark.",
+    "skills": ["Visceral Weapons", "Camouflage"]
+  },
+  {
+    "name": "Brawler's Resolve",
+    "description": "You were taught that the best weapon is your own body, and the best armor is your own hide.",
+    "skills": ["Brawling Weapons", "Natural/Unarmored"]
+  }
+]
