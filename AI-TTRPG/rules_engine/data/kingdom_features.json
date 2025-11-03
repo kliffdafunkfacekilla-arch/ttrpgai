@@ -222,7 +222,6 @@
         { "name": "Aerobatic Agility", "mods": { "+2": ["Finesse"], "+1": ["Charm"], "-1": ["Fortitude"] } },
         { "name": "Hovering Form", "mods": { "+2": ["Reflexes"], "+1": ["Willpower"], "-1": ["Might"] } },
         { "name": "Long-Haul Migration", "mods": { "+2": ["Vitality"], "+1": ["Knowledge"], "-1": ["Endurance"] } },
-        { "name":"Surface Skimmer", "mods": { "+2": ["Fortitude"], "+1": ["Logic"], "-1": ["Finesse"] } }
       ],
       "Aquatic": [
         { "name": "Lateral Line Array", "mods": { "+2": ["Might"], "+1": ["Awareness"], "-1": ["Reflexes"] } },
