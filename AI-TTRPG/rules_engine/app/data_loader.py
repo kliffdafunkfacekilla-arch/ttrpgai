@@ -161,11 +161,25 @@ STATUS_EFFECTS: Dict[str, Any] = {}
 EQUIPMENT_CATEGORY_TO_SKILL_MAP: Dict[str, str] = {}
 
 
+# --- ADD NEW BACKGROUND GLOBALS ---
+ORIGIN_CHOICES: List[Dict[str, Any]] = []
+CHILDHOOD_CHOICES: List[Dict[str, Any]] = []
+COMING_OF_AGE_CHOICES: List[Dict[str, Any]] = []
+TRAINING_CHOICES: List[Dict[str, Any]] = []
+DEVOTION_CHOICES: List[Dict[str, Any]] = []
+
+
+# --- END ADD ---
+
+
 def load_data() -> Dict[str, Any]:
     """Loads all rules data and returns it in a dictionary."""
     global STATS_LIST, SKILL_CATEGORIES, ALL_SKILLS, ABILITY_DATA, TALENT_DATA, FEATURE_STATS_MAP
     # --- MODIFIED ---
     global MELEE_WEAPONS, RANGED_WEAPONS, ARMOR, INJURY_EFFECTS, STATUS_EFFECTS, EQUIPMENT_CATEGORY_TO_SKILL_MAP, KINGDOM_FEATURES_DATA
+    # --- ADD NEW GLOBALS TO FUNCTION SCOPE ---
+    global ORIGIN_CHOICES, CHILDHOOD_CHOICES, COMING_OF_AGE_CHOICES, TRAINING_CHOICES, DEVOTION_CHOICES
+
     print("Starting data loading process...")
     loaded_data = {}
     try:
@@ -228,6 +242,14 @@ def load_data() -> Dict[str, Any]:
             print(f"ERROR loading status_effects.json: {e}. Status lookup will fail.")
             STATUS_EFFECTS = {}
 
+        # --- LOAD NEW BACKGROUND CHOICES ---
+        ORIGIN_CHOICES = _load_json("origin_choices.json")
+        CHILDHOOD_CHOICES = _load_json("childhood_choices.json")
+        COMING_OF_AGE_CHOICES = _load_json("coming_of_age_choices.json")
+        TRAINING_CHOICES = _load_json("training_choices.json")
+        DEVOTION_CHOICES = _load_json("devotion_choices.json")
+        # --- END LOAD ---
+
         loaded_data = {
             "stats_list": STATS_LIST,
             "skill_categories": SKILL_CATEGORIES,
@@ -242,6 +264,13 @@ def load_data() -> Dict[str, Any]:
             "injury_effects": INJURY_EFFECTS,
             "status_effects": STATUS_EFFECTS,
             "equipment_category_to_skill_map": EQUIPMENT_CATEGORY_TO_SKILL_MAP,
+            # --- ADD TO RETURN DICT ---
+            "origin_choices": ORIGIN_CHOICES,
+            "childhood_choices": CHILDHOOD_CHOICES,
+            "coming_of_age_choices": COMING_OF_AGE_CHOICES,
+            "training_choices": TRAINING_CHOICES,
+            "devotion_choices": DEVOTION_CHOICES,
+            # --- END ADD ---
         }
 
         print(f"DEBUG: STATS_LIST len: {len(STATS_LIST)}")
@@ -258,6 +287,13 @@ def load_data() -> Dict[str, Any]:
         print(f"Loaded {len(EQUIPMENT_CATEGORY_TO_SKILL_MAP)} skill mappings.")
         print(f"Loaded {len(INJURY_EFFECTS)} major injury locations.")
         print(f"Loaded {len(STATUS_EFFECTS)} status effect definitions.")
+        # --- ADD PRINT STATEMENTS ---
+        print(f"Loaded {len(ORIGIN_CHOICES)} origin choices.")
+        print(f"Loaded {len(CHILDHOOD_CHOICES)} childhood choices.")
+        print(f"Loaded {len(COMING_OF_AGE_CHOICES)} coming of age choices.")
+        print(f"Loaded {len(TRAINING_CHOICES)} training choices.")
+        print(f"Loaded {len(DEVOTION_CHOICES)} devotion choices.")
+        # --- END ADD ---
 
         print("--- Rules Engine Data Parsed Successfully ---")
         return loaded_data

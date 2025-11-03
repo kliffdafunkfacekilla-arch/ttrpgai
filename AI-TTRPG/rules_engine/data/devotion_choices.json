@@ -1,0 +1,17 @@
+[
+  {
+    "name": "Devotion to the State",
+    "description": "You are a patriot, dedicated to the laws and history of your kingdom.",
+    "skills": ["Lore: Royalty/Political", "Reinforced"]
+  },
+  {
+    "name": "Devotion to the Spirits",
+    "description": "You walk the path of the animist, listening to the whispers of the unseen world.",
+    "skills": ["Lore: Religion & Spirit", "Tribal/Spirit"]
+  },
+  {
+    "name": "Devotion to the Self",
+    "description": "Your own potential is your only concern. You wear what you please and study what you must.",
+    "skills": ["Lore: Science & Acad.", "Clothing/Utility"]
+  }
+]
