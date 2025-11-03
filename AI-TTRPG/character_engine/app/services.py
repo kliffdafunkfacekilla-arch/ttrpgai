@@ -11,6 +11,7 @@ import logging  # --- ADD LOGGING ---
 # --- ADDED: Logger ---
 logger = logging.getLogger("uvicorn.error")
 
+
 # --- ADDED: Rules Engine Configuration ---
 RULES_ENGINE_URL = os.getenv("RULES_ENGINE_URL", "http://127.0.0.1:8000/v1")
 CLIENT_TIMEOUT = 10.0
@@ -106,7 +107,7 @@ def get_character_context(
     )
 
 
-# --- UNCHANGED: Helper functions for new creation logic ---
+# --- MODIFIED: Helper functions for new creation logic ---
 async def _call_rules_engine(
     method: str, endpoint: str, params: Dict = None, json_data: Dict = None
 ) -> Any:
@@ -116,9 +117,11 @@ async def _call_rules_engine(
         async with httpx.AsyncClient() as client:
             logger.info(f"Calling Rules Engine: {method} {url}")
             if method.upper() == "GET":
-                response = await client.get(url, params=params)
+                response = await client.get(url, params=params, timeout=CLIENT_TIMEOUT)
             elif method.upper() == "POST":
-                response = await client.post(url, json=json_data, params=params)
+                response = await client.post(
+                    url, json=json_data, params=params, timeout=CLIENT_TIMEOUT
+                )
             else:
                 raise ValueError(f"Unsupported HTTP method: {method}")
 
@@ -151,7 +154,7 @@ async def get_eligible_talents(
     """Fetches eligible talents from the Rules Engine."""
     request_data = {"stats": stats, "skills": skills}  # Pass skill ranks directly
     return await _call_rules_engine(
-        "POST", "/v1/lookup/talents", json_data=request_data
+        "POST", "/lookup/talents", json_data=request_data
     )
 
 
@@ -162,13 +165,11 @@ def _get_rules_engine_data() -> Dict[str, Any]:
     print("Fetching all creation data from Rules Engine...")
     endpoints = {
         "kingdom_features": "/lookup/creation/kingdom_features",
-        # --- REMOVED OLD TALENT ENDPOINTS ---
-        # "background_talents_list": "/lookup/creation/background_talents",
-        # "ability_talents_list": "/lookup/creation/ability_talents",
+        "ability_talents_list": "/lookup/creation/ability_talents",  # For the final talent choice
         "ability_schools": "/lookup/all_ability_schools",  # Returns a list of names
         "stats_list": "/lookup/all_stats",
         "all_skills": "/lookup/all_skills",
-        "all_talents": "/v1/lookup/talents",  # POST, needs empty body to get all
+        "all_talents": "/lookup/talents",  # POST, needs empty body to get all
         "all_abilities_full": "/lookup/all_ability_schools",  # Re-using, need to get full data
         # --- ADD NEW BACKGROUND CHOICE ENDPOINTS ---
         "origin_choices": "/lookup/creation/origin_choices",
@@ -200,7 +201,7 @@ def _get_rules_engine_data() -> Dict[str, Any]:
         # This returns a list. Let's convert to a dict for easy lookup.
         all_talents_list = response.json()
         rules_data["all_talents_map"] = {t["name"]: t for t in all_talents_list}
-        print(f"all_talents_map: {rules_data['all_talents_map']}")
+        print(f"Loaded {len(rules_data['all_talents_map'])} talents into map.")
 
         # Fetch full ability school data
         school_details = {}
@@ -309,7 +310,6 @@ def create_character(
 
     # 4. Apply Background Skills
     print("Applying background skills...")
-    background_skills_to_add = []
 
     # Create master map for easy lookup
     background_choices_map = {
@@ -368,8 +368,7 @@ def create_character(
             print(f"Warning: Background choice granted unknown skill '{skill_name}'")
 
     # 5. Apply Ability Talent mods
-    # Note: We still apply stat mods from the *Ability* talent.
-    # The *Background* talent is now replaced by the 5 background choices.
+    # This is the final, single talent choice.
     print(f"Applying Ability Talent mods for: {character.ability_talent}")
     ab_talent_data = rules.get("all_talents_map", {}).get(character.ability_talent)
     if ab_talent_data and "mods" in ab_talent_data:

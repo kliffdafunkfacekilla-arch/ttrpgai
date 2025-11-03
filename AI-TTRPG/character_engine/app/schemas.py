@@ -31,7 +31,7 @@ class CharacterCreate(BaseModel):
     # --- END MODIFIED ---
 
     ability_school: str
-    ability_talent: str
+    ability_talent: str  # This is the final talent choice, which remains
 
 
 # --- UNCHANGED SCHEMAS ---
