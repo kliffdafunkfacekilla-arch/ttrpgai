@@ -1,0 +1,17 @@
+[
+  {
+    "name": "The Grand Tournament",
+    "description": "You proved your mettle in single combat with a blade.",
+    "skills": ["Precision Blades", "Resilience"]
+  },
+  {
+    "name": "First Hunt",
+    "description": "You tracked and killed a great beast, mastering the bow.",
+    "skills": ["Precision Archery", "Nature Sense"]
+  },
+  {
+    "name": "A Shady Deal",
+    "description": "You navigated a complex negotiation that secured your family's fortune.",
+    "skills": ["Negotiations", "Quick Pair"]
+  }
+]

@@ -286,7 +286,7 @@
         { "name": "Direct Muscle", "mods": { "+2": ["Knowledge"], "+1": ["Finesse"], "-1": ["Intuition"] } },
         { "name": "Fat Body Reserves", "mods": { "+2": ["Logic"], "+1": ["Reflexes"], "-1": ["Charm"] } },
         { "name": "Hemolymph Pressure", "mods": { "+2": ["Awareness"], "+1": ["Vitality"], "-1": ["Willpower"] } },
-        { "name":M: "Metabolic Burst", "mods": { "+2": ["Intuition"], "+1": ["Fortitude"], "-1": ["Knowledge"] } },
+        { "name": "Metabolic Burst", "mods": { "+2": ["Intuition"], "+1": ["Fortitude"], "-1": ["Knowledge"] } },
         { "name": "Malpighian Filtration", "mods": { "+2": ["Charm"], "+1": ["Might"], "-1": ["Logic"] } },
         { "name": "Tymbal Organ", "mods": { "+2": ["Willpower"], "+1": ["Endurance"], "-1": ["Awareness"] } }
       ],

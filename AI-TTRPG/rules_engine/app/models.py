@@ -172,6 +172,16 @@ class FeatureStatsResponse(BaseModel):
     mods: Dict[str, List[str]]
 
 
+# --- ADD THIS MODEL ---
+class BackgroundChoice(BaseModel):
+    name: str
+    description: str
+    skills: List[str]
+
+
+# --- END ADD ---
+
+
 class SkillCategoryResponse(BaseModel):
     categories: Dict[str, List[str]]
 
