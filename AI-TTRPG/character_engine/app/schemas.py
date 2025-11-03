@@ -21,7 +21,15 @@ class CharacterCreate(BaseModel):
     kingdom: str
     # This list should contain all 9 feature choices (F1-F8 + F9)
     feature_choices: List[FeatureChoice]
-    background_talent: str
+
+    # --- MODIFIED: Replaced background_talent ---
+    origin_choice: str
+    childhood_choice: str
+    coming_of_age_choice: str
+    training_choice: str
+    devotion_choice: str
+    # --- END MODIFIED ---
+
     ability_school: str
     ability_talent: str
 
