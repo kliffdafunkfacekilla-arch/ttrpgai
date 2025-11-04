@@ -61,10 +61,7 @@ export const fetchCharacters = (): Promise<CharacterContextResponse[]> => {
   return api<CharacterContextResponse[]>(`${CHARACTER_API_URL}/v1/characters/`);
 };
 
-// --- Character Engine Functions (UNCHANGED) ---
-export const fetchCharacters = (): Promise<CharacterContextResponse[]> => {
-  return api<CharacterContextResponse[]>(`${CHARACTER_API_URL}/v1/characters/`);
-};
+
 export const fetchCharacterContext = (
   characterId: string,
 ): Promise<CharacterContextResponse> => {
