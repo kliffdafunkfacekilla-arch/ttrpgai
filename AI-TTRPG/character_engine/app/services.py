@@ -256,7 +256,6 @@ def _apply_mods(stats: Dict[str, int], mods: Dict[str, List[str]]):
                 print(f"Warning: Stat '{stat_name}' in mods not found in base stats.")
 
 
-# --- MODIFIED: create_character ---
 def create_character(
     db: Session, character: schemas.CharacterCreate
 ) -> schemas.CharacterContextResponse:
@@ -271,23 +270,22 @@ def create_character(
         rules = _get_rules_engine_data()
     except Exception as e:
         print(f"Failed to fetch rules data from rules_engine: {e}")
-        # Re-raise as a more specific HTTP-style exception if desired
         raise Exception(f"Failed to fetch rules data: {e}")
 
     # 2. Initialize base stats and skills
     base_stats = {stat: 8 for stat in rules["stats_list"]}
-    base_skills = {skill: 0 for skill in rules["all_skills"]}
+    base_skills = {}
+    for skill_name in rules["all_skills"]:
+        base_skills[skill_name] = {"rank": 0, "sre": 0}
+    
     print(f"Initialized stats (all 8s) and skills (all 0s).")
 
     # 3. Apply Feature mods
     print("Applying feature mods...")
     all_features_data = rules.get("kingdom_features", {})
     for choice in character.feature_choices:
-        # F9 uses 'All' key, others use kingdom name
         kingdom_key = "All" if choice.feature_id == "F9" else character.kingdom
-
         try:
-            # Find the specific choice from the rules data
             feature_set = all_features_data.get(choice.feature_id, {}).get(
                 kingdom_key, []
             )
@@ -295,7 +293,6 @@ def create_character(
                 (item for item in feature_set if item["name"] == choice.choice_name),
                 None,
             )
-
             if mod_data and "mods" in mod_data:
                 print(f"Applying mods for: {choice.choice_name}")
                 _apply_mods(base_stats, mod_data["mods"])
@@ -310,8 +307,6 @@ def create_character(
 
     # 4. Apply Background Skills
     print("Applying background skills...")
-
-    # Create master map for easy lookup
     background_choices_map = {
         "origin": {item["name"]: item for item in rules.get("origin_choices", [])},
         "childhood": {
@@ -323,8 +318,6 @@ def create_character(
         "training": {item["name"]: item for item in rules.get("training_choices", [])},
         "devotion": {item["name"]: item for item in rules.get("devotion_choices", [])},
     }
-
-    # Look up each choice
     origin_skills = (
         background_choices_map["origin"]
         .get(character.origin_choice, {})
@@ -350,8 +343,6 @@ def create_character(
         .get(character.devotion_choice, {})
         .get("skills", [])
     )
-
-    # Combine all 10 skills
     all_background_skills = (
         origin_skills
         + childhood_skills
@@ -359,27 +350,20 @@ def create_character(
         + training_skills
         + devotion_skills
     )
-
     for skill_name in all_background_skills:
         if skill_name in base_skills:
-            base_skills[skill_name] = 1  # Set rank to 1
+            base_skills[skill_name]["rank"] = 1
             print(f"Granted Rank 1 in skill: {skill_name}")
         else:
             print(f"Warning: Background choice granted unknown skill '{skill_name}'")
 
     # 5. Apply Ability Talent mods
-    # This is the final, single talent choice.
     print(f"Applying Ability Talent mods for: {character.ability_talent}")
     ab_talent_data = rules.get("all_talents_map", {}).get(character.ability_talent)
     if ab_talent_data and "mods" in ab_talent_data:
         _apply_mods(base_stats, ab_talent_data["mods"])
-    else:
-        print(
-            f"Warning: No mod data found for ability talent {character.ability_talent}"
-        )
 
     print(f"Final calculated stats: {base_stats}")
-    print(f"Final skills with rank 1: {all_background_skills}")
 
     # 6. Get Vitals from Rules Engine
     print("Calculating vitals...")
@@ -391,7 +375,7 @@ def create_character(
         )
         response.raise_for_status()
         vitals_data = response.json()
-        max_hp = vitals_data.get("max_hp", 1)  # Default to 1 to avoid DB constraints
+        max_hp = vitals_data.get("max_hp", 1)
         resource_pools = vitals_data.get("resources", {})
         print(f"Vitals calculated: MaxHP={max_hp}")
     except Exception as e:
@@ -402,11 +386,10 @@ def create_character(
     base_abilities = []
     school_data = rules.get("all_abilities_map", {}).get(character.ability_school)
     if school_data and "tiers" in school_data and len(school_data["tiers"]) > 0:
-        # Add Tier 0 ability
         base_abilities.append(school_data["tiers"][0].get("name", "Unknown Ability"))
         print(f"Added Tier 0 ability: {base_abilities[0]}")
 
-    # 8. Create DB model
+    # 8. Create DB model (saving to separate columns)
     print("Creating database entry...")
     db_character = models.Character(
         id=str(uuid.uuid4()),
@@ -414,19 +397,18 @@ def create_character(
         kingdom=character.kingdom,
         level=1,
         stats=base_stats,
-        skills=base_skills,  # This now contains the 10 skills at rank 1
+        skills=base_skills,
         max_hp=max_hp,
-        current_hp=max_hp,  # Start at full health
+        current_hp=max_hp,
         resource_pools=resource_pools,
-        talents=[character.ability_talent],  # Only save the ability talent
+        talents=[character.ability_talent],
         abilities=base_abilities,
-        # Set defaults for the rest
-        inventory={},
+        inventory={}, # Start with empty inventory
         equipment={},
         status_effects=[],
         injuries=[],
-        position_x=0,  # TODO: Get start position from world_engine
-        position_y=0,
+        position_x=5, # Default start position
+        position_y=5  # Default start position
     )
 
     # 9. Save and return
@@ -435,6 +417,7 @@ def create_character(
         db.commit()
         db.refresh(db_character)
         print(f"Successfully created character {db_character.id} in database.")
+        # This function will now work, as db_character has the separate fields
         return get_character_context(db_character)
     except Exception as e:
         db.rollback()

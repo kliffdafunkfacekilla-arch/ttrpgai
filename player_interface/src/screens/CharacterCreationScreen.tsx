@@ -217,7 +217,11 @@ const CharacterCreationScreen: React.FC<CharacterCreationScreenProps> = ({
     choices.comingOfAgeChoice,
     choices.trainingChoice,
     choices.devotionChoice,
-    rulesData,
+    rulesData.originChoices,
+    rulesData.childhoodChoices,
+    rulesData.comingOfAgeChoices,
+    rulesData.trainingChoices,
+    rulesData.devotionChoices,
   ]);
 
   // --- Data Loading Effects ---
@@ -277,7 +281,7 @@ const CharacterCreationScreen: React.FC<CharacterCreationScreenProps> = ({
     loadAllData();
   }, []);
 
-  // --- *** NEW DYNAMIC HOOK *** ---
+  // --- Dynamic Talent Load ---
   // Runs when the step changes to 'talent'
   useEffect(() => {
     if (step === "talent") {
@@ -286,6 +290,9 @@ const CharacterCreationScreen: React.FC<CharacterCreationScreenProps> = ({
 
         // Build the skill ranks map
         const skillRanks: { [key: string]: number } = {};
+        for (const skillName in rulesData.all_skills) { // <-- Linter was right, this is a dependency
+          skillRanks[skillName] = 0; // Initialize all skills to 0
+        }
         for (const skillName of calculatedSkills) {
           skillRanks[skillName] = 1; // All background skills are Rank 1
         }
@@ -315,7 +322,7 @@ const CharacterCreationScreen: React.FC<CharacterCreationScreenProps> = ({
       };
       fetchTalents();
     }
-  }, [step, calculatedStats, calculatedSkills]); // Dependencies
+  }, [step, calculatedStats, calculatedSkills, rulesData.all_skills]); // <-- *** FIX IS HERE ***
 
   // --- Navigation Handlers ---
   const handleNext = () => {
@@ -675,6 +682,10 @@ const CharacterCreationScreen: React.FC<CharacterCreationScreenProps> = ({
     }
     
     // This now handles the case where the API correctly returns an empty list
+    if (loadingState.error) {
+      return renderError();
+    }
+    
     if (!availableTalents || availableTalents.length === 0) {
       return (
         <div className="text-center">
@@ -685,8 +696,8 @@ const CharacterCreationScreen: React.FC<CharacterCreationScreenProps> = ({
             No eligible talents were found for your current stats and skills.
           </p>
           <p className="text-gray-400 text-sm mt-2">
-            (This is likely a data issue in `talents.json`. Go back and change
-            your stats or add low-level talents to the data file.)
+            (This is a data issue in `talents.json`. Please add talents
+            with low requirements, e.g., 'score: 10' or 'MT1'.)
           </p>
         </div>
       );
@@ -833,7 +844,7 @@ const CharacterCreationScreen: React.FC<CharacterCreationScreenProps> = ({
           {/* F9 (Capstone) Selection */}
           <div className="pt-4 border-t border-stone-700 mt-4">
             <h4 className="text-xl font-semibold mb-2">
-              F9: Capstone (+2 to one stat)
+              F9: Capstone (+3 to one stat)
             </h4>
             <div className="grid grid-cols-3 gap-2">
               {f9Choices.map((choice) => (
