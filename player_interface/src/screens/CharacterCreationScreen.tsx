@@ -21,7 +21,6 @@ import {
   type KingdomFeatureChoice,
   type CharacterCreateRequest,
   type FeatureChoiceRequest,
-  type BackgroundChoiceInfo,
   type FeatureMods, // --- IMPORT FeatureMods ---
   type BackgroundChoiceInfo, // --- ADDED ---
 } from "../types/apiTypes";
