@@ -1,29 +1,64 @@
-from sqlalchemy import Column, Integer, String, JSON
-from .database import Base
+@echo off
+setlocal
 
+:: -----------------------------------------------------------------
+:: --- !! SET THIS TO YOUR PROJECT PATH !! ---
+:: -----------------------------------------------------------------
+set "PROJECT_DIR=C:\Users\krazy\Documents\GitHub\Ruleengine"
 
-class Character(Base):
-    __tablename__ = "characters"
+echo ==========================================================
+echo Starting TTRPG-AI Project Setup...
+echo Project directory set to: %PROJECT_DIR%
+echo ==========================================================
+echo.
 
-    id = Column(String, primary_key=True, index=True)
-    name = Column(String, index=True)
-    kingdom = Column(String)
-    
-    # These are the separate columns the application expects
-    level = Column(Integer)
-    stats = Column(JSON)
-    skills = Column(JSON)
-    max_hp = Column(Integer)
-    current_hp = Column(Integer)
-    resource_pools = Column(JSON)
-    talents = Column(JSON)
-    abilities = Column(JSON)
-    inventory = Column(JSON)
-    equipment = Column(JSON)
-    status_effects = Column(JSON)
-    injuries = Column(JSON)
-    
-    # This data is redundant with the 'location' object in your final
-    # frontend design, but the backend code relies on it.
-    position_x = Column(Integer)
-    position_y = Column(Integer)
+:: ---------------------------------
+:: --- FIX 1: Migrate BOTH Databases
+:: ---------------------------------
+echo [FIX 1/2] Upgrading the world_engine database...
+echo.
+cd /D "%PROJECT_DIR%\AI-TTRPG\world_engine"
+alembic upgrade head
+echo.
+
+echo Upgrading the character_engine database...
+echo.
+:: --- THIS LINE IS NOW FIXED (PROJECT_DIR) ---
+cd /D "%PROJECT_DIR%\AI-TTRPG\character_engine" 
+alembic upgrade head
+echo.
+echo Database migrations applied.
+echo.
+
+:: ---------------------------------
+:: --- FIX 2: Reset Character Database
+:: ---------------------------------
+echo [FIX 2/2] Deleting old character database to force rebuild...
+echo.
+cd /D "%PROJECT_DIR%\AI-TTRPG\character_engine"
+if exist characters.db (
+    del characters.db
+    echo characters.db deleted.
+) else (
+    echo characters.db not found. No need to delete.
+)
+echo.
+
+:: --- Run Migrations AGAIN to create the new, clean DB ---
+echo Re-running character_engine migration to create new database...
+echo.
+cd /D "%PROJECT_DIR%\AI-TTRPG\character_engine"
+alembic upgrade head
+echo.
+echo New characters.db created.
+echo.
+
+:: ---------------------------------
+:: --- Done
+:: ---------------------------------
+echo ==========================================================
+echo SETUP COMPLETE!
+echo You can now run start_services.bat to start the backend.
+echo ==========================================================
+echo.
+pause
