@@ -5,7 +5,6 @@ import {
   type InteractionRequestPayload as InteractionRequest,
   type InteractionResponse,
   type CombatEncounterResponse,
-  type PlayerActionRequest as CombatActionRequest, // This seems unused, but we'll leave it
   type CharacterCreateRequest,
   type KingdomFeaturesData,
   type TalentInfo,
@@ -169,6 +168,19 @@ export const getKingdomFeatures = (): Promise<KingdomFeaturesData> => {
   return api<KingdomFeaturesData>(
     `${RULES_API_URL}/v1/lookup/creation/kingdom_features`,
   );
+};
+export const getEligibleTalents = (
+  stats: { [key: string]: number },
+  skills: { [key: string]: number },
+): Promise<TalentInfo[]> => {
+  const payload = {
+    stats: stats,
+    skills: skills,
+  };
+  return api<TalentInfo[]>(`${RULES_API_URL}/v1/lookup/talents`, {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
 };
 
 // --- REMOVED: getBackgroundTalents ---

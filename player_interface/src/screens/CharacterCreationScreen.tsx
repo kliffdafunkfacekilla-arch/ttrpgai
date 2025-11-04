@@ -8,9 +8,10 @@ import {
   getComingOfAgeChoices,
   getTrainingChoices,
   getDevotionChoices,
-  getAbilityTalents,
+  // getAbilityTalents, // <-- REMOVED this
   getAbilitySchools,
   getAllSkills,
+  getEligibleTalents, // <-- ADDED this
 } from "../api/apiClient";
 import {
   type CharacterContextResponse,
@@ -55,7 +56,7 @@ type RulesData = {
   comingOfAgeChoices: BackgroundChoiceInfo[];
   trainingChoices: BackgroundChoiceInfo[];
   devotionChoices: BackgroundChoiceInfo[];
-  abilityTalents: TalentInfo[];
+  abilityTalents: TalentInfo[]; // This will now be loaded dynamically
   abilitySchools: string[];
   all_skills: { [key: string]: { stat: string } };
   ability_school_stats: { [key: string]: string };
@@ -131,7 +132,7 @@ const CharacterCreationScreen: React.FC<CharacterCreationScreenProps> = ({
     comingOfAgeChoices: [],
     trainingChoices: [],
     devotionChoices: [],
-    abilityTalents: [],
+    abilityTalents: [], // <-- Starts empty
     abilitySchools: [],
     all_skills: {},
     ability_school_stats: ABILITY_SCHOOL_STAT_MAP,
@@ -148,61 +149,6 @@ const CharacterCreationScreen: React.FC<CharacterCreationScreenProps> = ({
     abilityTalent: null,
     name: "",
   });
-
-  // --- Data Loading Effect ---
-  useEffect(() => {
-    const loadAllData = async () => {
-      try {
-        setLoadingState({ isLoading: true, error: null });
-
-        const [
-          features,
-          origins,
-          childhoods,
-          comingOfAges,
-          trainings,
-          devotions,
-          abTalents,
-          schools,
-          allSkills,
-        ] = await Promise.all([
-          getKingdomFeatures(),
-          getOriginChoices(),
-          getChildhoodChoices(),
-          getComingOfAgeChoices(),
-          getTrainingChoices(),
-          getDevotionChoices(),
-          getAbilityTalents(),
-          getAbilitySchools(),
-          getAllSkills(),
-        ]);
-
-        setRulesData({
-          kingdomFeatures: features,
-          originChoices: origins,
-          childhoodChoices: childhoods,
-          comingOfAgeChoices: comingOfAges,
-          trainingChoices: trainings,
-          devotionChoices: devotions,
-          abilityTalents: abTalents,
-          abilitySchools: schools,
-          all_skills: allSkills,
-          ability_school_stats: ABILITY_SCHOOL_STAT_MAP,
-        });
-        setLoadingState({ isLoading: false, error: null });
-      } catch (err) {
-        const message =
-          err instanceof Error
-            ? err.message
-            : "An unknown error occurred while loading rules data.";
-        setLoadingState({
-          isLoading: false,
-          error: message,
-        });
-      }
-    };
-    loadAllData();
-  }, []);
 
   // --- Live Stat Calculation ---
   const calculatedStats = useMemo(() => {
@@ -239,8 +185,7 @@ const CharacterCreationScreen: React.FC<CharacterCreationScreenProps> = ({
     return newStats;
   }, [choices.kingdom, choices.featureChoices, rulesData.kingdomFeatures]);
 
-  // --- *** MOVED HOOK TO TOP LEVEL *** ---
-  // This calculates the skills from background choices
+  // --- Live Skill Calculation ---
   const calculatedSkills = useMemo(() => {
     const skills = new Set<string>();
     const allChoices = [
@@ -273,7 +218,104 @@ const CharacterCreationScreen: React.FC<CharacterCreationScreenProps> = ({
     choices.trainingChoice,
     choices.devotionChoice,
     rulesData,
-  ]); // <-- This dependency array is now correct
+  ]);
+
+  // --- Data Loading Effects ---
+
+  // Initial Load (runs once)
+  useEffect(() => {
+    const loadAllData = async () => {
+      try {
+        setLoadingState({ isLoading: true, error: null });
+
+        const [
+          features,
+          origins,
+          childhoods,
+          comingOfAges,
+          trainings,
+          devotions,
+          schools,
+          allSkills,
+        ] = await Promise.all([
+          getKingdomFeatures(),
+          getOriginChoices(),
+          getChildhoodChoices(),
+          getComingOfAgeChoices(),
+          getTrainingChoices(),
+          getDevotionChoices(),
+          // getAbilityTalents(), // <-- REMOVED
+          getAbilitySchools(),
+          getAllSkills(),
+        ]);
+
+        setRulesData((prev) => ({
+          ...prev,
+          kingdomFeatures: features,
+          originChoices: origins,
+          childhoodChoices: childhoods,
+          comingOfAgeChoices: comingOfAges,
+          trainingChoices: trainings,
+          devotionChoices: devotions,
+          // abilityTalents: abTalents, // <-- REMOVED
+          abilitySchools: schools,
+          all_skills: allSkills,
+          ability_school_stats: ABILITY_SCHOOL_STAT_MAP,
+        }));
+        setLoadingState({ isLoading: false, error: null });
+      } catch (err) {
+        const message =
+          err instanceof Error
+            ? err.message
+            : "An unknown error occurred while loading rules data.";
+        setLoadingState({
+          isLoading: false,
+          error: message,
+        });
+      }
+    };
+    loadAllData();
+  }, []);
+
+  // --- *** NEW DYNAMIC HOOK *** ---
+  // Runs when the step changes to 'talent'
+  useEffect(() => {
+    if (step === "talent") {
+      const fetchTalents = async () => {
+        setLoadingState({ isLoading: true, error: null });
+
+        // Build the skill ranks map
+        const skillRanks: { [key: string]: number } = {};
+        for (const skillName of calculatedSkills) {
+          skillRanks[skillName] = 1; // All background skills are Rank 1
+        }
+
+        try {
+          console.log("Fetching eligible talents with:", calculatedStats, skillRanks);
+          const eligibleTalents = await getEligibleTalents(
+            calculatedStats,
+            skillRanks,
+          );
+          
+          setRulesData((prev) => ({
+            ...prev,
+            abilityTalents: eligibleTalents,
+          }));
+          setLoadingState({ isLoading: false, error: null });
+        } catch (err) {
+          const message =
+            err instanceof Error
+              ? err.message
+              : "An unknown error occurred while fetching eligible talents.";
+          setLoadingState({
+            isLoading: false,
+            error: message,
+          });
+        }
+      };
+      fetchTalents();
+    }
+  }, [step, calculatedStats, calculatedSkills]); // Dependencies
 
   // --- Navigation Handlers ---
   const handleNext = () => {
@@ -411,7 +453,7 @@ const CharacterCreationScreen: React.FC<CharacterCreationScreenProps> = ({
     setChoices((c) => ({
       ...c,
       abilitySchool: schoolName,
-      abilityTalent: null,
+      abilityTalent: null, // Reset talent choice if school changes
     }));
     handleNext();
   };
@@ -432,7 +474,7 @@ const CharacterCreationScreen: React.FC<CharacterCreationScreenProps> = ({
       }));
       return;
     }
-
+    
     const payload: CharacterCreateRequest = {
       name: choices.name,
       kingdom: choices.kingdom!,
@@ -464,9 +506,9 @@ const CharacterCreationScreen: React.FC<CharacterCreationScreenProps> = ({
 
   // --- Render Functions for Steps ---
 
-  const renderLoading = () => (
+  const renderLoading = (text: string = "Loading Rules Data...") => (
     <div className="text-center">
-      <h2 className="text-2xl font-bold mb-4">Loading Rules Data...</h2>
+      <h2 className="text-2xl font-bold mb-4">{text}</h2>
       <p className="text-gray-400">Please wait.</p>
     </div>
   );
@@ -625,9 +667,30 @@ const CharacterCreationScreen: React.FC<CharacterCreationScreenProps> = ({
   };
 
   const renderTalentSelect = () => {
-    // *** THIS FUNCTION NO LONGER CALLS useMemo ***
-    // It just *uses* the top-level variable 'calculatedSkills'
+    // This now reads from the dynamically loaded state
     const availableTalents = rulesData.abilityTalents;
+
+    if (loadingState.isLoading) {
+      return renderLoading("Fetching Eligible Talents...");
+    }
+    
+    // This now handles the case where the API correctly returns an empty list
+    if (!availableTalents || availableTalents.length === 0) {
+      return (
+        <div className="text-center">
+          <h2 className="text-2xl font-bold mb-4 text-amber-300">
+            Step 9: Choose Ability Talent
+          </h2>
+          <p className="text-red-400">
+            No eligible talents were found for your current stats and skills.
+          </p>
+          <p className="text-gray-400 text-sm mt-2">
+            (This is likely a data issue in `talents.json`. Go back and change
+            your stats or add low-level talents to the data file.)
+          </p>
+        </div>
+      );
+    }
 
     return (
       <div>
@@ -657,34 +720,26 @@ const CharacterCreationScreen: React.FC<CharacterCreationScreenProps> = ({
             Your granted skills (Rank 1):
           </p>
           <p className="text-xs text-amber-300">
-            {/* Use the top-level variable here */}
             {[...calculatedSkills].join(", ") || "None"}
           </p>
         </div>
 
         <div className="space-y-3 max-h-96 overflow-y-auto pr-2 stone-panel p-4">
-          {availableTalents.map((talent) => {
-            const isEligible = true; // Placeholder
-
-            return (
-              <button
-                key={talent.name}
-                onClick={() => selectAbilityTalent(talent.name)}
-                disabled={!isEligible}
-                className={`w-full text-left p-4 stone-button ${
-                  !isEligible ? "opacity-50 grayscale" : ""
-                }`}
-              >
-                <p className="text-lg font-semibold">{talent.name}</p>
-                <p className="text-sm text-stone-300">
-                  {talent.description || talent.effect}
-                </p>
-                <p className="text-xs text-gray-500 mt-1">
-                  Prerequisites: (Logic not yet implemented)
-                </p>
-              </button>
-            );
-          })}
+          {availableTalents.map((talent) => (
+            <button
+              key={talent.name}
+              onClick={() => selectAbilityTalent(talent.name)}
+              className="w-full text-left p-4 stone-button"
+            >
+              <p className="text-lg font-semibold">{talent.name}</p>
+              <p className="text-sm text-stone-300">
+                {talent.effect} {/* Use effect, not description */}
+              </p>
+              <p className="text-xs text-gray-500 mt-1">
+                Source: {talent.source}
+              </p>
+            </button>
+          ))}
         </div>
       </div>
     );
@@ -726,7 +781,7 @@ const CharacterCreationScreen: React.FC<CharacterCreationScreenProps> = ({
       choices.trainingChoice &&
       choices.devotionChoice &&
       choices.abilitySchool &&
-      choices.abilityTalent &&
+      choices.abilityTalent && // This must be selected
       choices.name.trim()
     );
   };
@@ -816,10 +871,13 @@ const CharacterCreationScreen: React.FC<CharacterCreationScreenProps> = ({
 
   // --- Main Render Switch ---
   const renderCurrentStep = () => {
+    // Check for initial load
     if (loadingState.isLoading && !rulesData.kingdomFeatures)
       return renderLoading();
+    // Check for initial load error
     if (loadingState.error && !rulesData.kingdomFeatures) return renderError();
 
+    // Normal step rendering
     switch (step) {
       case "kingdom":
         return renderKingdomSelect();
@@ -858,6 +916,9 @@ const CharacterCreationScreen: React.FC<CharacterCreationScreenProps> = ({
       case "school":
         return renderSchoolSelect();
       case "talent":
+        // This step now has its own loading/error state
+        if (loadingState.isLoading) return renderLoading("Fetching Eligible Talents...");
+        if (loadingState.error) return renderError(); // Show talent-specific error
         return renderTalentSelect();
       case "name":
         return renderNameInput();
