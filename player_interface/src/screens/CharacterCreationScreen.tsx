@@ -1,18 +1,16 @@
 // src/screens/CharacterCreationScreen.tsx
-import React, { useState, useEffect, useMemo } from "react"; // --- IMPORT useMemo ---
+import React, { useState, useEffect, useMemo } from "react";
 import {
   createCharacter,
   getKingdomFeatures,
-  // --- MODIFIED: Remove old, add new ---
   getOriginChoices,
   getChildhoodChoices,
   getComingOfAgeChoices,
   getTrainingChoices,
   getDevotionChoices,
-  // --- END MODIFIED ---
   getAbilityTalents,
   getAbilitySchools,
-  getAllSkills, // --- ADDED ---
+  getAllSkills,
 } from "../api/apiClient";
 import {
   type CharacterContextResponse,
@@ -21,8 +19,8 @@ import {
   type KingdomFeatureChoice,
   type CharacterCreateRequest,
   type FeatureChoiceRequest,
-  type FeatureMods, // --- IMPORT FeatureMods ---
-  type BackgroundChoiceInfo, // --- ADDED ---
+  type FeatureMods,
+  type BackgroundChoiceInfo,
 } from "../types/apiTypes";
 
 // --- Component Props ---
@@ -35,13 +33,11 @@ interface CharacterCreationScreenProps {
 type CreationStep =
   | "kingdom"
   | "features"
-  // --- MODIFIED: Add 5 new steps ---
   | "origin"
   | "childhood"
   | "comingOfAge"
   | "training"
   | "devotion"
-  // --- END MODIFIED ---
   | "school"
   | "talent"
   | "name"
@@ -52,34 +48,27 @@ type LoadingState = {
   error: string | null;
 };
 
-// --- MODIFIED: Add all_skills and ability_school_stats ---
 type RulesData = {
   kingdomFeatures: KingdomFeaturesData | null;
-type RulesData = {
-  kingdomFeatures: KingdomFeaturesData | null;
-  // --- MODIFIED: Remove backgroundTalents, add 5 new arrays ---
   originChoices: BackgroundChoiceInfo[];
   childhoodChoices: BackgroundChoiceInfo[];
   comingOfAgeChoices: BackgroundChoiceInfo[];
   trainingChoices: BackgroundChoiceInfo[];
   devotionChoices: BackgroundChoiceInfo[];
-  // --- END MODIFIED ---
   abilityTalents: TalentInfo[];
   abilitySchools: string[];
-  all_skills: { [key: string]: { stat: string } }; // --- ADDED: To hold skill->stat map ---
-  ability_school_stats: { [key: string]: string }; // --- ADDED: To hold school->stat map ---
+  all_skills: { [key: string]: { stat: string } };
+  ability_school_stats: { [key: string]: string };
 };
 
 type Choices = {
   kingdom: string | null;
   featureChoices: FeatureChoiceRequest[];
-  // --- MODIFIED: Remove backgroundTalent, add 5 new choices ---
   originChoice: string | null;
   childhoodChoice: string | null;
   comingOfAgeChoice: string | null;
   trainingChoice: string | null;
   devotionChoice: string | null;
-  // --- END MODIFIED ---
   abilitySchool: string | null;
   abilityTalent: string | null;
   name: string;
@@ -89,7 +78,6 @@ type Choices = {
 const KINGDOMS = ["Mammal", "Reptile", "Avian", "Aquatic", "Insect", "Plant"];
 const FEATURE_IDS: string[] = ["F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8"];
 
-// --- ADDED: Base stats and school-to-stat mapping ---
 const BASE_STATS: { [key: string]: number } = {
   Might: 8,
   Endurance: 8,
@@ -105,22 +93,20 @@ const BASE_STATS: { [key: string]: number } = {
   Willpower: 8,
 };
 
-// This is based on the logic in rules_engine/data/abilities.json
 const ABILITY_SCHOOL_STAT_MAP: { [key: string]: string } = {
   Force: "Might",
   Bastion: "Endurance",
-  Ki: "Finesse", // Assuming 'Ki' maps to 'Finesse' based on abilities.json
-  Grace: "Reflexes", // Assuming 'Grace' maps to 'Reflexes'
-  Biomancy: "Vitality", // Assuming 'Biomancy' maps to 'Vitality'
+  Ki: "Finesse",
+  Grace: "Reflexes",
+  Biomancy: "Vitality",
   Cunning: "Finesse",
   Cosmos: "Logic",
   Evocation: "Knowledge",
-  Spirit: "Awareness", // Assuming 'Spirit' maps to 'Awareness'
-  Psionics: "Intuition", // Assuming 'Psionics' maps to 'Intuition'
+  Spirit: "Awareness",
+  Psionics: "Intuition",
   Command: "Charm",
-  Chaos: "Willpower", // Assuming 'Chaos' maps to 'Willpower'
+  Chaos: "Willpower",
 };
-// --- END ADD ---
 
 // --- Helper: capitalize string ---
 const capitalize = (s: string) => (s ? s.charAt(0).toUpperCase() + s.slice(1) : "");
@@ -140,28 +126,24 @@ const CharacterCreationScreen: React.FC<CharacterCreationScreenProps> = ({
   });
   const [rulesData, setRulesData] = useState<RulesData>({
     kingdomFeatures: null,
-    // --- MODIFIED: Initialize new state ---
     originChoices: [],
     childhoodChoices: [],
     comingOfAgeChoices: [],
     trainingChoices: [],
     devotionChoices: [],
-    // --- END MODIFIED ---
     abilityTalents: [],
     abilitySchools: [],
-    all_skills: {}, // --- ADDED ---
-    ability_school_stats: ABILITY_SCHOOL_STAT_MAP, // --- ADDED ---
+    all_skills: {},
+    ability_school_stats: ABILITY_SCHOOL_STAT_MAP,
   });
   const [choices, setChoices] = useState<Choices>({
     kingdom: null,
     featureChoices: [],
-    // --- MODIFIED: Initialize new choices ---
     originChoice: null,
     childhoodChoice: null,
     comingOfAgeChoice: null,
     trainingChoice: null,
     devotionChoice: null,
-    // --- END MODIFIED ---
     abilitySchool: null,
     abilityTalent: null,
     name: "",
@@ -173,7 +155,6 @@ const CharacterCreationScreen: React.FC<CharacterCreationScreenProps> = ({
       try {
         setLoadingState({ isLoading: true, error: null });
 
-        // --- MODIFIED: Added all_skills ---
         const [
           features,
           origins,
@@ -183,35 +164,29 @@ const CharacterCreationScreen: React.FC<CharacterCreationScreenProps> = ({
           devotions,
           abTalents,
           schools,
-          allSkills, // --- ADDED ---
+          allSkills,
         ] = await Promise.all([
           getKingdomFeatures(),
-        ] = await Promise.all([
-          getKingdomFeatures(),
-          // --- MODIFIED: Call 5 new functions ---
           getOriginChoices(),
           getChildhoodChoices(),
           getComingOfAgeChoices(),
           getTrainingChoices(),
           getDevotionChoices(),
-          // --- END MODIFIED ---
           getAbilityTalents(),
           getAbilitySchools(),
-          getAllSkills(), // --- ADDED ---
+          getAllSkills(),
         ]);
 
         setRulesData({
           kingdomFeatures: features,
-          // --- MODIFIED: Set new data ---
           originChoices: origins,
           childhoodChoices: childhoods,
           comingOfAgeChoices: comingOfAges,
           trainingChoices: trainings,
           devotionChoices: devotions,
-          // --- END MODIFIED ---
           abilityTalents: abTalents,
           abilitySchools: schools,
-          all_skills: allSkills, // --- ADDED ---
+          all_skills: allSkills,
           ability_school_stats: ABILITY_SCHOOL_STAT_MAP,
         });
         setLoadingState({ isLoading: false, error: null });
@@ -229,14 +204,13 @@ const CharacterCreationScreen: React.FC<CharacterCreationScreenProps> = ({
     loadAllData();
   }, []);
 
-  // --- ADDED: Live Stat Calculation ---
+  // --- Live Stat Calculation ---
   const calculatedStats = useMemo(() => {
     const newStats = { ...BASE_STATS };
     if (!choices.kingdom || !rulesData.kingdomFeatures) {
       return newStats;
     }
 
-    // Helper to apply mods
     const applyMods = (mods: FeatureMods) => {
       for (const [modValue, statList] of Object.entries(mods)) {
         const value = parseInt(modValue, 10);
@@ -250,7 +224,6 @@ const CharacterCreationScreen: React.FC<CharacterCreationScreenProps> = ({
       }
     };
 
-    // 1. Apply Feature Mods
     for (const featureChoice of choices.featureChoices) {
       const { feature_id, choice_name } = featureChoice;
       const kingdom_key = feature_id === "F9" ? "All" : choices.kingdom;
@@ -263,31 +236,59 @@ const CharacterCreationScreen: React.FC<CharacterCreationScreenProps> = ({
         applyMods(choiceData.mods);
       }
     }
-
-    // 2. Apply Talent Mods (if we add them later)
-    // Note: The current flow has talent *after* school, so this is fine.
-    // If a talent (like 'Ability Talent') is selected, apply its mods.
-    // This logic needs to be fully implemented if talents also grant stat boosts.
-
     return newStats;
   }, [choices.kingdom, choices.featureChoices, rulesData.kingdomFeatures]);
-  // --- END ADD ---
+
+  // --- *** MOVED HOOK TO TOP LEVEL *** ---
+  // This calculates the skills from background choices
+  const calculatedSkills = useMemo(() => {
+    const skills = new Set<string>();
+    const allChoices = [
+      rulesData.originChoices.find((c) => c.name === choices.originChoice),
+      rulesData.childhoodChoices.find(
+        (c) => c.name === choices.childhoodChoice,
+      ),
+      rulesData.comingOfAgeChoices.find(
+        (c) => c.name === choices.comingOfAgeChoice,
+      ),
+      rulesData.trainingChoices.find(
+        (c) => c.name === choices.trainingChoice,
+      ),
+      rulesData.devotionChoices.find(
+        (c) => c.name === choices.devotionChoice,
+      ),
+    ];
+    for (const choice of allChoices) {
+      if (choice) {
+        for (const skill of choice.skills) {
+          skills.add(skill);
+        }
+      }
+    }
+    return skills;
+  }, [
+    choices.originChoice,
+    choices.childhoodChoice,
+    choices.comingOfAgeChoice,
+    choices.trainingChoice,
+    choices.devotionChoice,
+    rulesData,
+  ]); // <-- This dependency array is now correct
 
   // --- Navigation Handlers ---
   const handleNext = () => {
     switch (step) {
       case "kingdom":
         setStep("features");
-        setFeatureStep(0); // Start at F1
+        setFeatureStep(0);
         break;
       case "features":
         if (featureStep < FEATURE_IDS.length - 1) {
-          setFeatureStep((s) => s + 1); // Go to next feature
+          setFeatureStep((s) => s + 1);
         } else {
-          setStep("origin"); // Done with F1-F8, go to new step
+          setStep("origin");
         }
         break;
-      // --- MODIFIED: Add new step navigation ---
       case "origin":
         setStep("childhood");
         break;
@@ -303,7 +304,6 @@ const CharacterCreationScreen: React.FC<CharacterCreationScreenProps> = ({
       case "devotion":
         setStep("school");
         break;
-      // --- END MODIFIED ---
       case "school":
         setStep("talent");
         break;
@@ -313,24 +313,26 @@ const CharacterCreationScreen: React.FC<CharacterCreationScreenProps> = ({
       case "name":
         setStep("review");
         break;
+      case "review":
+        // This is handled by handleSubmit
+        break;
     }
   };
   const handleBack = () => {
     switch (step) {
       case "kingdom":
-        onBack(); // Go back to Main Menu
+        onBack();
         break;
       case "features":
         if (featureStep > 0) {
-          setFeatureStep((s) => s - 1); // Go to previous feature
+          setFeatureStep((s) => s - 1);
         } else {
-          setStep("kingdom"); // Go back to kingdom select
+          setStep("kingdom");
         }
         break;
-      // --- MODIFIED: Add new step navigation ---
       case "origin":
         setStep("features");
-        setFeatureStep(FEATURE_IDS.length - 1); // Go to last feature (F8)
+        setFeatureStep(FEATURE_IDS.length - 1);
         break;
       case "childhood":
         setStep("origin");
@@ -347,7 +349,6 @@ const CharacterCreationScreen: React.FC<CharacterCreationScreenProps> = ({
       case "school":
         setStep("devotion");
         break;
-      // --- END MODIFIED ---
       case "talent":
         setStep("school");
         break;
@@ -360,10 +361,9 @@ const CharacterCreationScreen: React.FC<CharacterCreationScreenProps> = ({
     }
   };
 
-  // --- Selection Handlers (Unchanged) ---
+  // --- Selection Handlers ---
   const selectKingdom = (kingdom: string) => {
     setChoices((c) => ({ ...c, kingdom, featureChoices: [] }));
-    setChoices((c) => ({ ...c, kingdom, featureChoices: [] })); // Reset features
     handleNext();
   };
   const selectFeatureChoice = (
@@ -371,7 +371,6 @@ const CharacterCreationScreen: React.FC<CharacterCreationScreenProps> = ({
     choice: KingdomFeatureChoice,
   ) => {
     setChoices((c) => {
-      // Remove any previous choice for this featureId
       const otherChoices = c.featureChoices.filter(
         (fc) => fc.feature_id !== featureId,
       );
@@ -387,7 +386,6 @@ const CharacterCreationScreen: React.FC<CharacterCreationScreenProps> = ({
     }
   };
 
-  // --- ADDED: 5 new selection handlers ---
   const selectOrigin = (choiceName: string) => {
     setChoices((c) => ({ ...c, originChoice: choiceName }));
     handleNext();
@@ -408,17 +406,6 @@ const CharacterCreationScreen: React.FC<CharacterCreationScreenProps> = ({
     setChoices((c) => ({ ...c, devotionChoice: choiceName }));
     handleNext();
   };
-    handleNext();
-  };
-  const selectTraining = (choiceName: string) => {
-    setChoices((c) => ({ ...c, trainingChoice: choiceName }));
-    handleNext();
-  };
-  const selectDevotion = (choiceName: string) => {
-    setChoices((c) => ({ ...c, devotionChoice: choiceName }));
-    handleNext();
-  };
-  // --- END ADD ---
 
   const selectSchool = (schoolName: string) => {
     setChoices((c) => ({
@@ -437,7 +424,6 @@ const CharacterCreationScreen: React.FC<CharacterCreationScreenProps> = ({
   const handleSubmit = async () => {
     if (!isReviewComplete()) return;
 
-    // Add the F9 (Capstone) choice
     const f9Choice = choices.featureChoices.find((f) => f.feature_id === "F9");
     if (!f9Choice) {
       setLoadingState((s) => ({
@@ -451,13 +437,11 @@ const CharacterCreationScreen: React.FC<CharacterCreationScreenProps> = ({
       name: choices.name,
       kingdom: choices.kingdom!,
       feature_choices: choices.featureChoices,
-      // --- MODIFIED: Send new choices ---
       origin_choice: choices.originChoice!,
       childhood_choice: choices.childhoodChoice!,
       coming_of_age_choice: choices.comingOfAgeChoice!,
       training_choice: choices.trainingChoice!,
       devotion_choice: choices.devotionChoice!,
-      // --- END MODIFIED ---
       ability_school: choices.abilitySchool!,
       ability_talent: choices.abilityTalent!,
     };
@@ -557,7 +541,6 @@ const CharacterCreationScreen: React.FC<CharacterCreationScreenProps> = ({
     );
   };
 
-  // --- ADDED: Generic renderer for 5 new steps ---
   const renderBackgroundChoice = (
     stepTitle: string,
     choices: BackgroundChoiceInfo[],
@@ -584,9 +567,7 @@ const CharacterCreationScreen: React.FC<CharacterCreationScreenProps> = ({
       </div>
     </div>
   );
-  // --- END ADD ---
 
-  // --- MODIFIED: renderSchoolSelect ---
   const renderSchoolSelect = () => {
     return (
       <div>
@@ -594,7 +575,6 @@ const CharacterCreationScreen: React.FC<CharacterCreationScreenProps> = ({
           Step 8: Choose Ability School
         </h2>
 
-        {/* ADDED: Stat Display */}
         <div className="mb-4 p-2 stone-panel bg-gray-900/50">
           <p className="text-sm text-gray-300">
             Your current stats (Base 8 + Features):
@@ -610,22 +590,19 @@ const CharacterCreationScreen: React.FC<CharacterCreationScreenProps> = ({
             ))}
           </div>
         </div>
-        {/* END ADD */}
 
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
           {rulesData.abilitySchools.map((school) => {
-            // --- ADDED: Filtering Logic ---
             const requiredStat = rulesData.ability_school_stats[school] || "Might";
             const currentStatValue =
               calculatedStats[requiredStat as keyof typeof calculatedStats] || 8;
             const isEligible = currentStatValue >= 10;
-            // --- END ADD ---
 
             return (
               <button
                 key={school}
                 onClick={() => selectSchool(school)}
-                disabled={!isEligible} // --- ADDED: disabled prop ---
+                disabled={!isEligible}
                 className={`stone-button p-4 text-lg ${
                   !isEligible ? "opacity-50 grayscale" : ""
                 }`}
@@ -643,61 +620,13 @@ const CharacterCreationScreen: React.FC<CharacterCreationScreenProps> = ({
             );
           })}
         </div>
-  const renderSchoolSelect = () => (
-    <div>
-      <h2 className="text-3xl font-bold mb-6 text-center text-amber-300 glow-text font-medieval">
-        Step 8: Choose Ability School
-      </h2>
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-        {rulesData.abilitySchools.map((school) => (
-          <button
-            key={school}
-            onClick={() => selectSchool(school)}
-            className="stone-button p-4 text-lg"
-          >
-            {capitalize(school)}
-          </button>
-        ))}
       </div>
     );
   };
-  // --- END MODIFIED ---
 
   const renderTalentSelect = () => {
-    // --- ADDED: Skill Calculation ---
-    // This is a bit of a placeholder as we don't have the *full* skill list from the rules engine yet
-    // But we can build it from the choices!
-    const selectedSkills = useMemo(() => {
-      const skills = new Set<string>();
-      const allChoices = [
-        rulesData.originChoices.find((c) => c.name === choices.originChoice),
-        rulesData.childhoodChoices.find(
-          (c) => c.name === choices.childhoodChoice,
-        ),
-        rulesData.comingOfAgeChoices.find(
-          (c) => c.name === choices.comingOfAgeChoice,
-        ),
-        rulesData.trainingChoices.find(
-          (c) => c.name === choices.trainingChoice,
-        ),
-        rulesData.devotionChoices.find(
-          (c) => c.name === choices.devotionChoice,
-        ),
-      ];
-      for (const choice of allChoices) {
-        if (choice) {
-          for (const skill of choice.skills) {
-            skills.add(skill);
-          }
-        }
-      }
-      return skills;
-    }, [choices, rulesData]);
-    // --- END ADD ---
-
-    // TODO: Filter talents based on stats/skills
-    // This is a placeholder. The real logic will be complex.
-    // TODO: Filter talents based on stats/skills
+    // *** THIS FUNCTION NO LONGER CALLS useMemo ***
+    // It just *uses* the top-level variable 'calculatedSkills'
     const availableTalents = rulesData.abilityTalents;
 
     return (
@@ -712,7 +641,6 @@ const CharacterCreationScreen: React.FC<CharacterCreationScreenProps> = ({
           </span>
         </h3>
 
-        {/* ADDED: Prerequisite Display */}
         <div className="mb-4 p-2 stone-panel bg-gray-900/50">
           <p className="text-sm text-gray-300">Your current stats:</p>
           <div className="grid grid-cols-4 gap-x-2 gap-y-1 text-xs">
@@ -729,17 +657,14 @@ const CharacterCreationScreen: React.FC<CharacterCreationScreenProps> = ({
             Your granted skills (Rank 1):
           </p>
           <p className="text-xs text-amber-300">
-            {[...selectedSkills].join(", ") || "None"}
+            {/* Use the top-level variable here */}
+            {[...calculatedSkills].join(", ") || "None"}
           </p>
         </div>
-        {/* END ADD */}
 
         <div className="space-y-3 max-h-96 overflow-y-auto pr-2 stone-panel p-4">
           {availableTalents.map((talent) => {
-            // --- ADDED: Placeholder filtering ---
-            // This is where the real prerequisite check will go
             const isEligible = true; // Placeholder
-            // --- END ADD ---
 
             return (
               <button
@@ -754,7 +679,6 @@ const CharacterCreationScreen: React.FC<CharacterCreationScreenProps> = ({
                 <p className="text-sm text-stone-300">
                   {talent.description || talent.effect}
                 </p>
-                {/* This is where you would show prerequisites */}
                 <p className="text-xs text-gray-500 mt-1">
                   Prerequisites: (Logic not yet implemented)
                 </p>
@@ -789,27 +713,6 @@ const CharacterCreationScreen: React.FC<CharacterCreationScreenProps> = ({
       </div>
     );
   };
-  const renderNameInput = () => (
-    <div>
-      <h2 className="text-3xl font-bold mb-6 text-center text-amber-300 glow-text font-medieval">
-        Step 10: Choose Your Name
-      </h2>
-      <input
-        type="text"
-        value={choices.name}
-        onChange={(e) => setChoices((c) => ({ ...c, name: e.target.value }))}
-        className="w-full p-4 bg-stone-800 border border-stone-600 rounded-lg text-white text-xl"
-        placeholder="Enter character name"
-      />
-      <button
-        onClick={handleNext}
-        disabled={!choices.name.trim()}
-        className="w-full mt-4 stone-button"
-      >
-        Review Character
-      </button>
-    </div>
-  );
 
   const isReviewComplete = () => {
     const f9Choice = choices.featureChoices.find((f) => f.feature_id === "F9");
@@ -817,13 +720,11 @@ const CharacterCreationScreen: React.FC<CharacterCreationScreenProps> = ({
       choices.kingdom &&
       choices.featureChoices.length >= 8 && // F1-F8
       f9Choice && // F9
-      // --- MODIFIED: Check 5 new choices ---
       choices.originChoice &&
       choices.childhoodChoice &&
       choices.comingOfAgeChoice &&
       choices.trainingChoice &&
       choices.devotionChoice &&
-      // --- END MODIFIED ---
       choices.abilitySchool &&
       choices.abilityTalent &&
       choices.name.trim()
@@ -851,16 +752,6 @@ const CharacterCreationScreen: React.FC<CharacterCreationScreenProps> = ({
             / 8 chosen
           </p>
           <hr className="border-stone-600 my-2" />
-          <p>
-            <strong>Origin:</strong> {choices.originChoice || "..."}
-          </p>
-          <hr className="border-stone-600 my-2" />
-          <p>
-            <strong>Childhood:</strong> {choices.childhoodChoice || "..."}
-          </p>
-          <p>
-            <strong>Coming of Age:</strong> {choices.comingOfAgeChoice || "..."}
-          </p>
           <p>
             <strong>Origin:</strong> {choices.originChoice || "..."}
           </p>
@@ -934,7 +825,6 @@ const CharacterCreationScreen: React.FC<CharacterCreationScreenProps> = ({
         return renderKingdomSelect();
       case "features":
         return renderFeatureSelect();
-      // --- MODIFIED: Add 5 new render cases ---
       case "origin":
         return renderBackgroundChoice(
           "Step 3: Choose Origin",
@@ -965,7 +855,6 @@ const CharacterCreationScreen: React.FC<CharacterCreationScreenProps> = ({
           rulesData.devotionChoices,
           selectDevotion,
         );
-      // --- END MODIFIED ---
       case "school":
         return renderSchoolSelect();
       case "talent":

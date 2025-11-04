@@ -1,19 +1,19 @@
 // src/types/apiTypes.ts
 
 // --- Core Character & World Types ---
-// --- NEW SPECIFIC TYPES ---
+
 export interface InventoryItem {
-  name: string; // This seems to be used by CharacterSheetScreen
-  description?: string; // Adding as optional
+  name: string;
+  description?: string;
   quantity: number;
 }
+
 export interface Injury {
   location: string;
   severity: string;
   description: string;
 }
 
-// --- UNCHANGED TYPES ---
 export interface CharacterContextResponse {
   id: string;
   name: string;
@@ -26,19 +26,16 @@ export interface CharacterContextResponse {
   resource_pools: { [key: string]: { current: number; max: number } };
   talents: string[];
   abilities: string[];
-  inventory: { [key: string]: InventoryItem }; // Changed to match CharacterSheetScreen
+  inventory: { [key: string]: InventoryItem };
   equipment: { [key: string]: InventoryItem };
   status_effects: string[];
   injuries: Injury[];
-  // --- MODIFIED: This is now an object ---
   location: {
     current_location_id: string;
     coordinates: [number, number];
   };
-  // --- END MODIFIED ---
-  position_x: number; // This is now redundant, but we'll leave it for now
-  position_y: number; // This is now redundant, but we'll leave it for now
-  // --- ADDED: For CombatScreen ---
+  position_x: number;
+  position_y: number;
   character_sheet: {
     abilities: string[];
     inventory: { [key: string]: InventoryItem };
@@ -54,6 +51,25 @@ export interface CharacterContextResponse {
 }
 
 // --- Types for Exploration & World ---
+
+/**
+ * NEW TYPE: Defines the shape of an object within ai_annotations.
+ * We use an intersection to combine known properties with unknown ones.
+ */
+// A base type for the known properties
+export interface AiAnnotationBase {
+  coordinates: [number, number];
+  type?: string;
+  status?: string;
+  key_id?: string;
+  item_id?: string;
+  quantity?: number;
+}
+// A type for any other dynamic properties
+type AiAnnotationExtras = Record<string, unknown>;
+// The final type is an intersection of both
+export type AiAnnotationValue = AiAnnotationBase & AiAnnotationExtras;
+
 export interface LocationContextResponse {
   id: string;
   name: string;
@@ -61,10 +77,7 @@ export interface LocationContextResponse {
   npc_instances: NpcInstance[];
   item_instances: ItemInstance[];
   ai_annotations?: {
-    [key: string]: {
-      coordinates: [number, number];
-      [key: string]: any; // Other properties
-    };
+    [key: string]: AiAnnotationValue; // <-- This now uses the intersection type
   };
 }
 
@@ -81,22 +94,15 @@ export interface NpcInstance {
 }
 
 export interface ItemInstance {
-export interface InteractionRequest {
-  character_id: string;
-  action: string;
-  target_id?: string;
-  context: string;
-}
-export interface InteractionResponse {
-  narrative: string;
-  options: string[];
-  // ... other potential fields
-}
-export interface CombatNpc {
   id: string;
   template_id: string;
+  quantity: number;
   coordinates: [number, number];
+  location_id?: number;
+  npc_id?: number;
 }
+
+// --- Interaction Types (Corrected) ---
 
 export interface InteractionRequestPayload {
   actor_id: string;
@@ -105,31 +111,39 @@ export interface InteractionRequestPayload {
   interaction_type: string;
 }
 
+/**
+ * NEW TYPE: Defines the shape of items being added/removed
+ * in an InteractionResponse.
+ */
+export interface ItemChange {
+  item_id: string;
+  quantity: number;
+}
+
 export interface InteractionResponse {
   success: boolean;
   message: string;
-  updated_annotations?: any;
-  items_added?: any[];
-  items_removed?: any[]; // Added for completeness
-  narrative?: string; // From old type
-  options?: string[]; // From old type
+  updated_annotations?: { [key: string]: AiAnnotationValue }; // <-- FIX 2: Use specific type
+  items_added?: ItemChange[]; // <-- FIX 3: Use specific type
+  items_removed?: ItemChange[]; // <-- FIX 4: Use specific type
 }
 
-// --- Types for Combat ---
+// --- Types for Combat (Corrected) ---
+
 export interface CombatStartRequestPayload {
   location_id: string;
   player_ids: string[];
   npc_template_ids: string[];
 }
+
 export interface CombatEncounterResponse {
   id: number;
   location_id: string;
   turn_order: string[];
   current_turn_index: number;
-  // --- These were from the old type, may not match story_engine ---
   encounter_id?: string;
   player_character?: CharacterContextResponse;
-  npcs?: NpcInstance[]; // Using NpcInstance
+  npcs?: NpcInstance[];
   current_turn?: string;
   log?: string[];
   grid_size?: { width: number; height: number };
@@ -137,9 +151,6 @@ export interface CombatEncounterResponse {
 
 export interface PlayerActionRequestPayload {
   action: "attack" | "use_ability" | "use_item" | "wait";
-export interface CombatActionRequest {
-  character_id: string;
-  action_type: string; // 'move', 'attack', 'ability', 'item'
   target_id?: string;
   ability_id?: string;
   item_id?: string;
@@ -153,78 +164,45 @@ export interface PlayerActionResponse {
   combat_over: boolean;
 }
 
-// --- Types for Character Creation ---
-// --- NEW CHARACTER CREATION TYPES ---
-/**
- * Represents a single choice for a feature, sent to the character_engine.
- * Matches schemas.FeatureChoice in character_engine.
- */
+// --- Types for Character Creation (Corrected) ---
+
 export interface FeatureChoiceRequest {
-  feature_id: string; // e.g., "F1", "F9"
-  choice_name: string; // e.g., "Predator's Gaze", "Capstone: +2 Might"
+  feature_id: string;
+  choice_name: string;
 }
 
-/**
- * The full payload for creating a new character.
- * Matches schemas.CharacterCreate in character_engine.
- */
 export interface CharacterCreateRequest {
   name: string;
   kingdom: string;
   feature_choices: FeatureChoiceRequest[];
-
-  // --- MODIFIED ---
   origin_choice: string;
   childhood_choice: string;
   coming_of_age_choice: string;
   training_choice: string;
   devotion_choice: string;
-  // --- END MODIFIED ---
-
   ability_school: string;
   ability_talent: string;
 }
 
-/**
- * A simple talent structure returned by the rules_engine.
- */
 export interface TalentInfo {
   name: string;
-  description: string; // Changed from 'effect' to match UI
-  source?: string; // Added from rules_engine model
-  effect?: string; // Added from rules_engine model
+  description: string;
+  source?: string;
+  effect?: string;
 }
 
-// --- ADDED THIS TYPE ---
 export interface BackgroundChoiceInfo {
   name: string;
   description: string;
   skills: string[];
 }
-// --- END ADD ---
 
-// --- ADDED THIS TYPE ---
-/**
- * A simple background choice structure returned by the rules_engine.
- */
-export interface BackgroundChoiceInfo {
-  name: string;
-  description: string;
-  skills: string[];
-}
-// --- END ADD ---
-/**
- * The modifiers block for a single feature choice.
- */
 export interface FeatureMods {
   "+2"?: string[];
   "+1"?: string[];
   "-1"?: string[];
 }
 
-/**
- * A single selectable choice within a kingdom for a feature.
- */
 export interface KingdomFeatureChoice {
   name: string;
   mods: FeatureMods;
@@ -234,18 +212,6 @@ export interface KingdomFeatureSet {
   [kingdom: string]: KingdomFeatureChoice[];
 }
 
-/**
- * The set of choices for a given feature, keyed by Kingdom.
- * e.g., { "Mammal": [KingdomFeatureChoice...], "Reptile": [...] }
- * or { "All": [KingdomFeatureChoice...] } for F9.
- */
-export interface KingdomFeatureSet {
-  [kingdom: string]: KingdomFeatureChoice[];
-}
-/**
- * The complete kingdom features data structure fetched from the rules_engine.
- * e.g., { "F1": KingdomFeatureSet, "F2": KingdomFeatureSet, ... }
- */
 export interface KingdomFeaturesData {
   [feature_id: string]: KingdomFeatureSet;
 }
