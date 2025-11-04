@@ -8,5 +8,19 @@ class Character(Base):
     id = Column(String, primary_key=True, index=True)
     name = Column(String, index=True)
     kingdom = Column(String)
-    # This is the single JSON blob that holds all character data
-    character_sheet = Column(JSON)
+    
+    # These are the separate columns that match your migration and services.py
+    level = Column(Integer)
+    stats = Column(JSON)
+    skills = Column(JSON)
+    max_hp = Column(Integer)
+    current_hp = Column(Integer)
+    resource_pools = Column(JSON)
+    talents = Column(JSON)
+    abilities = Column(JSON)
+    inventory = Column(JSON)
+    equipment = Column(JSON)
+    status_effects = Column(JSON)
+    injuries = Column(JSON)
+    position_x = Column(Integer)
+    position_y = Column(Integer)
