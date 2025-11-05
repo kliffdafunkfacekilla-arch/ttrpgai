@@ -66,6 +66,11 @@ class CharacterContextResponse(CharacterBase):
     equipment: Dict[str, Any]
     status_effects: List[str]
     injuries: List[Dict[str, Any]]
+
+    # --- ADD THIS LINE ---
+    current_location_id: int
+    # --- END ADD ---
+
     position_x: int
     position_y: int
 

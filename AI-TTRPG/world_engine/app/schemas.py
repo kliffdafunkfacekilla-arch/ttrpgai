@@ -39,9 +39,9 @@ class Faction(FactionBase):
 
 class RegionBase(BaseModel):
     name: str
-    current_weather: str
-    environmental_effects: List[str]
-    faction_influence: Dict[str, Any]
+    current_weather: Optional[str] = "clear"
+    environmental_effects: Optional[List[str]] = []
+    faction_influence: Optional[Dict[str, Any]] = {}
 
 class Region(RegionBase):
     id: int

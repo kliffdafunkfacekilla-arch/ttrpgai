@@ -1,0 +1,4 @@
+Initializing database at: /app/characters.db
+Table 'characters' created successfully.
+Indexes for 'characters' table created successfully.
+Database '/app/characters.db' initialized successfully.

@@ -3,7 +3,14 @@
 > vite --config vite.config.ts
 
 
-  VITE v7.1.12  ready in 552 ms
+  VITE v7.1.12  ready in 3052 ms
 
   ➜  Local:   http://localhost:5173/
   ➜  Network: use --host to expose
+[vite:css][postcss] @import must precede all other statements (besides @charset or empty @layer)
+757 |    }
+758 |  }
+759 |  @import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500;600;700&d...
+    |  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+760 |  @layer base {
+761 |    body {

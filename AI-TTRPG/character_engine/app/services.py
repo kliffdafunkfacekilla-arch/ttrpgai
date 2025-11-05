@@ -2,38 +2,28 @@
 from sqlalchemy.orm import Session
 from typing import List, Dict, Any, Optional
 import uuid
-import httpx  # Import httpx
-import os  # Import os
+import httpx # Import httpx
+import os # Import os
 from . import models, schemas
-import logging  # --- ADD LOGGING ---
-
-
+import logging # --- ADD LOGGING ---
 # --- ADDED: Logger ---
 logger = logging.getLogger("uvicorn.error")
-
-
 # --- ADDED: Rules Engine Configuration ---
 RULES_ENGINE_URL = os.getenv("RULES_ENGINE_URL", "http://127.0.0.1:8000/v1")
 CLIENT_TIMEOUT = 10.0
 print(f"Character Engine configured to use Rules Engine at: {RULES_ENGINE_URL}")
-
-
 # --- UNCHANGED: get_character, get_characters ---
 def get_character(db: Session, character_id: str) -> Optional[models.Character]:
     """Fetches a single character by its UUID."""
     return (
         db.query(models.Character).filter(models.Character.id == character_id).first()
     )
-
-
 def get_characters(
     db: Session, skip: int = 0, limit: int = 100
 ) -> List[models.Character]:
     """Fetches a list of all characters."""
     return db.query(models.Character).offset(skip).limit(limit).all()
-
-
-# --- UNCHANGED: get_character_context ---
+# --- MODIFIED: get_character_context ---
 def get_character_context(
     db_character: models.Character,
 ) -> schemas.CharacterContextResponse:
@@ -102,11 +92,12 @@ def get_character_context(
             if isinstance(db_character.injuries, list)
             else def_injuries
         ),
+        # --- ADD THIS LINE ---
+        current_location_id=db_character.current_location_id,
+        # --- END ADD ---
         position_x=db_character.position_x,
         position_y=db_character.position_y,
     )
-
-
 # --- MODIFIED: Helper functions for new creation logic ---
 async def _call_rules_engine(
     method: str, endpoint: str, params: Dict = None, json_data: Dict = None
@@ -125,7 +116,7 @@ async def _call_rules_engine(
             else:
                 raise ValueError(f"Unsupported HTTP method: {method}")
 
-            response.raise_for_status()  # Raise exception for 4xx/5xx errors
+            response.raise_for_status() # Raise exception for 4xx/5xx errors
             logger.info(f"Rules Engine response status: {response.status_code}")
             return response.json()
     except httpx.RequestError as e:
@@ -146,23 +137,19 @@ async def _call_rules_engine(
             status_code=e.response.status_code,
             detail=f"Rules Engine error: {e.response.text}",
         )
-
-
 async def get_eligible_talents(
     stats: Dict[str, int], skills: Dict[str, int]
 ) -> List[Dict]:
     """Fetches eligible talents from the Rules Engine."""
-    request_data = {"stats": stats, "skills": skills}  # Pass skill ranks directly
+    request_data = {"stats": stats, "skills": skills} # Pass skill ranks directly
     return await _call_rules_engine(
         "POST", "/lookup/talents", json_data=request_data
     )
-
-
 async def _get_rules_engine_data() -> Dict[str, Any]:
     """
     Fetches all necessary data from the rules_engine service asynchronously.
     """
-    logger.info("Fetching all creation data from Rules Engine...")
+    print("Fetching all creation data from Rules Engine...")
     endpoints = {
         "kingdom_features": "/lookup/creation/kingdom_features",
         "ability_talents_list": "/lookup/creation/ability_talents",
@@ -177,26 +164,36 @@ async def _get_rules_engine_data() -> Dict[str, Any]:
     }
 
     rules_data = {}
-    # --- REFACTOR: Can't use gather yet, issues with server handling load ---
-    for key, endpoint in endpoints.items():
-        rules_data[key] = await _call_rules_engine("GET", endpoint)
 
+    try:
+        # GET requests
+        for key, endpoint in endpoints.items():
+            print(f"Fetching {key} from {endpoint}...")
+            rules_data[key] = await _call_rules_engine("GET", endpoint)
 
-    # Fetch full talent data (POST request)
-    all_talents_list = await _call_rules_engine("POST", "/lookup/talents", json_data={"stats": {}, "skills": {}})
-    rules_data["all_talents_map"] = {t["name"]: t for t in all_talents_list}
-    logger.info(f"Loaded {len(rules_data['all_talents_map'])} talents into map.")
+        # Fetch full talent data (POST)
+        response = await _call_rules_engine(
+            "POST", "/lookup/talents", json_data={"stats": {}, "skills": {}}
+        )
+        all_talents_list = response
+        rules_data["all_talents_map"] = {t["name"]: t for t in all_talents_list}
+        print(f"Loaded {len(rules_data['all_talents_map'])} talents into map.")
 
-    # Fetch full ability school data
-    school_details = {}
-    for school_name in rules_data["ability_schools"]:
-        school_details[school_name] = await _call_rules_engine("GET", f"/lookup/ability_school/{school_name}")
-    rules_data["all_abilities_map"] = school_details
+        # Fetch full ability school data (Series of GETs)
+        school_details = {}
+        for school_name in rules_data["ability_schools"]:
+            school_details[school_name] = await _call_rules_engine(
+                "GET", f"/lookup/ability_school/{school_name}"
+            )
+        rules_data["all_abilities_map"] = school_details
 
-    logger.info("Successfully fetched all creation data.")
-    return rules_data
+        print("Successfully fetched all creation data.")
+        return rules_data
 
-
+    except Exception as e:
+        # Errors will be raised as HTTPErrors from the helper
+        print(f"FATAL: Error in _get_rules_engine_data: {e}")
+        raise e
 def _apply_mods(stats: Dict[str, int], mods: Dict[str, List[str]]):
     """
     Helper to apply a standard 'mods' block to a stats dictionary.
@@ -227,8 +224,6 @@ def _apply_mods(stats: Dict[str, int], mods: Dict[str, List[str]]):
                 print(f"Applied {key} to {stat_name}. New value: {stats[stat_name]}")
             else:
                 print(f"Warning: Stat '{stat_name}' in mods not found in base stats.")
-
-
 async def create_character(
     db: Session, character: schemas.CharacterCreate
 ) -> schemas.CharacterContextResponse:
@@ -236,18 +231,26 @@ async def create_character(
     Creates a new character in the database after calculating all
     stats and vitals based on user choices.
     """
-    logger.info(f"Starting creation for character: {character.name}")
+    logger.info(f"--- Starting character creation for: {character.name} ---")
+    logger.debug(f"Received character creation payload: {character.model_dump_json(indent=2)}")
 
     # 1. Get all rules data from Rules Engine
-    # This is now an async call
-    rules = await _get_rules_engine_data()
+    try:
+        rules = await _get_rules_engine_data()
+    except Exception as e:
+        print(f"Failed to fetch rules data from rules_engine: {e}")
+        raise e # Re-raise the HTTPException from the helper
 
     # 2. Initialize base stats and skills
-    base_stats = {stat: 8 for stat in rules["stats_list"]}
+    base_stats = {stat: 8 for stat in rules.get("stats_list", [])}
     base_skills = {}
-    for skill_name in rules["all_skills"]:
+    for skill_name in rules.get("all_skills", {}):
         base_skills[skill_name] = {"rank": 0, "sre": 0}
-    
+
+    if not base_stats or not base_skills:
+        logger.error("Failed to initialize stats/skills. Rules data for 'stats_list' or 'all_skills' was empty.")
+        raise HTTPException(status_code=500, detail="Character creation failed: Missing core rules data.")
+
     print(f"Initialized stats (all 8s) and skills (all 0s).")
 
     # 3. Apply Feature mods
@@ -336,13 +339,19 @@ async def create_character(
     print(f"Final calculated stats: {base_stats}")
 
     # 6. Get Vitals from Rules Engine
-    logger.info("Calculating vitals...")
-    vitals_data = await _call_rules_engine(
-        "POST", "/calculate/base_vitals", json_data={"stats": base_stats}
-    )
-    max_hp = vitals_data.get("max_hp", 1)
-    resource_pools = vitals_data.get("resources", {})
-    logger.info(f"Vitals calculated: MaxHP={max_hp}")
+    print("Calculating vitals...")
+    try:
+        vitals_data = await _call_rules_engine(
+            "POST",
+            "/calculate/base_vitals",
+            json_data={"stats": base_stats}
+        )
+        max_hp = vitals_data.get("max_hp", 1)
+        resource_pools = vitals_data.get("resources", {})
+        print(f"Vitals calculated: MaxHP={max_hp}")
+    except Exception as e:
+        print(f"FATAL: Failed to calculate vitals from rules_engine: {e}")
+        raise e # Re-raise the HTTPException from the helper
 
     # 7. Get base abilities
     base_abilities = []
@@ -369,25 +378,34 @@ async def create_character(
         equipment={},
         status_effects=[],
         injuries=[],
+        # --- ADD THIS LINE ---
+        current_location_id=1, # Default to STARTING_ZONE
         position_x=5, # Default start position
-        position_y=5  # Default start position
+        position_y=5 # Default start position
     )
+
+    logger.debug(f"Constructed DB character model: {db_character.__dict__}")
 
     # 9. Save and return
     try:
+        logger.info("Adding character to DB session...")
         db.add(db_character)
+        logger.info("Committing transaction...")
         db.commit()
+        logger.info("Transaction committed.")
         db.refresh(db_character)
-        print(f"Successfully created character {db_character.id} in database.")
+        logger.info(f"Successfully refreshed character from DB: {db_character.id}")
+
         # This function will now work, as db_character has the separate fields
-        return get_character_context(db_character)
+        response = get_character_context(db_character)
+        logger.debug(f"Returning character context response: {response.model_dump_json(indent=2)}")
+        logger.info("--- Character creation successful ---")
+        return response
     except Exception as e:
         db.rollback()
-        print(f"Database error on character save: {e}")
+        logger.error(f"Database error on character save: {e}", exc_info=True)
         raise Exception(f"Database error: {e}")
-
-
-# --- UNCHANGED: update_character_context ---
+# --- MODIFIED: update_character_context ---
 def update_character_context(
     db: Session, character_id: str, updates: schemas.CharacterContextResponse
 ) -> Optional[models.Character]:
@@ -412,6 +430,9 @@ def update_character_context(
         db_character.equipment = updates.equipment
         db_character.status_effects = updates.status_effects
         db_character.injuries = updates.injuries
+        # --- ADD THIS LINE ---
+        db_character.current_location_id = updates.current_location_id
+        # --- END ADD ---
         db_character.position_x = updates.position_x
         db_character.position_y = updates.position_y
 
