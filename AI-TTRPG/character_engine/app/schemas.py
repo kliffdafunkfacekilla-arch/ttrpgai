@@ -56,7 +56,7 @@ class CharacterContextResponse(CharacterBase):
 
     id: str
     stats: Dict[str, int]
-    skills: Dict[str, int]
+    skills: Dict[str, Any]
     max_hp: int
     current_hp: int
     resource_pools: Dict[str, Any]  # e.g., {"Stamina": {"current": 10, "max": 10}, ...}

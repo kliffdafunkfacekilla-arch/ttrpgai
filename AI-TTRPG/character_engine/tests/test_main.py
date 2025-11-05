@@ -3,117 +3,78 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from app.main import app, get_db
 from app.database import Base
-from unittest.mock import patch, MagicMock
+import pytest
+from unittest.mock import patch, AsyncMock
+
+from sqlalchemy.pool import StaticPool
 
 # In-memory SQLite database for testing
 SQLALCHEMY_DATABASE_URL = "sqlite:///:memory:"
-engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False})
+engine = create_engine(
+    SQLALCHEMY_DATABASE_URL,
+    connect_args={"check_same_thread": False},
+    poolclass=StaticPool,
+)
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
 def override_get_db():
-    Base.metadata.create_all(bind=engine)  # Create tables on the in-memory engine
+    Base.metadata.create_all(bind=engine)
     db = TestingSessionLocal()
     try:
         yield db
     finally:
         db.close()
-        Base.metadata.drop_all(bind=engine)  # Drop tables after the test
+        Base.metadata.drop_all(bind=engine)
 
 
 app.dependency_overrides[get_db] = override_get_db
 
-client = TestClient(app)
+
+@pytest.fixture
+def client():
+    with TestClient(app) as c:
+        yield c
 
 
-@patch("app.services.httpx.post")
-@patch("app.services._get_rules_engine_data")
-def test_create_character_success(mock_get_rules, mock_httpx_post):
-    # Mock the return value of the rules engine call
-    mock_get_rules.return_value = {
-        "stats_list": [
-            "Might",
-            "Endurance",
-            "Finesse",
-            "Reflexes",
-            "Vitality",
-            "Fortitude",
-            "Knowledge",
-            "Logic",
-            "Awareness",
-            "Intuition",
-            "Charm",
-            "Willpower",
-        ],
-        "all_skills": {
-            "Survival": {"category": "Utility", "stat": "Awareness"},
-            "Intimidation": {"category": "Conversational", "stat": "Willpower"},
-            "Lore: Agricul. & Wilds": {"category": "Lore", "stat": "Knowledge"},
-            "Slight of Hand": {"category": "Utility", "stat": "Finesse"},
-            "Precision Blades": {"category": "Combat", "stat": "Finesse"},
-            "Resilience": {"category": "Non-Combat", "stat": "Fortitude"},
-            "Polearms & Shields": {"category": "Combat", "stat": "Might"},
-            "Plate Armor": {"category": "Armor", "stat": "Might"},
-            "Lore: Royalty/Political": {"category": "Lore", "stat": "Knowledge"},
-            "Reinforced": {"category": "Armor", "stat": "Fortitude"},
-        },
-        "kingdom_features": {
-            "F1": {
-                "Mammal": [
-                    {"name": "Predator's Gaze", "mods": {"+1": ["Awareness", "Intuition"]}}
-                ]
-            },
-            "F9": {"All": [{"name": "Capstone: +2 Might", "mods": {"+2": ["Might"]}}]},
-        },
-        "origin_choices": [
-            {
-                "name": "Forested Highlands",
-                "description": "Raised in the high-altitude forests, you are a natural survivalist and tracker.",
-                "skills": ["Survival", "Lore: Agricul. & Wilds"],
+@pytest.mark.asyncio
+@patch("app.services._call_rules_engine", new_callable=AsyncMock)
+async def test_create_character_success(mock_call_rules, client):
+    # Configure the mock to return different values based on the endpoint
+    async def side_effect(method, endpoint, json_data=None, params=None):
+        if endpoint == "/lookup/creation/kingdom_features":
+            return {
+                "F1": {"Mammal": [{"name": "Predator's Gaze", "mods": {"+1": ["Awareness", "Intuition"]}}]},
+                "F9": {"All": [{"name": "Capstone: +2 Might", "mods": {"+2": ["Might"]}}]},
             }
-        ],
-        "childhood_choices": [
-            {
-                "name": "Street Urchin",
-                "description": "You grew up fending for yourself, learning to be quick with your hands and your words.",
-                "skills": ["Slight of Hand", "Intimidation"],
-            }
-        ],
-        "coming_of_age_choices": [
-            {
-                "name": "The Grand Tournament",
-                "description": "You proved your mettle in single combat with a blade.",
-                "skills": ["Precision Blades", "Resilience"],
-            }
-        ],
-        "training_choices": [
-            {
-                "name": "Soldier's Discipline",
-                "description": "You were trained in the regimented arts of the shield and polearm.",
-                "skills": ["Polearms & Shields", "Plate Armor"],
-            }
-        ],
-        "devotion_choices": [
-            {
-                "name": "Devotion to the State",
-                "description": "You are a patriot, dedicated to the laws and history of your kingdom.",
-                "skills": ["Lore: Royalty/Political", "Reinforced"],
-            }
-        ],
-        "all_talents_map": {
-            "Ability Talent": {"name": "Ability Talent", "mods": {"+1": ["Finesse"]}},
-        },
-        "all_abilities_map": {"Force": {"tiers": [{"name": "Force Push"}]}},
-    }
-    # Mock the vitals calculation call
-    mock_vitals_response = MagicMock()
-    mock_vitals_response.status_code = 200
-    mock_vitals_response.json.return_value = {
-        "max_hp": 15,
-        "resources": {"Stamina": {"current": 10, "max": 10}},
-    }
-    mock_httpx_post.return_value = mock_vitals_response
+        if endpoint == "/lookup/creation/origin_choices":
+            return [{"name": "Forested Highlands", "skills": ["Survival", "Lore: Agricul. & Wilds"]}]
+        if endpoint == "/lookup/creation/childhood_choices":
+            return [{"name": "Street Urchin", "skills": ["Slight of Hand", "Intimidation"]}]
+        if endpoint == "/lookup/creation/coming_of_age_choices":
+            return [{"name": "The Grand Tournament", "skills": ["Precision Blades", "Resilience"]}]
+        if endpoint == "/lookup/creation/training_choices":
+            return [{"name": "Soldier's Discipline", "skills": ["Polearms & Shields", "Plate Armor"]}]
+        if endpoint == "/lookup/creation/devotion_choices":
+            return [{"name": "Devotion to the State", "skills": ["Lore: Royalty/Political", "Reinforced"]}]
+        if endpoint == "/lookup/talents" and method.upper() == "POST":
+            return [{"name": "Ability Talent", "mods": {"+1": ["Finesse"]}}]
+        if endpoint == "/lookup/all_ability_schools":
+            return ["Force"]
+        if endpoint == "/lookup/all_stats":
+            return ["Might", "Endurance", "Finesse", "Reflexes", "Vitality", "Fortitude", "Knowledge", "Logic", "Awareness", "Intuition", "Charm", "Willpower"]
+        if endpoint == "/lookup/all_skills":
+            return ["Survival", "Intimidation", "Lore: Agricul. & Wilds", "Slight of Hand", "Precision Blades", "Resilience", "Polearms & Shields", "Plate Armor", "Lore: Royalty/Political", "Reinforced"]
+        if endpoint.startswith("/lookup/ability_school/"):
+            return {"tiers": [{"name": "Force Push"}]}
+        if endpoint == "/calculate/base_vitals" and method.upper() == "POST":
+            return {"max_hp": 15, "resources": {"Stamina": {"current": 10, "max": 10}}}
+        # Default mock values for other GET calls
+        return {}
 
+    mock_call_rules.side_effect = side_effect
+
+    # The client call is now synchronous because TestClient handles the event loop
     response = client.post(
         "/v1/characters/",
         json={
@@ -141,7 +102,7 @@ def test_create_character_success(mock_get_rules, mock_httpx_post):
     assert data["stats"]["Awareness"] == 9
     assert data["stats"]["Intuition"] == 9
     assert data["stats"]["Finesse"] == 9
-    assert data["skills"]["Survival"] == 1
-    assert data["skills"]["Intimidation"] == 1
+    assert data["skills"]["Survival"]["rank"] == 1
+    assert data["skills"]["Intimidation"]["rank"] == 1
     assert "Ability Talent" in data["talents"]
     assert "background_talent" not in data["talents"]

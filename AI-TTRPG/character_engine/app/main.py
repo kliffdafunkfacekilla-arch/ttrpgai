@@ -43,13 +43,13 @@ def get_db():
 @app.post(
     "/v1/characters/", response_model=schemas.CharacterContextResponse, status_code=201
 )
-def create_character_endpoint(
+async def create_character_endpoint(
     character: schemas.CharacterCreate, db: Session = Depends(get_db)
 ):
     """
     Creates a new character.
     """
-    return services.create_character(db=db, character=character)
+    return await services.create_character(db=db, character=character)
 
 
 @app.get("/v1/characters/{char_id}", response_model=schemas.CharacterContextResponse)
