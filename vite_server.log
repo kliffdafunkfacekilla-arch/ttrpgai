@@ -2,8 +2,3 @@
 > player_interface@0.0.0 dev
 > vite --config vite.config.ts
 
-
-  VITE v7.1.12  ready in 1079 ms
-
-  ➜  Local:   http://localhost:5173/
-  ➜  Network: use --host to expose

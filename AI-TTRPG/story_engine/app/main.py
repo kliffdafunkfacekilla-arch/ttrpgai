@@ -96,12 +96,21 @@ async def get_character_context(char_id: str):
     except Exception as e:
         raise HTTPException(status_code=503, detail=f"Error calling character_engine: {e}")
 
+import httpx
+
+# ... (other code)
+
 @router.get("/v1/context/location/{location_id}", response_model=schemas.OrchestrationWorldContext)
 async def get_location_context(location_id: int):
     try:
-        return await services.get_world_location_context(location_id)
+        # Create an httpx client and pass it to the service function
+        async with httpx.AsyncClient() as client:
+            return await services.get_world_location_context(client, location_id)
     except Exception as e:
-        raise HTTPException(status_code=503, detail=f"Error calling world_engine: {e}")
+        # The service layer now raises detailed HTTPException, so we can just re-raise
+        if isinstance(e, HTTPException):
+            raise e
+        raise HTTPException(status_code=503, detail=f"An unexpected error occurred: {e}")
 
 @router.post("/v1/combat/start", response_model=schemas.CombatEncounter, status_code=201, tags=["Combat Orchestration"])
 async def api_start_new_combat(start_request: schemas.CombatStartRequest, db: Session = Depends(get_db)):
