@@ -201,7 +201,7 @@ class InitiativeRequest(BaseModel):
     """
 
     endurance: int = Field(..., description="Attribute B Score")
-    agility: int = Field(..., description="Attribute D Score")
+    reflexes: int = Field(..., description="Attribute D Score") # CHANGED from agility
     fortitude: int = Field(..., description="Attribute F Score")
     logic: int = Field(..., description="Attribute H Score")
     intuition: int = Field(..., description="Attribute J Score")

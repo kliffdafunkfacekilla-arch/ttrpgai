@@ -33,7 +33,7 @@ async def handle_interaction(request: schemas.InteractionRequest) -> schemas.Int
             # --- Example: Simple Door Interaction ---
             if request.interaction_type == "use" and isinstance(target_object_state, dict) and target_object_state.get("type") == "door":
                 if target_object_state.get("status") == "locked":
-                    # --- MODIFIED: Check if player has key ---
+                    # --- Check if player has key ---
                     has_key = False
                     key_needed = target_object_state.get("key_id")
 
@@ -42,9 +42,12 @@ async def handle_interaction(request: schemas.InteractionRequest) -> schemas.Int
                         try:
                             # Call character_engine to get character context
                             char_context = await services.get_character_context(client, request.actor_id)
-                            inventory = char_context.get("character_sheet", {}).get("inventory", [])
-                            # Check if any item in inventory matches the key_id
-                            has_key = any(item.get("item_id") == key_needed and item.get("quantity", 0) > 0 for item in inventory)
+                            # --- MODIFIED: Use flat inventory ---
+                            inventory = char_context.get("inventory", {})
+                            # Check if the key_id is a key in the inventory dict with quantity > 0
+                            has_key = inventory.get(key_needed, 0) > 0
+                            # --- END MODIFIED ---
+
                             if has_key:
                                 logger.info(f"Key '{key_needed}' found in {request.actor_id}'s inventory.")
                             else:
@@ -56,16 +59,33 @@ async def handle_interaction(request: schemas.InteractionRequest) -> schemas.Int
                             logger.exception(f"Unexpected error during inventory check for key {key_needed}: {e}")
                             # Keep has_key = False
 
-                    # --- End MODIFIED section ---
+                    # --- End check section ---
 
                     if has_key:
-                        # ... (unlock logic remains the same) ...
-                        # Optional TODO: Remove the key from inventory after use?
-                        # try:
-                        # await services.remove_item_from_character(client, request.actor_id, key_needed, 1) # Need remove_item service call
-                        # except Exception as e:
-                        # logger.error(f"Failed to remove key {key_needed} after use: {e}")
-                        pass # Keep unlock logic simple for now
+                        # --- THIS BLOCK IS NOW FIXED ---
+                        # Key is used, unlock the door and remove the key
+                        target_object_state["status"] = "unlocked" # Or "closed", "unlocked" is clearer
+                        logger.info(f"Door '{request.target_object_id}' unlocked by {request.actor_id}.")
+
+                        items_removed_list = []
+
+                        # Try to remove the key from inventory
+                        try:
+                            await services.remove_item_from_character(client, request.actor_id, key_needed, 1)
+                            logger.info(f"Removed key '{key_needed}' from {request.actor_id}'s inventory.")
+                            items_removed_list.append({"item_id": key_needed, "quantity": 1})
+                        except Exception as e:
+                            logger.error(f"Failed to remove key {key_needed} after use: {e}. Door is unlocked anyway.")
+
+                        updated_context = await services.update_location_annotations(client, request.location_id, annotations)
+
+                        return schemas.InteractionResponse(
+                            success=True,
+                            message=f"You use the {key_needed.replace('_', ' ')} and unlock the {request.target_object_id.replace('_', ' ')}.",
+                            updated_annotations=updated_context.get("ai_annotations"),
+                            items_removed=items_removed_list
+                        )
+                        # --- END FIX ---
                     else:
                         return schemas.InteractionResponse(success=False, message=f"The {request.target_object_id.replace('_', ' ')} is locked." + (f" It seems to require a '{key_needed}'." if key_needed else ""))
 
@@ -88,6 +108,7 @@ async def handle_interaction(request: schemas.InteractionRequest) -> schemas.Int
                         message=f"You close the {request.target_object_id.replace('_', ' ')}.",
                         updated_annotations=updated_context.get("ai_annotations")
                     )
+
                 else:
                     return schemas.InteractionResponse(success=False, message="You can't use the door that way right now.")
 
@@ -116,7 +137,6 @@ async def handle_interaction(request: schemas.InteractionRequest) -> schemas.Int
                 except HTTPException as e:
                     logger.error(f"Failed to add item {item_id_to_give} to {request.actor_id}: {e.detail}")
                     return schemas.InteractionResponse(success=False, message="You couldn't pick that up.")
-
 
             # --- Add more interaction types and object types here ---
             # elif request.interaction_type == "examine":
