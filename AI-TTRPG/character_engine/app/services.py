@@ -158,70 +158,43 @@ async def get_eligible_talents(
     )
 
 
-def _get_rules_engine_data() -> Dict[str, Any]:
+async def _get_rules_engine_data() -> Dict[str, Any]:
     """
-    Fetches all necessary data from the rules_engine service.
+    Fetches all necessary data from the rules_engine service asynchronously.
     """
-    print("Fetching all creation data from Rules Engine...")
+    logger.info("Fetching all creation data from Rules Engine...")
     endpoints = {
         "kingdom_features": "/lookup/creation/kingdom_features",
-        "ability_talents_list": "/lookup/creation/ability_talents",  # For the final talent choice
-        "ability_schools": "/lookup/all_ability_schools",  # Returns a list of names
+        "ability_talents_list": "/lookup/creation/ability_talents",
+        "ability_schools": "/lookup/all_ability_schools",
         "stats_list": "/lookup/all_stats",
         "all_skills": "/lookup/all_skills",
-        "all_talents": "/lookup/talents",  # POST, needs empty body to get all
-        "all_abilities_full": "/lookup/all_ability_schools",  # Re-using, need to get full data
-        # --- ADD NEW BACKGROUND CHOICE ENDPOINTS ---
         "origin_choices": "/lookup/creation/origin_choices",
         "childhood_choices": "/lookup/creation/childhood_choices",
         "coming_of_age_choices": "/lookup/creation/coming_of_age_choices",
         "training_choices": "/lookup/creation/training_choices",
         "devotion_choices": "/lookup/creation/devotion_choices",
-        # --- END ADD ---
     }
 
     rules_data = {}
-    client = httpx.Client(base_url=RULES_ENGINE_URL, timeout=CLIENT_TIMEOUT)
+    # --- REFACTOR: Can't use gather yet, issues with server handling load ---
+    for key, endpoint in endpoints.items():
+        rules_data[key] = await _call_rules_engine("GET", endpoint)
 
-    try:
-        # GET requests
-        for key, endpoint in endpoints.items():
-            if key in ["all_talents"]:
-                continue  # Skip POST
-            if key in ["all_abilities_full"]:
-                continue  # Handled below
-            print(f"Fetching {key} from {endpoint}...")
-            response = client.get(endpoint)
-            response.raise_for_status()
-            rules_data[key] = response.json()
 
-        # Fetch full talent data
-        response = client.post("/lookup/talents", json={"stats": {}, "skills": {}})
-        response.raise_for_status()
-        # This returns a list. Let's convert to a dict for easy lookup.
-        all_talents_list = response.json()
-        rules_data["all_talents_map"] = {t["name"]: t for t in all_talents_list}
-        print(f"Loaded {len(rules_data['all_talents_map'])} talents into map.")
+    # Fetch full talent data (POST request)
+    all_talents_list = await _call_rules_engine("POST", "/lookup/talents", json_data={"stats": {}, "skills": {}})
+    rules_data["all_talents_map"] = {t["name"]: t for t in all_talents_list}
+    logger.info(f"Loaded {len(rules_data['all_talents_map'])} talents into map.")
 
-        # Fetch full ability school data
-        school_details = {}
-        for school_name in rules_data["ability_schools"]:
-            response = client.get(f"/lookup/ability_school/{school_name}")
-            response.raise_for_status()
-            school_details[school_name] = response.json()
-        rules_data["all_abilities_map"] = school_details
+    # Fetch full ability school data
+    school_details = {}
+    for school_name in rules_data["ability_schools"]:
+        school_details[school_name] = await _call_rules_engine("GET", f"/lookup/ability_school/{school_name}")
+    rules_data["all_abilities_map"] = school_details
 
-        print("Successfully fetched all creation data.")
-        return rules_data
-
-    except httpx.RequestError as e:
-        print(f"FATAL: HTTP request failed: {e}")
-        raise Exception(f"Rules Engine connection failed: {e}")
-    except httpx.HTTPStatusError as e:
-        print(f"FATAL: HTTP status error: {e.response.status_code} - {e.response.text}")
-        raise Exception(f"Rules Engine error: {e.response.status_code}")
-    finally:
-        client.close()
+    logger.info("Successfully fetched all creation data.")
+    return rules_data
 
 
 def _apply_mods(stats: Dict[str, int], mods: Dict[str, List[str]]):
@@ -256,21 +229,18 @@ def _apply_mods(stats: Dict[str, int], mods: Dict[str, List[str]]):
                 print(f"Warning: Stat '{stat_name}' in mods not found in base stats.")
 
 
-def create_character(
+async def create_character(
     db: Session, character: schemas.CharacterCreate
 ) -> schemas.CharacterContextResponse:
     """
     Creates a new character in the database after calculating all
     stats and vitals based on user choices.
     """
-    print(f"Starting creation for character: {character.name}")
+    logger.info(f"Starting creation for character: {character.name}")
 
     # 1. Get all rules data from Rules Engine
-    try:
-        rules = _get_rules_engine_data()
-    except Exception as e:
-        print(f"Failed to fetch rules data from rules_engine: {e}")
-        raise Exception(f"Failed to fetch rules data: {e}")
+    # This is now an async call
+    rules = await _get_rules_engine_data()
 
     # 2. Initialize base stats and skills
     base_stats = {stat: 8 for stat in rules["stats_list"]}
@@ -366,21 +336,13 @@ def create_character(
     print(f"Final calculated stats: {base_stats}")
 
     # 6. Get Vitals from Rules Engine
-    print("Calculating vitals...")
-    try:
-        response = httpx.post(
-            f"{RULES_ENGINE_URL}/calculate/base_vitals",
-            json={"stats": base_stats},
-            timeout=CLIENT_TIMEOUT,
-        )
-        response.raise_for_status()
-        vitals_data = response.json()
-        max_hp = vitals_data.get("max_hp", 1)
-        resource_pools = vitals_data.get("resources", {})
-        print(f"Vitals calculated: MaxHP={max_hp}")
-    except Exception as e:
-        print(f"FATAL: Failed to calculate vitals from rules_engine: {e}")
-        raise Exception(f"Failed to calculate vitals: {e}")
+    logger.info("Calculating vitals...")
+    vitals_data = await _call_rules_engine(
+        "POST", "/calculate/base_vitals", json_data={"stats": base_stats}
+    )
+    max_hp = vitals_data.get("max_hp", 1)
+    resource_pools = vitals_data.get("resources", {})
+    logger.info(f"Vitals calculated: MaxHP={max_hp}")
 
     # 7. Get base abilities
     base_abilities = []
