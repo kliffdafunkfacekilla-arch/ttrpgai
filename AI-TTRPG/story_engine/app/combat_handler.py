@@ -55,40 +55,39 @@ async def start_combat(db: Session, start_request: schemas.CombatStartRequest) -
             logger.exception(f"Error finding spawn points: {e}. NPCs will spawn at default location.")
             spawn_points = [[5, 5]] * len(start_request.npc_template_ids)
 
-        logger.info(f"Spawning NPCs: {start_request.npc_template_ids}")
+        logger.info(f"Generating and spawning NPCs: {start_request.npc_template_ids}")
         for i, template_id in enumerate(start_request.npc_template_ids):
             try:
                 coords = spawn_points[i]
 
-                # --- THIS IS THE FIX ---
-                # The story_engine is responsible for getting the NPC template
-                # from the npc_generator to find its HP, THEN telling the
-                # world_engine to spawn it with that HP.
-                #
-                # This requires a call to npc_generator, which is not
-                # currently in services.py. For now, we will simulate this
-                # by setting a default, but this is the *next* thing to fix.
+                # 1. Get generation params from rules_engine
+                logger.debug(f"Getting params for template: {template_id}")
+                template_lookup = await services.get_npc_generation_params(client, template_id)
+                generation_params = template_lookup.get("generation_params")
+                if not generation_params:
+                    logger.error(f"No generation_params found for template_id: {template_id}")
+                    continue
 
-                logger.warning(f"FIXME: NPC HP logic not implemented in story_engine. Spawning '{template_id}' with placeholder HP.")
-                # TODO:
-                # 1. Add `get_npc_template` to services.py (calls npc_generator)
-                # 2. `template = await services.get_npc_template(client, template_id)`
-                # 3. `npc_max_hp = template.get('max_hp', 10)`
-                npc_max_hp = 15 # Using a different placeholder to show it's working
+                # 2. Generate the full NPC template from npc_generator
+                logger.debug(f"Generating NPC with params: {generation_params}")
+                full_npc_template = await services.generate_npc_template(client, generation_params)
 
+                # 3. Spawn the NPC in world_engine with correct data
+                npc_max_hp = full_npc_template.get("max_hp", 10)
                 spawn_data = schemas.OrchestrationSpawnNpc(
                     template_id=template_id,
                     location_id=start_request.location_id,
                     coordinates=coords,
-                    current_hp=npc_max_hp, # Send the correct HP
-                    max_hp=npc_max_hp      # Send the correct HP
+                    current_hp=npc_max_hp,
+                    max_hp=npc_max_hp,
+                    behavior_tags=full_npc_template.get("behavior_tags", ["aggressive"])
                 )
                 npc_instance_data = await services.spawn_npc_in_world(client, spawn_data)
-                spawned_npc_details.append(npc_instance_data)
+                spawned_npc_details.append(npc_instance_data) # This data includes the new instance ID
                 logger.info(f"Spawned NPC instance ID: {npc_instance_data.get('id')} at {coords} from template: {template_id} with {npc_max_hp} HP.")
 
             except HTTPException as e:
-                logger.error(f"Failed to spawn NPC template '{template_id}': {e.detail}")
+                logger.error(f"HTTP Failed to spawn NPC template '{template_id}': {e.detail}")
                 continue
             except Exception as e:
                 logger.exception(f"Unexpected error spawning NPC template '{template_id}': {e}")
@@ -124,15 +123,29 @@ async def start_combat(db: Session, start_request: schemas.CombatStartRequest) -
             actor_id_str = f"npc_{npc_id}"
             try:
                 npc_context = await services.get_npc_context(client, npc_id)
-                npc_stats = npc_context.get("stats", {})
-                if not npc_stats:
-                     logger.warning(f"NPC {npc_id} context missing stats, using defaults for initiative.")
-                     npc_stats = {}
+                # --- THIS IS THE KEY CHANGE ---
+                # We now get stats from the GENERATED template, not the instance
+                # Re-fetch the generation params and the full template to get stats
+                template_id = npc_context.get("template_id", "")
+                if not template_id:
+                    logger.warning(f"NPC {npc_id} has no template_id, using default stats for initiative.")
+                    npc_stats = {}
+                else:
+                    try:
+                        template_lookup = await services.get_npc_generation_params(client, template_id)
+                        generation_params = template_lookup.get("generation_params")
+                        full_npc_template = await services.generate_npc_template(client, generation_params)
+                        npc_stats = full_npc_template.get("stats", {})
+                        if not npc_stats:
+                            logger.warning(f"Generated template for {template_id} missing stats, using defaults for initiative.")
+                    except Exception as e:
+                        logger.error(f"Failed to re-generate template for NPC {npc_id} stats. Using defaults. Error: {e}")
+                        npc_stats = {}
                 stats_for_init = _extract_initiative_stats(npc_stats)
                 init_result = await services.roll_initiative(client, **stats_for_init)
                 initiative_total = init_result.get("total_initiative", 0)
                 participants_data.append((actor_id_str, "npc", initiative_total))
-                logger.info(f"NPC {npc_id} initiative: {initiative_total}")
+                logger.info(f"NPC {npc_id} (template: {template_id}) initiative: {initiative_total}")
             except HTTPException as e:
                 logger.error(f"Failed to get context or roll initiative for NPC {npc_id}: {e.detail}")
                 participants_data.append((actor_id_str, "npc", 0))
@@ -168,7 +181,6 @@ async def get_actor_context(client: httpx.AsyncClient, actor_id: str) -> Tuple[s
     logger.debug(f"Getting context for actor: {actor_id}")
     if actor_id.startswith("player_"):
         try:
-            # Player ID is a UUID string, not an int
             context_data = await services.get_character_context(client, actor_id)
             return "player", context_data
         except IndexError:
@@ -209,67 +221,80 @@ def get_skill_rank(actor_context: Dict, skill_name: str) -> int:
     return 0
     # --- END MODIFIED ---
 
-# ---
-# --- THIS FUNCTION IS NOW FIXED (PARTIALLY)
-# ---
-def get_equipped_weapon(actor_context: Dict) -> Tuple[Optional[str], Optional[str]]:
-
+async def get_equipped_weapon(client: httpx.AsyncClient, actor_context: Dict) -> Tuple[Optional[str], Optional[str]]:
     actor_name = actor_context.get('name', actor_context.get('template_id', 'Unknown Actor'))
-    equipment = actor_context.get("equipment") # This is None for NPCs
+    equipment = actor_context.get("equipment")
 
     if equipment is not None:
         # This is a Player
-        weapon_item_id = equipment.get("weapon") # e.g., "item_iron_sword"
+        weapon_item_id = equipment.get("weapon")
         if weapon_item_id:
             logger.info(f"Player {actor_name} has weapon item ID: {weapon_item_id}")
-            # --- FIXME ---
-            # This is the design gap. We have the ITEM ID ("item_iron_sword")
-            # but we need the CATEGORY ("Precision Blades").
-            # The rules_engine has no endpoint to map this.
-            # We must return a placeholder category until that is fixed.
-            logger.warning(f"FIXME: No lookup for item ID '{weapon_item_id}' to weapon category. Using 'Precision Blades' as placeholder.")
-            return "Precision Blades", "melee"
+            try:
+                item_template = await services.get_item_template_params(client, weapon_item_id)
+                category = item_template.get("category")
+                item_type = item_template.get("type")
+                if category and item_type == "melee":
+                    logger.info(f"Mapped {weapon_item_id} to category: {category}")
+                    return category, "melee"
+                elif category and item_type == "ranged":
+                    logger.info(f"Mapped {weapon_item_id} to category: {category}")
+                    return category, "ranged"
+                else:
+                    logger.warning(f"Item {weapon_item_id} is not a valid weapon (type: {item_type}). Defaulting to 'Brawling Weapons'.")
+                    return "Brawling Weapons", "melee"
+            except Exception as e:
+                logger.error(f"Failed to get item template for {weapon_item_id}. Error: {e}. Defaulting to 'Brawling Weapons'.")
+                return "Brawling Weapons", "melee"
         else:
             logger.info(f"Player {actor_name} has no weapon equipped. Defaulting to 'Brawling Weapons'.")
             return "Brawling Weapons", "melee"
     else:
-        # This is an NPC
-        # We must guess their weapon category from their template/skills
+        # This is an NPC (logic remains the same)
         logger.info(f"NPC {actor_name} has no equipment dict. Guessing weapon from template.")
-        if "melee_heavy" in actor_context.get("template_id", ""):
-             return "Great Weapons", "melee" # Changed to match skill
-         elif "ranged" in actor_context.get("template_id", ""):
-              return "Precision Archery", "ranged" # Changed to match skill
+        # (The existing NPC logic...)
+        npc_skills = actor_context.get("skills", {})
+        if npc_skills.get("Great Weapons", 0) > 0:
+             return "Great Weapons", "melee"
+        if npc_skills.get("Precision Archery", 0) > 0:
+              return "Precision Archery", "ranged"
 
         logger.warning(f"Could not guess weapon for NPC {actor_name}. Defaulting to 'Brawling Weapons'.")
         return "Brawling Weapons", "melee"
 
-# ---
-# --- THIS FUNCTION IS NOW FIXED (PARTIALLY)
-# ---
-def get_equipped_armor(actor_context: Dict) -> Optional[str]:
+async def get_equipped_armor(client: httpx.AsyncClient, actor_context: Dict) -> Optional[str]:
     actor_name = actor_context.get('name', actor_context.get('template_id', 'Unknown Actor'))
-    equipment = actor_context.get("equipment") # This is None for NPCs
+    equipment = actor_context.get("equipment")
 
     if equipment is not None:
         # This is a Player
-        armor_item_id = equipment.get("armor") # e.g., "item_leather_jerkin"
+        armor_item_id = equipment.get("armor")
         if armor_item_id:
             logger.info(f"Player {actor_name} has armor item ID: {armor_item_id}")
-            # --- FIXME ---
-            # Same design gap as weapons. We need the category.
-            logger.warning(f"FIXME: No lookup for item ID '{armor_item_id}' to armor category. Using 'Leather/Hides' as placeholder.")
-            return "Leather/Hides"
+            try:
+                item_template = await services.get_item_template_params(client, armor_item_id)
+                category = item_template.get("category")
+                item_type = item_template.get("type")
+                if category and item_type == "armor":
+                    logger.info(f"Mapped {armor_item_id} to category: {category}")
+                    return category
+                else:
+                    logger.warning(f"Item {armor_item_id} is not a valid armor (type: {item_type}). Defaulting to 'Natural/Unarmored'.")
+                    return "Natural/Unarmored"
+            except Exception as e:
+                logger.error(f"Failed to get item template for {armor_item_id}. Error: {e}. Defaulting to 'Natural/Unarmored'.")
+                return "Natural/Unarmored"
         else:
             logger.info(f"Player {actor_name} has no armor equipped. Defaulting to 'Natural/Unarmored'.")
             return "Natural/Unarmored"
     else:
-        # This is an NPC
+        # This is an NPC (logic remains the same)
         logger.info(f"NPC {actor_name} has no equipment dict. Guessing armor from template.")
-        if "heavy_armor" in actor_context.get("template_id", ""):
-             return "Plate Armor" # Changed to match skill
-        elif "evasive" in actor_context.get("template_id", ""):
-             return "Clothing/Utility" # Changed to match skill
+        npc_skills = actor_context.get("skills", {})
+        if npc_skills.get("Plate Armor", 0) > 0:
+             return "Plate Armor"
+        elif npc_skills.get("Clothing/Utility", 0) > 0:
+             return "Clothing/Utility"
 
         logger.warning(f"Could not guess armor for NPC {actor_name}. Defaulting to 'Natural/Unarmored'.")
         return "Natural/Unarmored"
@@ -386,8 +411,8 @@ async def handle_player_action(db: Session, combat: models.CombatEncounter, acto
                 raise HTTPException(status_code=400, detail=f"Target {target_id} is already defeated.")
 
             # --- EQUIPMENT FIX IS APPLIED HERE ---
-            weapon_category, weapon_type = get_equipped_weapon(attacker_context)
-            armor_category = get_equipped_armor(defender_context)
+            weapon_category, weapon_type = await get_equipped_weapon(client, attacker_context)
+            armor_category = await get_equipped_armor(client, defender_context)
             # --- END FIX ---
 
             weapon_data = await services.get_weapon_data(client, weapon_category, weapon_type)

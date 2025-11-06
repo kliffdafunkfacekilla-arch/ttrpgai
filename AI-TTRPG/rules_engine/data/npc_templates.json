@@ -1,0 +1,46 @@
+{
+  "goblin_scout": {
+    "name": "Goblin Scout",
+    "description": "A small, aggressive goblin with crude armor and a rusty weapon.",
+    "generation_params": {
+      "kingdom": "mammal",
+      "offense_style": "melee_heavy",
+      "defense_style": "evasive",
+      "difficulty": "easy",
+      "behavior": "aggressive"
+    }
+  },
+  "forest_stalker_spider": {
+    "name": "Forest Stalker",
+    "description": "A large, predatory spider that uses venom and cunning.",
+    "generation_params": {
+      "kingdom": "insect",
+      "offense_style": "debuff",
+      "defense_style": "evasive",
+      "difficulty": "medium",
+      "behavior": "aggressive"
+    }
+  },
+  "cultist_acolyte": {
+    "name": "Cultist Acolyte",
+    "description": "A robed figure crackling with dark energy.",
+    "generation_params": {
+      "kingdom": "mammal",
+      "offense_style": "debuff",
+      "defense_style": "evasive",
+      "difficulty": "medium",
+      "behavior": "aggressive"
+    }
+  },
+  "cultist_brute": {
+    "name": "Cultist Brute",
+    "description": "A hulking bodyguard dedicated to the cult.",
+    "generation_params": {
+      "kingdom": "mammal",
+      "offense_style": "melee_heavy",
+      "defense_style": "heavy_armor",
+      "difficulty": "medium",
+      "behavior": "aggressive"
+    }
+  }
+}
