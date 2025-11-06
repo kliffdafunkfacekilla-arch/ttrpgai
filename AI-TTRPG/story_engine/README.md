@@ -20,12 +20,12 @@ The Story Engine is a stateful FastAPI service that acts as the central orchestr
 
 -   `POST /v1/combat/start`: Initiates a new combat encounter.
     -   **Request Body:** `CombatStartRequest` (location ID, list of player IDs, list of NPC template IDs).
-    -   **Process:** Spawns NPCs via `world_engine`, rolls initiative for all participants via `rules_engine`, and creates the combat encounter state in its own database.
+    -   **Process:** For each NPC template ID, it first calls the `rules_engine` to get generation parameters. It then calls the `npc_generator` to create a full NPC template with stats and HP. Finally, it tells the `world_engine` to spawn the NPC with the correct data, rolls initiative for all participants, and creates the combat encounter state in its own database.
     -   **Response Body:** `CombatEncounter` (the initial state of the combat, including turn order).
 
 -   `POST /v1/combat/{combat_id}/player_action`: Processes an action taken by a player.
     -   **Request Body:** `PlayerActionRequest` (action type, target ID).
-    -   **Process:** Orchestrates calls to `rules_engine` for attack rolls and damage calculation, and then calls `character_engine` or `world_engine` to apply the results.
+    -   **Process:** When a player attacks, it determines their equipped weapon by calling the `rules_engine`'s item lookup endpoint. It then orchestrates calls to the `rules_engine` for attack rolls and damage calculation, and finally calls `character_engine` or `world_engine` to apply the results.
     -   **Response Body:** A dictionary containing a detailed log of the action's resolution.
 
 ### Interaction Handling
@@ -47,7 +47,7 @@ The service uses SQLAlchemy and Alembic to manage its database.
 
 The Story Engine is the most interconnected service and depends on:
 
--   **`rules_engine`:** For all combat calculations, initiative rolls, and data lookups.
+-   **`rules_engine`:** For all combat calculations, initiative rolls, and data lookups (including NPC generation parameters and item details).
 -   **`character_engine`:** To get player character state and apply damage/status effects.
 -   **`world_engine`:** To get world/NPC state, spawn NPCs, and apply damage/status effects to them.
--   **`npc_generator`:** (Implicitly) The NPC templates used to start combat are created by this service.
+-   **`npc_generator`:** To generate full NPC templates with stats and HP before they are spawned.

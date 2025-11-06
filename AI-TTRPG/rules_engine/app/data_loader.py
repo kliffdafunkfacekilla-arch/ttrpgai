@@ -159,6 +159,8 @@ ARMOR: Dict[str, Any] = {}
 INJURY_EFFECTS: Dict[str, Any] = {}
 STATUS_EFFECTS: Dict[str, Any] = {}
 EQUIPMENT_CATEGORY_TO_SKILL_MAP: Dict[str, str] = {}
+NPC_TEMPLATES: Dict[str, Any] = {}
+ITEM_TEMPLATES: Dict[str, Any] = {}
 
 
 # --- ADD NEW BACKGROUND GLOBALS ---
@@ -176,7 +178,7 @@ def load_data() -> Dict[str, Any]:
     """Loads all rules data and returns it in a dictionary."""
     global STATS_LIST, SKILL_CATEGORIES, ALL_SKILLS, ABILITY_DATA, TALENT_DATA, FEATURE_STATS_MAP
     # --- MODIFIED ---
-    global MELEE_WEAPONS, RANGED_WEAPONS, ARMOR, INJURY_EFFECTS, STATUS_EFFECTS, EQUIPMENT_CATEGORY_TO_SKILL_MAP, KINGDOM_FEATURES_DATA
+    global MELEE_WEAPONS, RANGED_WEAPONS, ARMOR, INJURY_EFFECTS, STATUS_EFFECTS, EQUIPMENT_CATEGORY_TO_SKILL_MAP, KINGDOM_FEATURES_DATA, NPC_TEMPLATES, ITEM_TEMPLATES
     # --- ADD NEW GLOBALS TO FUNCTION SCOPE ---
     global ORIGIN_CHOICES, CHILDHOOD_CHOICES, COMING_OF_AGE_CHOICES, TRAINING_CHOICES, DEVOTION_CHOICES
 
@@ -250,6 +252,9 @@ def load_data() -> Dict[str, Any]:
         DEVOTION_CHOICES = _load_json("devotion_choices.json")
         # --- END LOAD ---
 
+        NPC_TEMPLATES = _load_json("npc_templates.json")
+        ITEM_TEMPLATES = _load_json("item_templates.json")
+
         loaded_data = {
             "stats_list": STATS_LIST,
             "skill_categories": SKILL_CATEGORIES,
@@ -271,6 +276,8 @@ def load_data() -> Dict[str, Any]:
             "training_choices": TRAINING_CHOICES,
             "devotion_choices": DEVOTION_CHOICES,
             # --- END ADD ---
+            "npc_templates": NPC_TEMPLATES,
+            "item_templates": ITEM_TEMPLATES,
         }
 
         print(f"DEBUG: STATS_LIST len: {len(STATS_LIST)}")
@@ -293,6 +300,8 @@ def load_data() -> Dict[str, Any]:
         print(f"Loaded {len(COMING_OF_AGE_CHOICES)} coming of age choices.")
         print(f"Loaded {len(TRAINING_CHOICES)} training choices.")
         print(f"Loaded {len(DEVOTION_CHOICES)} devotion choices.")
+        print(f"Loaded {len(NPC_TEMPLATES)} NPC templates.")
+        print(f"Loaded {len(ITEM_TEMPLATES)} item templates.")
         # --- END ADD ---
 
         print("--- Rules Engine Data Parsed Successfully ---")

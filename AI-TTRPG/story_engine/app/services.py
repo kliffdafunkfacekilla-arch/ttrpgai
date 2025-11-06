@@ -8,6 +8,7 @@ from . import schemas # Schemas from story_engine
 RULES_ENGINE_URL = "http://127.0.0.1:8000"
 CHARACTER_ENGINE_URL = "http://127.0.0.1:8001"
 WORLD_ENGINE_URL = "http://127.0.0.1:8002"
+NPC_GENERATOR_URL = "http://127.0.0.1:8005"
 
 # --- Ensure the _call_api helper function exists ---
 async def _call_api(
@@ -96,6 +97,22 @@ async def get_armor_data(client: httpx.AsyncClient, category_name: str) -> Dict:
      """Calls rules_engine to get armor data."""
      url = f"{RULES_ENGINE_URL}/v1/lookup/armor/{category_name}"
      return await _call_api(client, "GET", url)
+
+async def get_npc_generation_params(client: httpx.AsyncClient, template_id: str) -> Dict:
+    """Calls rules_engine to get generation params for an NPC template ID."""
+    url = f"{RULES_ENGINE_URL}/v1/lookup/npc_template/{template_id}"
+    return await _call_api(client, "GET", url)
+
+async def get_item_template_params(client: httpx.AsyncClient, item_id: str) -> Dict:
+    """Calls rules_engine to get definition for an item template ID."""
+    url = f"{RULES_ENGINE_URL}/v1/lookup/item_template/{item_id}"
+    return await _call_api(client, "GET", url)
+
+# --- Calls to npc_generator ---
+async def generate_npc_template(client: httpx.AsyncClient, generation_request: Dict) -> Dict:
+    """Calls npc_generator to generate a full NPC template."""
+    url = f"{NPC_GENERATOR_URL}/v1/generate"
+    return await _call_api(client, "POST", url, json=generation_request)
 
 # --- Calls to character_engine ---
 async def get_character_context(client: httpx.AsyncClient, char_id: str) -> Dict: # Changed char_id type hint

@@ -47,6 +47,8 @@ The seven services are:
     *   `/v1/roll/contested_attack`: Performs a contested attack roll.
     *   `/v1/calculate/damage`: Calculates damage.
     *   `/v1/lookup/all_skills`: Provides a list of all skills in the game.
+    *   `/v1/lookup/npc_template/{template_id}`: **(New)** Returns the generation parameters for a given NPC template ID.
+    *   `/v1/lookup/item_template/{item_id}`: **(New)** Looks up the definition for a given item ID, returning its type and category.
 *   **Data Management**: Loads all game rules from JSON files in the `data` directory into memory on startup.
 
 ### NPC Generator
@@ -91,3 +93,5 @@ The seven services are:
 ### Goal: Dynamic Data Loading
 *   **Current State**: **Complete**.
     *   The `npc_generator`'s `core.py` has been refactored to fetch the master skill list from the `rules_engine`'s `/v1/lookup/all_skills` endpoint, removing the hardcoded list.
+    *   **NPC Spawning:** The `story_engine` now orchestrates NPC creation by calling the `rules_engine` to get generation parameters, then the `npc_generator` to create a full template, and finally the `world_engine` to spawn the NPC.
+    *   **Item Lookup:** The `story_engine` now determines the category of a player's equipped weapon or armor by calling the `rules_engine`'s `/v1/lookup/item_template/{item_id}` endpoint.

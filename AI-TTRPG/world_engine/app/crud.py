@@ -76,19 +76,19 @@ def get_npc(db: Session, npc_id: int) -> Optional[models.NpcInstance]:
     return db.query(models.NpcInstance).filter(models.NpcInstance.id == npc_id).first()
 
 def spawn_npc(db: Session, npc: schemas.NpcSpawnRequest) -> models.NpcInstance:
-    # In a real app, max_hp/current_hp would be fetched
-    # from a data file (like in rules_engine)
-    # For now, we use the provided value or a default.
+    # --- THIS FUNCTION IS NOW FIXED ---
+    # It now prioritizes the HP values from the request schema.
+    # The 'or 10' is just a final fallback if None is passed.
     db_npc = models.NpcInstance(
         template_id=npc.template_id,
         location_id=npc.location_id,
         name_override=npc.name_override,
-        current_hp=npc.current_hp or 10,
-        max_hp=npc.max_hp or 10,
+        current_hp=npc.current_hp if npc.current_hp is not None else 10,
+        max_hp=npc.max_hp if npc.max_hp is not None else 10,
         behavior_tags=npc.behavior_tags,
-        # --- ADD THIS LINE ---
         coordinates=npc.coordinates # Save the coordinates
     )
+    # --- END FIX ---
     db.add(db_npc)
     db.commit()
     db.refresh(db_npc)
@@ -110,7 +110,6 @@ def update_npc(db: Session, npc_id: int, updates: schemas.NpcUpdate) -> Optional
         if "status_effects" in update_data:
             flag_modified(db_npc, "status_effects")
 
-        # --- ADD THIS BLOCK ---
         if "coordinates" in update_data:
             flag_modified(db_npc, "coordinates")
 

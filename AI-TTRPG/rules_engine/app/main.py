@@ -54,6 +54,8 @@ async def lifespan(app: FastAPI):
         app.state.training_choices = loaded_rules.get("training_choices", [])
         app.state.devotion_choices = loaded_rules.get("devotion_choices", [])
         # --- END ADD ---
+        app.state.npc_templates = loaded_rules.get("npc_templates", {})
+        app.state.item_templates = loaded_rules.get("item_templates", {})
 
         print("INFO: Rules data loaded successfully and stored in app.state.")
     except Exception as e:
@@ -78,6 +80,8 @@ async def lifespan(app: FastAPI):
         app.state.training_choices = []
         app.state.devotion_choices = []
         # --- END ADD ---
+        app.state.npc_templates = {}
+        app.state.item_templates = {}
 
         # Optionally re-raise to prevent server start on load failure
         # raise
@@ -110,6 +114,8 @@ def check_state_loaded(request: Request):
         "coming_of_age_choices",  # --- ADD ---
         "training_choices",  # --- ADD ---
         "devotion_choices",  # --- ADD ---
+        "npc_templates",
+        "item_templates",
     ]
     # --- END MODIFIED ---
     missing = [
@@ -150,6 +156,8 @@ async def get_status(request: Request):
         training_choices = getattr(request.app.state, "training_choices", [])
         devotion_choices = getattr(request.app.state, "devotion_choices", [])
         # --- END ADD ---
+        npc_templates = getattr(request.app.state, "npc_templates", {})
+        item_templates = getattr(request.app.state, "item_templates", {})
 
         stats_loaded = bool(stats_list)
         skills_loaded = bool(all_skills)
@@ -172,24 +180,26 @@ async def get_status(request: Request):
             ]
         )
         # --- END ADD ---
+        npc_templates_loaded = bool(npc_templates)
+        item_templates_loaded = bool(item_templates)
 
-        # --- MODIFIED ---
-        if not all(
-            [
-                stats_loaded,
-                skills_loaded,
-                abilities_loaded,
-                talents_loaded,
-                features_loaded,
-                kingdom_features_loaded,
-                melee_weapons_loaded,
-                ranged_weapons_loaded,
-                armor_loaded,
-                injury_effects_loaded,
-                background_choices_loaded,  # --- ADD ---
-            ]
-        ):
-            # --- END MODIFIED ---
+        all_check = [
+            stats_loaded,
+            skills_loaded,
+            abilities_loaded,
+            talents_loaded,
+            features_loaded,
+            kingdom_features_loaded,
+            melee_weapons_loaded,
+            ranged_weapons_loaded,
+            armor_loaded,
+            injury_effects_loaded,
+            background_choices_loaded,
+            npc_templates_loaded,
+            item_templates_loaded,
+        ]
+
+        if not all(all_check):
             status_msg = "error - data loading incomplete"
         else:
             status_msg = "online"
@@ -216,6 +226,8 @@ async def get_status(request: Request):
             "training_choices_loaded_count": len(training_choices),
             "devotion_choices_loaded_count": len(devotion_choices),
             # --- END ADD ---
+            "npc_templates_loaded_count": len(npc_templates),
+            "item_templates_loaded_count": len(item_templates),
         }
     except Exception as e:
         logger.exception(f"Error in get_status accessing app.state: {e}")
@@ -780,3 +792,27 @@ async def api_get_status_effect(status_name: str, request: Request):
             status_code=500,
             detail=f"Internal server error looking up status effect: {str(e)}",
         )
+
+@app.get("/v1/lookup/npc_template/{template_id}", response_model=Dict, tags=["Lookups"])
+async def api_get_npc_template(request: Request, template_id: str):
+    """Looks up the generation parameters for a given NPC template ID."""
+    check_state_loaded(request)  # Run dependency check
+    logger.info(f"Received request for NPC template: {template_id}")
+    templates = getattr(request.app.state, "npc_templates", {})
+    template_data = templates.get(template_id)
+    if not template_data:
+        logger.warning(f"NPC template ID '{template_id}' not found in npc_templates.json.")
+        raise HTTPException(status_code=404, detail=f"NPC template '{template_id}' not found.")
+    return template_data
+
+@app.get("/v1/lookup/item_template/{item_id}", response_model=Dict, tags=["Lookups"])
+async def api_get_item_template(request: Request, item_id: str):
+    """Looks up the definition for a given item_id."""
+    check_state_loaded(request)  # Run dependency check
+    logger.info(f"Received request for item template: {item_id}")
+    templates = getattr(request.app.state, "item_templates", {})
+    template_data = templates.get(item_id)
+    if not template_data:
+        logger.warning(f"Item template ID '{item_id}' not found in item_templates.json.")
+        raise HTTPException(status_code=404, detail=f"Item template '{item_id}' not found.")
+    return template_data
