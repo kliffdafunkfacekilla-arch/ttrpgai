@@ -1,0 +1,32 @@
+{
+  "item_iron_sword": {
+    "name": "Iron Sword",
+    "type": "melee",
+    "category": "Precision Blades"
+  },
+  "item_iron_axe": {
+    "name": "Iron Axe",
+    "type": "melee",
+    "category": "Great Weapons"
+  },
+  "item_short_bow": {
+    "name": "Short Bow",
+    "type": "ranged",
+    "category": "Precision Archery"
+  },
+  "item_leather_jerkin": {
+    "name": "Leather Jerkin",
+    "type": "armor",
+    "category": "Leather/Hides"
+  },
+  "item_iron_plate": {
+    "name": "Iron Plate",
+    "type": "armor",
+    "category": "Plate Armor"
+  },
+  "item_brawling_gloves": {
+    "name": "Brawling Gloves",
+    "type": "melee",
+    "category": "Brawling Weapons"
+  }
+}
