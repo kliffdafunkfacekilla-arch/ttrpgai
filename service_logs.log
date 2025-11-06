@@ -1,6 +1,0 @@
-start_services.bat: line 1: @echo: command not found
-start_services.bat: line 2: setlocal: command not found
-start_services.bat: line 4: REM: command not found
-start_services.bat: line 7: REM: command not found
-start_services.bat: line 8: syntax error near unexpected token `('
-start_services.bat: line 8: `if not exist "%SERVICES_PARENT_DIR%" ('

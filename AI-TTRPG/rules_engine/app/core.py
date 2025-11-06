@@ -207,7 +207,7 @@ def calculate_initiative(stats: models.InitiativeRequest) -> models.InitiativeRe
 
     # Calculate modifiers using the helper function
     mod_b = calculate_modifier(stats.endurance)
-    mod_d = calculate_modifier(stats.agility)
+    mod_d = calculate_modifier(stats.reflexes) # CHANGED from stats.agility
     mod_f = calculate_modifier(stats.fortitude)
     mod_h = calculate_modifier(stats.logic)
     mod_j = calculate_modifier(stats.intuition)
@@ -215,7 +215,7 @@ def calculate_initiative(stats: models.InitiativeRequest) -> models.InitiativeRe
 
     modifier_details = {
         "Endurance (B) Mod": mod_b,
-        "Agility (D) Mod": mod_d,
+        "Reflexes (D) Mod": mod_d, # CHANGED from Agility
         "Fortitude (F) Mod": mod_f,
         "Logic (H) Mod": mod_h,
         "Intuition (J) Mod": mod_j,

@@ -10,10 +10,10 @@ from sqlalchemy.orm.attributes import flag_modified
 
 # Import local modules using relative paths
 from . import crud, models, schemas, services
-from .database import SessionLocal, engine, Base  # Import Base if needed here
+from .database import SessionLocal, engine, Base
 
 # Create tables if they don't exist (useful for simple setups, Alembic is better for prod)
-# Base.metadata.create_all(bind=engine)
+Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Character Engine")
 logger = logging.getLogger("uvicorn.error")
