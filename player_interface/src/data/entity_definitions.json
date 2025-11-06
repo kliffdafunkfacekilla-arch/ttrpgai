@@ -1,9 +1,9 @@
 {
   "player_default": {
     "name": "Player",
-    "sheet": "player_character.png",
-    "col": 1,
-    "row": 1
+    "sheet": "character1.png",
+    "col": 0,
+    "row": 0
   },
   "goblin_scout": {
     "name": "Goblin Scout",
