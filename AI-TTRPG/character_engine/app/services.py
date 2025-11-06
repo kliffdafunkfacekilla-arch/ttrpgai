@@ -374,8 +374,8 @@ async def create_character(
         resource_pools=resource_pools,
         talents=[character.ability_talent],
         abilities=base_abilities,
-        inventory={}, # Start with empty inventory
-        equipment={},
+        inventory={"item_iron_sword": 1, "item_leather_jerkin": 1},
+        equipment={"weapon": "item_iron_sword", "armor": "item_leather_jerkin"},
         status_effects=[],
         injuries=[],
         # --- ADD THIS LINE ---

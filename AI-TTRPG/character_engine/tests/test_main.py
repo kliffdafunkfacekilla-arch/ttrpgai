@@ -37,7 +37,7 @@ def client():
         yield c
 
 
-@pytest.mark.asyncio
+@pytest.mark.anyio
 @patch("app.services._call_rules_engine", new_callable=AsyncMock)
 async def test_create_character_success(mock_call_rules, client):
     # Configure the mock to return different values based on the endpoint

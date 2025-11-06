@@ -28,5 +28,10 @@
     "name": "Brawling Gloves",
     "type": "melee",
     "category": "Brawling Weapons"
+  },
+  "item_iron_key": {
+    "name": "Iron Key",
+    "type": "key",
+    "category": "quest"
   }
 }
