@@ -110,28 +110,21 @@ Services communicate via synchronous REST API calls, primarily orchestrated by t
 3.  The `player_interface` sends the new coordinates to the `character_engine`'s `PUT /v1/characters/{id}/location` endpoint, persisting the player's new position.
 4.  The interface re-renders the scene.
 
-### Turn-Based Combat
+### Case Study: Spawning an NPC in Combat
 
-This is the most complex interaction, showcasing the full orchestration pattern.
+The process of spawning an NPC when combat starts is a prime example of the microservice architecture in action, demonstrating the clear separation of concerns.
 
-1.  **Initiation:** The player moves into a tile occupied by an "aggressive" NPC. The `player_interface` detects this and calls the `story_engine`'s `POST /v1/combat/start` endpoint.
-2.  **Setup:** The `story_engine` orchestrates the entire combat setup:
-    *   It fetches map data from the `world_engine` to determine valid spawn points for NPCs.
-    *   It calls the `world_engine` to officially spawn the NPC instances into the world state with coordinates.
-    *   It retrieves the full context for all participants (player data from `character_engine`, NPC data from `world_engine`).
-    *   It calls the `rules_engine`'s `/v1/roll/initiative` endpoint for every participant.
-    *   It saves the full encounter state, including the initiative-sorted turn order, to its own `story.db`.
-3.  **Player Turn:** The `player_interface` switches to a combat view. The player clicks an "Attack" button, targeting an NPC.
-    *   The interface calls the `story_engine`'s `POST /v1/combat/{id}/player_action` endpoint with the action details.
-4.  **Action Resolution:** The `story_engine` resolves the attack:
-    *   It fetches the player's equipped weapon and the target's armor from the `character_engine` and `world_engine`.
-    *   It retrieves the detailed stats for that weapon and armor from the `rules_engine`.
-    *   It sends all relevant stats (attacker's skill, defender's armor stat, etc.) to the `rules_engine`'s `/v1/roll/contested_attack` endpoint.
-    *   If the attack is a hit, it calls the `rules_engine`'s `/v1/calculate/damage` endpoint.
-    *   Finally, it applies the damage by calling the appropriate service (`world_engine` for NPCs, `character_engine` for players).
-5.  **Turn Advancement:** The `story_engine` records the results in a combat log, advances the turn index, and returns the log to the `player_interface`.
-6.  **NPC Turn:** If the new turn belongs to an NPC, the `story_engine` runs a simple AI (`determine_npc_action`) and executes the NPC's turn by following the same action resolution steps.
-7.  **Conclusion:** The loop continues until one side is defeated. The `story_engine` marks the combat as "finished," and the `player_interface` returns to the exploration screen.
+1.  **Initiation (`story_engine`):** The `story_engine` receives a request to start combat, which includes a list of NPC template IDs (e.g., `["goblin_scout"]`).
+
+2.  **Parameter Lookup (`rules_engine`):** The `story_engine` doesn't know *how* to create a "goblin_scout." It calls the `rules_engine`'s `GET /v1/lookup/npc_template/goblin_scout` endpoint. The `rules_engine` reads from its `npc_templates.json` file and returns the generation parameters: `{ "kingdom": "mammal", "difficulty": "easy", ... }`.
+
+3.  **Procedural Generation (`npc_generator`):** The `story_engine` now knows the recipe. It calls the `npc_generator`'s `POST /v1/generate` endpoint, providing the parameters it just received. The `npc_generator` uses its internal logic to procedurally generate a full NPC template, including stats, skills, and, crucially, a calculated `max_hp`. It returns this full template.
+
+4.  **World State Update (`world_engine`):** The `story_engine` now has a complete, statted NPC. It calls the `world_engine`'s `POST /v1/npcs/spawn` endpoint, providing the full template and the desired coordinates. The `world_engine` creates the NPC instance in its `world.db`, officially placing it in the game world.
+
+5.  **Combat Begins:** The `story_engine` proceeds with the rest of the combat setup, now confident that a fully-formed NPC exists in the world.
+
+This flow ensures that each service is only responsible for its own domain: the `rules_engine` knows the *recipe*, the `npc_generator` knows *how to cook*, and the `world_engine` knows *where to place the dish*. The `story_engine` simply directs the process.
 
 ## 4. Getting Started
 

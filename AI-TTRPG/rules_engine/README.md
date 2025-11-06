@@ -31,6 +31,8 @@ The Rules Engine is a stateless FastAPI service that functions as the single sou
 -   `POST /v1/lookup/injury_effects`: Returns the mechanical effects of a specific injury.
 -   `GET /v1/lookup/status_effect/{status_name}`: Returns the description and effects of a status like "Staggered" or "Bleeding".
 -   `POST /v1/lookup/talents`: Finds which talents a character is eligible for based on their current stats and skills.
+-   `GET /v1/lookup/npc_template/{template_id}`: Returns the generation parameters for a given NPC template ID. This is a crucial endpoint used by the `story_engine` to orchestrate NPC creation.
+-   `GET /v1/lookup/item_template/{item_id}`: Looks up the definition for a given item ID, returning its type and category. This is used by the `story_engine` to determine which skill to use for a player's equipped weapon or armor.
 
 ## 4. Data Sources
 
@@ -42,6 +44,8 @@ The Rules Engine is entirely data-driven. All of its knowledge comes from the JS
 -   `talents.json`: Defines the prerequisites and effects of all available talents.
 -   `injuries.json` & `status_effects.json`: Define the mechanical impacts of combat afflictions.
 -   `skill_mappings.json`: Defines the mapping between equipment categories and the skills used to wield them.
+-   `npc_templates.json`: Maps NPC template IDs (e.g., "goblin_scout") to the parameters needed by the `npc_generator` to create them.
+-   `item_templates.json`: Maps item IDs (e.g., "item_iron_sword") to their type ("melee", "armor") and category ("Precision Blades").
 
 ## 5. Dependencies
 
