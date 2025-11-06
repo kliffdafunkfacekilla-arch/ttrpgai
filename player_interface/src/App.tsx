@@ -1,22 +1,20 @@
+
 // src/App.tsx
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./App.css";
 import MainMenuScreen from "./screens/MainMenuScreen";
 import ExplorationScreen from "./screens/ExplorationScreen";
 import CombatScreen from "./screens/CombatScreen";
+import { createDefaultTestCharacter } from "./api/apiClient";
 import {
   type CombatEncounterResponse,
   type CharacterContextResponse,
 } from "./types/apiTypes";
 
 import CharacterSelectScreen from "./screens/CharacterSelectScreen";
-// --- ADD NEW SCREEN IMPORT ---
 import CharacterCreationScreen from "./screens/CharacterCreationScreen";
-// --- REMOVE OLD SCREEN IMPORT ---
-// import CharacterCreateScreen from './screens/CharacterCreateScreen';
 import CharacterSheetScreen from "./screens/CharacterSheetScreen";
 
-// --- ADD 'CharacterCreate' TO TYPE ---
 type GameScreen =
   | "MainMenu"
   | "CharacterCreate"
@@ -32,6 +30,26 @@ function App() {
   const [activeCharacter, setActiveCharacter] =
     useState<CharacterContextResponse | null>(null);
   const [showCharacterSheet, setShowCharacterSheet] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  // This effect handles the screen transition after a character is loaded or created.
+  useEffect(() => {
+    if (activeCharacter && currentScreen === "MainMenu") {
+      setCurrentScreen("Exploration");
+    }
+  }, [activeCharacter, currentScreen]);
+
+  const handleQuickStart = async () => {
+    setIsLoading(true);
+    try {
+      const newChar = await createDefaultTestCharacter();
+      setActiveCharacter(newChar); // This will trigger the useEffect to change screen
+    } catch (error) {
+      console.error("Failed to create default character:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleCombatStart = (combatData: CombatEncounterResponse) => {
     setCombatContext(combatData);
@@ -43,20 +61,16 @@ function App() {
   };
 
   const handleCharacterSelected = (character: CharacterContextResponse) => {
-    console.log(`Character selected: ${character.id} - ${character.name}`);
     setActiveCharacter(character);
     setCurrentScreen("Exploration");
   };
 
-  // This handler is now called by CharacterCreationScreen
   const handleCharacterCreated = (character: CharacterContextResponse) => {
-    console.log(`Character created: ${character.id} - ${character.name}`);
     setActiveCharacter(character);
     setCurrentScreen("Exploration");
   };
 
   const handleExitToMenu = () => {
-    console.log("Exiting to Main Menu...");
     setActiveCharacter(null);
     setCombatContext(null);
     setCurrentScreen("MainMenu");
@@ -67,9 +81,9 @@ function App() {
       case "MainMenu":
         return (
           <MainMenuScreen
-            // --- PASS onStartNewGame ---
             onStartNewGame={() => setCurrentScreen("CharacterCreate")}
-            onLoadGame={() => setCurrentScreen("CharacterSelect")}
+            onQuickStart={handleQuickStart}
+            isLoading={isLoading}
           />
         );
       case "CharacterSelect":
@@ -79,8 +93,6 @@ function App() {
             onBack={() => setCurrentScreen("MainMenu")}
           />
         );
-
-      // --- ADD THIS CASE BLOCK ---
       case "CharacterCreate":
         return (
           <CharacterCreationScreen
@@ -88,12 +100,8 @@ function App() {
             onBack={() => setCurrentScreen("MainMenu")}
           />
         );
-
-      // --- OLD 'CharacterCreate' case is removed ---
-
       case "Exploration":
         if (!activeCharacter) {
-          console.error("In Exploration screen but no active character!");
           handleExitToMenu();
           return null;
         }
@@ -106,10 +114,8 @@ function App() {
             onShowCharacterSheet={() => setShowCharacterSheet(true)}
           />
         );
-
       case "Combat":
         if (!combatContext || !activeCharacter) {
-          console.error("In Combat screen but no combat or character context!");
           handleExitToMenu();
           return null;
         }
@@ -120,7 +126,6 @@ function App() {
             onCombatEnd={handleCombatEnd}
           />
         );
-
       default:
         return <div>Unknown Screen</div>;
     }
@@ -128,13 +133,8 @@ function App() {
 
   return (
     <div className="app-container min-h-screen bg-dungeon text-stone-100 font-sans overflow-hidden">
-      {/* Background texture overlay */}
       <div className="fixed inset-0 opacity-10 pointer-events-none bg-noise" />
-
-      {/* The main screen is rendered here */}
       {renderScreen()}
-
-      {/* Character Sheet Overlay logic is unchanged */}
       {showCharacterSheet && activeCharacter && (
         <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-75 z-40">
           <CharacterSheetScreen

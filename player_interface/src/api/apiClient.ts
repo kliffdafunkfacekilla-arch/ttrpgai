@@ -237,3 +237,10 @@ export const getAllSkills = (): Promise<{ [key: string]: { stat: string } }> => 
     );
 };
 // --- END ADD ---
+
+export const createDefaultTestCharacter = (): Promise<CharacterContextResponse> => {
+    console.log("API: Attempting to create default test character...");
+    return api<CharacterContextResponse>(`${CHARACTER_API_URL}/v1/character/create/default_test`, {
+        method: 'POST',
+    });
+};

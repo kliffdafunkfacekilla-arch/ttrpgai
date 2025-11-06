@@ -36,6 +36,17 @@ def get_db():
     finally:
         db.close()
 
+async def get_rules_engine_data():
+    """Dependency to fetch all rules engine data."""
+    try:
+        return await services._get_rules_engine_data()
+    except HTTPException as e:
+        # Re-raise HTTPException from the service layer
+        raise e
+    except Exception as e:
+        # Catch any other unexpected errors
+        logger.exception(f"Unexpected error fetching rules engine data: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error fetching rules data")
 
 # --- API Endpoints ---
 
@@ -61,6 +72,21 @@ def read_character(char_id: str, db: Session = Depends(get_db)):
     if db_character is None:
         raise HTTPException(status_code=404, detail="Character not found")
     return services.get_character_context(db_character)
+
+
+@app.post("/v1/character/create/default_test", response_model=schemas.CharacterContextResponse, tags=["Character"])
+async def create_default_test_character(db: Session = Depends(get_db), rules_data: dict = Depends(get_rules_engine_data)):
+    """Creates a default character for testing, skipping creation steps."""
+    try:
+        logger.info("Received request for default test character creation")
+        new_char = await services.create_default_test_character(db=db, rules_engine_data=rules_data)
+        return new_char
+    except HTTPException as e:
+        logger.error(f"HTTP error during default test character creation: {e.detail}")
+        raise e
+    except Exception as e:
+        logger.exception(f"Unexpected error during default test character creation: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error creating default character")
 
 
 class SreRequest(BaseModel):
