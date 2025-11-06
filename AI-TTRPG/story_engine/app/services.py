@@ -3,12 +3,16 @@ import httpx
 from typing import Dict, Any, Optional, List
 from fastapi import HTTPException # Import HTTPException for error handling
 from . import schemas # Schemas from story_engine
+import logging
 
 # --- Ensure these URLs are defined ---
 RULES_ENGINE_URL = "http://127.0.0.1:8000"
 CHARACTER_ENGINE_URL = "http://127.0.0.1:8001"
 WORLD_ENGINE_URL = "http://127.0.0.1:8002"
 NPC_GENERATOR_URL = "http://127.0.0.1:8005"
+MAP_GENERATOR_URL = "http://127.0.0.1:8006"
+
+logger = logging.getLogger("uvicorn.error")
 
 # --- Ensure the _call_api helper function exists ---
 async def _call_api(
@@ -146,11 +150,84 @@ async def get_npc_context(client: httpx.AsyncClient, npc_id: int) -> Dict:
 async def get_world_location_context(client: httpx.AsyncClient, location_id: int) -> Dict: # Return raw Dict
     """Gets location data (including NPCs, items, region) from world_engine."""
     url = f"{WORLD_ENGINE_URL}/v1/locations/{location_id}"
-    return await _call_api(client, "GET", url) # Return raw dict
+    location_data = await _call_api(client, "GET", url)
+
+    # --- START DYNAMIC SETUP ---
+    # Check if this is the first time loading the STARTING_ZONE
+    if location_data.get("name") == "STARTING_ZONE" and not location_data.get("generated_map_data"):
+        logger.info(f"First load of STARTING_ZONE (Location {location_id}). Running dynamic setup...")
+        try:
+            # 1. Generate a new map
+            logger.info("Calling Map Generator...")
+            map_response = await _call_api(client, "POST", f"{MAP_GENERATOR_URL}/v1/generate", json={"tags": ["forest", "outside", "clearing"]})
+            map_data = map_response.get("map_data")
+            enemy_spawn = map_response.get("spawn_points", {}).get("enemy", [[10, 10]])[0]
+
+            # 2. Spawn a Goblin
+            logger.info(f"Spawning Goblin at {enemy_spawn}...")
+            template_lookup = await get_npc_generation_params(client, "goblin_scout")
+            gen_params = template_lookup.get("generation_params")
+            full_template = await generate_npc_template(client, gen_params)
+            max_hp = full_template.get("max_hp", 10)
+            spawn_npc_data = schemas.OrchestrationSpawnNpc(
+                template_id="goblin_scout",
+                location_id=location_id,
+                coordinates=enemy_spawn,
+                current_hp=max_hp,
+                max_hp=max_hp,
+                behavior_tags=full_template.get("behavior_tags", ["aggressive"])
+            )
+            await spawn_npc_in_world(client, spawn_npc_data)
+
+            # 3. Spawn the Key
+            logger.info("Spawning Iron Key at [10, 10]...")
+            spawn_item_data = schemas.OrchestrationSpawnItem(
+                template_id="item_iron_key",
+                location_id=location_id,
+                coordinates=[10, 10],
+                quantity=1
+            )
+            await spawn_item_in_world(client, spawn_item_data)
+
+            # 4. Create Annotations (the locked door)
+            logger.info("Creating locked door annotation at [5, 3]...")
+            annotations = {
+                "door_1": {
+                    "type": "door",
+                    "status": "locked",
+                    "key_id": "item_iron_key",
+                    "coordinates": [5, 3]
+                }
+            }
+            await update_location_annotations(client, location_id, annotations)
+
+            # 5. Save the new map to the location
+            logger.info("Saving generated map to World Engine...")
+            map_update_payload = {
+                "generated_map_data": map_data,
+                "map_seed": map_response.get("seed_used")
+            }
+            await _call_api(client, "PUT", f"{WORLD_ENGINE_URL}/v1/locations/{location_id}/map", json=map_update_payload)
+
+            # 6. Re-fetch the fully populated location data
+            logger.info("Dynamic setup complete. Re-fetching location context.")
+            location_data = await _call_api(client, "GET", url)
+        except Exception as e:
+            logger.exception(f"Failed to dynamically set up STARTING_ZONE: {e}")
+            # Don't raise, just return the (mostly empty) location data so it doesn't crash
+            return location_data
+    # --- END DYNAMIC SETUP ---
+
+    return location_data # Return raw dict
 
 async def spawn_npc_in_world(client: httpx.AsyncClient, spawn_request: schemas.OrchestrationSpawnNpc) -> Dict:
     """Tells the world_engine to spawn a new NPC."""
     url = f"{WORLD_ENGINE_URL}/v1/npcs/spawn"
+    return await _call_api(client, "POST", url, json=spawn_request.dict())
+
+async def spawn_item_in_world(client: httpx.AsyncClient, spawn_request: schemas.OrchestrationSpawnItem) -> Dict:
+    """Tells the world_engine to spawn a new item."""
+    url = f"{WORLD_ENGINE_URL}/v1/items/spawn"
     return await _call_api(client, "POST", url, json=spawn_request.dict())
 
 async def apply_damage_to_npc(client: httpx.AsyncClient, npc_id: int, new_hp: int) -> Dict:
