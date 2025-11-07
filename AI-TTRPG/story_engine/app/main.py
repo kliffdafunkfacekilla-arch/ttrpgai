@@ -7,10 +7,14 @@ import logging
 from . import crud, models, schemas, services, combat_handler, interaction_handler
 from .database import SessionLocal, engine
 
+print("!!!!!!!!!! IS THE NEW CHARACTER_ENGINE MAIN.PY RUNNING? YES. !!!!!!!!!!")
+
 app = FastAPI(
     title="Story Engine",
     description="Manages campaign state, quests, and orchestrates other services."
 )
+
+print("!!!!!!!!!! IS THE NEW STORY_ENGINE SERVICES.PY RUNNING? YES. !!!!!!!!!!")
 
 # Add CORSMiddleware
 app.add_middleware(
