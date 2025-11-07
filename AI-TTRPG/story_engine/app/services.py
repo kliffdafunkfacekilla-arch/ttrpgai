@@ -277,3 +277,10 @@ async def remove_item_from_character(client: httpx.AsyncClient, char_id: str, it
     url = f"{CHARACTER_ENGINE_URL}/v1/characters/{char_db_id}/inventory/remove" # Uses the existing endpoint
     payload = {"item_id": item_id, "quantity": quantity}
     return await _call_api(client, "POST", url, json=payload) # Assumes POST method matches character_engine
+[
+  {
+    "op": "replace",
+    "path": "/get_world_location_context/async_with/if_condition",
+    "value": "map_data = location_data.get(\"generated_map_data\")\nplaceholder_map = [[1, 1, 1], [1, 0, 1], [1, 1, 1]]\nif location_data.get(\"name\") == \"STARTING_ZONE\" and (map_data == placeholder_map or map_data is None):"
+  }
+]
