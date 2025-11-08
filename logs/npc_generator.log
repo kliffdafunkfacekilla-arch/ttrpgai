@@ -1,4 +1,12 @@
-INFO:     Started server process [76519]
+INFO:     Started server process [12083]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
-INFO:     Uvicorn running on http://127.0.0.1:8005 (Press CTRL+C to quit)
+ERROR:    [Errno 98] error while attempting to bind on address ('127.0.0.1', 8005): [errno 98] address already in use
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO: Loading NPC generation rules...
+--- NPC Generator: Loading Rules ---
+Loaded NPC generation rules.
+--- NPC Generator: Rules Loaded ---
+INFO: NPC generation rules loaded.
+INFO: Shutting down NPC Generator.

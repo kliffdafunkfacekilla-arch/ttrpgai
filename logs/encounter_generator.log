@@ -1,4 +1,13 @@
-INFO:     Started server process [76518]
+INFO:     Started server process [11796]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
-INFO:     Uvicorn running on http://127.0.0.1:8004 (Press CTRL+C to quit)
+ERROR:    [Errno 98] error while attempting to bind on address ('127.0.0.1', 8004): [errno 98] address already in use
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO: Loading encounter data...
+--- Encounter Generator: Loading Data ---
+Loaded 3 combat encounters.
+Loaded 2 skill challenges.
+--- Encounter Generator: Data Loaded ---
+INFO: Encounter data loaded successfully.
+INFO: Shutting down Encounter Generator.
