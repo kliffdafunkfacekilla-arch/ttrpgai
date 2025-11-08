@@ -2,6 +2,10 @@ from sqlalchemy.orm import Session
 from sqlalchemy.orm.attributes import flag_modified
 from . import models, schemas
 from typing import List, Optional
+from fastapi import HTTPException
+import logging
+
+logger = logging.getLogger("uvicorn.error")
 
 # --- Faction ---
 def get_faction(db: Session, faction_id: int) -> Optional[models.Faction]:
@@ -168,3 +172,39 @@ def delete_item(db: Session, item_id: int) -> bool:
         db.commit()
         return True
     return False
+
+def get_location_context(db: Session, location_id: int):
+    """
+    Retrieves the full context for a given location, including region,
+    NPCs, and items.
+    """
+    logger.info(f"Getting full context for location_id: {location_id}")
+    location = db.query(models.Location).filter(models.Location.id == location_id).first()
+    if not location:
+        logger.error(f"Location not found for id: {location_id}")
+        raise HTTPException(status_code=404, detail="Location not found")
+
+    npcs = db.query(models.NpcInstance).filter(models.NpcInstance.location_id == location_id).all()
+    items = db.query(models.ItemInstance).filter(models.ItemInstance.location_id == location_id).all()
+    
+    # Get Region name
+    region = db.query(models.Region).filter(models.Region.id == location.region_id).first()
+    
+    # --- START OF NEW FIX ---
+    if not region:
+        logger.error(f"Data integrity error: Location {location_id} has region_id {location.region_id} but no matching region was found.")
+        # This was the cause of the 500 error
+        raise HTTPException(status_code=500, detail=f"Data integrity error: Region {location.region_id} not found for location {location_id}.")
+    # --- END OF NEW FIX ---
+
+    return {
+        "location_id": location.id,
+        "name": location.name,
+        "region_name": region.name,
+        "description": location.description,
+        "generated_map_data": location.generated_map_data,
+        "map_seed": location.map_seed,
+        "ai_annotations": location.ai_annotations,
+        "npcs": [schemas.NpcInstanceContext.from_orm(npc) for npc in npcs],
+        "items": [schemas.ItemInstanceContext.from_orm(item) for item in items],
+    }

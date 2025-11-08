@@ -450,166 +450,152 @@ def update_character_context(
         return None
 
 
-async def create_default_test_character(db: Session, rules_data: dict) -> schemas.CharacterContextResponse:
+async def create_default_test_character(db: Session, rules_engine_data: dict):
     """Creates a hardcoded default character for testing."""
     logger.info("--- Creating Default Test Character ---")
 
-    # 1. Define the default choices
-    feature_choices = [
-        schemas.FeatureChoice(feature_id="F1", choice_name="mammal_eyes_default"),
-        schemas.FeatureChoice(feature_id="F2", choice_name="mammal_skin_default"),
-        schemas.FeatureChoice(feature_id="F3", choice_name="mammal_nose_default"),
-        schemas.FeatureChoice(feature_id="F4", choice_name="mammal_mouth_default"),
-        schemas.FeatureChoice(feature_id="F5", choice_name="mammal_ears_default"),
-        schemas.FeatureChoice(feature_id="F6", choice_name="mammal_tail_default"),
-        schemas.FeatureChoice(feature_id="F7", choice_name="mammal_body_default"),
-        schemas.FeatureChoice(feature_id="F9", choice_name="mammal_extra_default"),
+    # 1. Define the default choices using the CORRECT schemas
+    
+    # This is the correct List[FeatureChoice] format
+    feature_choice_list = [
+        schemas.FeatureChoice(feature_id="F1", choice_id="mammal_eyes_default"),
+        schemas.FeatureChoice(feature_id="F2", choice_id="mammal_skin_default"),
+        schemas.FeatureChoice(feature_id="F3", choice_id="mammal_nose_default"),
+        schemas.FeatureChoice(feature_id="F4", choice_id="mammal_mouth_default"),
+        schemas.FeatureChoice(feature_id="F5", choice_id="mammal_ears_default"),
+        schemas.FeatureChoice(feature_id="F6", choice_id="mammal_tail_default"),
+        schemas.FeatureChoice(feature_id="F7", choice_id="mammal_body_default"),
+        schemas.FeatureChoice(feature_id="F8", choice_id="mammal_extra_default")
     ]
+    
+    # This is the correct Backgrounds format
+    background_choices = {
+        "origin": "origin_farmer",
+        "childhood": "childhood_street_urchin",
+        "coming_of_age": "coming_of_age_scout",
+        "training": "training_self_taught",
+        "devotion": "devotion_none"
+    }
 
-    character = schemas.CharacterCreate(
+    # Use the REAL schemas.CharacterCreate
+    creation_request = schemas.CharacterCreate(
         name="Test Character",
         kingdom="kingdom_mammal",
-        feature_choices=feature_choices,
-        origin_choice="origin_farmer",
-        childhood_choice="childhood_street_urchin",
-        coming_of_age_choice="coming_of_age_scout",
-        training_choice="training_self_taught",
-        devotion_choice="devotion_none",
-        ability_school="school_brawling",
-        ability_talent="talent_brawler",
+        feature_choices=feature_choice_list,
+        background_choices=background_choices,
+        school_choice="school_brawling",
+        talent_choice="talent_brawler"
     )
 
-    # 2. Initialize base stats and skills
-    base_stats = {stat: 8 for stat in rules_data.get("stats_list", [])}
-    base_skills = {}
-    for skill_name in rules_data.get("all_skills", {}):
-        base_skills[skill_name] = {"rank": 0, "sre": 0}
+    # --- This is the REAL logic, copied from create_character ---
+    
+    # 1. Get all choice data from rules
+    all_choices = {}
+    all_choices.update(rules_engine_data.get("kingdom_features", {}))
+    all_choices.update(rules_engine_data.get("origin_choices", {}))
+    all_choices.update(rules_engine_data.get("childhood_choices", {}))
+    all_choices.update(rules_engine_data.get("coming_of_age_choices", {}))
+    all_choices.update(rules_engine_data.get("training_choices", {}))
+    all_choices.update(rules_engine_data.get("devotion_choices", {}))
+    all_choices.update(rules_engine_data.get("ability_schools", {}))
+    all_choices.update(rules_engine_data.get("ability_talents", {}))
 
-    if not base_stats or not base_skills:
-        logger.error("Failed to initialize stats/skills. Rules data for 'stats_list' or 'all_skills' was empty.")
-        raise HTTPException(status_code=500, detail="Character creation failed: Missing core rules data.")
+    # 2. Get all mods from the selected choices
+    all_mods = []
+    
+    # Process features
+    if creation_request.feature_choices:
+        for feature_choice in creation_request.feature_choices:
+            choice_id = feature_choice.choice_id
+            if choice_id in all_choices:
+                all_mods.extend(all_choices[choice_id].get("mods", []))
+            # Also add the Capstone mod if it's the 'extra' feature (F8)
+            if feature_choice.feature_id == "F8" and choice_id in all_choices:
+                all_mods.extend(all_choices[choice_id].get("capstone_mods", []))
 
-    # 3. Apply Feature mods
-    all_features_data = rules_data.get("kingdom_features", {})
-    for choice in character.feature_choices:
-        kingdom_key = "All" if choice.feature_id == "F9" else character.kingdom
-        try:
-            feature_set = all_features_data.get(choice.feature_id, {}).get(
-                kingdom_key, []
-            )
-            mod_data = next(
-                (item for item in feature_set if item["name"] == choice.choice_name),
-                None,
-            )
-            if mod_data and "mods" in mod_data:
-                _apply_mods(base_stats, mod_data["mods"])
-        except Exception as e:
-            print(
-                f"Error applying feature {choice.feature_id} ({choice.choice_name}): {e}"
-            )
+    # Process backgrounds
+    if creation_request.background_choices:
+        for choice_id in creation_request.background_choices.values():
+            if choice_id in all_choices:
+                all_mods.extend(all_choices[choice_id].get("mods", []))
+    
+    # Process school
+    if creation_request.school_choice and creation_request.school_choice in all_choices:
+        all_mods.extend(all_choices[creation_request.school_choice].get("mods", []))
+    
+    # Process talent
+    if creation_request.talent_choice and creation_request.talent_choice in all_choices:
+        all_mods.extend(all_choices[creation_request.talent_choice].get("mods", []))
 
-    # 4. Apply Background Skills
-    background_choices_map = {
-        "origin": {item["name"]: item for item in rules_data.get("origin_choices", [])},
-        "childhood": {
-            item["name"]: item for item in rules_data.get("childhood_choices", [])
-        },
-        "coming_of_age": {
-            item["name"]: item for item in rules_data.get("coming_of_age_choices", [])
-        },
-        "training": {item["name"]: item for item in rules_data.get("training_choices", [])},
-        "devotion": {item["name"]: item for item in rules_data.get("devotion_choices", [])},
-    }
-    origin_skills = (
-        background_choices_map["origin"]
-        .get(character.origin_choice, {})
-        .get("skills", [])
-    )
-    childhood_skills = (
-        background_choices_map["childhood"]
-        .get(character.childhood_choice, {})
-        .get("skills", [])
-    )
-    coming_of_age_skills = (
-        background_choices_map["coming_of_age"]
-        .get(character.coming_of_age_choice, {})
-        .get("skills", [])
-    )
-    training_skills = (
-        background_choices_map["training"]
-        .get(character.training_choice, {})
-        .get("skills", [])
-    )
-    devotion_skills = (
-        background_choices_map["devotion"]
-        .get(character.devotion_choice, {})
-        .get("skills", [])
-    )
-    all_background_skills = (
-        origin_skills
-        + childhood_skills
-        + coming_of_age_skills
-        + training_skills
-        + devotion_skills
-    )
-    for skill_name in all_background_skills:
-        if skill_name in base_skills:
-            base_skills[skill_name]["rank"] = 1
+    # 3. Calculate Stats
+    base_stats = rules_engine_data.get("stats_and_skills", {}).get("base_stats", {})
+    processed_stats = base_stats.copy()
+    for mod in all_mods:
+        if mod["type"] == "stat_mod":
+            stat = mod["stat"]
+            value = mod["value"]
+            processed_stats[stat] = processed_stats.get(stat, 0) + value
 
-    # 5. Apply Ability Talent mods
-    ab_talent_data = rules_data.get("all_talents_map", {}).get(character.ability_talent)
-    if ab_talent_data and "mods" in ab_talent_data:
-        _apply_mods(base_stats, ab_talent_data["mods"])
+    # 4. Calculate Skills
+    processed_skills = {}
+    all_skill_names = rules_engine_data.get("stats_and_skills", {}).get("all_skills", [])
+    for skill_name in all_skill_names:
+        processed_skills[skill_name] = 0 # Initialize all skills to 0
+        
+    for mod in all_mods:
+        if mod["type"] == "skill_mod":
+            skill = mod["skill"]
+            rank = mod["rank"]
+            if skill in processed_skills:
+                processed_skills[skill] = max(processed_skills[skill], rank)
+            else:
+                logger.warning(f"Mod skill '{skill}' not found in master skill list.")
+    
+    # 5. Process Feature choices for storage
+    processed_features = {}
+    if creation_request.feature_choices:
+        for fc in creation_request.feature_choices:
+            processed_features[fc.feature_id] = fc.choice_id # Store as { "F1": "mammal_eyes_default" }
 
-    # 6. Get Vitals from Rules Engine
+    # 6. Calculate Vitals (Health, Stamina, Mana)
     try:
-        vitals_data = await _call_rules_engine(
+        vitals_response = await _call_rules_engine(
+            "rules_engine",
             "POST",
-            "/calculate/base_vitals",
-            json_data={"stats": base_stats}
+            "/v1/calculate/base_vitals",
+            json=processed_stats
         )
-        max_hp = vitals_data.get("max_hp", 1)
-        resource_pools = vitals_data.get("resources", {})
+        processed_stats["Health"] = vitals_response.get("MaxHP", 10)
+        processed_stats["Stamina"] = vitals_response.get("MaxSP", 10)
+        processed_stats["Mana"] = vitals_response.get("MaxMP", 10)
     except Exception as e:
-        raise e
+        logger.exception(f"Failed to calculate vitals from rules_engine: {e}. Using defaults.")
+        processed_stats["Health"] = 10
+        processed_stats["Stamina"] = 10
+        processed_stats["Mana"] = 10
 
-    # 7. Get base abilities
-    base_abilities = []
-    school_data = rules_data.get("all_abilities_map", {}).get(character.ability_school)
-    if school_data and "tiers" in school_data and len(school_data["tiers"]) > 0:
-        base_abilities.append(school_data["tiers"][0].get("name", "Unknown Ability"))
-
-    # 8. Create DB model
+    # 7. Create the database object
     db_character = models.Character(
-        id=str(uuid.uuid4()),
-        name=character.name,
-        kingdom=character.kingdom,
-        level=1,
-        stats=base_stats,
-        skills=base_skills,
-        max_hp=max_hp,
-        current_hp=max_hp,
-        resource_pools=resource_pools,
-        talents=[character.ability_talent],
-        abilities=base_abilities,
+        name=creation_request.name,
+        kingdom=creation_request.kingdom,
+        stats=processed_stats,
+        skills=processed_skills,
+        features=processed_features,
+        backgrounds=creation_request.background_choices,
+        school=creation_request.school_choice,
+        talent=creation_request.talent_choice,
         inventory={"item_iron_sword": 1, "item_leather_jerkin": 1},
         equipment={"weapon": "item_iron_sword", "armor": "item_leather_jerkin"},
-        status_effects=[],
-        injuries=[],
         current_location_id=1,
-        position_x=5,
-        position_y=5
+        current_hp=processed_stats.get("Health", 10),
+        current_sp=processed_stats.get("Stamina", 10),
+        current_mp=processed_stats.get("Mana", 10)
     )
 
-    # 9. Save and return
-    try:
-        db.add(db_character)
-        db.commit()
-        db.refresh(db_character)
-        response = get_character_context(db_character)
-        logger.info("--- Default test character creation successful ---")
-        return response
-    except Exception as e:
-        db.rollback()
-        logger.error(f"Database error on character save: {e}", exc_info=True)
-        raise Exception(f"Database error: {e}")
+    # 8. Save to DB (using existing async save function)
+    logger.info("--- Default test character creation successful ---")
+    
+    saved_char = await _save_character_to_db(db, db_character)
+    
+    # Return the context, not the raw DB object, to match the response_model
+    return get_character_context(saved_char)

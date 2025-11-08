@@ -81,7 +81,7 @@ async def create_default_test_character(db: Session = Depends(get_db), rules_dat
     """Creates a default character for testing, skipping creation steps."""
     try:
         logger.info("Received request for default test character creation")
-        new_char = await services.create_default_test_character(db=db, rules_engine_data=rules_data)
+        new_char = await services.create_default_test_character(db=db, rules_data=rules_data)
         return new_char
     except HTTPException as e:
         logger.error(f"HTTP error during default test character creation: {e.detail}")
@@ -108,10 +108,11 @@ async def add_sre_to_character(
         logger.warning(f"Add SRE failed: Character ID {char_id} not found.")
         raise HTTPException(status_code=404, detail="Character not found")
 
-    # Get a mutable copy of the entire sheet
-    sheet = dict(character.character_sheet)
-    skills = sheet.get("skills", {})
+    # --- REFACTOR START ---
+    # Get mutable copies of the data from the flat columns
+    skills = dict(character.skills)
     skill_data = skills.get(sre_request.skill_name)
+    # --- END REFACTOR ---
 
     if skill_data is None:
         logger.warning(
@@ -140,17 +141,24 @@ async def add_sre_to_character(
         # Check for new talents
         try:
             logger.info("Checking for newly unlocked talents...")
-            char_stats = sheet.get("stats", {})
+            # --- REFACTOR START ---
+            char_stats = dict(character.stats)
+            # Use the 'skills' dict we are already modifying
             skill_ranks_now = {
                 name: data.get("rank", 0) for name, data in skills.items()
             }
+            # --- END REFACTOR ---
 
             # This returns a list of dictionaries, e.g., [{"name": "...", "source": "...", "effect": "..."}]
             all_eligible_talents_raw = await services.get_eligible_talents(
                 char_stats, skill_ranks_now
             )
 
-            current_talent_dicts = sheet.get("unlocked_talents", [])
+            # --- REFACTOR START ---
+            # Get talents from the flat column
+            current_talent_dicts = list(character.talents or [])
+            # --- END REFACTOR ---
+
             current_talents_set = {
                 t["name"]
                 for t in current_talent_dicts
@@ -167,24 +175,34 @@ async def add_sre_to_character(
                     logger.info(f"New talent unlocked: {talent_dict.get('name')}")
 
             if new_talents_found_dicts:
-                sheet["unlocked_talents"] = (
-                    current_talent_dicts + new_talents_found_dicts
-                )
+                # --- REFACTOR START ---
+                # Assign the new list back to the character model
+                character.talents = current_talent_dicts + new_talents_found_dicts
+                # --- END REFACTOR ---
 
         except Exception as e:
             logger.error(f"Error checking/updating talents for char {char_id}: {e}")
             # Log the error but don't crash the SRE add
 
-    # Explicitly flag the JSON column as modified
-    flag_modified(character, "character_sheet")
+    # --- REFACTOR START ---
+    # Assign the modified skills dict back to the character model
+    character.skills = skills
+    
+    # Explicitly flag the JSON columns as modified
+    flag_modified(character, "skills")
+    flag_modified(character, "talents") # Flag talents just in case it was changed
 
-    # Pass the ENTIRE modified sheet dictionary to the update function
-    updated_char = crud.update_character_sheet(db, character, sheet)
-
-    if not updated_char:
+    # Commit the changes directly instead of calling a deprecated crud function
+    try:
+        db.commit()
+        db.refresh(character)
+    except Exception as e:
+        db.rollback()
+        logger.error(f"Database error on SRE update: {e}", exc_info=True)
         raise HTTPException(
-            status_code=500, detail="Failed to update character sheet after adding SRE."
+            status_code=500, detail="Failed to update character after adding SRE."
         )
+    # --- END REFACTOR ---
 
     return {
         "character_id": char_id,
