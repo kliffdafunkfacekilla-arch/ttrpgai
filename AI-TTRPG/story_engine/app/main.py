@@ -7,7 +7,7 @@ import logging
 from . import crud, models, schemas, services, combat_handler, interaction_handler
 from .database import SessionLocal, engine
 
-print("!!!!!!!!!! IS THE NEW CHARACTER_ENGINE MAIN.PY RUNNING? YES. !!!!!!!!!!")
+
 
 app = FastAPI(
     title="Story Engine",

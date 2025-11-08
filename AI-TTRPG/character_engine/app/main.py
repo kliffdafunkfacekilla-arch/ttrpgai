@@ -12,6 +12,8 @@ from sqlalchemy.orm.attributes import flag_modified
 from . import crud, models, schemas, services
 from .database import SessionLocal, engine, Base
 
+print("!!!!!!!!!! IS THE NEW CHARACTER_ENGINE MAIN.PY RUNNING? YES. !!!!!!!!!!")
+
 # Create tables if they don't exist (useful for simple setups, Alembic is better for prod)
 Base.metadata.create_all(bind=engine)
 
