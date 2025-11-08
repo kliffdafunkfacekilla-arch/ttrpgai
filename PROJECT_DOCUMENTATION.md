@@ -1,4 +1,4 @@
-# AI-TTRPG Backend System Documentation
+# AI-TTRPG System Documentation
 
 ## 1. High-Level Architecture
 
@@ -46,8 +46,8 @@ Services communicate via synchronous REST API calls, primarily orchestrated by t
 *   **Purpose:** Acts as the central nervous system of the application. It directs the flow of gameplay by receiving high-level requests (e.g., "start combat," "move player") and orchestrating the necessary calls to other services.
 *   **Core Endpoints:**
     *   `POST /v1/combat/start`: Initiates a combat encounter.
-    *   `POST /v1/combat/{id}/player_action`: Processes a player's action during combat.
-    *   `POST /v1/actions/interact`: Handles non-combat interactions with world objects.
+    *   `POST /v1/combat/{id}/player_action`: Processes a player's action during combat. The core logic is in `combat_handler.py`, which includes the new NPC AI behavior.
+    *   `POST /v1/actions/interact`: **(New)** Handles non-combat interactions with world objects. The core logic is in `interaction_handler.py`, which fetches world state from the `world_engine` and character data from the `character_engine`.
 *   **Data:** Manages active campaign state, quests, story flags, and the state of ongoing combat encounters in `story.db`.
 *   **Dependencies:** Calls all other stateful and stateless services to execute gameplay logic.
 
@@ -58,18 +58,19 @@ Services communicate via synchronous REST API calls, primarily orchestrated by t
     *   `GET /v1/locations/{id}`: Retrieves the full state of a location, including all NPCs, items, and map data.
     *   `POST /v1/npcs/spawn`: Creates a new NPC instance at a specific location.
     *   `PUT /v1/npcs/{id}`: Updates an NPC's state (e.g., `current_hp`, `status_effects`, `coordinates`).
-    *   `PUT /v1/locations/{id}/annotations`: Updates the metadata for interactable objects.
+    *   `PUT /v1/locations/{id}/annotations`: **(New)** Allows the `story_engine` to store and update metadata about a location, such as the state of a door or the presence of a key.
 *   **Data:** Manages locations, NPCs, items, and their states in `world.db`.
 
 ### `character_engine` (Stateful)
 
-*   **Purpose:** Manages the persistent state of all player characters.
+*   **Purpose:** The authoritative source for player character data. It manages character sheets, including stats, skills, inventory, and combat-related data.
 *   **Core Endpoints:**
     *   `POST /v1/characters/`: Creates a new character.
     *   `GET /v1/characters/{id}`: Retrieves a character's complete sheet.
+    *   `PUT /v1/characters/{id}/inventory/add` & `/remove`: Manages a character's inventory.
     *   `PUT /v1/characters/{id}/apply_damage`: Updates a character's `current_hp`.
     *   `PUT /v1/characters/{id}/location`: Updates the player's current location and coordinates.
-*   **Data:** Manages character sheets (as a single JSON blob) in `characters.db`.
+*   **Data:** Manages character sheets (as a single JSON blob) in `characters.db`. The `character_sheet` JSON blob was recently refactored to include a `combat_stats` dictionary for `max_hp`, `current_hp`, and `status_effects`.
 
 ### `rules_engine` (Stateless)
 
@@ -77,14 +78,16 @@ Services communicate via synchronous REST API calls, primarily orchestrated by t
 *   **Core Endpoints:**
     *   `POST /v1/roll/contested_attack`: Performs a complete attack roll, returning the outcome (e.g., "hit", "miss", "critical_hit").
     *   `POST /v1/calculate/damage`: Calculates the final damage dealt after accounting for stats and armor.
-    *   `GET /v1/lookup/...`: A wide variety of endpoints to look up data for skills, items, statuses, etc.
+    *   `GET /v1/lookup/all_skills`: Provides a list of all skills in the game.
+    *   `GET /v1/lookup/npc_template/{template_id}`: **(New)** Returns the generation parameters for a given NPC template ID.
+    *   `GET /v1/lookup/item_template/{item_id}`: **(New)** Looks up the definition for a given item ID, returning its type and category.
 *   **Data:** Loads all game rules from its `data/` directory of JSON files on startup.
 
 ### `npc_generator` (Stateless)
 
 *   **Purpose:** Procedurally generates NPC stat blocks to be used by the `story_engine`.
 *   **Core Endpoints:**
-    *   `POST /v1/generate`: Creates a new NPC template based on input parameters like kingdom, style, and difficulty.
+    *   `POST /v1/generate`: Creates a new NPC template based on input parameters like kingdom, style, and difficulty. The core logic in `core.py` was recently updated to fetch the skill list dynamically.
 *   **Data:** Loads generation rules from `generation_rules.json`.
 *   **Dependencies:** Calls the `rules_engine` to get the master list of skills, ensuring generated NPCs are compatible with game rules.
 
@@ -92,7 +95,7 @@ Services communicate via synchronous REST API calls, primarily orchestrated by t
 
 *   **Purpose:** Procedurally generates tile-based maps for game locations.
 *   **Core Endpoints:**
-    *   `POST /v1/generate`: Creates a new tile map using a specified algorithm (e.g., Cellular Automata, Drunkard's Walk).
+    *   `POST /v1/generate`: Creates a new tile map using a specified algorithm (e.g., Cellular Automata, Drunkard's Walk). The core logic in `core.py` was recently updated to include the "Drunkard's Walk" algorithm.
 *   **Data:** Loads algorithm parameters and tile definitions from JSON files.
 
 ### `encounter_generator` (Stateless)
@@ -129,5 +132,5 @@ This flow ensures that each service is only responsible for its own domain: the 
 ## 4. Getting Started
 
 -   **Dependencies:** Each service has its own `requirements.txt` file.
--   **Running the System:** The `start_services.bat` script in the root directory is configured to launch all seven services, each on its own designated port (8000-8006).
+-   **Running the System:** The `start_services.bat` and `start_services.sh` scripts in the root directory are configured to launch all seven services, each on its own designated port (8000-8006).
 -   **Player Interface:** A React/TypeScript frontend is located in the `player_interface` directory. It must be started separately (`npm run dev`) and connects to the running backend services.
