@@ -1,4 +1,4 @@
-Initializing world database at: /app/world.db
+Initializing world database at: C:\Users\krazy\Documents\GitHub\Ruleengine\world.db
 All tables created successfully.
 Pre-populated with default region and STARTING_ZONE (location_id=1).
-Database '/app/world.db' initialized and populated successfully.
+Database 'C:\Users\krazy\Documents\GitHub\Ruleengine\world.db' initialized and populated successfully.
