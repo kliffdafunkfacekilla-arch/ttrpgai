@@ -42,12 +42,20 @@ def generate_npc_template(
     Core logic to generate an NPC template based on request parameters.
     """
     # --- 1. Determine Base Stats ---
-    base_stats = GENERATION_RULES.get("base_stats_by_kingdom", {}).get(
-        request.kingdom.lower(),
-        GENERATION_RULES.get("base_stats_by_kingdom", {}).get("mammal") # Fallback
-    ).copy() # Use .copy() to avoid modifying the original dict
+    kingdom_stats = GENERATION_RULES.get("base_stats_by_kingdom", {})
+    base_stats = kingdom_stats.get(request.kingdom.lower())
+
+    # --- FIX: Check if kingdom was found, if not, fallback to a default ---
+    if base_stats is None:
+        print(f"Warning: Kingdom '{request.kingdom}' not found in generation rules. Falling back to 'mammal' stats.")
+        base_stats = kingdom_stats.get("mammal", {}) # Get the mammal stats, or an empty dict if even that is missing
+
+    # Use .copy() to avoid modifying the original dict in GENERATION_RULES
+    final_stats = base_stats.copy()
 
     # --- 2. Apply Style Modifiers ---
+    offense_mods = GENERATION_RULES.get("stat_modifiers_by_style", {}).get("offense", {}).get(request.offense_style.lower(), {})
+    defense_mods = GENERATION_RULES.get("stat_modifiers_by_style", {}).get("defense", {}).get(request.defense_style.lower(), {})
     final_stats = base_stats
     offense_mods = GENERATION_RULES.get("stat_modifiers_by_style", {}).get("offense", {}).get(request.offense_style.lower(), {})
     defense_mods = GENERATION_RULES.get("stat_modifiers_by_style", {}).get("defense", {}).get(request.defense_style.lower(), {})

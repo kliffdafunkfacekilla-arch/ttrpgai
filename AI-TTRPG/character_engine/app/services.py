@@ -450,152 +450,46 @@ def update_character_context(
         return None
 
 
-async def create_default_test_character(db: Session, rules_engine_data: dict):
-    """Creates a hardcoded default character for testing."""
+async def create_default_test_character(db: Session, rules_data: dict):
+    """Creates a hardcoded default character for testing by calling the main creation service."""
     logger.info("--- Creating Default Test Character ---")
 
-    # 1. Define the default choices using the CORRECT schemas
-    
-    # This is the correct List[FeatureChoice] format
-    feature_choice_list = [
-        schemas.FeatureChoice(feature_id="F1", choice_id="mammal_eyes_default"),
-        schemas.FeatureChoice(feature_id="F2", choice_id="mammal_skin_default"),
-        schemas.FeatureChoice(feature_id="F3", choice_id="mammal_nose_default"),
-        schemas.FeatureChoice(feature_id="F4", choice_id="mammal_mouth_default"),
-        schemas.FeatureChoice(feature_id="F5", choice_id="mammal_ears_default"),
-        schemas.FeatureChoice(feature_id="F6", choice_id="mammal_tail_default"),
-        schemas.FeatureChoice(feature_id="F7", choice_id="mammal_body_default"),
-        schemas.FeatureChoice(feature_id="F8", choice_id="mammal_extra_default")
-    ]
-    
-    # This is the correct Backgrounds format
-    background_choices = {
-        "origin": "origin_farmer",
-        "childhood": "childhood_street_urchin",
-        "coming_of_age": "coming_of_age_scout",
-        "training": "training_self_taught",
-        "devotion": "devotion_none"
-    }
-
-    # Use the REAL schemas.CharacterCreate
+    # 1. Define the default choices using the correct schemas.CharacterCreate payload
+    # This payload mirrors what a user would select in the frontend for a quick start.
     creation_request = schemas.CharacterCreate(
-        name="Test Character",
-        kingdom="kingdom_mammal",
-        feature_choices=feature_choice_list,
-        background_choices=background_choices,
-        school_choice="school_brawling",
-        talent_choice="talent_brawler"
+        name="Tester",
+        kingdom="kingdom_automata",
+        feature_choices=[
+            schemas.FeatureChoice(feature_id="F1", choice_name="Automata Optics"),
+            schemas.FeatureChoice(feature_id="F2", choice_name="Automata Plating"),
+            schemas.FeatureChoice(feature_id="F3", choice_name="Automata Scent Sensors"),
+            schemas.FeatureChoice(feature_id="F4", choice_name="Automata Vocalizer"),
+            schemas.FeatureChoice(feature_id="F5", choice_name="Automata Auditory Sensors"),
+            schemas.FeatureChoice(feature_id="F6", choice_name="Automata Stabilizer"),
+            schemas.FeatureChoice(feature_id="F7", choice_name="Automata Chassis"),
+            schemas.FeatureChoice(feature_id="F8", choice_name="Automata Power Core"),
+            schemas.FeatureChoice(feature_id="F9", choice_name="Capstone: +2 Cunning"),
+        ],
+        origin_choice="Origin: Scribe",
+        childhood_choice="Childhood: Street Urchin",
+        coming_of_age_choice="Coming of Age: Scout",
+        training_choice="Training: Self-Taught",
+        devotion_choice="Devotion: The People",
+        ability_school="Force",
+        ability_talent="Mind over Matter"
     )
 
-    # --- This is the REAL logic, copied from create_character ---
-    
-    # 1. Get all choice data from rules
-    all_choices = {}
-    all_choices.update(rules_engine_data.get("kingdom_features", {}))
-    all_choices.update(rules_engine_data.get("origin_choices", {}))
-    all_choices.update(rules_engine_data.get("childhood_choices", {}))
-    all_choices.update(rules_engine_data.get("coming_of_age_choices", {}))
-    all_choices.update(rules_engine_data.get("training_choices", {}))
-    all_choices.update(rules_engine_data.get("devotion_choices", {}))
-    all_choices.update(rules_engine_data.get("ability_schools", {}))
-    all_choices.update(rules_engine_data.get("ability_talents", {}))
+    logger.info(f"Default character payload created for '{creation_request.name}'. Passing to main creation service.")
 
-    # 2. Get all mods from the selected choices
-    all_mods = []
-    
-    # Process features
-    if creation_request.feature_choices:
-        for feature_choice in creation_request.feature_choices:
-            choice_id = feature_choice.choice_id
-            if choice_id in all_choices:
-                all_mods.extend(all_choices[choice_id].get("mods", []))
-            # Also add the Capstone mod if it's the 'extra' feature (F8)
-            if feature_choice.feature_id == "F8" and choice_id in all_choices:
-                all_mods.extend(all_choices[choice_id].get("capstone_mods", []))
-
-    # Process backgrounds
-    if creation_request.background_choices:
-        for choice_id in creation_request.background_choices.values():
-            if choice_id in all_choices:
-                all_mods.extend(all_choices[choice_id].get("mods", []))
-    
-    # Process school
-    if creation_request.school_choice and creation_request.school_choice in all_choices:
-        all_mods.extend(all_choices[creation_request.school_choice].get("mods", []))
-    
-    # Process talent
-    if creation_request.talent_choice and creation_request.talent_choice in all_choices:
-        all_mods.extend(all_choices[creation_request.talent_choice].get("mods", []))
-
-    # 3. Calculate Stats
-    base_stats = rules_engine_data.get("stats_and_skills", {}).get("base_stats", {})
-    processed_stats = base_stats.copy()
-    for mod in all_mods:
-        if mod["type"] == "stat_mod":
-            stat = mod["stat"]
-            value = mod["value"]
-            processed_stats[stat] = processed_stats.get(stat, 0) + value
-
-    # 4. Calculate Skills
-    processed_skills = {}
-    all_skill_names = rules_engine_data.get("stats_and_skills", {}).get("all_skills", [])
-    for skill_name in all_skill_names:
-        processed_skills[skill_name] = 0 # Initialize all skills to 0
-        
-    for mod in all_mods:
-        if mod["type"] == "skill_mod":
-            skill = mod["skill"]
-            rank = mod["rank"]
-            if skill in processed_skills:
-                processed_skills[skill] = max(processed_skills[skill], rank)
-            else:
-                logger.warning(f"Mod skill '{skill}' not found in master skill list.")
-    
-    # 5. Process Feature choices for storage
-    processed_features = {}
-    if creation_request.feature_choices:
-        for fc in creation_request.feature_choices:
-            processed_features[fc.feature_id] = fc.choice_id # Store as { "F1": "mammal_eyes_default" }
-
-    # 6. Calculate Vitals (Health, Stamina, Mana)
+    # 2. Call the robust, existing create_character service with the payload
+    # This avoids duplicating logic and ensures the test character is always created
+    # with the same rules and calculations as a player character.
     try:
-        vitals_response = await _call_rules_engine(
-            "rules_engine",
-            "POST",
-            "/v1/calculate/base_vitals",
-            json=processed_stats
-        )
-        processed_stats["Health"] = vitals_response.get("MaxHP", 10)
-        processed_stats["Stamina"] = vitals_response.get("MaxSP", 10)
-        processed_stats["Mana"] = vitals_response.get("MaxMP", 10)
+        # Note: We don't need to pass 'rules_data' here because create_character fetches it internally.
+        new_character = await create_character(db=db, character=creation_request)
+        logger.info("--- Default test character creation successful ---")
+        return new_character
     except Exception as e:
-        logger.exception(f"Failed to calculate vitals from rules_engine: {e}. Using defaults.")
-        processed_stats["Health"] = 10
-        processed_stats["Stamina"] = 10
-        processed_stats["Mana"] = 10
-
-    # 7. Create the database object
-    db_character = models.Character(
-        name=creation_request.name,
-        kingdom=creation_request.kingdom,
-        stats=processed_stats,
-        skills=processed_skills,
-        features=processed_features,
-        backgrounds=creation_request.background_choices,
-        school=creation_request.school_choice,
-        talent=creation_request.talent_choice,
-        inventory={"item_iron_sword": 1, "item_leather_jerkin": 1},
-        equipment={"weapon": "item_iron_sword", "armor": "item_leather_jerkin"},
-        current_location_id=1,
-        current_hp=processed_stats.get("Health", 10),
-        current_sp=processed_stats.get("Stamina", 10),
-        current_mp=processed_stats.get("Mana", 10)
-    )
-
-    # 8. Save to DB (using existing async save function)
-    logger.info("--- Default test character creation successful ---")
-    
-    saved_char = await _save_character_to_db(db, db_character)
-    
-    # Return the context, not the raw DB object, to match the response_model
-    return get_character_context(saved_char)
+        logger.exception("An error occurred in the main creation service while creating the default character.")
+        # Re-raise the exception to be handled by the endpoint.
+        raise e
