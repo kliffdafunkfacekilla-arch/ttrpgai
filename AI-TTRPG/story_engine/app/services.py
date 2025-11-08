@@ -147,20 +147,23 @@ async def get_npc_context(client: httpx.AsyncClient, npc_id: int) -> Dict:
     url = f"{WORLD_ENGINE_URL}/v1/npcs/{npc_id}"
     return await _call_api(client, "GET", url)
 
-async def get_world_location_context(client: httpx.AsyncClient, location_id: int) -> Dict: # Return raw Dict
+async def get_world_location_context(client: httpx.AsyncClient, location_id: int) -> Dict:
     """Gets location data (including NPCs, items, region) from world_engine."""
     url = f"{WORLD_ENGINE_URL}/v1/locations/{location_id}"
     location_data = await _call_api(client, "GET", url)
 
-    # --- START DYNAMIC SETUP ---
-    # Check if this is the first time loading the STARTING_ZONE
-    if location_data.get("name") == "STARTING_ZONE" and not location_data.get("generated_map_data"):
+    # --- START OF NEW FIX ---
+    # Check if this is the STARTING_ZONE and if its map is the placeholder or just missing (None)
+    map_data = location_data.get("generated_map_data")
+    placeholder_map = [[1, 1, 1], [1, 0, 1], [1, 1, 1]]
+
+    if location_data.get("name") == "STARTING_ZONE" and (map_data == placeholder_map or map_data is None):
         logger.info(f"First load of STARTING_ZONE (Location {location_id}). Running dynamic setup...")
         try:
             # 1. Generate a new map
             logger.info("Calling Map Generator...")
             map_response = await _call_api(client, "POST", f"{MAP_GENERATOR_URL}/v1/generate", json={"tags": ["forest", "outside", "clearing"]})
-            map_data = map_response.get("map_data")
+            new_map_data = map_response.get("map_data")
             enemy_spawn = map_response.get("spawn_points", {}).get("enemy", [[10, 10]])[0]
 
             # 2. Spawn a Goblin
@@ -173,6 +176,7 @@ async def get_world_location_context(client: httpx.AsyncClient, location_id: int
                 template_id="goblin_scout",
                 location_id=location_id,
                 coordinates=enemy_spawn,
+                name_override=None,
                 current_hp=max_hp,
                 max_hp=max_hp,
                 behavior_tags=full_template.get("behavior_tags", ["aggressive"])
@@ -184,10 +188,11 @@ async def get_world_location_context(client: httpx.AsyncClient, location_id: int
             spawn_item_data = schemas.OrchestrationSpawnItem(
                 template_id="item_iron_key",
                 location_id=location_id,
+                npc_id=None,
                 coordinates=[10, 10],
                 quantity=1
             )
-            await spawn_item_in_world(client, spawn_item_data)
+            await _call_api(client, "POST", f"{WORLD_ENGINE_URL}/v1/items/spawn", json=spawn_item_data.dict())
 
             # 4. Create Annotations (the locked door)
             logger.info("Creating locked door annotation at [5, 3]...")
@@ -204,7 +209,7 @@ async def get_world_location_context(client: httpx.AsyncClient, location_id: int
             # 5. Save the new map to the location
             logger.info("Saving generated map to World Engine...")
             map_update_payload = {
-                "generated_map_data": map_data,
+                "generated_map_data": new_map_data,
                 "map_seed": map_response.get("seed_used")
             }
             await _call_api(client, "PUT", f"{WORLD_ENGINE_URL}/v1/locations/{location_id}/map", json=map_update_payload)
@@ -212,11 +217,11 @@ async def get_world_location_context(client: httpx.AsyncClient, location_id: int
             # 6. Re-fetch the fully populated location data
             logger.info("Dynamic setup complete. Re-fetching location context.")
             location_data = await _call_api(client, "GET", url)
+
         except Exception as e:
             logger.exception(f"Failed to dynamically set up STARTING_ZONE: {e}")
-            # Don't raise, just return the (mostly empty) location data so it doesn't crash
-            return location_data
-    # --- END DYNAMIC SETUP ---
+            # Don't raise, just return the (mostly empty) location data
+    # --- END OF NEW FIX ---
 
     return location_data # Return raw dict
 
