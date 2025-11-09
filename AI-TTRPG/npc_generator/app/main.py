@@ -37,17 +37,23 @@ app.add_middleware(
 def read_root():
     return {"status": "NPC Generator is running."}
 
+# --- MODIFICATION: Changed to 'async def' ---
 @app.post("/v1/generate", response_model=models.NpcTemplateResponse)
-def generate_npc(request: models.NpcGenerationRequest):
+async def generate_npc(request: models.NpcGenerationRequest):
     """
     (AI DM) Provide parameters (kingdom, styles, difficulty)
     to generate a new NPC template.
     """
     try:
-        template = core.generate_npc_template(request)
+        # --- MODIFICATION: Changed to 'await' ---
+        template = await core.generate_npc_template(request)
         return template
+    except HTTPException as e:
+        # Catch errors bubbled up from core
+        print(f"ERROR: Failed to generate NPC: {e.detail}")
+        raise e # Re-raise the HTTPException
     except Exception as e:
-        # Catch potential errors during generation
+        # Catch any other unexpected errors
         print(f"ERROR: Failed to generate NPC: {e}")
         raise HTTPException(
             status_code=500,
