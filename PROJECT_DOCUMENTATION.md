@@ -129,7 +129,33 @@ The process of spawning an NPC when combat starts is a prime example of the micr
 
 This flow ensures that each service is only responsible for its own domain: the `rules_engine` knows the *recipe*, the `npc_generator` knows *how to cook*, and the `world_engine` knows *where to place the dish*. The `story_engine` simply directs the process.
 
-## 4. Getting Started
+## 4. Current State
+
+The project is currently in a functional, demonstrable state. The core gameplay loop of exploration and combat is implemented, and the foundational architecture is stable.
+
+*   **Implemented Features:**
+    *   Full character creation flow.
+    *   World exploration with tile-based maps.
+    *   Combat initiation and turn-based resolution.
+    *   Procedural generation of maps and NPCs.
+    *   A comprehensive, data-driven ruleset for combat calculations.
+
+*   **Placeholder Components:**
+    *   The `encounter_generator` service is a placeholder and does not yet have a significant role in the system.
+    *   NPC AI is basic, with simple "aggressive" or "cowardly" behaviors.
+    *   Quest and story progression systems are not yet implemented.
+
+## 5. Intended Final Goal
+
+The intended final goal of the AI-TTRPG project is to create a fully autonomous, endlessly replayable tabletop role-playing experience. The architecture is designed to support a dynamic, procedurally generated world where an AI Dungeon Master (the `story_engine`) can create and manage emergent narratives.
+
+*   **Key Future Features:**
+    *   **Dynamic World State:** The world will change in response to player actions, with the `story_engine` and `world_engine` tracking these changes.
+    *   **Emergent Storytelling:** The `story_engine` will be expanded to include more sophisticated AI-driven narrative generation, creating quests, and managing story arcs based on player choices.
+    *   **Advanced NPC AI:** NPCs will have more complex behaviors, schedules, and relationships, making the world feel more alive.
+    *   **Extensibility:** The data-driven nature of the stateless services will allow for easy expansion with new rules, items, and content without requiring code changes.
+
+## 6. Getting Started
 
 -   **Dependencies:** Each service has its own `requirements.txt` file.
 -   **Running the System:** The `start_services.bat` and `start_services.sh` scripts in the root directory are configured to launch all seven services, each on its own designated port (8000-8006).
