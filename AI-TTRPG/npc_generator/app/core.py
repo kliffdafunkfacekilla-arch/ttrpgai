@@ -34,9 +34,8 @@ async def get_all_skill_names_from_rules() -> list[str]:
         # Raising error is safer to indicate dependency failure.
         raise HTTPException(status_code=500, detail=f"Unexpected error fetching skills: {e}")
 
-# --- Modify generate_npc_template ---
-# Make the main function synchronous for FastAPI, but call the async helper inside
-def generate_npc_template(
+# --- MODIFICATION: Changed to 'async def' ---
+async def generate_npc_template(
     request: models.NpcGenerationRequest) -> models.NpcTemplateResponse:
     """
     Core logic to generate an NPC template based on request parameters.
@@ -79,8 +78,8 @@ def generate_npc_template(
     # --- 5. Determine Skills (NEW LOGIC) ---
     skills = {}
     try:
-        # Run the async function to get skill names
-        all_skill_names = asyncio.run(get_all_skill_names_from_rules())
+        # --- MODIFICATION: Changed 'asyncio.run' to 'await' ---
+        all_skill_names = await get_all_skill_names_from_rules()
     except HTTPException as e:
         # If fetching fails, we cannot proceed reliably
         print(f"FATAL: Failed to get skill list during NPC generation: {e.detail}")
