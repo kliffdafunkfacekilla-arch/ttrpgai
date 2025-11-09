@@ -59,6 +59,7 @@ def initialize_database():
                 map_seed VARCHAR,
                 region_id INTEGER,
                 ai_annotations JSON,
+spawn_points JSON,
                 PRIMARY KEY (id),
                 FOREIGN KEY(region_id) REFERENCES regions (id)
             )
@@ -121,11 +122,12 @@ def initialize_database():
             "generated_map_data": json.dumps([[1, 1, 1], [1, 0, 1], [1, 1, 1]]), # Simple 3x3 map
             "map_seed": "initial_seed",
             "region_id": 1,
-            "ai_annotations": json.dumps({})
+"ai_annotations": json.dumps({}),
+"spawn_points": json.dumps({"player": [[1, 1]], "enemy": []}) # Add placeholder spawn
         }
         cursor.execute("""
-            INSERT INTO locations (id, name, tags, exits, generated_map_data, map_seed, region_id, ai_annotations)
-            VALUES (:id, :name, :tags, :exits, :generated_map_data, :map_seed, :region_id, :ai_annotations)
+INSERT INTO locations (id, name, tags, exits, generated_map_data, map_seed, region_id, ai_annotations, spawn_points)
+VALUES (:id, :name, :tags, :exits, :generated_map_data, :map_seed, :region_id, :ai_annotations, :spawn_points)
         """, starting_location_data)
 
         print("Pre-populated with default region and STARTING_ZONE (location_id=1).")

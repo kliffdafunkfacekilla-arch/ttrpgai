@@ -4,6 +4,7 @@ from typing import Dict, Any, Optional, List
 from fastapi import HTTPException # Import HTTPException for error handling
 from . import schemas # Schemas from story_engine
 import logging
+import json
 
 # --- Ensure these URLs are defined ---
 RULES_ENGINE_URL = "http://127.0.0.1:8000"
@@ -156,7 +157,12 @@ async def get_world_location_context(client: httpx.AsyncClient, location_id: int
     # Check if this is the STARTING_ZONE and if its map is the placeholder or just missing (None)
     map_data = location_data.get("generated_map_data")
     placeholder_map = [[1, 1, 1], [1, 0, 1], [1, 1, 1]]
-
+    # Robust check: map_data might be a string or a list
+    if isinstance(map_data, str):
+        try:
+            map_data = json.loads(map_data)
+        except json.JSONDecodeError:
+            pass # Keep it as a string if it's invalid JSON
     if location_data.get("name") == "STARTING_ZONE" and (map_data == placeholder_map or map_data is None):
         logger.info(f"First load of STARTING_ZONE (Location {location_id}). Running dynamic setup...")
         try:
@@ -210,7 +216,8 @@ async def get_world_location_context(client: httpx.AsyncClient, location_id: int
             logger.info("Saving generated map to World Engine...")
             map_update_payload = {
                 "generated_map_data": new_map_data,
-                "map_seed": map_response.get("seed_used")
+                "map_seed": map_response.get("seed_used"),
+                "spawn_points": map_response.get("spawn_points") # <-- ADD THIS
             }
             await _call_api(client, "PUT", f"{WORLD_ENGINE_URL}/v1/locations/{location_id}/map", json=map_update_payload)
 

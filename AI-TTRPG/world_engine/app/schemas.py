@@ -86,6 +86,7 @@ class LocationBase(BaseModel):
     exits: Dict[str, Any]
     generated_map_data: Optional[Any] = None # Can be any JSON
     map_seed: Optional[str] = None
+    spawn_points: Optional[Dict[str, Any]] = None # <-- ADD THIS
     region_id: int
 
 class Location(LocationBase):
@@ -146,3 +147,4 @@ class LocationMapUpdate(BaseModel):
     # This is for saving the procedurally generated map
     generated_map_data: Any # The tile map array
     map_seed: str
+    spawn_points: Optional[Dict[str, Any]] = None # <-- ADD THIS

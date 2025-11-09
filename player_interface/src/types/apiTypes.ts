@@ -58,18 +58,19 @@ type AiAnnotationExtras = Record<string, unknown>;
 export type AiAnnotationValue = AiAnnotationBase & AiAnnotationExtras;
 
 export interface LocationContextResponse {
-    id: string; // Changed to string to match API
+    id: number; // <-- CHANGE TO number
     name: string;
     generated_map_data: number[][];
     npc_instances: NpcInstance[];
     item_instances: ItemInstance[];
+    spawn_points?: { [key: string]: number[][] }; // <-- ADD THIS
     ai_annotations?: {
-        [key: string]: AiAnnotationValue; // <-- This now uses the intersection type
+        [key: string]: AiAnnotationValue;
     };
 }
 
 export interface NpcInstance {
-    id: number; // Changed to number
+    id: number; // <-- No change, already number
     template_id: string;
     name_override?: string;
     coordinates: [number, number];

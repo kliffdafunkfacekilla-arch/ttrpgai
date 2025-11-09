@@ -199,7 +199,7 @@ def find_spawn_points(grid: np.ndarray, floor_id: int, num_player: int = 1, num_
         for x in range(width):
             if grid[y, x] == floor_id:
                 # Optional: Add checks (e.g., not too close to edge, min distance between points)
-                valid_spawns.append([y, x]) # Store as [row, col] or [y, x]
+                valid_spawns.append([x, y]) # Store as [col, row] or [x, y]
 
     if not valid_spawns:
         print("Warning: No valid floor tiles found for spawn points!")

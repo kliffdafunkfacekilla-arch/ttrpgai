@@ -58,9 +58,11 @@ def update_location_map(db: Session, location_id: int, map_update: schemas.Locat
     if db_loc:
         db_loc.generated_map_data = map_update.generated_map_data
         db_loc.map_seed = map_update.map_seed
+        db_loc.spawn_points = map_update.spawn_points # <-- ADD THIS
 
         # This line is important for JSON fields
         flag_modified(db_loc, "generated_map_data")
+        flag_modified(db_loc, "spawn_points") # <-- ADD THIS
 
         db.commit()
         db.refresh(db_loc)
