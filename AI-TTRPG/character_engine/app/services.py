@@ -380,8 +380,8 @@ async def create_character(
         injuries=[],
         # --- ADD THIS LINE ---
         current_location_id=1, # Default to STARTING_ZONE
-        position_x=5, # Default start position
-        position_y=5 # Default start position
+        position_x=1, # Default start position (matches placeholder spawn)
+        position_y=1 # Default start position (matches placeholder spawn)
     )
 
     logger.debug(f"Constructed DB character model: {db_character.__dict__}")

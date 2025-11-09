@@ -77,6 +77,34 @@ const ExplorationScreen: React.FC<ExplorationScreenProps> = ({
                 addLog(`Successfully fetched data for "${locData.name}".`);
                 setLocation(locData);
 
+                // --- ADD THIS LOGIC ---
+                // Check if the location has defined player spawn points
+                if (locData.spawn_points && locData.spawn_points.player && locData.spawn_points.player.length > 0) {
+                    const spawn = locData.spawn_points.player[0]; // This is [x, y]
+                    const spawnX = spawn[0];
+                    const spawnY = spawn[1];
+
+                    // Check if player is still at the default placeholder spawn (1, 1)
+                    // and if the map is NOT the placeholder map (which has height 3)
+                    const isPlaceholderMap = locData.generated_map_data.length === 3;
+                    if (player.position_x === 1 && player.position_y === 1 && !isPlaceholderMap) {
+                        addLog(`Moving to new location's starting spawn point: [${spawnX}, ${spawnY}]`);
+                        try {
+                            // Update player position in the backend
+                            const updatedPlayer = await updatePlayerLocation(
+                                player.id,
+                                locData.id, // locData.id is now a number
+                                [spawnX, spawnY],
+                            );
+                            // Update the player state in the frontend
+                            setPlayer(updatedPlayer);
+                        } catch (err) {
+                            addLog(`Error moving player to spawn: ${err instanceof Error ? err.message : "Unknown error"}`);
+                        }
+                    }
+                }
+                // --- END ADDED LOGIC ---
+
             } catch (err) {
                 const message =
                     err instanceof Error

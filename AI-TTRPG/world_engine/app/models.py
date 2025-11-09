@@ -67,6 +67,7 @@ class Location(Base):
     item_instances = relationship("ItemInstance", back_populates="location")
     trap_instances = relationship("TrapInstance", back_populates="location") # Add this line
     ai_annotations = Column(JSON, nullable=True) # Store descriptions, interactions flags etc.
+    spawn_points = Column(JSON, nullable=True) # <-- ADD THIS
 
 class NpcInstance(Base):
     """
