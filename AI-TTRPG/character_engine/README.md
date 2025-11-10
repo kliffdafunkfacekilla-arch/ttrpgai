@@ -10,7 +10,7 @@ The Character Engine is a stateful FastAPI service that manages the creation, pe
 ## 2. Core Responsibilities
 
 -   **Character Creation:** Handles the complex process of creating a new character, including calculating initial stats, skills, and talents by making calls to the `rules_engine`.
--   **Data Persistence:** Stores the entire character sheet as a single JSON blob in the database, which is managed via SQLAlchemy and Alembic.
+-   **Data Persistence:** Stores character data in a flat schema managed via SQLAlchemy and Alembic, with dedicated columns for stats, skills, inventory, etc.
 -   **State Modification:** Provides a suite of endpoints for modifying a character's state, such as applying damage, adding status effects, managing inventory, and updating their location.
 -   **Progression:** Manages character progression by tracking Skill Rank Experience (SRE) and unlocking new talents when milestones are reached.
 
@@ -19,26 +19,44 @@ The Character Engine is a stateful FastAPI service that manages the creation, pe
 -   `POST /v1/characters/`: Creates a new character.
     -   **Process:** This is an orchestrated endpoint that calls the `rules_engine` multiple times to fetch master stat/skill lists, get stat modifications from features, and determine base vitals (HP/resources).
 
--   `GET /v1/characters/{char_id}`: Retrieves the full `character_sheet` for a given character.
+-   `GET /v1/characters/{char_id}`: Retrieves the full character context for a given character.
 
 -   `PUT /v1/characters/{char_id}/apply_damage`: Applies HP damage to a character.
     -   **Request Body:** `ApplyDamageRequest` (damage amount).
-    -   **Process:** Modifies the `current_hp` field within the `combat_stats` section of the character's JSON sheet.
+    -   **Process:** Modifies the `current_hp` column for the character.
 
 -   `PUT /v1/characters/{char_id}/apply_status`: Applies a status effect to a character.
     -   **Request Body:** `ApplyStatusRequest` (status ID).
-    -   **Process:** Appends the status ID to the `status_effects` list in the character's JSON sheet.
+    -   **Process:** Appends the status ID to the `status_effects` JSON array in the character's row.
 
 -   `PUT /v1/characters/{char_id}/location`: Updates the character's current position.
     -   **Request Body:** `LocationUpdateRequest` (new location ID and coordinates).
-    -   **Process:** Modifies the `location` object within the character's JSON sheet.
+    -   **Process:** Modifies the `current_location_id`, `position_x`, and `position_y` columns for the character.
 
--   `POST /v1/characters/{char_id}/inventory/add` & `/remove`: Adds or removes items from the character's inventory list within the JSON sheet.
+-   `POST /v1/characters/{char_id}/inventory/add` & `/remove`: Adds or removes items from the character's inventory.
 
 ## 4. Database Schema (`characters.db`)
 
--   `characters`: The primary table, containing basic info (`id`, `name`, `kingdom`) and a `character_sheet` column.
-    -   `character_sheet`: A `JSON` field that stores the entire character data structure, including stats, skills, inventory, equipment, combat stats, location, and more. All modifications to a character are performed on this JSON object.
+The `characters` table uses a flat model with individual columns for each data attribute, managed by SQLAlchemy. Key columns include:
+
+-   `id` (String, UUID) - Primary Key
+-   `name` (String)
+-   `kingdom` (String)
+-   `level` (Integer)
+-   `stats` (JSON)
+-   `skills` (JSON)
+-   `max_hp` (Integer)
+-   `current_hp` (Integer)
+-   `resource_pools` (JSON)
+-   `talents` (JSON)
+-   `abilities` (JSON)
+-   `inventory` (JSON)
+-   `equipment` (JSON)
+-   `status_effects` (JSON)
+-   `injuries` (JSON)
+-   `position_x` (Integer)
+-   `position_y` (Integer)
+-   `current_location_id` (Integer)
 
 ## 5. Dependencies
 
