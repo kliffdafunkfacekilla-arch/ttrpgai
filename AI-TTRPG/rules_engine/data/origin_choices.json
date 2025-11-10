@@ -8,12 +8,10 @@
     "name": "Bustling Metropolis",
     "description": "Born in the heart of a massive city, you know how to navigate the streets and the crowds.",
     "skills": ["Kinetics", "Lore: Civilization"]
-    "skills": ["Lore: Travel & Routes", "Lore: Civilization"]
   },
   {
     "name": "Underground Enclave",
     "description": "You hail from a hidden society beneath the earth. You are a-tune with the stone and the shadows.",
-    "skills": ["Provisioning", "Lore: Miners & Geology"]
     "skills": ["Ingenuity", "Lore: Miners & Geology"]
   }
 ]

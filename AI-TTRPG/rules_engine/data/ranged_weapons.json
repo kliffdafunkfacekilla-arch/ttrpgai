@@ -7,14 +7,14 @@
     "properties": ["Siege", "AoE", "Slow"]
   },
   "Long Bow": {
-    "skill_stat": "Agility",
+    "skill_stat": "Reflexes",
     "damage": "1d10",
     "penalty": -1,
     "range_m": 100,
     "properties": ["Long Range", "Accurate"]
   },
   "Short Bow": {
-    "skill_stat": "Agility",
+    "skill_stat": "Reflexes",
     "damage": "1d8",
     "penalty": 0,
     "range_m": 50,
@@ -42,7 +42,7 @@
     "properties": ["Elemental Damage", "Focus"]
   },
   "Needle Launcher": {
-    "skill_stat": "Agility",
+    "skill_stat": "Reflexes",
     "damage": "3d4",
     "penalty": 0,
     "range_m": 40,
