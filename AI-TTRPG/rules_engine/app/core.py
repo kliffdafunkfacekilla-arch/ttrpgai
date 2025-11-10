@@ -24,7 +24,7 @@ def generate_npc_template_core(
     request: models.NpcGenerationRequest,
     all_skills_map: Dict[str, Dict[str, str]],
     generation_rules: Dict[str, Any]
-) -> Dict: # Returns a dict matching NpcTemplateResponse structure
+) -> models.NpcTemplateResponse:
     """
     Core logic to generate an NPC template based on request parameters.
     Consolidated from the old NPC Generator service.
@@ -87,7 +87,9 @@ def generate_npc_template_core(
 
     behavior_tags = generation_rules.get("behavior_map",{}).get(request.behavior.lower(), [])
 
-    # 7. Build Response
+    # 7. Build Response (Using the imported Pydantic model structure)
+    # We use a placeholder for the Pydantic model imported from main/models.
+    # The Pydantic model will be defined in main.py, so we return a simple dict for now.
     return {"generated_id": generated_id, "name": name, "description": description, "stats": final_stats, "skills": skills, "abilities": abilities, "max_hp": max_hp, "behavior_tags": behavior_tags, "loot_table_ref": f"{request.kingdom}_{request.difficulty}_loot"}
 
 

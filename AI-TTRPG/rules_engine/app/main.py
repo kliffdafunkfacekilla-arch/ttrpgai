@@ -19,6 +19,8 @@ from .models import (
     SkillCategoryResponse,
     AbilitySchoolResponse,
     BackgroundChoice,  # --- ADD THIS IMPORT ---
+    NpcGenerationRequest, # ADDED
+    NpcTemplateResponse, # ADDED
 )
 
 # Use relative imports for local modules
@@ -82,6 +84,7 @@ async def lifespan(app: FastAPI):
         app.state.coming_of_age_choices = []
         app.state.training_choices = []
         app.state.devotion_choices = []
+        app.state.generation_rules = {} # ADDED
         # --- END ADD ---
         app.state.npc_templates = {}
         app.state.item_templates = {}
@@ -178,6 +181,7 @@ async def get_status(request: Request):
         background_choices_loaded = all(
             [
                 bool(origin_choices),
+                bool(generation_rules), # ADDED
                 bool(childhood_choices),
                 bool(coming_of_age_choices),
                 bool(training_choices),
@@ -827,7 +831,7 @@ async def api_get_item_template(request: Request, item_id: str):
 async def api_generate_npc_template(request_data: NpcGenerationRequest, request: Request):
     """
     Consolidated endpoint: Generates a complete NPC template/stat block
-    using local generation rules and formula.
+    using local generation rules and formula. Eliminates one microservice call.
     """
     check_state_loaded(request)
     try:
@@ -836,6 +840,7 @@ async def api_generate_npc_template(request_data: NpcGenerationRequest, request:
             all_skills_map=request.app.state.all_skills,
             generation_rules=request.app.state.generation_rules,
         )
+        # The core function returns a Dict, Pydantic handles the coercion to NpcTemplateResponse
         return template_data
     except Exception as e:
         logger.exception(f"Error during consolidated NPC generation: {e}")

@@ -25,7 +25,6 @@ uvicorn AI-TTRPG.character_engine.app.main:app --host 127.0.0.1 --port 8001 > lo
 uvicorn AI-TTRPG.world_engine.app.main:app --host 127.0.0.1 --port 8002 > logs/world_engine.log 2>&1 &
 uvicorn AI-TTRPG.story_engine.app.main:app --host 127.0.0.1 --port 8003 > logs/story_engine.log 2>&1 &
 uvicorn AI-TTRPG.encounter_generator.app.main:app --host 127.0.0.1 --port 8004 > logs/encounter_generator.log 2>&1 &
-# Removed npc_generator (port 8005) - logic consolidated into rules_engine (port 8000)
 uvicorn AI-TTRPG.map_generator.app.main:app --host 127.0.0.1 --port 8006 > logs/map_generator.log 2>&1 &
 
 sleep 5 # Give servers a moment to start

@@ -249,7 +249,7 @@ def load_data() -> Dict[str, Any]:
         print(f"Loaded {len(DEVOTION_CHOICES)} devotion choices.")
         print(f"Loaded {len(NPC_TEMPLATES)} NPC templates.")
         print(f"Loaded {len(ITEM_TEMPLATES)} item templates.")
-        print(f"Loaded {len(GENERATION_RULES)} NPC generation rule sections.") # ADDED print
+        print(f"Loaded {len(GENERATION_RULES)} NPC generation rule sections.")
         # --- END ADD ---
 
         print("--- Rules Engine Data Parsed Successfully ---")
