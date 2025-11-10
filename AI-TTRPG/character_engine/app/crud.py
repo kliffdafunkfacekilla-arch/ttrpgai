@@ -4,40 +4,9 @@ from . import models
 from typing import Dict, Any, List
 from sqlalchemy.orm.attributes import flag_modified
 
-def get_character(db: Session, char_id: int) -> models.Character | None:
+def get_character(db: Session, char_id: str) -> models.Character | None:
     """Retrieves a single character by ID."""
     return db.query(models.Character).filter(models.Character.id == char_id).first()
-
-def create_character(
-    db: Session, name: str, kingdom: str, character_sheet: Dict[str, Any]
-) -> models.Character:
-    """Creates and saves a new character with the fully calculated sheet."""
-    # --- THIS FUNCTION IS DEPRECATED ---
-    # --- The logic is now in services.py ---
-    # --- This function should NOT be called by main.py ---
-    # --- We will leave it here but it's unused by the fixed services.py ---
-    db_character = models.Character(
-        name=name, kingdom=kingdom, character_sheet=character_sheet
-    )
-    db.add(db_character)
-    db.commit()
-    db.refresh(db_character)
-    return db_character
-
-def update_character_sheet(
-    db: Session, character: models.Character, full_sheet_update: Dict[str, Any]
-) -> models.Character:
-    """
-    Updates the character sheet JSON for an *existing* character object.
-    This function NO LONGER re-fetches the character.
-    """
-    # --- THIS FUNCTION IS DEPRECATED ---
-    # --- The logic is now in services.py:update_character_context ---
-    # Directly reassign the entire updated sheet dictionary
-    character.character_sheet = full_sheet_update
-    db.commit()
-    db.refresh(character)
-    return character
 
 def apply_damage_to_character(
     db: Session, character: models.Character, damage_amount: int
