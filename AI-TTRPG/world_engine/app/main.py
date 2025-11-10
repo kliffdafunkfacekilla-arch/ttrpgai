@@ -54,6 +54,16 @@ def read_location(location_id: int, db: Session = Depends(get_db)):
     db_loc = crud.get_location(db, location_id=location_id)
     if db_loc is None:
         raise HTTPException(status_code=404, detail="Location not found")
+
+    # --- DEFENSIVE CHECK TO PREVENT SCHEMA MISMATCH CRASH ---
+    # The Pydantic Location model requires a nested Region object.
+    # If the ForeignKey is invalid, the relationship loads as None, causing a crash.
+    if db_loc.region is None:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Data integrity error: Location {location_id} references missing Region ID {db_loc.region_id}. World state is invalid."
+        )
+
     return db_loc
 
 @app.put("/v1/locations/{location_id}/annotations", response_model=schemas.Location)
