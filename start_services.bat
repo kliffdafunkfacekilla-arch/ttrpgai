@@ -1,6 +1,13 @@
 @echo off
 setlocal
 
+REM --- ADDED: Delete old database files from common problem locations ---
+echo Deleting old database files...
+del "%~dp0characters.db" >nul 2>&1
+del "%~dp0world.db" >nul 2>&1
+del "%~dp0AI-TTRPG\story_engine\story.db" >nul 2>&1
+REM --- END ADDED ---
+
 REM --- Configuration ---
 set "LOG_DIR=%~dp0logs"
 set "SERVICES_PARENT_DIR=%~dp0AI-TTRPG"

@@ -3,14 +3,11 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-# Construct an absolute path to the database file in the project root.
-_current_dir = os.path.dirname(os.path.abspath(__file__))
-_project_root = os.path.abspath(os.path.join(_current_dir, "..", "..", ".."))
-_db_path = os.path.join(_project_root, "world.db")
-DATABASE_URL = f"sqlite:///{_db_path}"
+# --- MODIFICATION: Remove complex path calculation. ---
+# The DB file will now live alongside alembic.ini inside the world_engine directory.
+DATABASE_URL = "sqlite:///./world.db" # Simple relative path within the service directory
 
-# connect_args is needed for SQLite to allow it to be
-# accessed by multiple parts of the app at once.
+# The connect_args is recommended for SQLite with FastAPI to allow multithreading.
 engine = create_engine(
     DATABASE_URL, connect_args={"check_same_thread": False}
 )

@@ -1,5 +1,13 @@
 #!/bin/bash
 
+# --- ADDED: Delete old database files from common problem locations ---
+echo "Deleting old database files..."
+rm -f characters.db
+rm -f world.db
+rm -f AI-TTRPG/story_engine/story.db
+echo "Old database files deleted."
+# --- END ADDED ---
+
 # Set PYTHONPATH to the repository root to ensure correct module resolution
 export PYTHONPATH=$(pwd)
 echo "PYTHONPATH set to: $PYTHONPATH"
