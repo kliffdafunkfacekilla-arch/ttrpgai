@@ -20,6 +20,77 @@ def calculate_modifier(score: int) -> int:
     return math.floor((score - 10) / 2)
 
 
+def generate_npc_template_core(
+    request: models.NpcGenerationRequest,
+    all_skills_map: Dict[str, Dict[str, str]],
+    generation_rules: Dict[str, Any]
+) -> Dict: # Returns a dict matching NpcTemplateResponse structure
+    """
+    Core logic to generate an NPC template based on request parameters.
+    Consolidated from the old NPC Generator service.
+    """
+    # 1. Determine Base Stats
+    kingdom_stats = generation_rules.get("base_stats_by_kingdom", {})
+    base_stats = kingdom_stats.get(request.kingdom.lower())
+
+    if base_stats is None:
+        base_stats = kingdom_stats.get("mammal", {})
+
+    final_stats = base_stats.copy()
+
+    # 2. Apply Style Modifiers
+    offense_mods = generation_rules.get("stat_modifiers_by_style", {}).get("offense", {}).get(request.offense_style.lower(), {})
+    defense_mods = generation_rules.get("stat_modifiers_by_style", {}).get("defense", {}).get(request.defense_style.lower(), {})
+
+    all_mods = {**offense_mods, **defense_mods}
+
+    for stat, mod_str in all_mods.items():
+        if stat in final_stats:
+            try:
+                modifier = int(mod_str.replace('+', ''))
+                final_stats[stat] += modifier
+                final_stats[stat] = max(1, final_stats[stat])
+            except ValueError:
+                print(f"Warning: Invalid modifier format '{mod_str}' for stat '{stat}'")
+
+    # 3. Calculate HP
+    base_hp = final_stats.get("Endurance", 10) + final_stats.get("Vitality", 10) * 2
+    hp_multiplier = generation_rules.get("hp_scaling_by_difficulty", {}).get(request.difficulty.lower(), 1.0)
+    max_hp = int(base_hp * hp_multiplier)
+
+    # 4. Determine Abilities
+    abilities = []
+    if request.ability_focus and request.ability_focus in generation_rules.get("ability_suggestions", {}):
+        suggested = generation_rules["ability_suggestions"][request.ability_focus]
+        if suggested:
+            abilities.append(suggested[0])
+
+    # 5. Determine Skills
+    skills = {skill_name: 0 for skill_name in all_skills_map.keys()}
+
+    skill_rules = generation_rules.get("skills_by_style_and_difficulty", {})
+    offense_skills_for_diff = skill_rules.get("offense", {}).get(request.offense_style.lower(), {}).get(request.difficulty.lower(), [])
+    defense_skills_for_diff = skill_rules.get("defense", {}).get(request.defense_style.lower(), {}).get(request.difficulty.lower(), [])
+    skill_rank_value = skill_rules.get("skill_ranks", {}).get(request.difficulty.lower(), 1)
+    skills_to_rank = set(offense_skills_for_diff + defense_skills_for_diff)
+
+    for skill_name in skills_to_rank:
+        if skill_name in skills:
+            skills[skill_name] = skill_rank_value
+
+    # 6. ID, Name, Description, Behavior Tags
+    generated_id = f"procgen_{request.biome or 'unk'}_{request.kingdom}_{request.offense_style}_{request.difficulty}_{random.randint(100,999)}"
+    name = request.custom_name or f"{request.difficulty.capitalize()} {request.kingdom.capitalize()} {request.offense_style.replace('_',' ').title()}"
+    description = f"A {request.difficulty} {request.kingdom} exhibiting a {request.offense_style} style and {request.defense_style} defense."
+    if request.biome:
+        description += f" Adapted to the {request.biome}."
+
+    behavior_tags = generation_rules.get("behavior_map",{}).get(request.behavior.lower(), [])
+
+    # 7. Build Response
+    return {"generated_id": generated_id, "name": name, "description": description, "stats": final_stats, "skills": skills, "abilities": abilities, "max_hp": max_hp, "behavior_tags": behavior_tags, "loot_table_ref": f"{request.kingdom}_{request.difficulty}_loot"}
+
+
 # ADD THIS FUNCTION
 def calculate_skill_mt_bonus(rank: int) -> int:
     """

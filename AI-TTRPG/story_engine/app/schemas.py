@@ -80,6 +80,10 @@ class OrchestrationWorldContext(BaseModel):
     name: str
     region: Any # We can just grab the whole sub-object
     generated_map_data: Optional[Any] = None
+    # --- ADDED/FIXED FIELDS ---
+    ai_annotations: Optional[Dict[str, Any]] = None  # Ensure annotations pass through
+    spawn_points: Optional[Dict[str, Any]] = None    # Ensure spawn points pass through
+    # --- END ADDED/FIXED FIELDS ---
     npcs: List[Any] = []
     items: List[Any] = []
 
