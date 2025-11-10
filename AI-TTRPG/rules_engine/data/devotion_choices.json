@@ -2,7 +2,7 @@
   {
     "name": "Devotion to the State",
     "description": "You are a patriot, dedicated to the laws and history of your kingdom.",
-    "skills": ["Lore: Royalty/Political", "Reinforced"]
+    "skills": ["Lore: Ruling Class/Politics", "Reinforced"]
   },
   {
     "name": "Devotion to the Spirits",
@@ -12,6 +12,6 @@
   {
     "name": "Devotion to the Self",
     "description": "Your own potential is your only concern. You wear what you please and study what you must.",
-    "skills": ["Lore: Science & Acad.", "Clothing/Utility"]
+    "skills": ["Lore: Science & History", "Clothing/Utility"]
   }
 ]
