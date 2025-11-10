@@ -14,6 +14,8 @@ from .models import (
     RollResult,
     TalentInfo,
     FeatureStatsResponse,
+    NpcGenerationRequest,
+    NpcTemplateResponse,
     SkillCategoryResponse,
     AbilitySchoolResponse,
     BackgroundChoice,  # --- ADD THIS IMPORT ---
