@@ -97,7 +97,7 @@ class SreRequest(BaseModel):
 
 @app.post("/v1/characters/{char_id}/add_sre")
 async def add_sre_to_character(
-    char_id: int, sre_request: SreRequest, db: Session = Depends(get_db)
+    char_id: str, sre_request: SreRequest, db: Session = Depends(get_db)
 ):
     """Adds SRE to a skill and handles rank-up logic."""
     logger.info(
@@ -220,7 +220,7 @@ async def add_sre_to_character(
     tags=["Combat Integration"],
 )
 async def apply_damage(
-    char_id: int,
+    char_id: str,
     damage_request: schemas.ApplyDamageRequest,
     db: Session = Depends(get_db),
 ):
@@ -243,7 +243,7 @@ async def apply_damage(
     tags=["Combat Integration"],
 )
 async def apply_status(
-    char_id: int,
+    char_id: str,
     status_request: schemas.ApplyStatusRequest,
     db: Session = Depends(get_db),
 ):
@@ -264,7 +264,7 @@ async def apply_status(
     tags=["Location"],
 )
 async def update_character_location(
-    char_id: int,
+    char_id: str,
     location_update: schemas.LocationUpdateRequest,
     db: Session = Depends(get_db),
 ):

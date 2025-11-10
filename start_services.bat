@@ -16,13 +16,13 @@ taskkill /F /IM node.exe /T >nul 2>&1
 echo.
 timeout /t 2 /nobreak > nul
 
-REM --- Database Initialization ---
-echo Initializing databases...
-echo  - Initializing characters.db...
-python "%~dp0db_init.py" > "%LOG_DIR%\db_init_character.log" 2>&1
-echo  - Initializing world.db...
-python "%~dp0db_init_world.py" > "%LOG_DIR%\db_init_world.log" 2>&1
-echo Databases initialized successfully.
+REM --- Database Migrations ---
+echo Applying database migrations...
+echo  - Applying character_engine migrations...
+alembic -c "%~dp0AI-TTRPG\character_engine\alembic.ini" upgrade head > "%LOG_DIR%\alembic_character.log" 2>&1
+echo  - Applying world_engine migrations...
+alembic -c "%~dp0AI-TTRPG\world_engine\alembic.ini" upgrade head > "%LOG_DIR%\alembic_world.log" 2>&1
+echo Migrations applied successfully.
 echo.
 
 REM --- Backend Services ---

@@ -9,7 +9,8 @@ from typing import Sequence, Union
 
 from alembic import op
 import sqlalchemy as sa
-
+import json
+import os
 
 # revision identifiers, used by Alembic.
 revision: str = '0001_create_world_tables'
@@ -21,7 +22,7 @@ depends_on: Union[str, Sequence[str], None] = None
 def upgrade() -> None:
     """This function runs when you 'upgrade head'"""
     # ### Create Factions Table ###
-    op.create_table('factions',
+    factions_table = op.create_table('factions',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(), nullable=True),
     sa.Column('status', sa.String(), nullable=True),
@@ -33,7 +34,7 @@ def upgrade() -> None:
     op.create_index(op.f('ix_factions_name'), 'factions', ['name'], unique=True)
 
     # ### Create Regions Table ###
-    op.create_table('regions',
+    regions_table = op.create_table('regions',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(), nullable=True),
     sa.Column('current_weather', sa.String(), nullable=True),
@@ -45,7 +46,7 @@ def upgrade() -> None:
     op.create_index(op.f('ix_regions_name'), 'regions', ['name'], unique=True)
 
     # ### Create Locations Table ###
-    op.create_table('locations',
+    locations_table = op.create_table('locations',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(), nullable=True),
     sa.Column('tags', sa.JSON(), nullable=True),
@@ -87,6 +88,21 @@ def upgrade() -> None:
     )
     op.create_index(op.f('ix_item_instances_id'), 'item_instances', ['id'], unique=False)
     op.create_index(op.f('ix_item_instances_template_id'), 'item_instances', ['template_id'], unique=False)
+
+    # ### Seed Data ###
+    data_dir = os.path.join(os.path.dirname(__file__), '..', '..', 'data')
+
+    with open(os.path.join(data_dir, "initial_factions.json"), "r") as f:
+        factions_data = json.load(f)
+        op.bulk_insert(factions_table, factions_data)
+
+    with open(os.path.join(data_dir, "initial_regions.json"), "r") as f:
+        regions_data = json.load(f)
+        op.bulk_insert(regions_table, regions_data)
+
+    with open(os.path.join(data_dir, "initial_locations.json"), "r") as f:
+        locations_data = json.load(f)
+        op.bulk_insert(locations_table, locations_data)
 
 
 def downgrade() -> None:

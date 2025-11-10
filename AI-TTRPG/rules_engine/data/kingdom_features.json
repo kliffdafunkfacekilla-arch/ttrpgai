@@ -1,418 +1,418 @@
 {
-  "F1": {
-    "Mammal": [
-      { "name": "The Predator (Jaws/Horns)", "mods": { "+2": ["Might", "Endurance", "Fortitude"], "+1": ["Awareness", "Intuition", "Charm", "Willpower"], "-1": ["Finesse", "Reflexes", "Vitality"] } },
-      { "name": "The Sage (Big Brain)", "mods": { "+2": ["Knowledge", "Logic", "Awareness"], "+1": ["Finesse", "Intuition", "Charm", "Willpower"], "-1": ["Might", "Endurance", "Reflexes"] } },
-      { "name": "The Sensor (Keen Senses)", "mods": { "+2": ["Awareness", "Intuition", "Logic"], "+1": ["Finesse", "Reflexes", "Knowledge", "Fortitude"], "-1": ["Might", "Endurance", "Vitality"] } },
-      { "name": "The Socialite (Face/Display)", "mods": { "+2": ["Charm", "Willpower", "Intuition"], "+1": ["Finesse", "Knowledge", "Logic", "Awareness"], "-1": ["Might", "Endurance", "Fortitude"] } },
-      { "name": "The Precise Striker (Fangs/Needle)", "mods": { "+2": ["Finesse", "Reflexes", "Awareness"], "+1": ["Might", "Fortitude", "Intuition", "Knowledge"], "-1": ["Endurance", "Vitality", "Charm"] } },
-      { "name": "The Balanced Head (Generalist)", "mods": { "+2": ["Might", "Knowledge", "Charm"], "+1": ["Endurance", "Finesse", "Logic", "Awareness"], "-1": ["Reflexes", "Vitality", "Fortitude"] } }
-    ],
-    "Reptile": [
-      { "name": "The Predator (Jaws/Horns)", "mods": { "+2": ["Might", "Endurance", "Fortitude"], "+1": ["Awareness", "Intuition", "Charm", "Willpower"], "-1": ["Finesse", "Reflexes", "Vitality"] } },
-      { "name": "The Sage (Big Brain)", "mods": { "+2": ["Knowledge", "Logic", "Awareness"], "+1": ["Finesse", "Intuition", "Charm", "Willpower"], "-1": ["Might", "Endurance", "Reflexes"] } },
-      { "name": "The Sensor (Keen Senses)", "mods": { "+2": ["Awareness", "Intuition", "Logic"], "+1": ["Finesse", "Reflexes", "Knowledge", "Fortitude"], "-1": ["Might", "Endurance", "Vitality"] } },
-      { "name": "The Socialite (Face/Display)", "mods": { "+2": ["Charm", "Willpower", "Intuition"], "+1": ["Finesse", "Knowledge", "Logic", "Awareness"], "-1": ["Might", "Endurance", "Fortitude"] } },
-      { "name": "The Precise Striker (Fangs/Needle)", "mods": { "+2": ["Finesse", "Reflexes", "Awareness"], "+1": ["Might", "Fortitude", "Intuition", "Knowledge"], "-1": ["Endurance", "Vitality", "Charm"] } },
-      { "name": "The Balanced Head (Generalist)", "mods": { "+2": ["Might", "Knowledge", "Charm"], "+1": ["Endurance", "Finesse", "Logic", "Awareness"], "-1": ["Reflexes", "Vitality", "Fortitude"] } }
-    ],
-    "Avian": [
-      { "name": "The Predator (Jaws/Horns)", "mods": { "+2": ["Might", "Endurance", "Fortitude"], "+1": ["Awareness", "Intuition", "Charm", "Willpower"], "-1": ["Finesse", "Reflexes", "Vitality"] } },
-      { "name": "The Sage (Big Brain)", "mods": { "+2": ["Knowledge", "Logic", "Awareness"], "+1": ["Finesse", "Intuition", "Charm", "Willpower"], "-1": ["Might", "Endurance", "Reflexes"] } },
-      { "name": "The Sensor (Keen Senses)", "mods": { "+2": ["Awareness", "Intuition", "Logic"], "+1": ["Finesse", "Reflexes", "Knowledge", "Fortitude"], "-1": ["Might", "Endurance", "Vitality"] } },
-      { "name": "The Socialite (Face/Display)", "mods": { "+2": ["Charm", "Willpower", "Intuition"], "+1": ["Finesse", "Knowledge", "Logic", "Awareness"], "-1": ["Might", "Endurance", "Fortitude"] } },
-      { "name": "The Precise Striker (Fangs/Needle)", "mods": { "+2": ["Finesse", "Reflexes", "Awareness"], "+1": ["Might", "Fortitude", "Intuition", "Knowledge"], "-1": ["Endurance", "Vitality", "Charm"] } },
-      { "name": "The Balanced Head (Generalist)", "mods": { "+2": ["Might", "Knowledge", "Charm"], "+1": ["Endurance", "Finesse", "Logic", "Awareness"], "-1": ["Reflexes", "Vitality", "Fortitude"] } }
-    ],
-    "Aquatic": [
-      { "name": "The Predator (Jaws/Horns)", "mods": { "+2": ["Might", "Endurance", "Fortitude"], "+1": ["Awareness", "Intuition", "Charm", "Willpower"], "-1": ["Finesse", "Reflexes", "Vitality"] } },
-      { "name": "The Sage (Big Brain)", "mods": { "+2": ["Knowledge", "Logic", "Awareness"], "+1": ["Finesse", "Intuition", "Charm", "Willpower"], "-1": ["Might", "Endurance", "Reflexes"] } },
-      { "name": "The Sensor (Keen Senses)", "mods": { "+2": ["Awareness", "Intuition", "Logic"], "+1": ["Finesse", "Reflexes", "Knowledge", "Fortitude"], "-1": ["Might", "Endurance", "Vitality"] } },
-      { "name": "The Socialite (Face/Display)", "mods": { "+2": ["Charm", "Willpower", "Intuition"], "+1": ["Finesse", "Knowledge", "Logic", "Awareness"], "-1": ["Might", "Endurance", "Fortitude"] } },
-      { "name": "The Precise Striker (Fangs/Needle)", "mods": { "+2": ["Finesse", "Reflexes", "Awareness"], "+1": ["Might", "Fortitude", "Intuition", "Knowledge"], "-1": ["Endurance", "Vitality", "Charm"] } },
-      { "name": "The Balanced Head (Generalist)", "mods": { "+2": ["Might", "Knowledge", "Charm"], "+1": ["Endurance", "Finesse", "Logic", "Awareness"], "-1": ["Reflexes", "Vitality", "Fortitude"] } }
-    ],
-    "Insect": [
-      { "name": "The Predator (Jaws/Horns)", "mods": { "+2": ["Might", "Endurance", "Fortitude"], "+1": ["Awareness", "Intuition", "Charm", "Willpower"], "-1": ["Finesse", "Reflexes", "Vitality"] } },
-      { "name": "The Sage (Big Brain)", "mods": { "+2": ["Knowledge", "Logic", "Awareness"], "+1": ["Finesse", "Intuition", "Charm", "Willpower"], "-1": ["Might", "Endurance", "Reflexes"] } },
-      { "name": "The Sensor (Keen Senses)", "mods": { "+2": ["Awareness", "Intuition", "Logic"], "+1": ["Finesse", "Reflexes", "Knowledge", "Fortitude"], "-1": ["Might", "Endurance", "Vitality"] } },
-      { "name": "The Socialite (Face/Display)", "mods": { "+2": ["Charm", "Willpower", "Intuition"], "+1": ["Finesse", "Knowledge", "Logic", "Awareness"], "-1": ["Might", "Endurance", "Fortitude"] } },
-      { "name": "The Precise Striker (Fangs/Needle)", "mods": { "+2": ["Finesse", "Reflexes", "Awareness"], "+1": ["Might", "Fortitude", "Intuition", "Knowledge"], "-1": ["Endurance", "Vitality", "Charm"] } },
-      { "name": "The Balanced Head (Generalist)", "mods": { "+2": ["Might", "Knowledge", "Charm"], "+1": ["Endurance", "Finesse", "Logic", "Awareness"], "-1": ["Reflexes", "Vitality", "Fortitude"] } }
-    ],
-    "Plant": [
-      { "name": "The Predator (Jaws/Horns)", "mods": { "+2": ["Might", "Endurance", "Fortitude"], "+1": ["Awareness", "Intuition", "Charm", "Willpower"], "-1": ["Finesse", "Reflexes", "Vitality"] } },
-      { "name": "The Sage (Big Brain)", "mods": { "+2": ["Knowledge", "Logic", "Awareness"], "+1": ["Finesse", "Intuition", "Charm", "Willpower"], "-1": ["Might", "Endurance", "Reflexes"] } },
-      { "name": "The Sensor (Keen Senses)", "mods": { "+2": ["Awareness", "Intuition", "Logic"], "+1": ["Finesse", "Reflexes", "Knowledge", "Fortitude"], "-1": ["Might", "Endurance", "Vitality"] } },
-      { "name": "The Socialite (Face/Display)", "mods": { "+2": ["Charm", "Willpower", "Intuition"], "+1": ["Finesse", "Knowledge", "Logic", "Awareness"], "-1": ["Might", "Endurance", "Fortitude"] } },
-      { "name": "The Precise Striker (Fangs/Needle)", "mods": { "+2": ["Finesse", "Reflexes", "Awareness"], "+1": ["Might", "Fortitude", "Intuition", "Knowledge"], "-1": ["Endurance", "Vitality", "Charm"] } },
-      { "name": "The Balanced Head (Generalist)", "mods": { "+2": ["Might", "Knowledge", "Charm"], "+1": ["Endurance", "Finesse", "Logic", "Awareness"], "-1": ["Reflexes", "Vitality", "Fortitude"] } }
-    ]
-  },
-  "F2": {
-    "Mammal": [
-      { "name": "The Juggernaut (Pure Armor)", "mods": { "+2": ["Endurance", "Vitality", "Fortitude"], "+1": ["Might", "Logic", "Awareness", "Willpower"], "-1": ["Finesse", "Reflexes", "Charm"] } },
-      { "name": "The Hardy Core (Stamina)", "mods": { "+2": ["Endurance", "Vitality", "Logic"], "+1": ["Might", "Fortitude", "Knowledge", "Intuition"], "-1": ["Finesse", "Reflexes", "Charm"] } },
-      { "name": "The Resilient Mind (Mental Fort.)", "mods": { "+2": ["Fortitude", "Willpower", "Logic"], "+1": ["Endurance", "Vitality", "Knowledge", "Awareness"], "-1": ["Might", "Finesse", "Reflexes"] } },
-      { "name": "The Social Tank (Presence)", "mods": { "+2": ["Endurance", "Charm", "Willpower"], "+1": ["Vitality", "Fortitude", "Intuition", "Logic"], "-1": ["Might", "Finesse", "Reflexes"] } },
-      { "name": "The Life-Spring (Pure Vitals)", "mods": { "+2": ["Vitality", "Fortitude", "Knowledge"], "+1": ["Endurance", "Awareness", "Intuition", "Willpower"], "-1": ["Might", "Reflexes", "Charm"] } },
-      { "name": "The Balanced Core (Generalist)", "mods": { "+2": ["Endurance", "Vitality", "Fortitude"], "+1": ["Knowledge", "Logic", "Awareness", "Intuition"], "-1": ["Reflexes", "Charm", "Willpower"] } }
-    ],
-    "Reptile": [
-      { "name": "The Juggernaut (Pure Armor)", "mods": { "+2": ["Endurance", "Vitality", "Fortitude"], "+1": ["Might", "Logic", "Awareness", "Willpower"], "-1": ["Finesse", "Reflexes", "Charm"] } },
-      { "name": "The Hardy Core (Stamina)", "mods": { "+2": ["Endurance", "Vitality", "Logic"], "+1": ["Might", "Fortitude", "Knowledge", "Intuition"], "-1": ["Finesse", "Reflexes", "Charm"] } },
-      { "name": "The Resilient Mind (Mental Fort.)", "mods": { "+2": ["Fortitude", "Willpower", "Logic"], "+1": ["Endurance", "Vitality", "Knowledge", "Awareness"], "-1": ["Might", "Finesse", "Reflexes"] } },
-      { "name": "The Social Tank (Presence)", "mods": { "+2": ["Endurance", "Charm", "Willpower"], "+1": ["Vitality", "Fortitude", "Intuition", "Logic"], "-1": ["Might", "Finesse", "Reflexes"] } },
-      { "name": "The Life-Spring (Pure Vitals)", "mods": { "+2": ["Vitality", "Fortitude", "Knowledge"], "+1": ["Endurance", "Awareness", "Intuition", "Willpower"], "-1": ["Might", "Reflexes", "Charm"] } },
-      { "name": "The Balanced Core (Generalist)", "mods": { "+2": ["Endurance", "Vitality", "Fortitude"], "+1": ["Knowledge", "Logic", "Awareness", "Intuition"], "-1": ["Reflexes", "Charm", "Willpower"] } }
-    ],
-    "Avian": [
-      { "name": "The Juggernaut (Pure Armor)", "mods": { "+2": ["Endurance", "Vitality", "Fortitude"], "+1": ["Might", "Logic", "Awareness", "Willpower"], "-1": ["Finesse", "Reflexes", "Charm"] } },
-      { "name": "The Hardy Core (Stamina)", "mods": { "+2": ["Endurance", "Vitality", "Logic"], "+1": ["Might", "Fortitude", "Knowledge", "Intuition"], "-1": ["Finesse", "Reflexes", "Charm"] } },
-      { "name": "The Resilient Mind (Mental Fort.)", "mods": { "+2": ["Fortitude", "Willpower", "Logic"], "+1": ["Endurance", "Vitality", "Knowledge", "Awareness"], "-1": ["Might", "Finesse", "Reflexes"] } },
-      { "name": "The Social Tank (Presence)", "mods": { "+2": ["Endurance", "Charm", "Willpower"], "+1": ["Vitality", "Fortitude", "Intuition", "Logic"], "-1": ["Might", "Finesse", "Reflexes"] } },
-      { "name": "The Life-Spring (Pure Vitals)", "mods": { "+2": ["Vitality", "Fortitude", "Knowledge"], "+1": ["Endurance", "Awareness", "Intuition", "Willpower"], "-1": ["Might", "Reflexes", "Charm"] } },
-      { "name": "The Balanced Core (Generalist)", "mods": { "+2": ["Endurance", "Vitality", "Fortitude"], "+1": ["Knowledge", "Logic", "Awareness", "Intuition"], "-1": ["Reflexes", "Charm", "Willpower"] } }
-    ],
-    "Aquatic": [
-      { "name": "The Juggernaut (Pure Armor)", "mods": { "+2": ["Endurance", "Vitality", "Fortitude"], "+1": ["Might", "Logic", "Awareness", "Willpower"], "-1": ["Finesse", "Reflexes", "Charm"] } },
-      { "name": "The Hardy Core (Stamina)", "mods": { "+2": ["Endurance", "Vitality", "Logic"], "+1": ["Might", "Fortitude", "Knowledge", "Intuition"], "-1": ["Finesse", "Reflexes", "Charm"] } },
-      { "name": "The Resilient Mind (Mental Fort.)", "mods": { "+2": ["Fortitude", "Willpower", "Logic"], "+1": ["Endurance", "Vitality", "Knowledge", "Awareness"], "-1": ["Might", "Finesse", "Reflexes"] } },
-      { "name": "The Social Tank (Presence)", "mods": { "+2": ["Endurance", "Charm", "Willpower"], "+1": ["Vitality", "Fortitude", "Intuition", "Logic"], "-1": ["Might", "Finesse", "Reflexes"] } },
-      { "name": "The Life-Spring (Pure Vitals)", "mods": { "+2": ["Vitality", "Fortitude", "Knowledge"], "+1": ["Endurance", "Awareness", "Intuition", "Willpower"], "-1": ["Might", "Reflexes", "Charm"] } },
-      { "name": "The Balanced Core (Generalist)", "mods": { "+2": ["Endurance", "Vitality", "Fortitude"], "+1": ["Knowledge", "Logic", "Awareness", "Intuition"], "-1": ["Reflexes", "Charm", "Willpower"] } }
-    ],
-    "Insect": [
-      { "name": "The Juggernaut (Pure Armor)", "mods": { "+2": ["Endurance", "Vitality", "Fortitude"], "+1": ["Might", "Logic", "Awareness", "Willpower"], "-1": ["Finesse", "Reflexes", "Charm"] } },
-      { "name": "The Hardy Core (Stamina)", "mods": { "+2": ["Endurance", "Vitality", "Logic"], "+1": ["Might", "Fortitude", "Knowledge", "Intuition"], "-1": ["Finesse", "Reflexes", "Charm"] } },
-      { "name": "The Resilient Mind (Mental Fort.)", "mods": { "+2": ["Fortitude", "Willpower", "Logic"], "+1": ["Endurance", "Vitality", "Knowledge", "Awareness"], "-1": ["Might", "Finesse", "Reflexes"] } },
-      { "name": "The Social Tank (Presence)", "mods": { "+2": ["Endurance", "Charm", "Willpower"], "+1": ["Vitality", "Fortitude", "Intuition", "Logic"], "-1": ["Might", "Finesse", "Reflexes"] } },
-      { "name": "The Life-Spring (Pure Vitals)", "mods": { "+2": ["Vitality", "Fortitude", "Knowledge"], "+1": ["Endurance", "Awareness", "Intuition", "Willpower"], "-1": ["Might", "Reflexes", "Charm"] } },
-      { "name": "The Balanced Core (Generalist)", "mods": { "+2": ["Endurance", "Vitality", "Fortitude"], "+1": ["Knowledge", "Logic", "Awareness", "Intuition"], "-1": ["Reflexes", "Charm", "Willpower"] } }
-    ],
-    "Plant": [
-      { "name": "The Juggernaut (Pure Armor)", "mods": { "+2": ["Endurance", "Vitality", "Fortitude"], "+1": ["Might", "Logic", "Awareness", "Willpower"], "-1": ["Finesse", "Reflexes", "Charm"] } },
-      { "name": "The Hardy Core (Stamina)", "mods": { "+2": ["Endurance", "Vitality", "Logic"], "+1": ["Might", "Fortitude", "Knowledge", "Intuition"], "-1": ["Finesse", "Reflexes", "Charm"] } },
-      { "name": "The Resilient Mind (Mental Fort.)", "mods": { "+2": ["Fortitude", "Willpower", "Logic"], "+1": ["Endurance", "Vitality", "Knowledge", "Awareness"], "-1": ["Might", "Finesse", "Reflexes"] } },
-      { "name": "The Social Tank (Presence)", "mods": { "+2": ["Endurance", "Charm", "Willpower"], "+1": ["Vitality", "Fortitude", "Intuition", "Logic"], "-1": ["Might", "Finesse", "Reflexes"] } },
-      { "name": "The Life-Spring (Pure Vitals)", "mods": { "+2": ["Vitality", "Fortitude", "Knowledge"], "+1": ["Endurance", "Awareness", "Intuition", "Willpower"], "-1": ["Might", "Reflexes", "Charm"] } },
-      { "name": "The Balanced Core (Generalist)", "mods": { "+2": ["Endurance", "Vitality", "Fortitude"], "+1": ["Knowledge", "Logic", "Awareness", "Intuition"], "-1": ["Reflexes", "Charm", "Willpower"] } }
-    ]
-  },
-  "F3": {
-    "Mammal": [
-      { "name": "The Brute (Raw Power)", "mods": { "+2": ["Might", "Endurance", "Vitality"], "+1": ["Fortitude", "Logic", "Awareness", "Willpower"], "-1": ["Finesse", "Reflexes", "Knowledge"] } },
-      { "name": "The Lancer (Precision/Reach)", "mods": { "+2": ["Finesse", "Reflexes", "Awareness"], "+1": ["Might", "Fortitude", "Knowledge", "Intuition"], "-1": ["Endurance", "Vitality", "Charm"] } },
-      { "name": "The Acrobat (Speed/Agility)", "mods": { "+2": ["Reflexes", "Finesse", "Endurance"], "+1": ["Vitality", "Awareness", "Intuition", "Charm"], "-1": ["Might", "Knowledge", "Logic"] } },
-      { "name": "The Mixed Attacker (Might/Speed)", "mods": { "+2": ["Might", "Reflexes", "Intuition"], "+1": ["Endurance", "Vitality", "Fortitude", "Awareness"], "-1": ["Finesse", "Knowledge", "Charm"] } },
-      { "name": "The Tactician (Finesse/Mind)", "mods": { "+2": ["Finesse", "Knowledge", "Logic"], "+1": ["Reflexes", "Fortitude", "Awareness", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } },
-      { "name": "The Balanced Limb (Generalist)", "mods": { "+2": ["Might", "Finesse", "Reflexes"], "+1": ["Endurance", "Vitality", "Fortitude", "Awareness"], "-1": ["Knowledge", "Logic", "Charm"] } }
-    ],
-    "Reptile": [
-      { "name": "The Brute (Raw Power)", "mods": { "+2": ["Might", "Endurance", "Vitality"], "+1": ["Fortitude", "Logic", "Awareness", "Willpower"], "-1": ["Finesse", "Reflexes", "Knowledge"] } },
-      { "name": "The Lancer (Precision/Reach)", "mods": { "+2": ["Finesse", "Reflexes", "Awareness"], "+1": ["Might", "Fortitude", "Knowledge", "Intuition"], "-1": ["Endurance", "Vitality", "Charm"] } },
-      { "name": "The Acrobat (Speed/Agility)", "mods": { "+2": ["Reflexes", "Finesse", "Endurance"], "+1": ["Vitality", "Awareness", "Intuition", "Charm"], "-1": ["Might", "Knowledge", "Logic"] } },
-      { "name": "The Mixed Attacker (Might/Speed)", "mods": { "+2": ["Might", "Reflexes", "Intuition"], "+1": ["Endurance", "Vitality", "Fortitude", "Awareness"], "-1": ["Finesse", "Knowledge", "Charm"] } },
-      { "name": "The Tactician (Finesse/Mind)", "mods": { "+2": ["Finesse", "Knowledge", "Logic"], "+1": ["Reflexes", "Fortitude", "Awareness", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } },
-      { "name": "The Balanced Limb (Generalist)", "mods": { "+2": ["Might", "Finesse", "Reflexes"], "+1": ["Endurance", "Vitality", "Fortitude", "Awareness"], "-1": ["Knowledge", "Logic", "Charm"] } }
-    ],
-    "Avian": [
-      { "name": "The Brute (Raw Power)", "mods": { "+2": ["Might", "Endurance", "Vitality"], "+1": ["Fortitude", "Logic", "Awareness", "Willpower"], "-1": ["Finesse", "Reflexes", "Knowledge"] } },
-      { "name": "The Lancer (Precision/Reach)", "mods": { "+2": ["Finesse", "Reflexes", "Awareness"], "+1": ["Might", "Fortitude", "Knowledge", "Intuition"], "-1": ["Endurance", "Vitality", "Charm"] } },
-      { "name": "The Acrobat (Speed/Agility)", "mods": { "+2": ["Reflexes", "Finesse", "Endurance"], "+1": ["Vitality", "Awareness", "Intuition", "Charm"], "-1": ["Might", "Knowledge", "Logic"] } },
-      { "name": "The Mixed Attacker (Might/Speed)", "mods": { "+2": ["Might", "Reflexes", "Intuition"], "+1": ["Endurance", "Vitality", "Fortitude", "Awareness"], "-1": ["Finesse", "Knowledge", "Charm"] } },
-      { "name": "The Tactician (Finesse/Mind)", "mods": { "+2": ["Finesse", "Knowledge", "Logic"], "+1": ["Reflexes", "Fortitude", "Awareness", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } },
-      { "name": "The Balanced Limb (Generalist)", "mods": { "+2": ["Might", "Finesse", "Reflexes"], "+1": ["Endurance", "Vitality", "Fortitude", "Awareness"], "-1": ["Knowledge", "Logic", "Charm"] } }
-    ],
-    "Aquatic": [
-      { "name": "The Brute (Raw Power)", "mods": { "+2": ["Might", "Endurance", "Vitality"], "+1": ["Fortitude", "Logic", "Awareness", "Willpower"], "-1": ["Finesse", "Reflexes", "Knowledge"] } },
-      { "name": "The Lancer (Precision/Reach)", "mods": { "+2": ["Finesse", "Reflexes", "Awareness"], "+1": ["Might", "Fortitude", "Knowledge", "Intuition"], "-1": ["Endurance", "Vitality", "Charm"] } },
-      { "name": "The Acrobat (Speed/Agility)", "mods": { "+2": ["Reflexes", "Finesse", "Endurance"], "+1": ["Vitality", "Awareness", "Intuition", "Charm"], "-1": ["Might", "Knowledge", "Logic"] } },
-      { "name": "The Mixed Attacker (Might/Speed)", "mods": { "+2": ["Might", "Reflexes", "Intuition"], "+1": ["Endurance", "Vitality", "Fortitude", "Awareness"], "-1": ["Finesse", "Knowledge", "Charm"] } },
-      { "name": "The Tactician (Finesse/Mind)", "mods": { "+2": ["Finesse", "Knowledge", "Logic"], "+1": ["Reflexes", "Fortitude", "Awareness", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } },
-      { "name": "The Balanced Limb (Generalist)", "mods": { "+2": ["Might", "Finesse", "Reflexes"], "+1": ["Endurance", "Vitality", "Fortitude", "Awareness"], "-1": ["Knowledge", "Logic", "Charm"] } }
-    ],
-    "Insect": [
-      { "name": "The Brute (Raw Power)", "mods": { "+2": ["Might", "Endurance", "Vitality"], "+1": ["Fortitude", "Logic", "Awareness", "Willpower"], "-1": ["Finesse", "Reflexes", "Knowledge"] } },
-      { "name": "The Lancer (Precision/Reach)", "mods": { "+2": ["Finesse", "Reflexes", "Awareness"], "+1": ["Might", "Fortitude", "Knowledge", "Intuition"], "-1": ["Endurance", "Vitality", "Charm"] } },
-      { "name": "The Acrobat (Speed/Agility)", "mods": { "+2": ["Reflexes", "Finesse", "Endurance"], "+1": ["Vitality", "Awareness", "Intuition", "Charm"], "-1": ["Might", "Knowledge", "Logic"] } },
-      { "name": "The Mixed Attacker (Might/Speed)", "mods": { "+2": ["Might", "Reflexes", "Intuition"], "+1": ["Endurance", "Vitality", "Fortitude", "Awareness"], "-1": ["Finesse", "Knowledge", "Charm"] } },
-      { "name": "The Tactician (Finesse/Mind)", "mods": { "+2": ["Finesse", "Knowledge", "Logic"], "+1": ["Reflexes", "Fortitude", "Awareness", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } },
-      { "name": "The Balanced Limb (Generalist)", "mods": { "+2": ["Might", "Finesse", "Reflexes"], "+1": ["Endurance", "Vitality", "Fortitude", "Awareness"], "-1": ["Knowledge", "Logic", "Charm"] } }
-    ],
-    "Plant": [
-      { "name": "The Brute (Raw Power)", "mods": { "+2": ["Might", "Endurance", "Vitality"], "+1": ["Fortitude", "Logic", "Awareness", "Willpower"], "-1": ["Finesse", "Reflexes", "Knowledge"] } },
-      { "name": "The Lancer (Precision/Reach)", "mods": { "+2": ["Finesse", "Reflexes", "Awareness"], "+1": ["Might", "Fortitude", "Knowledge", "Intuition"], "-1": ["Endurance", "Vitality", "Charm"] } },
-      { "name": "The Acrobat (Speed/Agility)", "mods": { "+2": ["Reflexes", "Finesse", "Endurance"], "+1": ["Vitality", "Awareness", "Intuition", "Charm"], "-1": ["Might", "Knowledge", "Logic"] } },
-      { "name": "The Mixed Attacker (Might/Speed)", "mods": { "+2": ["Might", "Reflexes", "Intuition"], "+1": ["Endurance", "Vitality", "Fortitude", "Awareness"], "-1": ["Finesse", "Knowledge", "Charm"] } },
-      { "name": "The Tactician (Finesse/Mind)", "mods": { "+2": ["Finesse", "Knowledge", "Logic"], "+1": ["Reflexes", "Fortitude", "Awareness", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } },
-      { "name": "The Balanced Limb (Generalist)", "mods": { "+2": ["Might", "Finesse", "Reflexes"], "+1": ["Endurance", "Vitality", "Fortitude", "Awareness"], "-1": ["Knowledge", "Logic", "Charm"] } }
-    ]
-  },
-  "F4": {
-    "Mammal": [
-      { "name": "The Artisan (Delicate)", "mods": { "+2": ["Finesse", "Knowledge", "Logic"], "+1": ["Reflexes", "Awareness", "Intuition", "Charm"], "-1": ["Might", "Endurance", "Vitality"] } },
-      { "name": "The Crushing Grip (Powerful)", "mods": { "+2": ["Might", "Endurance", "Vitality"], "+1": ["Fortitude", "Logic", "Awareness", "Willpower"], "-1": ["Finesse", "Reflexes", "Knowledge"] } },
-      { "name": "The Rending Talon (Natural Weapon)", "mods": { "+2": ["Might", "Finesse", "Reflexes"], "+1": ["Endurance", "Vitality", "Fortitude", "Awareness"], "-1": ["Knowledge", "Logic", "Charm"] } },
-      { "name": "The Sensitive Touch (Awareness)", "mods": { "+2": ["Awareness", "Intuition", "Finesse"], "+1": ["Reflexes", "Knowledge", "Logic", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } },
-      { "name": "The Swift Hand (Speed)", "mods": { "+2": ["Reflexes", "Finesse", "Intuition"], "+1": ["Awareness", "Charm", "Willpower", "Fortitude"], "-1": ["Might", "Endurance", "Fortitude"] } },
-      { "name": "The Balanced Paw (Generalist)", "mods": { "+2": ["Might", "Finesse", "Awareness"], "+1": ["Endurance", "Reflexes", "Knowledge", "Logic"], "-1": ["Vitality", "Fortitude", "Charm"] } }
-    ],
-    "Reptile": [
-      { "name": "The Artisan (Delicate)", "mods": { "+2": ["Finesse", "Knowledge", "Logic"], "+1": ["Reflexes", "Awareness", "Intuition", "Charm"], "-1": ["Might", "Endurance", "Vitality"] } },
-      { "name": "The Crushing Grip (Powerful)", "mods": { "+2": ["Might", "Endurance", "Vitality"], "+1": ["Fortitude", "Logic", "Awareness", "Willpower"], "-1": ["Finesse", "Reflexes", "Knowledge"] } },
-      { "name": "The Rending Talon (Natural Weapon)", "mods": { "+2": ["Might", "Finesse", "Reflexes"], "+1": ["Endurance", "Vitality", "Fortitude", "Awareness"], "-1": ["Knowledge", "Logic", "Charm"] } },
-      { "name": "The Sensitive Touch (Awareness)", "mods": { "+2": ["Awareness", "Intuition", "Finesse"], "+1": ["Reflexes", "Knowledge", "Logic", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } },
-      { "name": "The Swift Hand (Speed)", "mods": { "+2": ["Reflexes", "Finesse", "Intuition"], "+1": ["Awareness", "Charm", "Willpower", "Fortitude"], "-1": ["Might", "Endurance", "Fortitude"] } },
-      { "name": "The Balanced Paw (Generalist)", "mods": { "+2": ["Might", "Finesse", "Awareness"], "+1": ["Endurance", "Reflexes", "Knowledge", "Logic"], "-1": ["Vitality", "Fortitude", "Charm"] } }
-    ],
-    "Avian": [
-      { "name": "The Artisan (Delicate)", "mods": { "+2": ["Finesse", "Knowledge", "Logic"], "+1": ["Reflexes", "Awareness", "Intuition", "Charm"], "-1": ["Might", "Endurance", "Vitality"] } },
-      { "name": "The Crushing Grip (Powerful)", "mods": { "+2": ["Might", "Endurance", "Vitality"], "+1": ["Fortitude", "Logic", "Awareness", "Willpower"], "-1": ["Finesse", "Reflexes", "Knowledge"] } },
-      { "name": "The Rending Talon (Natural Weapon)", "mods": { "+2": ["Might", "Finesse", "Reflexes"], "+1": ["Endurance", "Vitality", "Fortitude", "Awareness"], "-1": ["Knowledge", "Logic", "Charm"] } },
-      { "name": "The Sensitive Touch (Awareness)", "mods": { "+2": ["Awareness", "Intuition", "Finesse"], "+1": ["Reflexes", "Knowledge", "Logic", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } },
-      { "name": "The Swift Hand (Speed)", "mods": { "+2": ["Reflexes", "Finesse", "Intuition"], "+1": ["Awareness", "Charm", "Willpower", "Fortitude"], "-1": ["Might", "Endurance", "Fortitude"] } },
-      { "name": "The Balanced Paw (Generalist)", "mods": { "+2": ["Might", "Finesse", "Awareness"], "+1": ["Endurance", "Reflexes", "Knowledge", "Logic"], "-1": ["Vitality", "Fortitude", "Charm"] } }
-    ],
-    "Aquatic": [
-      { "name": "The Artisan (Delicate)", "mods": { "+2": ["Finesse", "Knowledge", "Logic"], "+1": ["Reflexes", "Awareness", "Intuition", "Charm"], "-1": ["Might", "Endurance", "Vitality"] } },
-      { "name": "The Crushing Grip (Powerful)", "mods": { "+2": ["Might", "Endurance", "Vitality"], "+1": ["Fortitude", "Logic", "Awareness", "Willpower"], "-1": ["Finesse", "Reflexes", "Knowledge"] } },
-      { "name": "The Rending Talon (Natural Weapon)", "mods": { "+2": ["Might", "Finesse", "Reflexes"], "+1": ["Endurance", "Vitality", "Fortitude", "Awareness"], "-1": ["Knowledge", "Logic", "Charm"] } },
-      { "name": "The Sensitive Touch (Awareness)", "mods": { "+2": ["Awareness", "Intuition", "Finesse"], "+1": ["Reflexes", "Knowledge", "Logic", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } },
-      { "name": "The Swift Hand (Speed)", "mods": { "+2": ["Reflexes", "Finesse", "Intuition"], "+1": ["Awareness", "Charm", "Willpower", "Fortitude"], "-1": ["Might", "Endurance", "Fortitude"] } },
-      { "name": "The Balanced Paw (Generalist)", "mods": { "+2": ["Might", "Finesse", "Awareness"], "+1": ["Endurance", "Reflexes", "Knowledge", "Logic"], "-1": ["Vitality", "Fortitude", "Charm"] } }
-    ],
-    "Insect": [
-      { "name": "The Artisan (Delicate)", "mods": { "+2": ["Finesse", "Knowledge", "Logic"], "+1": ["Reflexes", "Awareness", "Intuition", "Charm"], "-1": ["Might", "Endurance", "Vitality"] } },
-      { "name": "The Crushing Grip (Powerful)", "mods": { "+2": ["Might", "Endurance", "Vitality"], "+1": ["Fortitude", "Logic", "Awareness", "Willpower"], "-1": ["Finesse", "Reflexes", "Knowledge"] } },
-      { "name": "The Rending Talon (Natural Weapon)", "mods": { "+2": ["Might", "Finesse", "Reflexes"], "+1": ["Endurance", "Vitality", "Fortitude", "Awareness"], "-1": ["Knowledge", "Logic", "Charm"] } },
-      { "name": "The Sensitive Touch (Awareness)", "mods": { "+2": ["Awareness", "Intuition", "Finesse"], "+1": ["Reflexes", "Knowledge", "Logic", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } },
-      { "name": "The Swift Hand (Speed)", "mods": { "+2": ["Reflexes", "Finesse", "Intuition"], "+1": ["Awareness", "Charm", "Willpower", "Fortitude"], "-1": ["Might", "Endurance", "Fortitude"] } },
-      { "name": "The Balanced Paw (Generalist)", "mods": { "+2": ["Might", "Finesse", "Awareness"], "+1": ["Endurance", "Reflexes", "Knowledge", "Logic"], "-1": ["Vitality", "Fortitude", "Charm"] } }
-    ],
-    "Plant": [
-      { "name": "The Artisan (Delicate)", "mods": { "+2": ["Finesse", "Knowledge", "Logic"], "+1": ["Reflexes", "Awareness", "Intuition", "Charm"], "-1": ["Might", "Endurance", "Vitality"] } },
-      { "name": "The Crushing Grip (Powerful)", "mods": { "+2": ["Might", "Endurance", "Vitality"], "+1": ["Fortitude", "Logic", "Awareness", "Willpower"], "-1": ["Finesse", "Reflexes", "Knowledge"] } },
-      { "name": "The Rending Talon (Natural Weapon)", "mods": { "+2": ["Might", "Finesse", "Reflexes"], "+1": ["Endurance", "Vitality", "Fortitude", "Awareness"], "-1": ["Knowledge", "Logic", "Charm"] } },
-      { "name": "The Sensitive Touch (Awareness)", "mods": { "+2": ["Awareness", "Intuition", "Finesse"], "+1": ["Reflexes", "Knowledge", "Logic", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } },
-      { "name": "The Swift Hand (Speed)", "mods": { "+2": ["Reflexes", "Finesse", "Intuition"], "+1": ["Awareness", "Charm", "Willpower", "Fortitude"], "-1": ["Might", "Endurance", "Fortitude"] } },
-      { "name": "The Balanced Paw (Generalist)", "mods": { "+2": ["Might", "Finesse", "Awareness"], "+1": ["Endurance", "Reflexes", "Knowledge", "Logic"], "-1": ["Vitality", "Fortitude", "Charm"] } }
-    ]
-  },
-  "F5": {
-    "Mammal": [
-      { "name": "The Acrobat (Speed/Evasion)", "mods": { "+2": ["Reflexes", "Finesse", "Endurance"], "+1": ["Vitality", "Awareness", "Intuition", "Charm"], "-1": ["Might", "Knowledge", "Logic"] } },
-      { "name": "The Pillar (Unyielding Stance)", "mods": { "+2": ["Endurance", "Vitality", "Fortitude"], "+1": ["Might", "Logic", "Awareness", "Willpower"], "-1": ["Finesse", "Reflexes", "Knowledge"] } },
-      { "name": "The Leaper (Brute Power)", "mods": { "+2": ["Might", "Reflexes", "Endurance"], "+1": ["Vitality", "Fortitude", "Logic", "Willpower"], "-1": ["Finesse", "Knowledge", "Charm"] } },
-      { "name": "The Marathoner (Stamina)", "mods": { "+2": ["Endurance", "Fortitude", "Willpower"], "+1": ["Vitality", "Logic", "Awareness", "Intuition"], "-1": ["Might", "Finesse", "Reflexes"] } },
-      { "name": "The Climber (Sure-Footed)", "mods": { "+2": ["Reflexes", "Finesse", "Awareness"], "+1": ["Might", "Endurance", "Intuition", "Willpower"], "-1": ["Vitality", "Fortitude", "Logic"] } },
-      { "name": "The Balanced Leg (Generalist)", "mods": { "+2": ["Might", "Endurance", "Reflexes"], "+1": ["Finesse", "Vitality", "Fortitude", "Awareness"], "-1": ["Knowledge", "Logic", "Intuition"] } }
-    ],
-    "Reptile": [
-      { "name": "The Acrobat (Speed/Evasion)", "mods": { "+2": ["Reflexes", "Finesse", "Endurance"], "+1": ["Vitality", "Awareness", "Intuition", "Charm"], "-1": ["Might", "Knowledge", "Logic"] } },
-      { "name": "The Pillar (Unyielding Stance)", "mods": { "+2": ["Endurance", "Vitality", "Fortitude"], "+1": ["Might", "Logic", "Awareness", "Willpower"], "-1": ["Finesse", "Reflexes", "Knowledge"] } },
-      { "name": "The Leaper (Brute Power)", "mods": { "+2": ["Might", "Reflexes", "Endurance"], "+1": ["Vitality", "Fortitude", "Logic", "Willpower"], "-1": ["Finesse", "Knowledge", "Charm"] } },
-      { "name": "The Marathoner (Stamina)", "mods": { "+2": ["Endurance", "Fortitude", "Willpower"], "+1": ["Vitality", "Logic", "Awareness", "Intuition"], "-1": ["Might", "Finesse", "Reflexes"] } },
-      { "name": "The Climber (Sure-Footed)", "mods": { "+2": ["Reflexes", "Finesse", "Awareness"], "+1": ["Might", "Endurance", "Intuition", "Willpower"], "-1": ["Vitality", "Fortitude", "Logic"] } },
-      { "name": "The Balanced Leg (Generalist)", "mods": { "+2": ["Might", "Endurance", "Reflexes"], "+1": ["Finesse", "Vitality", "Fortitude", "Awareness"], "-1": ["Knowledge", "Logic", "Intuition"] } }
-    ],
-    "Avian": [
-      { "name": "The Acrobat (Speed/Evasion)", "mods": { "+2": ["Reflexes", "Finesse", "Endurance"], "+1": ["Vitality", "Awareness", "Intuition", "Charm"], "-1": ["Might", "Knowledge", "Logic"] } },
-      { "name": "The Pillar (Unyielding Stance)", "mods": { "+2": ["Endurance", "Vitality", "Fortitude"], "+1": ["Might", "Logic", "Awareness", "Willpower"], "-1": ["Finesse", "Reflexes", "Knowledge"] } },
-      { "name": "The Leaper (Brute Power)", "mods": { "+2": ["Might", "Reflexes", "Endurance"], "+1": ["Vitality", "Fortitude", "Logic", "Willpower"], "-1": ["Finesse", "Knowledge", "Charm"] } },
-      { "name": "The Marathoner (Stamina)", "mods": { "+2": ["Endurance", "Fortitude", "Willpower"], "+1": ["Vitality", "Logic", "Awareness", "Intuition"], "-1": ["Might", "Finesse", "Reflexes"] } },
-      { "name": "The Climber (Sure-Footed)", "mods": { "+2": ["Reflexes", "Finesse", "Awareness"], "+1": ["Might", "Endurance", "Intuition", "Willpower"], "-1": ["Vitality", "Fortitude", "Logic"] } },
-      { "name": "The Balanced Leg (Generalist)", "mods": { "+2": ["Might", "Endurance", "Reflexes"], "+1": ["Finesse", "Vitality", "Fortitude", "Awareness"], "-1": ["Knowledge", "Logic", "Intuition"] } }
-    ],
-    "Aquatic": [
-      { "name": "The Acrobat (Speed/Evasion)", "mods": { "+2": ["Reflexes", "Finesse", "Endurance"], "+1": ["Vitality", "Awareness", "Intuition", "Charm"], "-1": ["Might", "Knowledge", "Logic"] } },
-      { "name": "The Pillar (Unyielding Stance)", "mods": { "+2": ["Endurance", "Vitality", "Fortitude"], "+1": ["Might", "Logic", "Awareness", "Willpower"], "-1": ["Finesse", "Reflexes", "Knowledge"] } },
-      { "name": "The Leaper (Brute Power)", "mods": { "+2": ["Might", "Reflexes", "Endurance"], "+1": ["Vitality", "Fortitude", "Logic", "Willpower"], "-1": ["Finesse", "Knowledge", "Charm"] } },
-      { "name": "The Marathoner (Stamina)", "mods": { "+2": ["Endurance", "Fortitude", "Willpower"], "+1": ["Vitality", "Logic", "Awareness", "Intuition"], "-1": ["Might", "Finesse", "Reflexes"] } },
-      { "name": "The Climber (Sure-Footed)", "mods": { "+2": ["Reflexes", "Finesse", "Awareness"], "+1": ["Might", "Endurance", "Intuition", "Willpower"], "-1": ["Vitality", "Fortitude", "Logic"] } },
-      { "name": "The Balanced Leg (Generalist)", "mods": { "+2": ["Might", "Endurance", "Reflexes"], "+1": ["Finesse", "Vitality", "Fortitude", "Awareness"], "-1": ["Knowledge", "Logic", "Intuition"] } }
-    ],
-    "Insect": [
-      { "name": "The Acrobat (Speed/Evasion)", "mods": { "+2": ["Reflexes", "Finesse", "Endurance"], "+1": ["Vitality", "Awareness", "Intuition", "Charm"], "-1": ["Might", "Knowledge", "Logic"] } },
-      { "name": "The Pillar (Unyielding Stance)", "mods": { "+2": ["Endurance", "Vitality", "Fortitude"], "+1": ["Might", "Logic", "Awareness", "Willpower"], "-1": ["Finesse", "Reflexes", "Knowledge"] } },
-      { "name": "The Leaper (Brute Power)", "mods": { "+2": ["Might", "Reflexes", "Endurance"], "+1": ["Vitality", "Fortitude", "Logic", "Willpower"], "-1": ["Finesse", "Knowledge", "Charm"] } },
-      { "name": "The Marathoner (Stamina)", "mods": { "+2": ["Endurance", "Fortitude", "Willpower"], "+1": ["Vitality", "Logic", "Awareness", "Intuition"], "-1": ["Might", "Finesse", "Reflexes"] } },
-      { "name": "The Climber (Sure-Footed)", "mods": { "+2": ["Reflexes", "Finesse", "Awareness"], "+1": ["Might", "Endurance", "Intuition", "Willpower"], "-1": ["Vitality", "Fortitude", "Logic"] } },
-      { "name": "The Balanced Leg (Generalist)", "mods": { "+2": ["Might", "Endurance", "Reflexes"], "+1": ["Finesse", "Vitality", "Fortitude", "Awareness"], "-1": ["Knowledge", "Logic", "Intuition"] } }
-    ],
-    "Plant": [
-      { "name": "The Acrobat (Speed/Evasion)", "mods": { "+2": ["Reflexes", "Finesse", "Endurance"], "+1": ["Vitality", "Awareness", "Intuition", "Charm"], "-1": ["Might", "Knowledge", "Logic"] } },
-      { "name": "The Pillar (Unyielding Stance)", "mods": { "+2": ["Endurance", "Vitality", "Fortitude"], "+1": ["Might", "Logic", "Awareness", "Willpower"], "-1": ["Finesse", "Reflexes", "Knowledge"] } },
-      { "name": "The Leaper (Brute Power)", "mods": { "+2": ["Might", "Reflexes", "Endurance"], "+1": ["Vitality", "Fortitude", "Logic", "Willpower"], "-1": ["Finesse", "Knowledge", "Charm"] } },
-      { "name": "The Marathoner (Stamina)", "mods": { "+2": ["Endurance", "Fortitude", "Willpower"], "+1": ["Vitality", "Logic", "Awareness", "Intuition"], "-1": ["Might", "Finesse", "Reflexes"] } },
-      { "name": "The Climber (Sure-Footed)", "mods": { "+2": ["Reflexes", "Finesse", "Awareness"], "+1": ["Might", "Endurance", "Intuition", "Willpower"], "-1": ["Vitality", "Fortitude", "Logic"] } },
-      { "name": "The Balanced Leg (Generalist)", "mods": { "+2": ["Might", "Endurance", "Reflexes"], "+1": ["Finesse", "Vitality", "Fortitude", "Awareness"], "-1": ["Knowledge", "Logic", "Intuition"] } }
-    ]
-  },
-  "F6": {
-    "Mammal": [
-      { "name": "The Toxin Filter (Resilience)", "mods": { "+2": ["Vitality", "Fortitude", "Endurance"], "+1": ["Knowledge", "Logic", "Awareness", "Willpower"], "-1": ["Might", "Finesse", "Reflexes"] } },
-      { "name": "The Iron Stomach (Hardy)", "mods": { "+2": ["Vitality", "Fortitude", "Logic"], "+1": ["Might", "Endurance", "Knowledge", "Awareness"], "-1": ["Finesse", "Reflexes", "Charm"] } },
-      { "name": "The Adrenal Burst (Stamina)", "mods": { "+2": ["Endurance", "Willpower", "Fortitude"], "+1": ["Vitality", "Logic", "Awareness", "Intuition"], "-1": ["Might", "Finesse", "Reflexes"] } },
-      { "name": "The Social Vitals (Presence)", "mods": { "+2": ["Vitality", "Charm", "Willpower"], "+1": ["Endurance", "Fortitude", "Logic", "Intuition"], "-1": ["Might", "Finesse", "Reflexes"] } },
-      { "name": "The Regenerator (Pure Life)", "mods": { "+2": ["Vitality", "Fortitude", "Knowledge"], "+1": ["Endurance", "Awareness", "Intuition", "Willpower"], "-1": ["Might", "Reflexes", "Charm"] } },
-      { "name": "The Balanced System (Generalist)", "mods": { "+2": ["Vitality", "Fortitude", "Endurance"], "+1": ["Knowledge", "Logic", "Awareness", "Willpower"], "-1": ["Might", "Finesse", "Charm"] } }
-    ],
-    "Reptile": [
-      { "name": "The Toxin Filter (Resilience)", "mods": { "+2": ["Vitality", "Fortitude", "Endurance"], "+1": ["Knowledge", "Logic", "Awareness", "Willpower"], "-1": ["Might", "Finesse", "Reflexes"] } },
-      { "name": "The Iron Stomach (Hardy)", "mods": { "+2": ["Vitality", "Fortitude", "Logic"], "+1": ["Might", "Endurance", "Knowledge", "Awareness"], "-1": ["Finesse", "Reflexes", "Charm"] } },
-      { "name": "The Adrenal Burst (Stamina)", "mods": { "+2": ["Endurance", "Willpower", "Fortitude"], "+1": ["Vitality", "Logic", "Awareness", "Intuition"], "-1": ["Might", "Finesse", "Reflexes"] } },
-      { "name": "The Social Vitals (Presence)", "mods": { "+2": ["Vitality", "Charm", "Willpower"], "+1": ["Endurance", "Fortitude", "Logic", "Intuition"], "-1": ["Might", "Finesse", "Reflexes"] } },
-      { "name": "The Regenerator (Pure Life)", "mods": { "+2": ["Vitality", "Fortitude", "Knowledge"], "+1": ["Endurance", "Awareness", "Intuition", "Willpower"], "-1": ["Might", "Reflexes", "Charm"] } },
-      { "name": "The Balanced System (Generalist)", "mods": { "+2": ["Vitality", "Fortitude", "Endurance"], "+1": ["Knowledge", "Logic", "Awareness", "Willpower"], "-1": ["Might", "Finesse", "Charm"] } }
-    ],
-    "Avian": [
-      { "name": "The Toxin Filter (Resilience)", "mods": { "+2": ["Vitality", "Fortitude", "Endurance"], "+1": ["Knowledge", "Logic", "Awareness", "Willpower"], "-1": ["Might", "Finesse", "Reflexes"] } },
-      { "name": "The Iron Stomach (Hardy)", "mods": { "+2": ["Vitality", "Fortitude", "Logic"], "+1": ["Might", "Endurance", "Knowledge", "Awareness"], "-1": ["Finesse", "Reflexes", "Charm"] } },
-      { "name": "The Adrenal Burst (Stamina)", "mods": { "+2": ["Endurance", "Willpower", "Fortitude"], "+1": ["Vitality", "Logic", "Awareness", "Intuition"], "-1": ["Might", "Finesse", "Reflexes"] } },
-      { "name": "The Social Vitals (Presence)", "mods": { "+2": ["Vitality", "Charm", "Willpower"], "+1": ["Endurance", "Fortitude", "Logic", "Intuition"], "-1": ["Might", "Finesse", "Reflexes"] } },
-      { "name": "The Regenerator (Pure Life)", "mods": { "+2": ["Vitality", "Fortitude", "Knowledge"], "+1": ["Endurance", "Awareness", "Intuition", "Willpower"], "-1": ["Might", "Reflexes", "Charm"] } },
-      { "name": "The Balanced System (Generalist)", "mods": { "+2": ["Vitality", "Fortitude", "Endurance"], "+1": ["Knowledge", "Logic", "Awareness", "Willpower"], "-1": ["Might", "Finesse", "Charm"] } }
-    ],
-    "Aquatic": [
-      { "name": "The Toxin Filter (Resilience)", "mods": { "+2": ["Vitality", "Fortitude", "Endurance"], "+1": ["Knowledge", "Logic", "Awareness", "Willpower"], "-1": ["Might", "Finesse", "Reflexes"] } },
-      { "name": "The Iron Stomach (Hardy)", "mods": { "+2": ["Vitality", "Fortitude", "Logic"], "+1": ["Might", "Endurance", "Knowledge", "Awareness"], "-1": ["Finesse", "Reflexes", "Charm"] } },
-      { "name": "The Adrenal Burst (Stamina)", "mods": { "+2": ["Endurance", "Willpower", "Fortitude"], "+1": ["Vitality", "Logic", "Awareness", "Intuition"], "-1": ["Might", "Finesse", "Reflexes"] } },
-      { "name": "The Social Vitals (Presence)", "mods": { "+2": ["Vitality", "Charm", "Willpower"], "+1": ["Endurance", "Fortitude", "Logic", "Intuition"], "-1": ["Might", "Finesse", "Reflexes"] } },
-      { "name": "The Regenerator (Pure Life)", "mods": { "+2": ["Vitality", "Fortitude", "Knowledge"], "+1": ["Endurance", "Awareness", "Intuition", "Willpower"], "-1": ["Might", "Reflexes", "Charm"] } },
-      { "name": "The Balanced System (Generalist)", "mods": { "+2": ["Vitality", "Fortitude", "Endurance"], "+1": ["Knowledge", "Logic", "Awareness", "Willpower"], "-1": ["Might", "Finesse", "Charm"] } }
-    ],
-    "Insect": [
-      { "name": "The Toxin Filter (Resilience)", "mods": { "+2": ["Vitality", "Fortitude", "Endurance"], "+1": ["Knowledge", "Logic", "Awareness", "Willpower"], "-1": ["Might", "Finesse", "Reflexes"] } },
-      { "name": "The Iron Stomach (Hardy)", "mods": { "+2": ["Vitality", "Fortitude", "Logic"], "+1": ["Might", "Endurance", "Knowledge", "Awareness"], "-1": ["Finesse", "Reflexes", "Charm"] } },
-      { "name": "The Adrenal Burst (Stamina)", "mods": { "+2": ["Endurance", "Willpower", "Fortitude"], "+1": ["Vitality", "Logic", "Awareness", "Intuition"], "-1": ["Might", "Finesse", "Reflexes"] } },
-      { "name": "The Social Vitals (Presence)", "mods": { "+2": ["Vitality", "Charm", "Willpower"], "+1": ["Endurance", "Fortitude", "Logic", "Intuition"], "-1": ["Might", "Finesse", "Reflexes"] } },
-      { "name": "The Regenerator (Pure Life)", "mods": { "+2": ["Vitality", "Fortitude", "Knowledge"], "+1": ["Endurance", "Awareness", "Intuition", "Willpower"], "-1": ["Might", "Reflexes", "Charm"] } },
-      { "name": "The Balanced System (Generalist)", "mods": { "+2": ["Vitality", "Fortitude", "Endurance"], "+1": ["Knowledge", "Logic", "Awareness", "Willpower"], "-1": ["Might", "Finesse", "Charm"] } }
-    ],
-    "Plant": [
-      { "name": "The Toxin Filter (Resilience)", "mods": { "+2": ["Vitality", "Fortitude", "Endurance"], "+1": ["Knowledge", "Logic", "Awareness", "Willpower"], "-1": ["Might", "Finesse", "Reflexes"] } },
-      { "name": "The Iron Stomach (Hardy)", "mods": { "+2": ["Vitality", "Fortitude", "Logic"], "+1": ["Might", "Endurance", "Knowledge", "Awareness"], "-1": ["Finesse", "Reflexes", "Charm"] } },
-      { "name": "The Adrenal Burst (Stamina)", "mods": { "+2": ["Endurance", "Willpower", "Fortitude"], "+1": ["Vitality", "Logic", "Awareness", "Intuition"], "-1": ["Might", "Finesse", "Reflexes"] } },
-      { "name": "The Social Vitals (Presence)", "mods": { "+2": ["Vitality", "Charm", "Willpower"], "+1": ["Endurance", "Fortitude", "Logic", "Intuition"], "-1": ["Might", "Finesse", "Reflexes"] } },
-      { "name": "The Regenerator (Pure Life)", "mods": { "+2": ["Vitality", "Fortitude", "Knowledge"], "+1": ["Endurance", "Awareness", "Intuition", "Willpower"], "-1": ["Might", "Reflexes", "Charm"] } },
-      { "name": "The Balanced System (Generalist)", "mods": { "+2": ["Vitality", "Fortitude", "Endurance"], "+1": ["Knowledge", "Logic", "Awareness", "Willpower"], "-1": ["Might", "Finesse", "Charm"] } }
-    ]
-  },
-  "F7": {
-    "Mammal": [
-      { "name": "The Tracker (Keen Senses)", "mods": { "+2": ["Awareness", "Intuition", "Knowledge"], "+1": ["Finesse", "Reflexes", "Logic", "Willpower"], "-1": ["Might", "Endurance", "Charm"] } },
-      { "name": "The Analyst (Thermal/Magic)", "mods": { "+2": ["Logic", "Awareness", "Knowledge"], "+1": ["Finesse", "Fortitude", "Intuition", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } },
-      { "name": "The Pre-Cog (Hyper Intuition)", "mods": { "+2": ["Intuition", "Willpower", "Reflexes"], "+1": ["Finesse", "Awareness", "Logic", "Charm"], "-1": ["Might", "Endurance", "Fortitude"] } },
-      { "name": "The Empath (Social Sense)", "mods": { "+2": ["Intuition", "Charm", "Logic"], "+1": ["Awareness", "Willpower", "Knowledge", "Finesse"], "-1": ["Might", "Endurance", "Vitality"] } },
-      { "name": "The Watchman (360° Senses)", "mods": { "+2": ["Awareness", "Fortitude", "Logic"], "+1": ["Endurance", "Vitality", "Intuition", "Willpower"], "-1": ["Might", "Finesse", "Reflexes"] } },
-      { "name": "The Balanced Sense (Generalist)", "mods": { "+2": ["Awareness", "Intuition", "Logic"], "+1": ["Finesse", "Knowledge", "Charm", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } }
-    ],
-    "Reptile": [
-      { "name": "The Tracker (Keen Senses)", "mods": { "+2": ["Awareness", "Intuition", "Knowledge"], "+1": ["Finesse", "Reflexes", "Logic", "Willpower"], "-1": ["Might", "Endurance", "Charm"] } },
-      { "name": "The Analyst (Thermal/Magic)", "mods": { "+2": ["Logic", "Awareness", "Knowledge"], "+1": ["Finesse", "Fortitude", "Intuition", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } },
-      { "name": "The Pre-Cog (Hyper Intuition)", "mods": { "+2": ["Intuition", "Willpower", "Reflexes"], "+1": ["Finesse", "Awareness", "Logic", "Charm"], "-1": ["Might", "Endurance", "Fortitude"] } },
-      { "name": "The Empath (Social Sense)", "mods": { "+2": ["Intuition", "Charm", "Logic"], "+1": ["Awareness", "Willpower", "Knowledge", "Finesse"], "-1": ["Might", "Endurance", "Vitality"] } },
-      { "name": "The Watchman (360° Senses)", "mods": { "+2": ["Awareness", "Fortitude", "Logic"], "+1": ["Endurance", "Vitality", "Intuition", "Willpower"], "-1": ["Might", "Finesse", "Reflexes"] } },
-      { "name": "The Balanced Sense (Generalist)", "mods": { "+2": ["Awareness", "Intuition", "Logic"], "+1": ["Finesse", "Knowledge", "Charm", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } }
-    ],
-    "Avian": [
-      { "name": "The Tracker (Keen Senses)", "mods": { "+2": ["Awareness", "Intuition", "Knowledge"], "+1": ["Finesse", "Reflexes", "Logic", "Willpower"], "-1": ["Might", "Endurance", "Charm"] } },
-      { "name": "The Analyst (Thermal/Magic)", "mods": { "+2": ["Logic", "Awareness", "Knowledge"], "+1": ["Finesse", "Fortitude", "Intuition", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } },
-      { "name": "The Pre-Cog (Hyper Intuition)", "mods": { "+2": ["Intuition", "Willpower", "Reflexes"], "+1": ["Finesse", "Awareness", "Logic", "Charm"], "-1": ["Might", "Endurance", "Fortitude"] } },
-      { "name": "The Empath (Social Sense)", "mods": { "+2": ["Intuition", "Charm", "Logic"], "+1": ["Awareness", "Willpower", "Knowledge", "Finesse"], "-1": ["Might", "Endurance", "Vitality"] } },
-      { "name": "The Watchman (360° Senses)", "mods": { "+2": ["Awareness", "Fortitude", "Logic"], "+1": ["Endurance", "Vitality", "Intuition", "Willpower"], "-1": ["Might", "Finesse", "Reflexes"] } },
-      { "name": "The Balanced Sense (Generalist)", "mods": { "+2": ["Awareness", "Intuition", "Logic"], "+1": ["Finesse", "Knowledge", "Charm", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } }
-    ],
-    "Aquatic": [
-      { "name": "The Tracker (Keen Senses)", "mods": { "+2": ["Awareness", "Intuition", "Knowledge"], "+1": ["Finesse", "Reflexes", "Logic", "Willpower"], "-1": ["Might", "Endurance", "Charm"] } },
-      { "name": "The Analyst (Thermal/Magic)", "mods": { "+2": ["Logic", "Awareness", "Knowledge"], "+1": ["Finesse", "Fortitude", "Intuition", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } },
-      { "name": "The Pre-Cog (Hyper Intuition)", "mods": { "+2": ["Intuition", "Willpower", "Reflexes"], "+1": ["Finesse", "Awareness", "Logic", "Charm"], "-1": ["Might", "Endurance", "Fortitude"] } },
-      { "name": "The Empath (Social Sense)", "mods": { "+2": ["Intuition", "Charm", "Logic"], "+1": ["Awareness", "Willpower", "Knowledge", "Finesse"], "-1": ["Might", "Endurance", "Vitality"] } },
-      { "name": "The Watchman (360° Senses)", "mods": { "+2": ["Awareness", "Fortitude", "Logic"], "+1": ["Endurance", "Vitality", "Intuition", "Willpower"], "-1": ["Might", "Finesse", "Reflexes"] } },
-      { "name": "The Balanced Sense (Generalist)", "mods": { "+2": ["Awareness", "Intuition", "Logic"], "+1": ["Finesse", "Knowledge", "Charm", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } }
-    ],
-    "Insect": [
-      { "name": "The Tracker (Keen Senses)", "mods": { "+2": ["Awareness", "Intuition", "Knowledge"], "+1": ["Finesse", "Reflexes", "Logic", "Willpower"], "-1": ["Might", "Endurance", "Charm"] } },
-      { "name": "The Analyst (Thermal/Magic)", "mods": { "+2": ["Logic", "Awareness", "Knowledge"], "+1": ["Finesse", "Fortitude", "Intuition", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } },
-      { "name": "The Pre-Cog (Hyper Intuition)", "mods": { "+2": ["Intuition", "Willpower", "Reflexes"], "+1": ["Finesse", "Awareness", "Logic", "Charm"], "-1": ["Might", "Endurance", "Fortitude"] } },
-      { "name": "The Empath (Social Sense)", "mods": { "+2": ["Intuition", "Charm", "Logic"], "+1": ["Awareness", "Willpower", "Knowledge", "Finesse"], "-1": ["Might", "Endurance", "Vitality"] } },
-      { "name": "The Watchman (360° Senses)", "mods": { "+2": ["Awareness", "Fortitude", "Logic"], "+1": ["Endurance", "Vitality", "Intuition", "Willpower"], "-1": ["Might", "Finesse", "Reflexes"] } },
-      { "name": "The Balanced Sense (Generalist)", "mods": { "+2": ["Awareness", "Intuition", "Logic"], "+1": ["Finesse", "Knowledge", "Charm", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } }
-    ],
-    "Plant": [
-      { "name": "The Tracker (Keen Senses)", "mods": { "+2": ["Awareness", "Intuition", "Knowledge"], "+1": ["Finesse", "Reflexes", "Logic", "Willpower"], "-1": ["Might", "Endurance", "Charm"] } },
-      { "name": "The Analyst (Thermal/Magic)", "mods": { "+2": ["Logic", "Awareness", "Knowledge"], "+1": ["Finesse", "Fortitude", "Intuition", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } },
-      { "name": "The Pre-Cog (Hyper Intuition)", "mods": { "+2": ["Intuition", "Willpower", "Reflexes"], "+1": ["Finesse", "Awareness", "Logic", "Charm"], "-1": ["Might", "Endurance", "Fortitude"] } },
-      { "name": "The Empath (Social Sense)", "mods": { "+2": ["Intuition", "Charm", "Logic"], "+1": ["Awareness", "Willpower", "Knowledge", "Finesse"], "-1": ["Might", "Endurance", "Vitality"] } },
-      { "name": "The Watchman (360° Senses)", "mods": { "+2": ["Awareness", "Fortitude", "Logic"], "+1": ["Endurance", "Vitality", "Intuition", "Willpower"], "-1": ["Might", "Finesse", "Reflexes"] } },
-      { "name": "The Balanced Sense (Generalist)", "mods": { "+2": ["Awareness", "Intuition", "Logic"], "+1": ["Finesse", "Knowledge", "Charm", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } }
-    ]
-  },
-  "F8": {
-    "Mammal": [
-      { "name": "The Logician (Pure Intellect)", "mods": { "+2": ["Knowledge", "Logic", "Awareness"], "+1": ["Fortitude", "Intuition", "Charm", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } },
-      { "name": "The Social Master (Influence)", "mods": { "+2": ["Charm", "Willpower", "Logic"], "+1": ["Finesse", "Knowledge", "Awareness", "Intuition"], "-1": ["Might", "Endurance", "Vitality"] } },
-      { "name": "The Primal Instinct (Hyper-Aware)", "mods": { "+2": ["Intuition", "Awareness", "Willpower"], "+1": ["Reflexes", "Fortitude", "Logic", "Charm"], "-1": ["Might", "Endurance", "Knowledge"] } },
-      { "name": "The Willpower Tank (Mental Fort.)", "mods": { "+2": ["Willpower", "Fortitude", "Logic"], "+1": ["Endurance", "Vitality", "Awareness", "Intuition"], "-1": ["Might", "Finesse", "Reflexes"] } },
-      { "name": "The Cunning Mind (Tactics)", "mods": { "+2": ["Logic", "Intuition", "Finesse"], "+1": ["Reflexes", "Knowledge", "Awareness", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } },
-      { "name": "The Balanced Mind (Generalist)", "mods": { "+2": ["Knowledge", "Logic", "Intuition"], "+1": ["Awareness", "Charm", "Willpower", "Fortitude"], "-1": ["Might", "Finesse", "Reflexes"] } }
-    ],
-    "Reptile": [
-      { "name": "The Logician (Pure Intellect)", "mods": { "+2": ["Knowledge", "Logic", "Awareness"], "+1": ["Fortitude", "Intuition", "Charm", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } },
-      { "name": "The Social Master (Influence)", "mods": { "+2": ["Charm", "Willpower", "Logic"], "+1": ["Finesse", "Knowledge", "Awareness", "Intuition"], "-1": ["Might", "Endurance", "Vitality"] } },
-      { "name": "The Primal Instinct (Hyper-Aware)", "mods": { "+2": ["Intuition", "Awareness", "Willpower"], "+1": ["Reflexes", "Fortitude", "Logic", "Charm"], "-1": ["Might", "Endurance", "Knowledge"] } },
-      { "name": "The Willpower Tank (Mental Fort.)", "mods": { "+2": ["Willpower", "Fortitude", "Logic"], "+1": ["Endurance", "Vitality", "Awareness", "Intuition"], "-1": ["Might", "Finesse", "Reflexes"] } },
-      { "name": "The Cunning Mind (Tactics)", "mods": { "+2": ["Logic", "Intuition", "Finesse"], "+1": ["Reflexes", "Knowledge", "Awareness", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } },
-      { "name": "The Balanced Mind (Generalist)", "mods": { "+2": ["Knowledge", "Logic", "Intuition"], "+1": ["Awareness", "Charm", "Willpower", "Fortitude"], "-1": ["Might", "Finesse", "Reflexes"] } }
-    ],
-    "Avian": [
-      { "name": "The Logician (Pure Intellect)", "mods": { "+2": ["Knowledge", "Logic", "Awareness"], "+1": ["Fortitude", "Intuition", "Charm", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } },
-      { "name": "The Social Master (Influence)", "mods": { "+2": ["Charm", "Willpower", "Logic"], "+1": ["Finesse", "Knowledge", "Awareness", "Intuition"], "-1": ["Might", "Endurance", "Vitality"] } },
-      { "name": "The Primal Instinct (Hyper-Aware)", "mods": { "+2": ["Intuition", "Awareness", "Willpower"], "+1": ["Reflexes", "Fortitude", "Logic", "Charm"], "-1": ["Might", "Endurance", "Knowledge"] } },
-      { "name": "The Willpower Tank (Mental Fort.)", "mods": { "+2": ["Willpower", "Fortitude", "Logic"], "+1": ["Endurance", "Vitality", "Awareness", "Intuition"], "-1": ["Might", "Finesse", "Reflexes"] } },
-      { "name": "The Cunning Mind (Tactics)", "mods": { "+2": ["Logic", "Intuition", "Finesse"], "+1": ["Reflexes", "Knowledge", "Awareness", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } },
-      { "name": "The Balanced Mind (Generalist)", "mods": { "+2": ["Knowledge", "Logic", "Intuition"], "+1": ["Awareness", "Charm", "Willpower", "Fortitude"], "-1": ["Might", "Finesse", "Reflexes"] } }
-    ],
-    "Aquatic": [
-      { "name": "The Logician (Pure Intellect)", "mods": { "+2": ["Knowledge", "Logic", "Awareness"], "+1": ["Fortitude", "Intuition", "Charm", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } },
-      { "name": "The Social Master (Influence)", "mods": { "+2": ["Charm", "Willpower", "Logic"], "+1": ["Finesse", "Knowledge", "Awareness", "Intuition"], "-1": ["Might", "Endurance", "Vitality"] } },
-      { "name": "The Primal Instinct (Hyper-Aware)", "mods": { "+2": ["Intuition", "Awareness", "Willpower"], "+1": ["Reflexes", "Fortitude", "Logic", "Charm"], "-1": ["Might", "Endurance", "Knowledge"] } },
-      { "name": "The Willpower Tank (Mental Fort.)", "mods": { "+2": ["Willpower", "Fortitude", "Logic"], "+1": ["Endurance", "Vitality", "Awareness", "Intuition"], "-1": ["Might", "Finesse", "Reflexes"] } },
-      { "name": "The Cunning Mind (Tactics)", "mods": { "+2": ["Logic", "Intuition", "Finesse"], "+1": ["Reflexes", "Knowledge", "Awareness", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } },
-      { "name": "The Balanced Mind (Generalist)", "mods": { "+2": ["Knowledge", "Logic", "Intuition"], "+1": ["Awareness", "Charm", "Willpower", "Fortitude"], "-1": ["Might", "Finesse", "Reflexes"] } }
-    ],
-    "Insect": [
-      { "name": "The Logician (Pure Intellect)", "mods": { "+2": ["Knowledge", "Logic", "Awareness"], "+1": ["Fortitude", "Intuition", "Charm", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } },
-      { "name": "The Social Master (Influence)", "mods": { "+2": ["Charm", "Willpower", "Logic"], "+1": ["Finesse", "Knowledge", "Awareness", "Intuition"], "-1": ["Might", "Endurance", "Vitality"] } },
-      { "name": "The Primal Instinct (Hyper-Aware)", "mods": { "+2": ["Intuition", "Awareness", "Willpower"], "+1": ["Reflexes", "Fortitude", "Logic", "Charm"], "-1": ["Might", "Endurance", "Knowledge"] } },
-      { "name": "The Willpower Tank (Mental Fort.)", "mods": { "+2": ["Willpower", "Fortitude", "Logic"], "+1": ["Endurance", "Vitality", "Awareness", "Intuition"], "-1": ["Might", "Finesse", "Reflexes"] } },
-      { "name": "The Cunning Mind (Tactics)", "mods": { "+2": ["Logic", "Intuition", "Finesse"], "+1": ["Reflexes", "Knowledge", "Awareness", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } },
-      { "name": "The Balanced Mind (Generalist)", "mods": { "+2": ["Knowledge", "Logic", "Intuition"], "+1": ["Awareness", "Charm", "Willpower", "Fortitude"], "-1": ["Might","Finesse", "Reflexes"] } }
-    ],
-    "Plant": [
-      { "name": "The Logician (Pure Intellect)", "mods": { "+2": ["Knowledge", "Logic", "Awareness"], "+1": ["Fortitude", "Intuition", "Charm", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } },
-      { "name": "The Social Master (Influence)", "mods": { "+2": ["Charm", "Willpower", "Logic"], "+1": ["Finesse", "Knowledge", "Awareness", "Intuition"], "-1": ["Might", "Endurance", "Vitality"] } },
-      { "name": "The Primal Instinct (Hyper-Aware)", "mods": { "+2": ["Intuition", "Awareness", "Willpower"], "+1": ["Reflexes", "Fortitude", "Logic", "Charm"], "-1": ["Might", "Endurance", "Knowledge"] } },
-      { "name": "The Willpower Tank (Mental Fort.)", "mods": { "+2": ["Willpower", "Fortitude", "Logic"], "+1": ["Endurance", "Vitality", "Awareness", "Intuition"], "-1": ["Might", "Finesse", "Reflexes"] } },
-      { "name": "The Cunning Mind (Tactics)", "mods": { "+2": ["Logic", "Intuition", "Finesse"], "+1": ["Reflexes", "Knowledge", "Awareness", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } },
-      { "name": "The Balanced Mind (Generalist)", "mods": { "+2": ["Knowledge", "Logic", "Intuition"], "+1": ["Awareness", "Charm", "Willpower", "Fortitude"], "-1": ["Might", "Finesse", "Reflexes"] } }
-    ]
-  },
-  "F9": {
-    "All": [
-      { "name": "Capstone: +3 Might", "mods": { "+3": ["Might"] } },
-      { "name": "Capstone: +3 Endurance", "mods": { "+3": ["Endurance"] } },
-      { "name": "Capstone: +3 Finesse", "mods": { "+3": ["Finesse"] } },
-      { "name": "Capstone: +3 Reflexes", "mods": { "+3": ["Reflexes"] } },
-      { "name": "Capstone: +3 Vitality", "mods": { "+3": ["Vitality"] } },
-      { "name": "Capstone: +3 Fortitude", "mods": { "+3": ["Fortitude"] } },
-      { "name": "Capstone: +3 Knowledge", "mods": { "+3": ["Knowledge"] } },
-      { "name": "Capstone: +3 Logic", "mods": { "+3": ["Logic"] } },
-      { "name": "Capstone: +3 Awareness", "mods": { "+3": ["Awareness"] } },
-      { "name": "Capstone: +3 Intuition", "mods": { "+3": ["Intuition"] } },
-      { "name": "Capstone: +3 Charm", "mods": { "+3": ["Charm"] } },
-      { "name": "Capstone: +3 Willpower", "mods": { "+3": ["Willpower"] } }
-    ]
-  }
+"F1": {
+"Mammal": [
+{ "name": "The Predator (Jaws/Horns)", "mods": { "+2": ["Might", "Endurance", "Fortitude"], "+1": ["Awareness", "Intuition", "Charm", "Willpower"], "-1": ["Finesse", "Reflexes", "Vitality"] } },
+{ "name": "The Sage (Big Brain)", "mods": { "+2": ["Knowledge", "Logic", "Awareness"], "+1": ["Finesse", "Intuition", "Charm", "Willpower"], "-1": ["Might", "Endurance", "Reflexes"] } },
+{ "name": "The Sensor (Keen Senses)", "mods": { "+2": ["Awareness", "Intuition", "Logic"], "+1": ["Finesse", "Reflexes", "Knowledge", "Fortitude"], "-1": ["Might", "Endurance", "Vitality"] } },
+{ "name": "The Socialite (Face/Display)", "mods": { "+2": ["Charm", "Willpower", "Intuition"], "+1": ["Finesse", "Knowledge", "Logic", "Awareness"], "-1": ["Might", "Endurance", "Fortitude"] } },
+{ "name": "The Precise Striker (Fangs/Needle)", "mods": { "+2": ["Finesse", "Reflexes", "Awareness"], "+1": ["Might", "Fortitude", "Intuition", "Knowledge"], "-1": ["Endurance", "Vitality", "Charm"] } },
+{ "name": "The Balanced Head (Generalist)", "mods": { "+2": ["Might", "Knowledge", "Charm"], "+1": ["Endurance", "Finesse", "Logic", "Awareness"], "-1": ["Reflexes", "Vitality", "Fortitude"] } }
+],
+"Reptile": [
+{ "name": "The Predator (Jaws/Horns)", "mods": { "+2": ["Might", "Endurance", "Fortitude"], "+1": ["Awareness", "Intuition", "Charm", "Willpower"], "-1": ["Finesse", "Reflexes", "Vitality"] } },
+{ "name": "The Sage (Big Brain)", "mods": { "+2": ["Knowledge", "Logic", "Awareness"], "+1": ["Finesse", "Intuition", "Charm", "Willpower"], "-1": ["Might", "Endurance", "Reflexes"] } },
+{ "name": "The Sensor (Keen Senses)", "mods": { "+2": ["Awareness", "Intuition", "Logic"], "+1": ["Finesse", "Reflexes", "Knowledge", "Fortitude"], "-1": ["Might", "Endurance", "Vitality"] } },
+{ "name": "The Socialite (Face/Display)", "mods": { "+2": ["Charm", "Willpower", "Intuition"], "+1": ["Finesse", "Knowledge", "Logic", "Awareness"], "-1": ["Might", "Endurance", "Fortitude"] } },
+{ "name": "The Precise Striker (Fangs/Needle)", "mods": { "+2": ["Finesse", "Reflexes", "Awareness"], "+1": ["Might", "Fortitude", "Intuition", "Knowledge"], "-1": ["Endurance", "Vitality", "Charm"] } },
+{ "name": "The Balanced Head (Generalist)", "mods": { "+2": ["Might", "Knowledge", "Charm"], "+1": ["Endurance", "Finesse", "Logic", "Awareness"], "-1": ["Reflexes", "Vitality", "Fortitude"] } }
+],
+"Avian": [
+{ "name": "The Predator (Jaws/Horns)", "mods": { "+2": ["Might", "Endurance", "Fortitude"], "+1": ["Awareness", "Intuition", "Charm", "Willpower"], "-1": ["Finesse", "Reflexes", "Vitality"] } },
+{ "name": "The Sage (Big Brain)", "mods": { "+2": ["Knowledge", "Logic", "Awareness"], "+1": ["Finesse", "Intuition", "Charm", "Willpower"], "-1": ["Might", "Endurance", "Reflexes"] } },
+{ "name": "The Sensor (Keen Senses)", "mods": { "+2": ["Awareness", "Intuition", "Logic"], "+1": ["Finesse", "Reflexes", "Knowledge", "Fortitude"], "-1": ["Might", "Endurance", "Vitality"] } },
+{ "name": "The Socialite (Face/Display)", "mods": { "+2": ["Charm", "Willpower", "Intuition"], "+1": ["Finesse", "Knowledge", "Logic", "Awareness"], "-1": ["Might", "Endurance", "Fortitude"] } },
+{ "name": "The Precise Striker (Fangs/Needle)", "mods": { "+2": ["Finesse", "Reflexes", "Awareness"], "+1": ["Might", "Fortitude", "Intuition", "Knowledge"], "-1": ["Endurance", "Vitality", "Charm"] } },
+{ "name": "The Balanced Head (Generalist)", "mods": { "+2": ["Might", "Knowledge", "Charm"], "+1": ["Endurance", "Finesse", "Logic", "Awareness"], "-1": ["Reflexes", "Vitality", "Fortitude"] } }
+],
+"Aquatic": [
+{ "name": "The Predator (Jaws/Horns)", "mods": { "+2": ["Might", "Endurance", "Fortitude"], "+1": ["Awareness", "Intuition", "Charm", "Willpower"], "-1": ["Finesse", "Reflexes", "Vitality"] } },
+{ "name": "The Sage (Big Brain)", "mods": { "+2": ["Knowledge", "Logic", "Awareness"], "+1": ["Finesse", "Intuition", "Charm", "Willpower"], "-1": ["Might", "Endurance", "Reflexes"] } },
+{ "name": "The Sensor (Keen Senses)", "mods": { "+2": ["Awareness", "Intuition", "Logic"], "+1": ["Finesse", "Reflexes", "Knowledge", "Fortitude"], "-1": ["Might", "Endurance", "Vitality"] } },
+{ "name": "The Socialite (Face/Display)", "mods": { "+2": ["Charm", "Willpower", "Intuition"], "+1": ["Finesse", "Knowledge", "Logic", "Awareness"], "-1": ["Might", "Endurance", "Fortitude"] } },
+{ "name": "The Precise Striker (Fangs/Needle)", "mods": { "+2": ["Finesse", "Reflexes", "Awareness"], "+1": ["Might", "Fortitude", "Intuition", "Knowledge"], "-1": ["Endurance", "Vitality", "Charm"] } },
+{ "name": "The Balanced Head (Generalist)", "mods": { "+2": ["Might", "Knowledge", "Charm"], "+1": ["Endurance", "Finesse", "Logic", "Awareness"], "-1": ["Reflexes", "Vitality", "Fortitude"] } }
+],
+"Insect": [
+{ "name": "The Predator (Jaws/Horns)", "mods": { "+2": ["Might", "Endurance", "Fortitude"], "+1": ["Awareness", "Intuition", "Charm", "Willpower"], "-1": ["Finesse", "Reflexes", "Vitality"] } },
+{ "name": "The Sage (Big Brain)", "mods": { "+2": ["Knowledge", "Logic", "Awareness"], "+1": ["Finesse", "Intuition", "Charm", "Willpower"], "-1": ["Might", "Endurance", "Reflexes"] } },
+{ "name": "The Sensor (Keen Senses)", "mods": { "+2": ["Awareness", "Intuition", "Logic"], "+1": ["Finesse", "Reflexes", "Knowledge", "Fortitude"], "-1": ["Might", "Endurance", "Vitality"] } },
+{ "name": "The Socialite (Face/Display)", "mods": { "+2": ["Charm", "Willpower", "Intuition"], "+1": ["Finesse", "Knowledge", "Logic", "Awareness"], "-1": ["Might", "Endurance", "Fortitude"] } },
+{ "name": "The Precise Striker (Fangs/Needle)", "mods": { "+2": ["Finesse", "Reflexes", "Awareness"], "+1": ["Might", "Fortitude", "Intuition", "Knowledge"], "-1": ["Endurance", "Vitality", "Charm"] } },
+{ "name": "The Balanced Head (Generalist)", "mods": { "+2": ["Might", "Knowledge", "Charm"], "+1": ["Endurance", "Finesse", "Logic", "Awareness"], "-1": ["Reflexes", "Vitality", "Fortitude"] } }
+],
+"Plant": [
+{ "name": "The Predator (Jaws/Horns)", "mods": { "+2": ["Might", "Endurance", "Fortitude"], "+1": ["Awareness", "Intuition", "Charm", "Willpower"], "-1": ["Finesse", "Reflexes", "Vitality"] } },
+{ "name": "The Sage (Big Brain)", "mods": { "+2": ["Knowledge", "Logic", "Awareness"], "+1": ["Finesse", "Intuition", "Charm", "Willpower"], "-1": ["Might", "Endurance", "Reflexes"] } },
+{ "name": "The Sensor (Keen Senses)", "mods": { "+2": ["Awareness", "Intuition", "Logic"], "+1": ["Finesse", "Reflexes", "Knowledge", "Fortitude"], "-1": ["Might", "Endurance", "Vitality"] } },
+{ "name": "The Socialite (Face/Display)", "mods": { "+2": ["Charm", "Willpower", "Intuition"], "+1": ["Finesse", "Knowledge", "Logic", "Awareness"], "-1": ["Might", "Endurance", "Fortitude"] } },
+{ "name": "The Precise Striker (Fangs/Needle)", "mods": { "+2": ["Finesse", "Reflexes", "Awareness"], "+1": ["Might", "Fortitude", "Intuition", "Knowledge"], "-1": ["Endurance", "Vitality", "Charm"] } },
+{ "name": "The Balanced Head (Generalist)", "mods": { "+2": ["Might", "Knowledge", "Charm"], "+1": ["Endurance", "Finesse", "Logic", "Awareness"], "-1": ["Reflexes", "Vitality", "Fortitude"] } }
+]
+},
+"F2": {
+"Mammal": [
+{ "name": "The Juggernaut (Pure Armor)", "mods": { "+2": ["Endurance", "Vitality", "Fortitude"], "+1": ["Might", "Logic", "Awareness", "Willpower"], "-1": ["Finesse", "Reflexes", "Charm"] } },
+{ "name": "The Hardy Core (Stamina)", "mods": { "+2": ["Endurance", "Vitality", "Logic"], "+1": ["Might", "Fortitude", "Knowledge", "Intuition"], "-1": ["Finesse", "Reflexes", "Charm"] } },
+{ "name": "The Resilient Mind (Mental Fort.)", "mods": { "+2": ["Fortitude", "Willpower", "Logic"], "+1": ["Endurance", "Vitality", "Knowledge", "Awareness"], "-1": ["Might", "Finesse", "Reflexes"] } },
+{ "name": "The Social Tank (Presence)", "mods": { "+2": ["Endurance", "Charm", "Willpower"], "+1": ["Vitality", "Fortitude", "Intuition", "Logic"], "-1": ["Might", "Finesse", "Reflexes"] } },
+{ "name": "The Life-Spring (Pure Vitals)", "mods": { "+2": ["Vitality", "Fortitude", "Knowledge"], "+1": ["Endurance", "Awareness", "Intuition", "Willpower"], "-1": ["Might", "Reflexes", "Charm"] } },
+{ "name": "The Balanced Core (Generalist)", "mods": { "+2": ["Endurance", "Vitality", "Fortitude"], "+1": ["Knowledge", "Logic", "Awareness", "Intuition"], "-1": ["Reflexes", "Charm", "Willpower"] } }
+],
+"Reptile": [
+{ "name": "The Juggernaut (Pure Armor)", "mods": { "+2": ["Endurance", "Vitality", "Fortitude"], "+1": ["Might", "Logic", "Awareness", "Willpower"], "-1": ["Finesse", "Reflexes", "Charm"] } },
+{ "name": "The Hardy Core (Stamina)", "mods": { "+2": ["Endurance", "Vitality", "Logic"], "+1": ["Might", "Fortitude", "Knowledge", "Intuition"], "-1": ["Finesse", "Reflexes", "Charm"] } },
+{ "name": "The Resilient Mind (Mental Fort.)", "mods": { "+2": ["Fortitude", "Willpower", "Logic"], "+1": ["Endurance", "Vitality", "Knowledge", "Awareness"], "-1": ["Might", "Finesse", "Reflexes"] } },
+{ "name": "The Social Tank (Presence)", "mods": { "+2": ["Endurance", "Charm", "Willpower"], "+1": ["Vitality", "Fortitude", "Intuition", "Logic"], "-1": ["Might", "Finesse", "Reflexes"] } },
+{ "name": "The Life-Spring (Pure Vitals)", "mods": { "+2": ["Vitality", "Fortitude", "Knowledge"], "+1": ["Endurance", "Awareness", "Intuition", "Willpower"], "-1": ["Might", "Reflexes", "Charm"] } },
+{ "name": "The Balanced Core (Generalist)", "mods": { "+2": ["Endurance", "Vitality", "Fortitude"], "+1": ["Knowledge", "Logic", "Awareness", "Intuition"], "-1": ["Reflexes", "Charm", "Willpower"] } }
+],
+"Avian": [
+{ "name": "The Juggernaut (Pure Armor)", "mods": { "+2": ["Endurance", "Vitality", "Fortitude"], "+1": ["Might", "Logic", "Awareness", "Willpower"], "-1": ["Finesse", "Reflexes", "Charm"] } },
+{ "name": "The Hardy Core (Stamina)", "mods": { "+2": ["Endurance", "Vitality", "Logic"], "+1": ["Might", "Fortitude", "Knowledge", "Intuition"], "-1": ["Finesse", "Reflexes", "Charm"] } },
+{ "name": "The Resilient Mind (Mental Fort.)", "mods": { "+2": ["Fortitude", "Willpower", "Logic"], "+1": ["Endurance", "Vitality", "Knowledge", "Awareness"], "-1": ["Might", "Finesse", "Reflexes"] } },
+{ "name": "The Social Tank (Presence)", "mods": { "+2": ["Endurance", "Charm", "Willpower"], "+1": ["Vitality", "Fortitude", "Intuition", "Logic"], "-1": ["Might", "Finesse", "Reflexes"] } },
+{ "name": "The Life-Spring (Pure Vitals)", "mods": { "+2": ["Vitality", "Fortitude", "Knowledge"], "+1": ["Endurance", "Awareness", "Intuition", "Willpower"], "-1": ["Might", "Reflexes", "Charm"] } },
+{ "name": "The Balanced Core (Generalist)", "mods": { "+2": ["Endurance", "Vitality", "Fortitude"], "+1": ["Knowledge", "Logic", "Awareness", "Intuition"], "-1": ["Reflexes", "Charm", "Willpower"] } }
+],
+"Aquatic": [
+{ "name": "The Juggernaut (Pure Armor)", "mods": { "+2": ["Endurance", "Vitality", "Fortitude"], "+1": ["Might", "Logic", "Awareness", "Willpower"], "-1": ["Finesse", "Reflexes", "Charm"] } },
+{ "name": "The Hardy Core (Stamina)", "mods": { "+2": ["Endurance", "Vitality", "Logic"], "+1": ["Might", "Fortitude", "Knowledge", "Intuition"], "-1": ["Finesse", "Reflexes", "Charm"] } },
+{ "name": "The Resilient Mind (Mental Fort.)", "mods": { "+2": ["Fortitude", "Willpower", "Logic"], "+1": ["Endurance", "Vitality", "Knowledge", "Awareness"], "-1": ["Might", "Finesse", "Reflexes"] } },
+{ "name": "The Social Tank (Presence)", "mods": { "+2": ["Endurance", "Charm", "Willpower"], "+1": ["Vitality", "Fortitude", "Intuition", "Logic"], "-1": ["Might", "Finesse", "Reflexes"] } },
+{ "name": "The Life-Spring (Pure Vitals)", "mods": { "+2": ["Vitality", "Fortitude", "Knowledge"], "+1": ["Endurance", "Awareness", "Intuition", "Willpower"], "-1": ["Might", "Reflexes", "Charm"] } },
+{ "name": "The Balanced Core (Generalist)", "mods": { "+2": ["Endurance", "Vitality", "Fortitude"], "+1": ["Knowledge", "Logic", "Awareness", "Intuition"], "-1": ["Reflexes", "Charm", "Willpower"] } }
+],
+"Insect": [
+{ "name": "The Juggernaut (Pure Armor)", "mods": { "+2": ["Endurance", "Vitality", "Fortitude"], "+1": ["Might", "Logic", "Awareness", "Willpower"], "-1": ["Finesse", "Reflexes", "Charm"] } },
+{ "name": "The Hardy Core (Stamina)", "mods": { "+2": ["Endurance", "Vitality", "Logic"], "+1": ["Might", "Fortitude", "Knowledge", "Intuition"], "-1": ["Finesse", "Reflexes", "Charm"] } },
+{ "name": "The Resilient Mind (Mental Fort.)", "mods": { "+2": ["Fortitude", "Willpower", "Logic"], "+1": ["Endurance", "Vitality", "Knowledge", "Awareness"], "-1": ["Might", "Finesse", "Reflexes"] } },
+{ "name": "The Social Tank (Presence)", "mods": { "+2": ["Endurance", "Charm", "Willpower"], "+1": ["Vitality", "Fortitude", "Intuition", "Logic"], "-1": ["Might", "Finesse", "Reflexes"] } },
+{ "name": "The Life-Spring (Pure Vitals)", "mods": { "+2": ["Vitality", "Fortitude", "Knowledge"], "+1": ["Endurance", "Awareness", "Intuition", "Willpower"], "-1": ["Might", "Reflexes", "Charm"] } },
+{ "name": "The Balanced Core (Generalist)", "mods": { "+2": ["Endurance", "Vitality", "Fortitude"], "+1": ["Knowledge", "Logic", "Awareness", "Intuition"], "-1": ["Reflexes", "Charm", "Willpower"] } }
+],
+"Plant": [
+{ "name": "The Juggernaut (Pure Armor)", "mods": { "+2": ["Endurance", "Vitality", "Fortitude"], "+1": ["Might", "Logic", "Awareness", "Willpower"], "-1": ["Finesse", "Reflexes", "Charm"] } },
+{ "name": "The Hardy Core (Stamina)", "mods": { "+2": ["Endurance", "Vitality", "Logic"], "+1": ["Might", "Fortitude", "Knowledge", "Intuition"], "-1": ["Finesse", "Reflexes", "Charm"] } },
+{ "name": "The Resilient Mind (Mental Fort.)", "mods": { "+2": ["Fortitude", "Willpower", "Logic"], "+1": ["Endurance", "Vitality", "Knowledge", "Awareness"], "-1": ["Might", "Finesse", "Reflexes"] } },
+{ "name": "The Social Tank (Presence)", "mods": { "+2": ["Endurance", "Charm", "Willpower"], "+1": ["Vitality", "Fortitude", "Intuition", "Logic"], "-1": ["Might", "Finesse", "Reflexes"] } },
+{ "name": "The Life-Spring (Pure Vitals)", "mods": { "+2": ["Vitality", "Fortitude", "Knowledge"], "+1": ["Endurance", "Awareness", "Intuition", "Willpower"], "-1": ["Might", "Reflexes", "Charm"] } },
+{ "name": "The Balanced Core (Generalist)", "mods": { "+2": ["Endurance", "Vitality", "Fortitude"], "+1": ["Knowledge", "Logic", "Awareness", "Intuition"], "-1": ["Reflexes", "Charm", "Willpower"] } }
+]
+},
+"F3": {
+"Mammal": [
+{ "name": "The Brute (Raw Power)", "mods": { "+2": ["Might", "Endurance", "Vitality"], "+1": ["Fortitude", "Logic", "Awareness", "Willpower"], "-1": ["Finesse", "Reflexes", "Knowledge"] } },
+{ "name": "The Lancer (Precision/Reach)", "mods": { "+2": ["Finesse", "Reflexes", "Awareness"], "+1": ["Might", "Fortitude", "Knowledge", "Intuition"], "-1": ["Endurance", "Vitality", "Charm"] } },
+{ "name": "The Acrobat (Speed/Agility)", "mods": { "+2": ["Reflexes", "Finesse", "Endurance"], "+1": ["Vitality", "Awareness", "Intuition", "Charm"], "-1": ["Might", "Knowledge", "Logic"] } },
+{ "name": "The Mixed Attacker (Might/Speed)", "mods": { "+2": ["Might", "Reflexes", "Intuition"], "+1": ["Endurance", "Vitality", "Fortitude", "Awareness"], "-1": ["Finesse", "Knowledge", "Charm"] } },
+{ "name": "The Tactician (Finesse/Mind)", "mods": { "+2": ["Finesse", "Knowledge", "Logic"], "+1": ["Reflexes", "Fortitude", "Awareness", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } },
+{ "name": "The Balanced Limb (Generalist)", "mods": { "+2": ["Might", "Finesse", "Reflexes"], "+1": ["Endurance", "Vitality", "Fortitude", "Awareness"], "-1": ["Knowledge", "Logic", "Charm"] } }
+],
+"Reptile": [
+{ "name": "The Brute (Raw Power)", "mods": { "+2": ["Might", "Endurance", "Vitality"], "+1": ["Fortitude", "Logic", "Awareness", "Willpower"], "-1": ["Finesse", "Reflexes", "Knowledge"] } },
+{ "name": "The Lancer (Precision/Reach)", "mods": { "+2": ["Finesse", "Reflexes", "Awareness"], "+1": ["Might", "Fortitude", "Knowledge", "Intuition"], "-1": ["Endurance", "Vitality", "Charm"] } },
+{ "name": "The Acrobat (Speed/Agility)", "mods": { "+2": ["Reflexes", "Finesse", "Endurance"], "+1": ["Vitality", "Awareness", "Intuition", "Charm"], "-1": ["Might", "Knowledge", "Logic"] } },
+{ "name": "The Mixed Attacker (Might/Speed)", "mods": { "+2": ["Might", "Reflexes", "Intuition"], "+1": ["Endurance", "Vitality", "Fortitude", "Awareness"], "-1": ["Finesse", "Knowledge", "Charm"] } },
+{ "name": "The Tactician (Finesse/Mind)", "mods": { "+2": ["Finesse", "Knowledge", "Logic"], "+1": ["Reflexes", "Fortitude", "Awareness", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } },
+{ "name": "The Balanced Limb (Generalist)", "mods": { "+2": ["Might", "Finesse", "Reflexes"], "+1": ["Endurance", "Vitality", "Fortitude", "Awareness"], "-1": ["Knowledge", "Logic", "Charm"] } }
+],
+"Avian": [
+{ "name": "The Brute (Raw Power)", "mods": { "+2": ["Might", "Endurance", "Vitality"], "+1": ["Fortitude", "Logic", "Awareness", "Willpower"], "-1": ["Finesse", "Reflexes", "Knowledge"] } },
+{ "name": "The Lancer (Precision/Reach)", "mods": { "+2": ["Finesse", "Reflexes", "Awareness"], "+1": ["Might", "Fortitude", "Knowledge", "Intuition"], "-1": ["Endurance", "Vitality", "Charm"] } },
+{ "name": "The Acrobat (Speed/Agility)", "mods": { "+2": ["Reflexes", "Finesse", "Endurance"], "+1": ["Vitality", "Awareness", "Intuition", "Charm"], "-1": ["Might", "Knowledge", "Logic"] } },
+{ "name": "The Mixed Attacker (Might/Speed)", "mods": { "+2": ["Might", "Reflexes", "Intuition"], "+1": ["Endurance", "Vitality", "Fortitude", "Awareness"], "-1": ["Finesse", "Knowledge", "Charm"] } },
+{ "name": "The Tactician (Finesse/Mind)", "mods": { "+2": ["Finesse", "Knowledge", "Logic"], "+1": ["Reflexes", "Fortitude", "Awareness", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } },
+{ "name": "The Balanced Limb (Generalist)", "mods": { "+2": ["Might", "Finesse", "Reflexes"], "+1": ["Endurance", "Vitality", "Fortitude", "Awareness"], "-1": ["Knowledge", "Logic", "Charm"] } }
+],
+"Aquatic": [
+{ "name": "The Brute (Raw Power)", "mods": { "+2": ["Might", "Endurance", "Vitality"], "+1": ["Fortitude", "Logic", "Awareness", "Willpower"], "-1": ["Finesse", "Reflexes", "Knowledge"] } },
+{ "name": "The Lancer (Precision/Reach)", "mods": { "+2": ["Finesse", "Reflexes", "Awareness"], "+1": ["Might", "Fortitude", "Knowledge", "Intuition"], "-1": ["Endurance", "Vitality", "Charm"] } },
+{ "name": "The Acrobat (Speed/Agility)", "mods": { "+2": ["Reflexes", "Finesse", "Endurance"], "+1": ["Vitality", "Awareness", "Intuition", "Charm"], "-1": ["Might", "Knowledge", "Logic"] } },
+{ "name": "The Mixed Attacker (Might/Speed)", "mods": { "+2": ["Might", "Reflexes", "Intuition"], "+1": ["Endurance", "Vitality", "Fortitude", "Awareness"], "-1": ["Finesse", "Knowledge", "Charm"] } },
+{ "name": "The Tactician (Finesse/Mind)", "mods": { "+2": ["Finesse", "Knowledge", "Logic"], "+1": ["Reflexes", "Fortitude", "Awareness", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } },
+{ "name": "The Balanced Limb (Generalist)", "mods": { "+2": ["Might", "Finesse", "Reflexes"], "+1": ["Endurance", "Vitality", "Fortitude", "Awareness"], "-1": ["Knowledge", "Logic", "Charm"] } }
+],
+"Insect": [
+{ "name": "The Brute (Raw Power)", "mods": { "+2": ["Might", "Endurance", "Vitality"], "+1": ["Fortitude", "Logic", "Awareness", "Willpower"], "-1": ["Finesse", "Reflexes", "Knowledge"] } },
+{ "name": "The Lancer (Precision/Reach)", "mods": { "+2": ["Finesse", "Reflexes", "Awareness"], "+1": ["Might", "Fortitude", "Knowledge", "Intuition"], "-1": ["Endurance", "Vitality", "Charm"] } },
+{ "name": "The Acrobat (Speed/Agility)", "mods": { "+2": ["Reflexes", "Finesse", "Endurance"], "+1": ["Vitality", "Awareness", "Intuition", "Charm"], "-1": ["Might", "Knowledge", "Logic"] } },
+{ "name": "The Mixed Attacker (Might/Speed)", "mods": { "+2": ["Might", "Reflexes", "Intuition"], "+1": ["Endurance", "Vitality", "Fortitude", "Awareness"], "-1": ["Finesse", "Knowledge", "Charm"] } },
+{ "name": "The Tactician (Finesse/Mind)", "mods": { "+2": ["Finesse", "Knowledge", "Logic"], "+1": ["Reflexes", "Fortitude", "Awareness", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } },
+{ "name": "The Balanced Limb (Generalist)", "mods": { "+2": ["Might", "Finesse", "Reflexes"], "+1": ["Endurance", "Vitality", "Fortitude", "Awareness"], "-1": ["Knowledge", "Logic", "Charm"] } }
+],
+"Plant": [
+{ "name": "The Brute (Raw Power)", "mods": { "+2": ["Might", "Endurance", "Vitality"], "+1": ["Fortitude", "Logic", "Awareness", "Willpower"], "-1": ["Finesse", "Reflexes", "Knowledge"] } },
+{ "name": "The Lancer (Precision/Reach)", "mods": { "+2": ["Finesse", "Reflexes", "Awareness"], "+1": ["Might", "Fortitude", "Knowledge", "Intuition"], "-1": ["Endurance", "Vitality", "Charm"] } },
+{ "name": "The Acrobat (Speed/Agility)", "mods": { "+2": ["Reflexes", "Finesse", "Endurance"], "+1": ["Vitality", "Awareness", "Intuition", "Charm"], "-1": ["Might", "Knowledge", "Logic"] } },
+{ "name": "The Mixed Attacker (Might/Speed)", "mods": { "+2": ["Might", "Reflexes", "Intuition"], "+1": ["Endurance", "Vitality", "Fortitude", "Awareness"], "-1": ["Finesse", "Knowledge", "Charm"] } },
+{ "name": "The Tactician (Finesse/Mind)", "mods": { "+2": ["Finesse", "Knowledge", "Logic"], "+1": ["Reflexes", "Fortitude", "Awareness", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } },
+{ "name": "The Balanced Limb (Generalist)", "mods": { "+2": ["Might", "Finesse", "Reflexes"], "+1": ["Endurance", "Vitality", "Fortitude", "Awareness"], "-1": ["Knowledge", "Logic", "Charm"] } }
+]
+},
+"F4": {
+"Mammal": [
+{ "name": "The Artisan (Delicate)", "mods": { "+2": ["Finesse", "Knowledge", "Logic"], "+1": ["Reflexes", "Awareness", "Intuition", "Charm"], "-1": ["Might", "Endurance", "Vitality"] } },
+{ "name": "The Crushing Grip (Powerful)", "mods": { "+2": ["Might", "Endurance", "Vitality"], "+1": ["Fortitude", "Logic", "Awareness", "Willpower"], "-1": ["Finesse", "Reflexes", "Knowledge"] } },
+{ "name": "The Rending Talon (Natural Weapon)", "mods": { "+2": ["Might", "Finesse", "Reflexes"], "+1": ["Endurance", "Vitality", "Fortitude", "Awareness"], "-1": ["Knowledge", "Logic", "Charm"] } },
+{ "name": "The Sensitive Touch (Awareness)", "mods": { "+2": ["Awareness", "Intuition", "Finesse"], "+1": ["Reflexes", "Knowledge", "Logic", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } },
+{ "name": "The Swift Hand (Speed)", "mods": { "+2": ["Reflexes", "Finesse", "Intuition"], "+1": ["Awareness", "Charm", "Willpower", "Fortitude"], "-1": ["Might", "Endurance", "Fortitude"] } },
+{ "name": "The Balanced Paw (Generalist)", "mods": { "+2": ["Might", "Finesse", "Awareness"], "+1": ["Endurance", "Reflexes", "Knowledge", "Logic"], "-1": ["Vitality", "Fortitude", "Charm"] } }
+],
+"Reptile": [
+{ "name": "The Artisan (Delicate)", "mods": { "+2": ["Finesse", "Knowledge", "Logic"], "+1": ["Reflexes", "Awareness", "Intuition", "Charm"], "-1": ["Might", "Endurance", "Vitality"] } },
+{ "name": "The Crushing Grip (Powerful)", "mods": { "+2": ["Might", "Endurance", "Vitality"], "+1": ["Fortitude", "Logic", "Awareness", "Willpower"], "-1": ["Finesse", "Reflexes", "Knowledge"] } },
+{ "name": "The Rending Talon (Natural Weapon)", "mods": { "+2": ["Might", "Finesse", "Reflexes"], "+1": ["Endurance", "Vitality", "Fortitude", "Awareness"], "-1": ["Knowledge", "Logic", "Charm"] } },
+{ "name": "The Sensitive Touch (Awareness)", "mods": { "+2": ["Awareness", "Intuition", "Finesse"], "+1": ["Reflexes", "Knowledge", "Logic", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } },
+{ "name": "The Swift Hand (Speed)", "mods": { "+2": ["Reflexes", "Finesse", "Intuition"], "+1": ["Awareness", "Charm", "Willpower", "Fortitude"], "-1": ["Might", "Endurance", "Fortitude"] } },
+{ "name": "The Balanced Paw (Generalist)", "mods": { "+2": ["Might", "Finesse", "Awareness"], "+1": ["Endurance", "Reflexes", "Knowledge", "Logic"], "-1": ["Vitality", "Fortitude", "Charm"] } }
+],
+"Avian": [
+{ "name": "The Artisan (Delicate)", "mods": { "+2": ["Finesse", "Knowledge", "Logic"], "+1": ["Reflexes", "Awareness", "Intuition", "Charm"], "-1": ["Might", "Endurance", "Vitality"] } },
+{ "name": "The Crushing Grip (Powerful)", "mods": { "+2": ["Might", "Endurance", "Vitality"], "+1": ["Fortitude", "Logic", "Awareness", "Willpower"], "-1": ["Finesse", "Reflexes", "Knowledge"] } },
+{ "name": "The Rending Talon (Natural Weapon)", "mods": { "+2": ["Might", "Finesse", "Reflexes"], "+1": ["Endurance", "Vitality", "Fortitude", "Awareness"], "-1": ["Knowledge", "Logic", "Charm"] } },
+{ "name": "The Sensitive Touch (Awareness)", "mods": { "+2": ["Awareness", "Intuition", "Finesse"], "+1": ["Reflexes", "Knowledge", "Logic", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } },
+{ "name": "The Swift Hand (Speed)", "mods": { "+2": ["Reflexes", "Finesse", "Intuition"], "+1": ["Awareness", "Charm", "Willpower", "Fortitude"], "-1": ["Might", "Endurance", "Fortitude"] } },
+{ "name": "The Balanced Paw (Generalist)", "mods": { "+2": ["Might", "Finesse", "Awareness"], "+1": ["Endurance", "Reflexes", "Knowledge", "Logic"], "-1": ["Vitality", "Fortitude", "Charm"] } }
+],
+"Aquatic": [
+{ "name": "The Artisan (Delicate)", "mods": { "+2": ["Finesse", "Knowledge", "Logic"], "+1": ["Reflexes", "Awareness", "Intuition", "Charm"], "-1": ["Might", "Endurance", "Vitality"] } },
+{ "name": "The Crushing Grip (Powerful)", "mods": { "+2": ["Might", "Endurance", "Vitality"], "+1": ["Fortitude", "Logic", "Awareness", "Willpower"], "-1": ["Finesse", "Reflexes", "Knowledge"] } },
+{ "name": "The Rending Talon (Natural Weapon)", "mods": { "+2": ["Might", "Finesse", "Reflexes"], "+1": ["Endurance", "Vitality", "Fortitude", "Awareness"], "-1": ["Knowledge", "Logic", "Charm"] } },
+{ "name": "The Sensitive Touch (Awareness)", "mods": { "+2": ["Awareness", "Intuition", "Finesse"], "+1": ["Reflexes", "Knowledge", "Logic", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } },
+{ "name": "The Swift Hand (Speed)", "mods": { "+2": ["Reflexes", "Finesse", "Intuition"], "+1": ["Awareness", "Charm", "Willpower", "Fortitude"], "-1": ["Might", "Endurance", "Fortitude"] } },
+{ "name": "The Balanced Paw (Generalist)", "mods": { "+2": ["Might", "Finesse", "Awareness"], "+1": ["Endurance", "Reflexes", "Knowledge", "Logic"], "-1": ["Vitality", "Fortitude", "Charm"] } }
+],
+"Insect": [
+{ "name": "The Artisan (Delicate)", "mods": { "+2": ["Finesse", "Knowledge", "Logic"], "+1": ["Reflexes", "Awareness", "Intuition", "Charm"], "-1": ["Might", "Endurance", "Vitality"] } },
+{ "name": "The Crushing Grip (Powerful)", "mods": { "+2": ["Might", "Endurance", "Vitality"], "+1": ["Fortitude", "Logic", "Awareness", "Willpower"], "-1": ["Finesse", "Reflexes", "Knowledge"] } },
+{ "name": "The Rending Talon (Natural Weapon)", "mods": { "+2": ["Might", "Finesse", "Reflexes"], "+1": ["Endurance", "Vitality", "Fortitude", "Awareness"], "-1": ["Knowledge", "Logic", "Charm"] } },
+{ "name": "The Sensitive Touch (Awareness)", "mods": { "+2": ["Awareness", "Intuition", "Finesse"], "+1": ["Reflexes", "Knowledge", "Logic", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } },
+{ "name": "The Swift Hand (Speed)", "mods": { "+2": ["Reflexes", "Finesse", "Intuition"], "+1": ["Awareness", "Charm", "Willpower", "Fortitude"], "-1": ["Might", "Endurance", "Fortitude"] } },
+{ "name": "The Balanced Paw (Generalist)", "mods": { "+2": ["Might", "Finesse", "Awareness"], "+1": ["Endurance", "Reflexes", "Knowledge", "Logic"], "-1": ["Vitality", "Fortitude", "Charm"] } }
+],
+"Plant": [
+{ "name": "The Artisan (Delicate)", "mods": { "+2": ["Finesse", "Knowledge", "Logic"], "+1": ["Reflexes", "Awareness", "Intuition", "Charm"], "-1": ["Might", "Endurance", "Vitality"] } },
+{ "name": "The Crushing Grip (Powerful)", "mods": { "+2": ["Might", "Endurance", "Vitality"], "+1": ["Fortitude", "Logic", "Awareness", "Willpower"], "-1": ["Finesse", "Reflexes", "Knowledge"] } },
+{ "name": "The Rending Talon (Natural Weapon)", "mods": { "+2": ["Might", "Finesse", "Reflexes"], "+1": ["Endurance", "Vitality", "Fortitude", "Awareness"], "-1": ["Knowledge", "Logic", "Charm"] } },
+{ "name": "The Sensitive Touch (Awareness)", "mods": { "+2": ["Awareness", "Intuition", "Finesse"], "+1": ["Reflexes", "Knowledge", "Logic", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } },
+{ "name": "The Swift Hand (Speed)", "mods": { "+2": ["Reflexes", "Finesse", "Intuition"], "+1": ["Awareness", "Charm", "Willpower", "Fortitude"], "-1": ["Might", "Endurance", "Fortitude"] } },
+{ "name": "The Balanced Paw (Generalist)", "mods": { "+2": ["Might", "Finesse", "Awareness"], "+1": ["Endurance", "Reflexes", "Knowledge", "Logic"], "-1": ["Vitality", "Fortitude", "Charm"] } }
+]
+},
+"F5": {
+"Mammal": [
+{ "name": "The Acrobat (Speed/Evasion)", "mods": { "+2": ["Reflexes", "Finesse", "Endurance"], "+1": ["Vitality", "Awareness", "Intuition", "Charm"], "-1": ["Might", "Knowledge", "Logic"] } },
+{ "name": "The Pillar (Unyielding Stance)", "mods": { "+2": ["Endurance", "Vitality", "Fortitude"], "+1": ["Might", "Logic", "Awareness", "Willpower"], "-1": ["Finesse", "Reflexes", "Knowledge"] } },
+{ "name": "The Leaper (Brute Power)", "mods": { "+2": ["Might", "Reflexes", "Endurance"], "+1": ["Vitality", "Fortitude", "Logic", "Willpower"], "-1": ["Finesse", "Knowledge", "Charm"] } },
+{ "name": "The Marathoner (Stamina)", "mods": { "+2": ["Endurance", "Fortitude", "Willpower"], "+1": ["Vitality", "Logic", "Awareness", "Intuition"], "-1": ["Might", "Finesse", "Reflexes"] } },
+{ "name": "The Climber (Sure-Footed)", "mods": { "+2": ["Reflexes", "Finesse", "Awareness"], "+1": ["Might", "Endurance", "Intuition", "Willpower"], "-1": ["Vitality", "Fortitude", "Logic"] } },
+{ "name": "The Balanced Leg (Generalist)", "mods": { "+2": ["Might", "Endurance", "Reflexes"], "+1": ["Finesse", "Vitality", "Fortitude", "Awareness"], "-1": ["Knowledge", "Logic", "Intuition"] } }
+],
+"Reptile": [
+{ "name": "The Acrobat (Speed/Evasion)", "mods": { "+2": ["Reflexes", "Finesse", "Endurance"], "+1": ["Vitality", "Awareness", "Intuition", "Charm"], "-1": ["Might", "Knowledge", "Logic"] } },
+{ "name": "The Pillar (Unyielding Stance)", "mods": { "+2": ["Endurance", "Vitality", "Fortitude"], "+1": ["Might", "Logic", "Awareness", "Willpower"], "-1": ["Finesse", "Reflexes", "Knowledge"] } },
+{ "name": "The Leaper (Brute Power)", "mods": { "+2": ["Might", "Reflexes", "Endurance"], "+1": ["Vitality", "Fortitude", "Logic", "Willpower"], "-1": ["Finesse", "Knowledge", "Charm"] } },
+{ "name": "The Marathoner (Stamina)", "mods": { "+2": ["Endurance", "Fortitude", "Willpower"], "+1": ["Vitality", "Logic", "Awareness", "Intuition"], "-1": ["Might", "Finesse", "Reflexes"] } },
+{ "name": "The Climber (Sure-Footed)", "mods": { "+2": ["Reflexes", "Finesse", "Awareness"], "+1": ["Might", "Endurance", "Intuition", "Willpower"], "-1": ["Vitality", "Fortitude", "Logic"] } },
+{ "name": "The Balanced Leg (Generalist)", "mods": { "+2": ["Might", "Endurance", "Reflexes"], "+1": ["Finesse", "Vitality", "Fortitude", "Awareness"], "-1": ["Knowledge", "Logic", "Intuition"] } }
+],
+"Avian": [
+{ "name": "The Acrobat (Speed/Evasion)", "mods": { "+2": ["Reflexes", "Finesse", "Endurance"], "+1": ["Vitality", "Awareness", "Intuition", "Charm"], "-1": ["Might", "Knowledge", "Logic"] } },
+{ "name": "The Pillar (Unyielding Stance)", "mods": { "+2": ["Endurance", "Vitality", "Fortitude"], "+1": ["Might", "Logic", "Awareness", "Willpower"], "-1": ["Finesse", "Reflexes", "Knowledge"] } },
+{ "name": "The Leaper (Brute Power)", "mods": { "+2": ["Might", "Reflexes", "Endurance"], "+1": ["Vitality", "Fortitude", "Logic", "Willpower"], "-1": ["Finesse", "Knowledge", "Charm"] } },
+{ "name": "The Marathoner (Stamina)", "mods": { "+2": ["Endurance", "Fortitude", "Willpower"], "+1": ["Vitality", "Logic", "Awareness", "Intuition"], "-1": ["Might", "Finesse", "Reflexes"] } },
+{ "name": "The Climber (Sure-Footed)", "mods": { "+2": ["Reflexes", "Finesse", "Awareness"], "+1": ["Might", "Endurance", "Intuition", "Willpower"], "-1": ["Vitality", "Fortitude", "Logic"] } },
+{ "name": "The Balanced Leg (Generalist)", "mods": { "+2": ["Might", "Endurance", "Reflexes"], "+1": ["Finesse", "Vitality", "Fortitude", "Awareness"], "-1": ["Knowledge", "Logic", "Intuition"] } }
+],
+"Aquatic": [
+{ "name": "The Acrobat (Speed/Evasion)", "mods": { "+2": ["Reflexes", "Finesse", "Endurance"], "+1": ["Vitality", "Awareness", "Intuition", "Charm"], "-1": ["Might", "Knowledge", "Logic"] } },
+{ "name": "The Pillar (Unyielding Stance)", "mods": { "+2": ["Endurance", "Vitality", "Fortitude"], "+1": ["Might", "Logic", "Awareness", "Willpower"], "-1": ["Finesse", "Reflexes", "Knowledge"] } },
+{ "name": "The Leaper (Brute Power)", "mods": { "+2": ["Might", "Reflexes", "Endurance"], "+1": ["Vitality", "Fortitude", "Logic", "Willpower"], "-1": ["Finesse", "Knowledge", "Charm"] } },
+{ "name": "The Marathoner (Stamina)", "mods": { "+2": ["Endurance", "Fortitude", "Willpower"], "+1": ["Vitality", "Logic", "Awareness", "Intuition"], "-1": ["Might", "Finesse", "Reflexes"] } },
+{ "name": "The Climber (Sure-Footed)", "mods": { "+2": ["Reflexes", "Finesse", "Awareness"], "+1": ["Might", "Endurance", "Intuition", "Willpower"], "-1": ["Vitality", "Fortitude", "Logic"] } },
+{ "name": "The Balanced Leg (Generalist)", "mods": { "+2": ["Might", "Endurance", "Reflexes"], "+1": ["Finesse", "Vitality", "Fortitude", "Awareness"], "-1": ["Knowledge", "Logic", "Intuition"] } }
+],
+"Insect": [
+{ "name": "The Acrobat (Speed/Evasion)", "mods": { "+2": ["Reflexes", "Finesse", "Endurance"], "+1": ["Vitality", "Awareness", "Intuition", "Charm"], "-1": ["Might", "Knowledge", "Logic"] } },
+{ "name": "The Pillar (Unyielding Stance)", "mods": { "+2": ["Endurance", "Vitality", "Fortitude"], "+1": ["Might", "Logic", "Awareness", "Willpower"], "-1": ["Finesse", "Reflexes", "Knowledge"] } },
+{ "name": "The Leaper (Brute Power)", "mods": { "+2": ["Might", "Reflexes", "Endurance"], "+1": ["Vitality", "Fortitude", "Logic", "Willpower"], "-1": ["Finesse", "Knowledge", "Charm"] } },
+{ "name": "The Marathoner (Stamina)", "mods": { "+2": ["Endurance", "Fortitude", "Willpower"], "+1": ["Vitality", "Logic", "Awareness", "Intuition"], "-1": ["Might", "Finesse", "Reflexes"] } },
+{ "name": "The Climber (Sure-Footed)", "mods": { "+2": ["Reflexes", "Finesse", "Awareness"], "+1": ["Might", "Endurance", "Intuition", "Willpower"], "-1": ["Vitality", "Fortitude", "Logic"] } },
+{ "name": "The Balanced Leg (Generalist)", "mods": { "+2": ["Might", "Endurance", "Reflexes"], "+1": ["Finesse", "Vitality", "Fortitude", "Awareness"], "-1": ["Knowledge", "Logic", "Intuition"] } }
+],
+"Plant": [
+{ "name": "The Acrobat (Speed/Evasion)", "mods": { "+2": ["Reflexes", "Finesse", "Endurance"], "+1": ["Vitality", "Awareness", "Intuition", "Charm"], "-1": ["Might", "Knowledge", "Logic"] } },
+{ "name": "The Pillar (Unyielding Stance)", "mods": { "+2": ["Endurance", "Vitality", "Fortitude"], "+1": ["Might", "Logic", "Awareness", "Willpower"], "-1": ["Finesse", "Reflexes", "Knowledge"] } },
+{ "name": "The Leaper (Brute Power)", "mods": { "+2": ["Might", "Reflexes", "Endurance"], "+1": ["Vitality", "Fortitude", "Logic", "Willpower"], "-1": ["Finesse", "Knowledge", "Charm"] } },
+{ "name": "The Marathoner (Stamina)", "mods": { "+2": ["Endurance", "Fortitude", "Willpower"], "+1": ["Vitality", "Logic", "Awareness", "Intuition"], "-1": ["Might","Finesse", "Reflexes"] } },
+{ "name": "The Climber (Sure-Footed)", "mods": { "+2": ["Reflexes", "Finesse", "Awareness"], "+1": ["Might", "Endurance", "Intuition", "Willpower"], "-1": ["Vitality", "Fortitude", "Logic"] } },
+{ "name": "The Balanced Leg (Generalist)", "mods": { "+2": ["Might", "Endurance", "Reflexes"], "+1": ["Finesse", "Vitality", "Fortitude", "Awareness"], "-1": ["Knowledge", "Logic", "Intuition"] } }
+]
+},
+"F6": {
+"Mammal": [
+{ "name": "The Toxin Filter (Resilience)", "mods": { "+2": ["Vitality", "Fortitude", "Endurance"], "+1": ["Knowledge", "Logic", "Awareness", "Willpower"], "-1": ["Might", "Finesse", "Reflexes"] } },
+{ "name": "The Iron Stomach (Hardy)", "mods": { "+2": ["Vitality", "Fortitude", "Logic"], "+1": ["Might", "Endurance", "Knowledge", "Awareness"], "-1": ["Finesse", "Reflexes", "Charm"] } },
+{ "name": "The Adrenal Burst (Stamina)", "mods": { "+2": ["Endurance", "Willpower", "Fortitude"], "+1": ["Vitality", "Logic", "Awareness", "Intuition"], "-1": ["Might", "Finesse", "Reflexes"] } },
+{ "name": "The Social Vitals (Presence)", "mods": { "+2": ["Vitality", "Charm", "Willpower"], "+1": ["Endurance", "Fortitude", "Logic", "Intuition"], "-1": ["Might", "Finesse", "Reflexes"] } },
+{ "name": "The Regenerator (Pure Life)", "mods": { "+2": ["Vitality", "Fortitude", "Knowledge"], "+1": ["Endurance", "Awareness", "Intuition", "Willpower"], "-1": ["Might", "Reflexes", "Charm"] } },
+{ "name": "The Balanced System (Generalist)", "mods": { "+2": ["Vitality", "Fortitude", "Endurance"], "+1": ["Knowledge", "Logic", "Awareness", "Willpower"], "-1": ["Might", "Finesse", "Charm"] } }
+],
+"Reptile": [
+{ "name": "The Toxin Filter (Resilience)", "mods": { "+2": ["Vitality", "Fortitude", "Endurance"], "+1": ["Knowledge", "Logic", "Awareness", "Willpower"], "-1": ["Might", "Finesse", "Reflexes"] } },
+{ "name": "The Iron Stomach (Hardy)", "mods": { "+2": ["Vitality", "Fortitude", "Logic"], "+1": ["Might", "Endurance", "Knowledge", "Awareness"], "-1": ["Finesse", "Reflexes", "Charm"] } },
+{ "name": "The Adrenal Burst (Stamina)", "mods": { "+2": ["Endurance", "Willpower", "Fortitude"], "+1": ["Vitality", "Logic", "Awareness", "Intuition"], "-1": ["Might", "Finesse", "Reflexes"] } },
+{ "name": "The Social Vitals (Presence)", "mods": { "+2": ["Vitality", "Charm", "Willpower"], "+1": ["Endurance", "Fortitude", "Logic", "Intuition"], "-1": ["Might", "Finesse", "Reflexes"] } },
+{ "name": "The Regenerator (Pure Life)", "mods": { "+2": ["Vitality", "Fortitude", "Knowledge"], "+1": ["Endurance", "Awareness", "Intuition", "Willpower"], "-1": ["Might", "Reflexes", "Charm"] } },
+{ "name": "The Balanced System (Generalist)", "mods": { "+2": ["Vitality", "Fortitude", "Endurance"], "+1": ["Knowledge", "Logic", "Awareness", "Willpower"], "-1": ["Might", "Finesse", "Charm"] } }
+],
+"Avian": [
+{ "name": "The Toxin Filter (Resilience)", "mods": { "+2": ["Vitality", "Fortitude", "Endurance"], "+1": ["Knowledge", "Logic", "Awareness", "Willpower"], "-1": ["Might", "Finesse", "Reflexes"] } },
+{ "name": "The Iron Stomach (Hardy)", "mods": { "+2": ["Vitality", "Fortitude", "Logic"], "+1": ["Might", "Endurance", "Knowledge", "Awareness"], "-1": ["Finesse", "Reflexes", "Charm"] } },
+{ "name": "The Adrenal Burst (Stamina)", "mods": { "+2": ["Endurance", "Willpower", "Fortitude"], "+1": ["Vitality", "Logic", "Awareness", "Intuition"], "-1": ["Might", "Finesse", "Reflexes"] } },
+{ "name": "The Social Vitals (Presence)", "mods": { "+2": ["Vitality", "Charm", "Willpower"], "+1": ["Endurance", "Fortitude", "Logic", "Intuition"], "-1": ["Might", "Finesse", "Reflexes"] } },
+{ "name": "The Regenerator (Pure Life)", "mods": { "+2": ["Vitality", "Fortitude", "Knowledge"], "+1": ["Endurance", "Awareness", "Intuition", "Willpower"], "-1": ["Might", "Reflexes", "Charm"] } },
+{ "name": "The Balanced System (Generalist)", "mods": { "+2": ["Vitality", "Fortitude", "Endurance"], "+1": ["Knowledge", "Logic", "Awareness", "Willpower"], "-1": ["Might", "Finesse", "Charm"] } }
+],
+"Aquatic": [
+{ "name": "The Toxin Filter (Resilience)", "mods": { "+2": ["Vitality", "Fortitude", "Endurance"], "+1": ["Knowledge", "Logic", "Awareness", "Willpower"], "-1": ["Might", "Finesse", "Reflexes"] } },
+{ "name": "The Iron Stomach (Hardy)", "mods": { "+2": ["Vitality", "Fortitude", "Logic"], "+1": ["Might", "Endurance", "Knowledge", "Awareness"], "-1": ["Finesse", "Reflexes", "Charm"] } },
+{ "name": "The Adrenal Burst (Stamina)", "mods": { "+2": ["Endurance", "Willpower", "Fortitude"], "+1": ["Vitality", "Logic", "Awareness", "Intuition"], "-1": ["Might", "Finesse", "Reflexes"] } },
+{ "name": "The Social Vitals (Presence)", "mods": { "+2": ["Vitality", "Charm", "Willpower"], "+1": ["Endurance", "Fortitude", "Logic", "Intuition"], "-1": ["Might", "Finesse", "Reflexes"] } },
+{ "name": "The Regenerator (Pure Life)", "mods": { "+2": ["Vitality", "Fortitude", "Knowledge"], "+1": ["Endurance", "Awareness", "Intuition", "Willpower"], "-1": ["Might", "Reflexes", "Charm"] } },
+{ "name": "The Balanced System (Generalist)", "mods": { "+2": ["Vitality", "Fortitude", "Endurance"], "+1": ["Knowledge", "Logic", "Awareness", "Willpower"], "-1": ["Might", "Finesse", "Charm"] } }
+],
+"Insect": [
+{ "name": "The Toxin Filter (Resilience)", "mods": { "+2": ["Vitality", "Fortitude", "Endurance"], "+1": ["Knowledge", "Logic", "Awareness", "Willpower"], "-1": ["Might", "Finesse", "Reflexes"] } },
+{ "name": "The Iron Stomach (Hardy)", "mods": { "+2": ["Vitality", "Fortitude", "Logic"], "+1": ["Might", "Endurance", "Knowledge", "Awareness"], "-1": ["Finesse", "Reflexes", "Charm"] } },
+{ "name": "The Adrenal Burst (Stamina)", "mods": { "+2": ["Endurance", "Willpower", "Fortitude"], "+1": ["Vitality", "Logic", "Awareness", "Intuition"], "-1": ["Might", "Finesse", "Reflexes"] } },
+{ "name": "The Social Vitals (Presence)", "mods": { "+2": ["Vitality", "Charm", "Willpower"], "+1": ["Endurance", "Fortitude", "Logic", "Intuition"], "-1": ["Might", "Finesse", "Reflexes"] } },
+{ "name": "The Regenerator (Pure Life)", "mods": { "+2": ["Vitality", "Fortitude", "Knowledge"], "+1": ["Endurance", "Awareness", "Intuition", "Willpower"], "-1": ["Might", "Reflexes", "Charm"] } },
+{ "name": "The Balanced System (Generalist)", "mods": { "+2": ["Vitality", "Fortitude", "Endurance"], "+1": ["Knowledge", "Logic", "Awareness", "Willpower"], "-1": ["Might", "Finesse", "Charm"] } }
+],
+"Plant": [
+{ "name": "The Toxin Filter (Resilience)", "mods": { "+2": ["Vitality", "Fortitude", "Endurance"], "+1": ["Knowledge", "Logic", "Awareness", "Willpower"], "-1": ["Might", "Finesse", "Reflexes"] } },
+{ "name": "The Iron Stomach (Hardy)", "mods": { "+2": ["Vitality", "Fortitude", "Logic"], "+1": ["Might", "Endurance", "Knowledge", "Awareness"], "-1": ["Finesse", "Reflexes", "Charm"] } },
+{ "name": "The Adrenal Burst (Stamina)", "mods": { "+2": ["Endurance", "Willpower", "Fortitude"], "+1": ["Vitality", "Logic", "Awareness", "Intuition"], "-1": ["Might", "Finesse", "Reflexes"] } },
+{ "name": "The Social Vitals (Presence)", "mods": { "+2": ["Vitality", "Charm", "Willpower"], "+1": ["Endurance", "Fortitude", "Logic", "Intuition"], "-1": ["Might", "Finesse", "Reflexes"] } },
+{ "name": "The Regenerator (Pure Life)", "mods": { "+2": ["Vitality", "Fortitude", "Knowledge"], "+1": ["Endurance", "Awareness", "Intuition", "Willpower"], "-1": ["Might", "Reflexes", "Charm"] } },
+{ "name": "The Balanced System (Generalist)", "mods": { "+2": ["Vitality", "Fortitude", "Endurance"], "+1": ["Knowledge", "Logic", "Awareness", "Willpower"], "-1": ["Might", "Finesse", "Charm"] } }
+]
+},
+"F7": {
+"Mammal": [
+{ "name": "The Tracker (Keen Senses)", "mods": { "+2": ["Awareness", "Intuition", "Knowledge"], "+1": ["Finesse", "Reflexes", "Logic", "Willpower"], "-1": ["Might", "Endurance", "Charm"] } },
+{ "name": "The Analyst (Thermal/Magic)", "mods": { "+2": ["Logic", "Awareness", "Knowledge"], "+1": ["Finesse", "Fortitude", "Intuition", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } },
+{ "name": "The Pre-Cog (Hyper Intuition)", "mods": { "+2": ["Intuition", "Willpower", "Reflexes"], "+1": ["Finesse", "Awareness", "Logic", "Charm"], "-1": ["Might", "Endurance", "Fortitude"] } },
+{ "name": "The Empath (Social Sense)", "mods": { "+2": ["Intuition", "Charm", "Logic"], "+1": ["Awareness", "Willpower", "Knowledge", "Finesse"], "-1": ["Might", "Endurance", "Vitality"] } },
+{ "name": "The Watchman (360° Senses)", "mods": { "+2": ["Awareness", "Fortitude", "Logic"], "+1": ["Endurance", "Vitality", "Intuition", "Willpower"], "-1": ["Might", "Finesse", "Reflexes"] } },
+{ "name": "The Balanced Sense (Generalist)", "mods": { "+2": ["Awareness", "Intuition", "Logic"], "+1": ["Finesse", "Knowledge", "Charm", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } }
+],
+"Reptile": [
+{ "name": "The Tracker (Keen Senses)", "mods": { "+2": ["Awareness", "Intuition", "Knowledge"], "+1": ["Finesse", "Reflexes", "Logic", "Willpower"], "-1": ["Might", "Endurance", "Charm"] } },
+{ "name": "The Analyst (Thermal/Magic)", "mods": { "+2": ["Logic", "Awareness", "Knowledge"], "+1": ["Finesse", "Fortitude", "Intuition", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } },
+{ "name": "The Pre-Cog (Hyper Intuition)", "mods": { "+2": ["Intuition", "Willpower", "Reflexes"], "+1": ["Finesse", "Awareness", "Logic", "Charm"], "-1": ["Might", "Endurance", "Fortitude"] } },
+{ "name": "The Empath (Social Sense)", "mods": { "+2": ["Intuition", "Charm", "Logic"], "+1": ["Awareness", "Willpower", "Knowledge", "Finesse"], "-1": ["Might", "Endurance", "Vitality"] } },
+{ "name": "The Watchman (360° Senses)", "mods": { "+2": ["Awareness", "Fortitude", "Logic"], "+1": ["Endurance", "Vitality", "Intuition", "Willpower"], "-1": ["Might", "Finesse", "Reflexes"] } },
+{ "name": "The Balanced Sense (Generalist)", "mods": { "+2": ["Awareness", "Intuition", "Logic"], "+1": ["Finesse", "Knowledge", "Charm", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } }
+],
+"Avian": [
+{ "name": "The Tracker (Keen Senses)", "mods": { "+2": ["Awareness", "Intuition", "Knowledge"], "+1": ["Finesse", "Reflexes", "Logic", "Willpower"], "-1": ["Might", "Endurance", "Charm"] } },
+{ "name": "The Analyst (Thermal/Magic)", "mods": { "+2": ["Logic", "Awareness", "Knowledge"], "+1": ["Finesse", "Fortitude", "Intuition", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } },
+{ "name": "The Pre-Cog (Hyper Intuition)", "mods": { "+2": ["Intuition", "Willpower", "Reflexes"], "+1": ["Finesse", "Awareness", "Logic", "Charm"], "-1": ["Might", "Endurance", "Fortitude"] } },
+{ "name": "The Empath (Social Sense)", "mods": { "+2": ["Intuition", "Charm", "Logic"], "+1": ["Awareness", "Willpower", "Knowledge", "Finesse"], "-1": ["Might", "Endurance", "Vitality"] } },
+{ "name": "The Watchman (360° Senses)", "mods": { "+2": ["Awareness", "Fortitude", "Logic"], "+1": ["Endurance", "Vitality", "Intuition", "Willpower"], "-1": ["Might", "Finesse", "Reflexes"] } },
+{ "name": "The Balanced Sense (Generalist)", "mods": { "+2": ["Awareness", "Intuition", "Logic"], "+1": ["Finesse", "Knowledge", "Charm", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } }
+],
+"Aquatic": [
+{ "name": "The Tracker (Keen Senses)", "mods": { "+2": ["Awareness", "Intuition", "Knowledge"], "+1": ["Finesse", "Reflexes", "Logic", "Willpower"], "-1": ["Might", "Endurance", "Charm"] } },
+{ "name": "The Analyst (Thermal/Magic)", "mods": { "+2": ["Logic", "Awareness", "Knowledge"], "+1": ["Finesse", "Fortitude", "Intuition", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } },
+{ "name": "The Pre-Cog (Hyper Intuition)", "mods": { "+2": ["Intuition", "Willpower", "Reflexes"], "+1": ["Finesse", "Awareness", "Logic", "Charm"], "-1": ["Might", "Endurance", "Fortitude"] } },
+{ "name": "The Empath (Social Sense)", "mods": { "+2": ["Intuition", "Charm", "Logic"], "+1": ["Awareness", "Willpower", "Knowledge", "Finesse"], "-1": ["Might", "Endurance", "Vitality"] } },
+{ "name": "The Watchman (360° Senses)", "mods": { "+2": ["Awareness", "Fortitude", "Logic"], "+1": ["Endurance", "Vitality", "Intuition", "Willpower"], "-1": ["Might", "Finesse", "Reflexes"] } },
+{ "name": "The Balanced Sense (Generalist)", "mods": { "+2": ["Awareness", "Intuition", "Logic"], "+1": ["Finesse", "Knowledge", "Charm", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } }
+],
+"Insect": [
+{ "name": "The Tracker (Keen Senses)", "mods": { "+2": ["Awareness", "Intuition", "Knowledge"], "+1": ["Finesse", "Reflexes", "Logic", "Willpower"], "-1": ["Might", "Endurance", "Charm"] } },
+{ "name": "The Analyst (Thermal/Magic)", "mods": { "+2": ["Logic", "Awareness", "Knowledge"], "+1": ["Finesse", "Fortitude", "Intuition", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } },
+{ "name": "The Pre-Cog (Hyper Intuition)", "mods": { "+2": ["Intuition", "Willpower", "Reflexes"], "+1": ["Finesse", "Awareness", "Logic", "Charm"], "-1": ["Might", "Endurance", "Fortitude"] } },
+{ "name": "The Empath (Social Sense)", "mods": { "+2": ["Intuition", "Charm", "Logic"], "+1": ["Awareness", "Willpower", "Knowledge", "Finesse"], "-1": ["Might", "Endurance", "Vitality"] } },
+{ "name": "The Watchman (360° Senses)", "mods": { "+2": ["Awareness", "Fortitude", "Logic"], "+1": ["Endurance", "Vitality", "Intuition", "Willpower"], "-1": ["Might", "Finesse", "Reflexes"] } },
+{ "name": "The Balanced Sense (Generalist)", "mods": { "+2": ["Awareness", "Intuition", "Logic"], "+1": ["Finesse", "Knowledge", "Charm", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } }
+],
+"Plant": [
+{ "name": "The Tracker (Keen Senses)", "mods": { "+2": ["Awareness", "Intuition", "Knowledge"], "+1": ["Finesse", "Reflexes", "Logic", "Willpower"], "-1": ["Might", "Endurance", "Charm"] } },
+{ "name": "The Analyst (Thermal/Magic)", "mods": { "+2": ["Logic", "Awareness", "Knowledge"], "+1": ["Finesse", "Fortitude", "Intuition", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } },
+{ "name": "The Pre-Cog (Hyper Intuition)", "mods": { "+2": ["Intuition", "Willpower", "Reflexes"], "+1": ["Finesse", "Awareness", "Logic", "Charm"], "-1": ["Might", "Endurance", "Fortitude"] } },
+{ "name": "The Empath (Social Sense)", "mods": { "+2": ["Intuition", "Charm", "Logic"], "+1": ["Awareness", "Willpower", "Knowledge", "Finesse"], "-1": ["Might", "Endurance", "Vitality"] } },
+{ "name": "The Watchman (360° Senses)", "mods": { "+2": ["Awareness", "Fortitude", "Logic"], "+1": ["Endurance", "Vitality", "Intuition", "Willpower"], "-1": ["Might", "Finesse", "Reflexes"] } },
+{ "name": "The Balanced Sense (Generalist)", "mods": { "+2": ["Awareness", "Intuition", "Logic"], "+1": ["Finesse", "Knowledge", "Charm", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } }
+]
+},
+"F8": {
+"Mammal": [
+{ "name": "The Logician (Pure Intellect)", "mods": { "+2": ["Knowledge", "Logic", "Awareness"], "+1": ["Fortitude", "Intuition", "Charm", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } },
+{ "name": "The Social Master (Influence)", "mods": { "+2": ["Charm", "Willpower", "Logic"], "+1": ["Finesse", "Knowledge", "Awareness", "Intuition"], "-1": ["Might", "Endurance", "Vitality"] } },
+{ "name": "The Primal Instinct (Hyper-Aware)", "mods": { "+2": ["Intuition", "Awareness", "Willpower"], "+1": ["Reflexes", "Fortitude", "Logic", "Charm"], "-1": ["Might", "Endurance", "Knowledge"] } },
+{ "name": "The Willpower Tank (Mental Fort.)", "mods": { "+2": ["Willpower", "Fortitude", "Logic"], "+1": ["Endurance", "Vitality", "Awareness", "Intuition"], "-1": ["Might", "Finesse", "Reflexes"] } },
+{ "name": "The Cunning Mind (Tactics)", "mods": { "+2": ["Logic", "Intuition", "Finesse"], "+1": ["Reflexes", "Knowledge", "Awareness", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } },
+{ "name": "The Balanced Mind (Generalist)", "mods": { "+2": ["Knowledge", "Logic", "Intuition"], "+1": ["Awareness", "Charm", "Willpower", "Fortitude"], "-1": ["Might", "Finesse", "Reflexes"] } }
+],
+"Reptile": [
+{ "name": "The Logician (Pure Intellect)", "mods": { "+2": ["Knowledge", "Logic", "Awareness"], "+1": ["Fortitude", "Intuition", "Charm", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } },
+{ "name": "The Social Master (Influence)", "mods": { "+2": ["Charm", "Willpower", "Logic"], "+1": ["Finesse", "Knowledge", "Awareness", "Intuition"], "-1": ["Might", "Endurance", "Vitality"] } },
+{ "name": "The Primal Instinct (Hyper-Aware)", "mods": { "+2": ["Intuition", "Awareness", "Willpower"], "+1": ["Reflexes", "Fortitude", "Logic", "Charm"], "-1": ["Might", "Endurance", "Knowledge"] } },
+{ "name": "The Willpower Tank (Mental Fort.)", "mods": { "+2": ["Willpower", "Fortitude", "Logic"], "+1": ["Endurance", "Vitality", "Awareness", "Intuition"], "-1": ["Might", "Finesse", "Reflexes"] } },
+{ "name": "The Cunning Mind (Tactics)", "mods": { "+2": ["Logic", "Intuition", "Finesse"], "+1": ["Reflexes", "Knowledge", "Awareness", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } },
+{ "name": "The Balanced Mind (Generalist)", "mods": { "+2": ["Knowledge", "Logic", "Intuition"], "+1": ["Awareness", "Charm", "Willpower", "Fortitude"], "-1": ["Might", "Finesse", "Reflexes"] } }
+],
+"Avian": [
+{ "name": "The Logician (Pure Intellect)", "mods": { "+2": ["Knowledge", "Logic", "Awareness"], "+1": ["Fortitude", "Intuition", "Charm", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } },
+{ "name": "The Social Master (Influence)", "mods": { "+2": ["Charm", "Willpower", "Logic"], "+1": ["Finesse", "Knowledge", "Awareness", "Intuition"], "-1": ["Might", "Endurance", "Vitality"] } },
+{ "name": "The Primal Instinct (Hyper-Aware)", "mods": { "+2": ["Intuition", "Awareness", "Willpower"], "+1": ["Reflexes", "Fortitude", "Logic", "Charm"], "-1": ["Might", "Endurance", "Knowledge"] } },
+{ "name": "The Willpower Tank (Mental Fort.)", "mods": { "+2": ["Willpower", "Fortitude", "Logic"], "+1": ["Endurance", "Vitality", "Awareness", "Intuition"], "-1": ["Might", "Finesse", "Reflexes"] } },
+{ "name": "The Cunning Mind (Tactics)", "mods": { "+2": ["Logic", "Intuition", "Finesse"], "+1": ["Reflexes", "Knowledge", "Awareness", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } },
+{ "name": "The Balanced Mind (Generalist)", "mods": { "+2": ["Knowledge", "Logic", "Intuition"], "+1": ["Awareness", "Charm", "Willpower", "Fortitude"], "-1": ["Might", "Finesse", "Reflexes"] } }
+],
+"Aquatic": [
+{ "name": "The Logician (Pure Intellect)", "mods": { "+2": ["Knowledge", "Logic", "Awareness"], "+1": ["Fortitude", "Intuition", "Charm", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } },
+{ "name": "The Social Master (Influence)", "mods": { "+2": ["Charm", "Willpower", "Logic"], "+1": ["Finesse", "Knowledge", "Awareness", "Intuition"], "-1": ["Might", "Endurance", "Vitality"] } },
+{ "name": "The Primal Instinct (Hyper-Aware)", "mods": { "+2": ["Intuition", "Awareness", "Willpower"], "+1": ["Reflexes", "Fortitude", "Logic", "Charm"], "-1": ["Might", "Endurance", "Knowledge"] } },
+{ "name": "The Willpower Tank (Mental Fort.)", "mods": { "+2": ["Willpower", "Fortitude", "Logic"], "+1": ["Endurance", "Vitality", "Awareness", "Intuition"], "-1": ["Might", "Finesse", "Reflexes"] } },
+{ "name": "The Cunning Mind (Tactics)", "mods": { "+2": ["Logic", "Intuition", "Finesse"], "+1": ["Reflexes", "Knowledge", "Awareness", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } },
+{ "name": "The Balanced Mind (Generalist)", "mods": { "+2": ["Knowledge", "Logic", "Intuition"], "+1": ["Awareness", "Charm", "Willpower", "Fortitude"], "-1": ["Might", "Finesse", "Reflexes"] } }
+],
+"Insect": [
+{ "name": "The Logician (Pure Intellect)", "mods": { "+2": ["Knowledge", "Logic", "Awareness"], "+1": ["Fortitude", "Intuition", "Charm", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } },
+{ "name": "The Social Master (Influence)", "mods": { "+2": ["Charm", "Willpower", "Logic"], "+1": ["Finesse", "Knowledge", "Awareness", "Intuition"], "-1": ["Might", "Endurance", "Vitality"] } },
+{ "name": "The Primal Instinct (Hyper-Aware)", "mods": { "+2": ["Intuition", "Awareness", "Willpower"], "+1": ["Reflexes", "Fortitude", "Logic", "Charm"], "-1": ["Might", "Endurance", "Knowledge"] } },
+{ "name": "The Willpower Tank (Mental Fort.)", "mods": { "+2": ["Willpower", "Fortitude", "Logic"], "+1": ["Endurance", "Vitality", "Awareness", "Intuition"], "-1": ["Might", "Finesse", "Reflexes"] } },
+{ "name": "The Cunning Mind (Tactics)", "mods": { "+2": ["Logic", "Intuition", "Finesse"], "+1": ["Reflexes", "Knowledge", "Awareness", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } },
+{ "name": "The Balanced Mind (Generalist)", "mods": { "+2": ["Knowledge", "Logic", "Intuition"], "+1": ["Awareness", "Charm", "Willpower", "Fortitude"], "-1": ["Might","Finesse", "Reflexes"] } }
+],
+"Plant": [
+{ "name": "The Logician (Pure Intellect)", "mods": { "+2": ["Knowledge", "Logic", "Awareness"], "+1": ["Fortitude", "Intuition", "Charm", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } },
+{ "name": "The Social Master (Influence)", "mods": { "+2": ["Charm", "Willpower", "Logic"], "+1": ["Finesse", "Knowledge", "Awareness", "Intuition"], "-1": ["Might", "Endurance", "Vitality"] } },
+{ "name": "The Primal Instinct (Hyper-Aware)", "mods": { "+2": ["Intuition", "Awareness", "Willpower"], "+1": ["Reflexes", "Fortitude", "Logic", "Charm"], "-1": ["Might", "Endurance", "Knowledge"] } },
+{ "name": "The Willpower Tank (Mental Fort.)", "mods": { "+2": ["Willpower", "Fortitude", "Logic"], "+1": ["Endurance", "Vitality", "Awareness", "Intuition"], "-1": ["Might", "Finesse", "Reflexes"] } },
+{ "name": "The Cunning Mind (Tactics)", "mods": { "+2": ["Logic", "Intuition", "Finesse"], "+1": ["Reflexes", "Knowledge", "Awareness", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } },
+{ "name": "The Balanced Mind (Generalist)", "mods": { "+2": ["Knowledge", "Logic", "Intuition"], "+1": ["Awareness", "Charm", "Willpower", "Fortitude"], "-1": ["Might", "Finesse", "Reflexes"] } }
+]
+},
+"F9": {
+"All": [
+{ "name": "Capstone: +3 Might", "mods": { "+3": ["Might"] } },
+{ "name": "Capstone: +3 Endurance", "mods": { "+3": ["Endurance"] } },
+{ "name": "Capstone: +3 Finesse", "mods": { "+3": ["Finesse"] } },
+{ "name": "Capstone: +3 Reflexes", "mods": { "+3": ["Reflexes"] } },
+{ "name": "Capstone: +3 Vitality", "mods": { "+3": ["Vitality"] } },
+{ "name": "Capstone: +3 Fortitude", "mods": { "+3": ["Vitality"] } },
+{ "name": "Capstone: +3 Intelligence", "mods": { "+3": ["Vitality"] } },
+{ "name": "Capstone: +3 Logic", "mods": { "+3": ["Finesse"] } },
+{ "name": "Capstone: +3 Awareness", "mods": { "+3": ["Reflexes"] } },
+{ "name": "Capstone: +3 Intuition", "mods": { "+3": ["Vitality"] } },
+{ "name": "Capstone: +3 Charm", "mods": { "+3": ["Vitality"] } },
+{ "name": "Capstone: +3 Willpower", "mods": { "+3": ["Willpower"] } }
+]
+}
 }
