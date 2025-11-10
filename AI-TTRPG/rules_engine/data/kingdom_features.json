@@ -103,7 +103,7 @@
 "Mammal": [
 { "name": "The Brute (Raw Power)", "mods": { "+2": ["Might", "Endurance", "Vitality"], "+1": ["Fortitude", "Logic", "Awareness", "Willpower"], "-1": ["Finesse", "Reflexes", "Knowledge"] } },
 { "name": "The Lancer (Precision/Reach)", "mods": { "+2": ["Finesse", "Reflexes", "Awareness"], "+1": ["Might", "Fortitude", "Knowledge", "Intuition"], "-1": ["Endurance", "Vitality", "Charm"] } },
-{ "name": "The Acrobat (Speed/Reflexes)", "mods": { "+2": ["Reflexes", "Finesse", "Endurance"], "+1": ["Vitality", "Awareness", "Intuition", "Charm"], "-1": ["Might", "Knowledge", "Logic"] } },
+{ "name": "The Acrobat (Speed/Agility)", "mods": { "+2": ["Reflexes", "Finesse", "Endurance"], "+1": ["Vitality", "Awareness", "Intuition", "Charm"], "-1": ["Might", "Knowledge", "Logic"] } },
 { "name": "The Mixed Attacker (Might/Speed)", "mods": { "+2": ["Might", "Reflexes", "Intuition"], "+1": ["Endurance", "Vitality", "Fortitude", "Awareness"], "-1": ["Finesse", "Knowledge", "Charm"] } },
 { "name": "The Tactician (Finesse/Mind)", "mods": { "+2": ["Finesse", "Knowledge", "Logic"], "+1": ["Reflexes", "Fortitude", "Awareness", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } },
 { "name": "The Balanced Limb (Generalist)", "mods": { "+2": ["Might", "Finesse", "Reflexes"], "+1": ["Endurance", "Vitality", "Fortitude", "Awareness"], "-1": ["Knowledge", "Logic", "Charm"] } }
@@ -111,7 +111,7 @@
 "Reptile": [
 { "name": "The Brute (Raw Power)", "mods": { "+2": ["Might", "Endurance", "Vitality"], "+1": ["Fortitude", "Logic", "Awareness", "Willpower"], "-1": ["Finesse", "Reflexes", "Knowledge"] } },
 { "name": "The Lancer (Precision/Reach)", "mods": { "+2": ["Finesse", "Reflexes", "Awareness"], "+1": ["Might", "Fortitude", "Knowledge", "Intuition"], "-1": ["Endurance", "Vitality", "Charm"] } },
-{ "name": "The Acrobat (Speed/Reflexes)", "mods": { "+2": ["Reflexes", "Finesse", "Endurance"], "+1": ["Vitality", "Awareness", "Intuition", "Charm"], "-1": ["Might", "Knowledge", "Logic"] } },
+{ "name": "The Acrobat (Speed/Agility)", "mods": { "+2": ["Reflexes", "Finesse", "Endurance"], "+1": ["Vitality", "Awareness", "Intuition", "Charm"], "-1": ["Might", "Knowledge", "Logic"] } },
 { "name": "The Mixed Attacker (Might/Speed)", "mods": { "+2": ["Might", "Reflexes", "Intuition"], "+1": ["Endurance", "Vitality", "Fortitude", "Awareness"], "-1": ["Finesse", "Knowledge", "Charm"] } },
 { "name": "The Tactician (Finesse/Mind)", "mods": { "+2": ["Finesse", "Knowledge", "Logic"], "+1": ["Reflexes", "Fortitude", "Awareness", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } },
 { "name": "The Balanced Limb (Generalist)", "mods": { "+2": ["Might", "Finesse", "Reflexes"], "+1": ["Endurance", "Vitality", "Fortitude", "Awareness"], "-1": ["Knowledge", "Logic", "Charm"] } }
@@ -119,7 +119,7 @@
 "Avian": [
 { "name": "The Brute (Raw Power)", "mods": { "+2": ["Might", "Endurance", "Vitality"], "+1": ["Fortitude", "Logic", "Awareness", "Willpower"], "-1": ["Finesse", "Reflexes", "Knowledge"] } },
 { "name": "The Lancer (Precision/Reach)", "mods": { "+2": ["Finesse", "Reflexes", "Awareness"], "+1": ["Might", "Fortitude", "Knowledge", "Intuition"], "-1": ["Endurance", "Vitality", "Charm"] } },
-{ "name": "The Acrobat (Speed/Reflexes)", "mods": { "+2": ["Reflexes", "Finesse", "Endurance"], "+1": ["Vitality", "Awareness", "Intuition", "Charm"], "-1": ["Might", "Knowledge", "Logic"] } },
+{ "name": "The Acrobat (Speed/Agility)", "mods": { "+2": ["Reflexes", "Finesse", "Endurance"], "+1": ["Vitality", "Awareness", "Intuition", "Charm"], "-1": ["Might", "Knowledge", "Logic"] } },
 { "name": "The Mixed Attacker (Might/Speed)", "mods": { "+2": ["Might", "Reflexes", "Intuition"], "+1": ["Endurance", "Vitality", "Fortitude", "Awareness"], "-1": ["Finesse", "Knowledge", "Charm"] } },
 { "name": "The Tactician (Finesse/Mind)", "mods": { "+2": ["Finesse", "Knowledge", "Logic"], "+1": ["Reflexes", "Fortitude", "Awareness", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } },
 { "name": "The Balanced Limb (Generalist)", "mods": { "+2": ["Might", "Finesse", "Reflexes"], "+1": ["Endurance", "Vitality", "Fortitude", "Awareness"], "-1": ["Knowledge", "Logic", "Charm"] } }
@@ -127,7 +127,7 @@
 "Aquatic": [
 { "name": "The Brute (Raw Power)", "mods": { "+2": ["Might", "Endurance", "Vitality"], "+1": ["Fortitude", "Logic", "Awareness", "Willpower"], "-1": ["Finesse", "Reflexes", "Knowledge"] } },
 { "name": "The Lancer (Precision/Reach)", "mods": { "+2": ["Finesse", "Reflexes", "Awareness"], "+1": ["Might", "Fortitude", "Knowledge", "Intuition"], "-1": ["Endurance", "Vitality", "Charm"] } },
-{ "name": "The Acrobat (Speed/Reflexes)", "mods": { "+2": ["Reflexes", "Finesse", "Endurance"], "+1": ["Vitality", "Awareness", "Intuition", "Charm"], "-1": ["Might", "Knowledge", "Logic"] } },
+{ "name": "The Acrobat (Speed/Agility)", "mods": { "+2": ["Reflexes", "Finesse", "Endurance"], "+1": ["Vitality", "Awareness", "Intuition", "Charm"], "-1": ["Might", "Knowledge", "Logic"] } },
 { "name": "The Mixed Attacker (Might/Speed)", "mods": { "+2": ["Might", "Reflexes", "Intuition"], "+1": ["Endurance", "Vitality", "Fortitude", "Awareness"], "-1": ["Finesse", "Knowledge", "Charm"] } },
 { "name": "The Tactician (Finesse/Mind)", "mods": { "+2": ["Finesse", "Knowledge", "Logic"], "+1": ["Reflexes", "Fortitude", "Awareness", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } },
 { "name": "The Balanced Limb (Generalist)", "mods": { "+2": ["Might", "Finesse", "Reflexes"], "+1": ["Endurance", "Vitality", "Fortitude", "Awareness"], "-1": ["Knowledge", "Logic", "Charm"] } }
@@ -135,7 +135,7 @@
 "Insect": [
 { "name": "The Brute (Raw Power)", "mods": { "+2": ["Might", "Endurance", "Vitality"], "+1": ["Fortitude", "Logic", "Awareness", "Willpower"], "-1": ["Finesse", "Reflexes", "Knowledge"] } },
 { "name": "The Lancer (Precision/Reach)", "mods": { "+2": ["Finesse", "Reflexes", "Awareness"], "+1": ["Might", "Fortitude", "Knowledge", "Intuition"], "-1": ["Endurance", "Vitality", "Charm"] } },
-{ "name": "The Acrobat (Speed/Reflexes)", "mods": { "+2": ["Reflexes", "Finesse", "Endurance"], "+1": ["Vitality", "Awareness", "Intuition", "Charm"], "-1": ["Might", "Knowledge", "Logic"] } },
+{ "name": "The Acrobat (Speed/Agility)", "mods": { "+2": ["Reflexes", "Finesse", "Endurance"], "+1": ["Vitality", "Awareness", "Intuition", "Charm"], "-1": ["Might", "Knowledge", "Logic"] } },
 { "name": "The Mixed Attacker (Might/Speed)", "mods": { "+2": ["Might", "Reflexes", "Intuition"], "+1": ["Endurance", "Vitality", "Fortitude", "Awareness"], "-1": ["Finesse", "Knowledge", "Charm"] } },
 { "name": "The Tactician (Finesse/Mind)", "mods": { "+2": ["Finesse", "Knowledge", "Logic"], "+1": ["Reflexes", "Fortitude", "Awareness", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } },
 { "name": "The Balanced Limb (Generalist)", "mods": { "+2": ["Might", "Finesse", "Reflexes"], "+1": ["Endurance", "Vitality", "Fortitude", "Awareness"], "-1": ["Knowledge", "Logic", "Charm"] } }
@@ -143,7 +143,7 @@
 "Plant": [
 { "name": "The Brute (Raw Power)", "mods": { "+2": ["Might", "Endurance", "Vitality"], "+1": ["Fortitude", "Logic", "Awareness", "Willpower"], "-1": ["Finesse", "Reflexes", "Knowledge"] } },
 { "name": "The Lancer (Precision/Reach)", "mods": { "+2": ["Finesse", "Reflexes", "Awareness"], "+1": ["Might", "Fortitude", "Knowledge", "Intuition"], "-1": ["Endurance", "Vitality", "Charm"] } },
-{ "name": "The Acrobat (Speed/Reflexes)", "mods": { "+2": ["Reflexes", "Finesse", "Endurance"], "+1": ["Vitality", "Awareness", "Intuition", "Charm"], "-1": ["Might", "Knowledge", "Logic"] } },
+{ "name": "The Acrobat (Speed/Agility)", "mods": { "+2": ["Reflexes", "Finesse", "Endurance"], "+1": ["Vitality", "Awareness", "Intuition", "Charm"], "-1": ["Might", "Knowledge", "Logic"] } },
 { "name": "The Mixed Attacker (Might/Speed)", "mods": { "+2": ["Might", "Reflexes", "Intuition"], "+1": ["Endurance", "Vitality", "Fortitude", "Awareness"], "-1": ["Finesse", "Knowledge", "Charm"] } },
 { "name": "The Tactician (Finesse/Mind)", "mods": { "+2": ["Finesse", "Knowledge", "Logic"], "+1": ["Reflexes", "Fortitude", "Awareness", "Willpower"], "-1": ["Might", "Endurance", "Vitality"] } },
 { "name": "The Balanced Limb (Generalist)", "mods": { "+2": ["Might", "Finesse", "Reflexes"], "+1": ["Endurance", "Vitality", "Fortitude", "Awareness"], "-1": ["Knowledge", "Logic", "Charm"] } }

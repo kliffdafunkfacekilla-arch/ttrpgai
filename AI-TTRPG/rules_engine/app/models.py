@@ -456,20 +456,24 @@ class BaseVitalsResponse(BaseModel):
         description="Dictionary of all 6 resource pools with current/max values."
     )
 
-
-# ADD THESE MODELS for NPC Generation
+# --- ADDED NPC GENERATION MODELS (Consolidated from npc_generator) ---
 class NpcGenerationRequest(BaseModel):
-    kingdom: str
+    """
+    Inputs from the Story Engine to generate an NPC template.
+    """
+    biome: Optional[str] = None
+    kingdom: str = "mammal"
     offense_style: str
     defense_style: str
-    difficulty: str
     ability_focus: Optional[str] = None
-    biome: Optional[str] = None
+    behavior: str = "aggressive"
+    difficulty: str = "medium"
     custom_name: Optional[str] = None
-    behavior: str
-
 
 class NpcTemplateResponse(BaseModel):
+    """
+    The generated NPC template/stat block returned to the Story Engine.
+    """
     generated_id: str
     name: str
     description: str
@@ -478,4 +482,4 @@ class NpcTemplateResponse(BaseModel):
     abilities: List[str]
     max_hp: int
     behavior_tags: List[str]
-    loot_table_ref: str
+    loot_table_ref: Optional[str] = None

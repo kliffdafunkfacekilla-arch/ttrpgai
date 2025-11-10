@@ -10,7 +10,7 @@ import json
 RULES_ENGINE_URL = "http://127.0.0.1:8000"
 CHARACTER_ENGINE_URL = "http://127.0.0.1:8001"
 WORLD_ENGINE_URL = "http://127.0.0.1:8002"
-# NPC_GENERATOR_URL REMOVED - Logic is now in Rules Engine
+# NPC_GENERATOR_URL REMOVED
 MAP_GENERATOR_URL = "http://127.0.0.1:8006"
 
 logger = logging.getLogger("uvicorn.error")
