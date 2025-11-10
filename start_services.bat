@@ -40,7 +40,7 @@ start "story_engine" cmd /c "cd /d "%SERVICES_PARENT_DIR%\story_engine" && title
 timeout /t 2 /nobreak > nul
 start "encounter_generator" cmd /c "cd /d "%SERVICES_PARENT_DIR%\encounter_generator" && title encounter_generator && uvicorn app.main:app --host 127.0.0.1 --port 8004 --reload"
 timeout /t 2 /nobreak > nul
-start "npc_generator" cmd /c "cd /d "%SERVICES_PARENT_DIR%\npc_generator" && title npc_generator && uvicorn app.main:app --host 127.0.0.1 --port 8005 --reload"
+REM Removed npc_generator (port 8005) - logic consolidated into rules_engine (port 8000)
 timeout /t 2 /nobreak > nul
 start "map_generator" cmd /c "cd /d "%SERVICES_PARENT_DIR%\map_generator" && title map_generator && uvicorn app.main:app --host 127.0.0.1 --port 8006 --reload"
 timeout /t 2 /nobreak > nul
