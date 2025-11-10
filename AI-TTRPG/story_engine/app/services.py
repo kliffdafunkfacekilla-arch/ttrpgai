@@ -11,6 +11,7 @@ import random
 RULES_ENGINE_URL = "http://127.0.0.1:8000"
 CHARACTER_ENGINE_URL = "http://127.0.0.1:8001"
 WORLD_ENGINE_URL = "http://127.0.0.1:8002"
+# NPC_GENERATOR_URL REMOVED
 MAP_GENERATOR_URL = "http://127.0.0.1:8006"
 
 logger = logging.getLogger("uvicorn.error")
@@ -82,7 +83,14 @@ async def get_npc_generation_params(client: httpx.AsyncClient, template_id: str)
     url = f"{RULES_ENGINE_URL}/v1/lookup/npc_template/{template_id}"
     return await _call_api(client, "GET", url)
 
+async def get_item_template_params(client: httpx.AsyncClient, item_id: str) -> Dict:
+    """Calls rules_engine to get definition for an item template ID."""
+    url = f"{RULES_ENGINE_URL}/v1/lookup/item_template/{item_id}"
+    return await _call_api(client, "GET", url)
+
+# --- MODIFIED: Consolidated NPC Generation Call to Rules Engine ---
 async def generate_npc_template(client: httpx.AsyncClient, generation_request: Dict) -> Dict:
+    """Calls the Rules Engine (now the single source) to generate a full NPC template."""
     url = f"{RULES_ENGINE_URL}/v1/generate/npc_template"
     return await _call_api(client, "POST", url, json=generation_request)
 
