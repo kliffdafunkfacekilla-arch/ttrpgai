@@ -7,6 +7,12 @@ from typing import List, Dict, Any
 from . import crud, models, schemas
 from .database import SessionLocal, engine
 
+# --- CRITICAL FIX: Add Database Table Creation on Startup ---
+# This ensures tables exist if Alembic was skipped or failed, eliminating the "no such table" error.
+print("INFO: World Engine attempting to create database tables if they do not exist.")
+models.Base.metadata.create_all(bind=engine)
+# --- END CRITICAL FIX ---
+
 # This creates the FastAPI application instance
 app = FastAPI(
     title="World Engine",
