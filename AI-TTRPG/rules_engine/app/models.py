@@ -455,3 +455,27 @@ class BaseVitalsResponse(BaseModel):
     resources: Dict[str, Dict[str, int]] = Field(
         description="Dictionary of all 6 resource pools with current/max values."
     )
+
+
+# ADD THESE MODELS for NPC Generation
+class NpcGenerationRequest(BaseModel):
+    kingdom: str
+    offense_style: str
+    defense_style: str
+    difficulty: str
+    ability_focus: Optional[str] = None
+    biome: Optional[str] = None
+    custom_name: Optional[str] = None
+    behavior: str
+
+
+class NpcTemplateResponse(BaseModel):
+    generated_id: str
+    name: str
+    description: str
+    stats: Dict[str, int]
+    skills: Dict[str, int]
+    abilities: List[str]
+    max_hp: int
+    behavior_tags: List[str]
+    loot_table_ref: str
