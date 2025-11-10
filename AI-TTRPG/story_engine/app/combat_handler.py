@@ -32,7 +32,7 @@ def _extract_initiative_stats(stats_dict: Dict) -> Dict:
     # This function is now correct based on our previous fix
     return {
         "endurance": stats_dict.get("Endurance", 10),
-        "reflexes": stats_dict.get("Reflexes", 10),
+        "reflexes": stats_dict.get("Reflexes", 10), # <-- CHANGED 'reflexes' was previously 'agility' here
         "fortitude": stats_dict.get("Fortitude", 10),
         "logic": stats_dict.get("Logic", 10),
         "intuition": stats_dict.get("Intuition", 10),
