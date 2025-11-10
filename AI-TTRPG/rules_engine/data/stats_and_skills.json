@@ -1,19 +1,102 @@
-{"stats": ["Might", "Endurance", "Finesse", "Reflexes", "Vitality","Fortitude", "Knowledge", "Logic", "Awareness", "Intuition","Charm", "Willpower"
-
-],"skill_categories": {"Conversational": ["Intimidation", "Resilience", "Slight of Hand", "Evasion", "Comfort","Discipline", "Debate", "Rhetoric", "Insight", "Empathy","Persuasion", "Negotiations"
-
-],"Utility": ["Strength", "Survival", "Artifice", "Athletics", "Provisioning","Resourcefulness", "Navigation", "Pathfinding", "Security", "Nature Sense","Communication", "Expedition"
-
-],"Lore": ["Lore: Tribal & Outlaw", "Lore: Common Folk", "Lore: Outlaw/Criminal", "Lore: Travel & Routes","Lore: Agricul. & Wilds", "Lore: Miners & Geology", "Lore: Science & Acad.", "Lore: Trades & Eng.","Lore: Merchant/Trade", "Lore: Religion & Spirit", "Lore: Nobility/Court", "Lore: Royalty/Political"
-
-],"Armor": ["Scale/Band Mail", "Plate Armor", "Camouflage", "Clothing/Utility", "Wood and Stone","Natural/Unarmored","Robes/Cloaks", "Chainmail", "Leather/Hides", "Tribal/Spirit","Ornate/Showy", "Reinforced"
-
-],"Melee": ["Great Weapons", "Polearms & Shields", "Precision Blades", "Quick Pair", "Adept Staves","Brawling Weapons", "Elemental Edges", "Utilitarian Weapons", "Binding Weapons", "Visceral Weapons","Performance Weapons", "Resolute Edges"
-
-],"Ranged": ["Heavy Artillery", "Area Projectors", "Subtle Projectiles", "Quick Throws", "Explosives & Vials","Returning Projectiles", "Clockwork Weapons", "Impact Spears", "Precision Archery", "Restraint Weapons","Concussive Firearms", "Sustained Defense"
-
-]
-
+{
+"stats": [
+"Might",
+"Endurance",
+"Finesse",
+"Reflexes",
+"Vitality",
+"Fortitude",
+"Knowledge",
+"Logic",
+"Awareness",
+"Intuition",
+"Charm",
+"Willpower"
+],
+"skill_categories": {
+"Conversational": {
+"Intimidation": "Might",
+"Resilience": "Endurance",
+"Slight of Hand": "Finesse",
+"Evasion": "Reflexes",
+"Comfort": "Vitality",
+"Discipline": "Fortitude",
+"Debate": "Knowledge",
+"Rhetoric": "Logic",
+"Insight": "Awareness",
+"Empathy": "Intuition",
+"Persuasion": "Charm",
+"Negotiations": "Willpower"
+},
+"Utility": {
+"Labor": "Might",
+"Security": "Endurance",
+"Artifice": "Finesse",
+"Kinetics": "Reflexes",
+"Provisioning": "Vitality",
+"Environment": "Fortitude",
+"Scholarship": "Knowledge",
+"Ingenuity": "Logic",
+"Investigation": "Awareness",
+"Thaumaturgy": "Intuition",
+"Expression": "Charm",
+"Coordination": "Willpower"
+},
+"Lore": {
+"Lore: Military and Training": "Might",
+"Lore: Civilization": "Endurance",
+"Lore: Outlaw & Secret": "Finesse",
+"Lore: Travel & Routes": "Reflexes",
+"Lore: Agricul. & Wilds": "Vitality",
+"Lore: Miners & Geology": "Fortitude",
+"Lore: Science & History": "Knowledge",
+"Lore: Trades & Markets.": "Logic",
+"Lore: Astrology & Direction": "Awareness",
+"Lore: Religion & Spirit": "Intuition",
+"Lore: Ruling Class/Politics": "Charm",
+"Lore: Law & Enforcement": "Willpower"
+},
+"Armor": {
+"Scale/Band Mail": "Might",
+"Plate Armor": "Endurance",
+"Camouflage": "Finesse",
+"Clothing/Utility": "Reflexes",
+"Wood and Stone": "Vitality",
+"Natural/Unarmored": "Fortitude",
+"Robes/Cloaks": "Knowledge",
+"Chainmail": "Logic",
+"Leather/Hides": "Awareness",
+"Tribal/Spirit": "Intuition",
+"Ornate/Showy": "Charm",
+"Reinforced": "Willpower"
+},
+"Melee": {
+"Great Weapons": "Might",
+"Polearms & Shields": "Endurance",
+"Double/dual wield": "Finesse",
+"Daggers/Small Blades": "Reflexes",
+"Nature Weapons": "Vitality",
+"Unarmed/Fist Weapons": "Fortitude",
+"Infused Weapons": "Knowledge",
+"Tool/Improvised Weapons": "Logic",
+"Covering/Area Weapons": "Awareness",
+"Savage Weapons": "Intuition",
+"Performance/Show Weapons": "Charm",
+"Exotic/Concentration Weapons": "Willpower"
+},
+"Ranged": {
+"Heavy Bows/Launchers": "Might",
+"Crowd Controllers": "Endurance",
+"Quick Thrown": "Finesse",
+"Effect/Surprise Thrown": "Reflexes",
+"Nature/Alchemy": "Vitality",
+"Ariel/Flying Strikes": "Fortitude",
+"Infused Blasters/Launchers": "Knowledge",
+"Slings/Spears": "Logic",
+"Bows and Firearms": "Awareness",
+"Fused/Triggered Projectiles": "Intuition",
+"Scatter/Repeater Bows/Firearms": "Charm",
+"Concentration/Focus Launchers  ": "Willpower"
 }
-
+}
 }

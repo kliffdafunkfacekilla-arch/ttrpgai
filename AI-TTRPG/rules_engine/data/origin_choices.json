@@ -2,16 +2,16 @@
   {
     "name": "Forested Highlands",
     "description": "Raised in the high-altitude forests, you are a natural survivalist and tracker.",
-    "skills": ["Survival", "Lore: Agricul. & Wilds"]
+    "skills": ["Environment", "Lore: Agricul. & Wilds"]
   },
   {
     "name": "Bustling Metropolis",
     "description": "Born in the heart of a massive city, you know how to navigate the streets and the crowds.",
-    "skills": ["Navigation", "Lore: Common Folk"]
+    "skills": ["Kinetics", "Lore: Civilization"]
   },
   {
     "name": "Underground Enclave",
     "description": "You hail from a hidden society beneath the earth. You are a-tune with the stone and the shadows.",
-    "skills": ["Resourcefulness", "Lore: Miners & Geology"]
+    "skills": ["Provisioning", "Lore: Miners & Geology"]
   }
 ]

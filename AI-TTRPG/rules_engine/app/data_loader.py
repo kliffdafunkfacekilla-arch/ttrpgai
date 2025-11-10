@@ -32,27 +32,6 @@ def _load_json(filename: str) -> Any:
         raise
 
 
-def _correct_stat_names_in_mods(mods: Dict[str, List[str]]) -> Dict[str, List[str]]:
-    """Replaces 'Constitution' with 'Vitality' in stat modifier lists."""
-    corrected_mods = {}
-    if not isinstance(mods, dict):
-        print(
-            f"Warning: Expected dict for mods, got {type(mods)}. Skipping correction."
-        )
-        return mods
-    for key, stats in mods.items():
-        if isinstance(stats, list):
-            corrected_mods[key] = [
-                "Vitality" if stat == "Constitution" else stat for stat in stats
-            ]
-        else:
-            print(
-                f"Warning: Expected list for stats under key '{key}', got {type(stats)}. Keeping original."
-            )
-            corrected_mods[key] = stats
-    return corrected_mods
-
-
 # --- Processing Functions ---
 
 
@@ -74,50 +53,15 @@ def _process_kingdom_features() -> Dict[str, Any]:
                         continue
                     feature_name = feature.get("name")
                     if feature_name:
-                        if "mods" in feature:
-                            # --- MODIFIED ---
-                            # We still correct the mods here for the flat map
-                            feature["mods"] = _correct_stat_names_in_mods(
-                                feature["mods"]
-                            )
                         feature_stats_map[feature_name] = feature
     print(
-        f"Processed {len(feature_stats_map)} kingdom features into flat map (Vitality corrected)."
+        f"Processed {len(feature_stats_map)} kingdom features into flat map."
     )
     return feature_stats_map
 
 
-# --- ADDED FUNCTION ---
-def _load_and_correct_kingdom_features() -> Dict[str, Any]:
-    """Loads kingdom features, corrects stat names, but preserves hierarchy."""
-    kingdom_data = _load_json("kingdom_features.json")
-    if not isinstance(kingdom_data, dict):
-        print("FATAL ERROR: kingdom_features.json did not load as a dictionary.")
-        return {}
-
-    print("Correcting stat names in full kingdom_features.json structure...")
-    # Iterate through the full structure (e.g., "F1", "F2"...)
-    for feature_key, kingdoms in kingdom_data.items():
-        if not isinstance(kingdoms, dict):
-            continue
-        # Iterate kingdoms ("Mammal", "Reptile"...) or "All"
-        for kingdom_name, choices_list in kingdoms.items():
-            if not isinstance(choices_list, list):
-                continue
-            # Iterate choices
-            for choice in choices_list:
-                if isinstance(choice, dict) and "mods" in choice:
-                    choice["mods"] = _correct_stat_names_in_mods(choice["mods"])
-
-    print("Full kingdom_features.json structure corrected.")
-    return kingdom_data
-
-
-# --- END ADDED FUNCTION ---
-
-
 def _process_skills() -> (
-    tuple[List[str], Dict[str, List[str]], Dict[str, Dict[str, str]]]
+    tuple[List[str], Dict[str, Dict[str, str]], Dict[str, Dict[str, str]]]
 ):
     """Processes skills AND RETURNS stats list, categories dict, and all_skills dict."""
     stats_data = _load_json("stats_and_skills.json")
@@ -129,15 +73,19 @@ def _process_skills() -> (
         print("FATAL ERROR: 'stats' list not found or empty in stats_and_skills.json")
         return [], {}, {}
 
-    for category, skills in skill_categories.items():
-        if isinstance(skills, list):
-            for i, skill_name in enumerate(skills):
-                stat_index = i % len(stats_list)
-                governing_stat = stats_list[stat_index]
+    for category, skills_dict in skill_categories.items():
+        if isinstance(skills_dict, dict):
+            for skill_name, governing_stat in skills_dict.items():
+                if governing_stat not in stats_list:
+                    print(
+                        f"Warning: Skill '{skill_name}' has invalid governing stat '{governing_stat}'. Skipping."
+                    )
+                    continue
+
                 all_skills[skill_name] = {"category": category, "stat": governing_stat}
         else:
             print(
-                f"Warning: Expected list for skills in category '{category}', got {type(skills)}. Skipping category."
+                f"Warning: Expected dict for skills in category '{category}', got {type(skills_dict)}. Skipping category."
             )
 
     print(f"Processed {len(all_skills)} skills into master map.")
@@ -152,7 +100,7 @@ ALL_SKILLS: Dict[str, Dict[str, str]] = {}
 ABILITY_DATA: Dict[str, Any] = {}
 TALENT_DATA: Dict[str, Any] = {}
 FEATURE_STATS_MAP: Dict[str, Any] = {}
-KINGDOM_FEATURES_DATA: Dict[str, Any] = {}  # --- ADDED ---
+KINGDOM_FEATURES_DATA: Dict[str, Any] = {}
 MELEE_WEAPONS: Dict[str, Any] = {}
 RANGED_WEAPONS: Dict[str, Any] = {}
 ARMOR: Dict[str, Any] = {}
@@ -177,9 +125,7 @@ DEVOTION_CHOICES: List[Dict[str, Any]] = []
 def load_data() -> Dict[str, Any]:
     """Loads all rules data and returns it in a dictionary."""
     global STATS_LIST, SKILL_CATEGORIES, ALL_SKILLS, ABILITY_DATA, TALENT_DATA, FEATURE_STATS_MAP
-    # --- MODIFIED ---
     global MELEE_WEAPONS, RANGED_WEAPONS, ARMOR, INJURY_EFFECTS, STATUS_EFFECTS, EQUIPMENT_CATEGORY_TO_SKILL_MAP, KINGDOM_FEATURES_DATA, NPC_TEMPLATES, ITEM_TEMPLATES
-    # --- ADD NEW GLOBALS TO FUNCTION SCOPE ---
     global ORIGIN_CHOICES, CHILDHOOD_CHOICES, COMING_OF_AGE_CHOICES, TRAINING_CHOICES, DEVOTION_CHOICES
 
     print("Starting data loading process...")
@@ -207,10 +153,8 @@ def load_data() -> Dict[str, Any]:
         # Process kingdom features (flat map for lookups)
         FEATURE_STATS_MAP = _process_kingdom_features()
 
-        # --- ADDED ---
         # Load kingdom features (full structure for creation)
-        KINGDOM_FEATURES_DATA = _load_and_correct_kingdom_features()
-        # --- END ADDED ---
+        KINGDOM_FEATURES_DATA = _load_json("kingdom_features.json")
 
         # Load combat data
         MELEE_WEAPONS = _load_json("melee_weapons.json")
@@ -262,7 +206,7 @@ def load_data() -> Dict[str, Any]:
             "ability_data": ABILITY_DATA,
             "talent_data": TALENT_DATA,
             "feature_stats_map": FEATURE_STATS_MAP,
-            "kingdom_features_data": KINGDOM_FEATURES_DATA,  # --- ADDED ---
+            "kingdom_features_data": KINGDOM_FEATURES_DATA,
             "melee_weapons": MELEE_WEAPONS,
             "ranged_weapons": RANGED_WEAPONS,
             "armor": ARMOR,
@@ -287,7 +231,7 @@ def load_data() -> Dict[str, Any]:
         print(f"DEBUG: FEATURE_STATS_MAP len: {len(FEATURE_STATS_MAP)}")
         print(
             f"DEBUG: KINGDOM_FEATURES_DATA keys: {len(KINGDOM_FEATURES_DATA.keys())}"
-        )  # --- ADDED ---
+        )
         print(f"Loaded {len(MELEE_WEAPONS)} melee weapon categories.")
         print(f"Loaded {len(RANGED_WEAPONS)} ranged weapon categories.")
         print(f"Loaded {len(ARMOR)} armor categories.")
