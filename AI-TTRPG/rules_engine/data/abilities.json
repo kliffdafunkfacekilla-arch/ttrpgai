@@ -15,7 +15,7 @@
           },
           {
             "tier": "T3",
-            "description": "Precision Trip: Force target to pass Agility check or be Prone."
+            "description": "Precision Trip: Force target to pass Reflexes check or be Prone."
           },
           {
             "tier": "T4",
@@ -402,7 +402,7 @@
           },
           {
             "tier": "T3",
-            "description": "Pain Block: Target suffers a penalty to all Speed and Agility checks for 2 rounds."
+            "description": "Pain Block: Target suffers a penalty to all Speed and Reflexes checks for 2 rounds."
           },
           {
             "tier": "T4",
@@ -527,7 +527,7 @@
           },
           {
             "tier": "T2",
-            "description": "Hamstring: Target suffers a -2 penalty on their next Agility check."
+            "description": "Hamstring: Target suffers a -2 penalty on their next Reflexes check."
           },
           {
             "tier": "T3",
@@ -535,7 +535,7 @@
           },
           {
             "tier": "T4",
-            "description": "Binding Field: 3m area. Enemies entering suffer a -2 penalty to their Agility check."
+            "description": "Binding Field: 3m area. Enemies entering suffer a -2 penalty to their Reflexes check."
           },
           {
             "tier": "T5",
@@ -642,7 +642,7 @@
         ]
       }
     ],
-    "associated_stat": "Agility"
+    "associated_stat": "Reflexes"
   },
   "Cunning": {
     "resource": "Guile",
@@ -652,7 +652,7 @@
         "tiers": [
           {
             "tier": "T1",
-            "description": "Minor Trip: Create a subtle snare on the ground. Next enemy crossing must pass Agility check or be Prone."
+            "description": "Minor Trip: Create a subtle snare on the ground. Next enemy crossing must pass Reflexes check or be Prone."
           },
           {
             "tier": "T2",
@@ -914,7 +914,7 @@
           },
           {
             "tier": "T2",
-            "description": "Minor Tremor: Create a small earthquake in a 3m area. Targets must pass an Agility check or be Staggered."
+            "description": "Minor Tremor: Create a small earthquake in a 3m area. Targets must pass an Reflexes check or be Staggered."
           },
           {
             "tier": "T3",
