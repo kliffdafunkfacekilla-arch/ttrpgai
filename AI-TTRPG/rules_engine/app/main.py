@@ -17,6 +17,8 @@ from .models import (
     SkillCategoryResponse,
     AbilitySchoolResponse,
     BackgroundChoice,  # --- ADD THIS IMPORT ---
+    NpcGenerationRequest, # ADDED
+    NpcTemplateResponse, # ADDED
 )
 
 # Use relative imports for local modules
@@ -54,6 +56,7 @@ async def lifespan(app: FastAPI):
         app.state.training_choices = loaded_rules.get("training_choices", [])
         app.state.devotion_choices = loaded_rules.get("devotion_choices", [])
         # --- END ADD ---
+        app.state.generation_rules = loaded_rules.get("generation_rules", {}) # ADDED
         app.state.npc_templates = loaded_rules.get("npc_templates", {})
         app.state.item_templates = loaded_rules.get("item_templates", {})
 
@@ -79,6 +82,7 @@ async def lifespan(app: FastAPI):
         app.state.coming_of_age_choices = []
         app.state.training_choices = []
         app.state.devotion_choices = []
+        app.state.generation_rules = {} # ADDED
         # --- END ADD ---
         app.state.npc_templates = {}
         app.state.item_templates = {}
@@ -114,6 +118,7 @@ def check_state_loaded(request: Request):
         "coming_of_age_choices",  # --- ADD ---
         "training_choices",  # --- ADD ---
         "devotion_choices",  # --- ADD ---
+        "generation_rules", # ADDED
         "npc_templates",
         "item_templates",
     ]
@@ -153,6 +158,7 @@ async def get_status(request: Request):
         coming_of_age_choices = getattr(
             request.app.state, "coming_of_age_choices", []
         )
+        generation_rules = getattr(request.app.state, "generation_rules", {}) # ADDED
         training_choices = getattr(request.app.state, "training_choices", [])
         devotion_choices = getattr(request.app.state, "devotion_choices", [])
         # --- END ADD ---
@@ -173,6 +179,7 @@ async def get_status(request: Request):
         background_choices_loaded = all(
             [
                 bool(origin_choices),
+                bool(generation_rules), # ADDED
                 bool(childhood_choices),
                 bool(coming_of_age_choices),
                 bool(training_choices),
@@ -225,6 +232,7 @@ async def get_status(request: Request):
             "coming_of_age_choices_loaded_count": len(coming_of_age_choices),
             "training_choices_loaded_count": len(training_choices),
             "devotion_choices_loaded_count": len(devotion_choices),
+            "generation_rules_loaded": bool(generation_rules), # ADDED
             # --- END ADD ---
             "npc_templates_loaded_count": len(npc_templates),
             "item_templates_loaded_count": len(item_templates),
@@ -816,3 +824,25 @@ async def api_get_item_template(request: Request, item_id: str):
         logger.warning(f"Item template ID '{item_id}' not found in item_templates.json.")
         raise HTTPException(status_code=404, detail=f"Item template '{item_id}' not found.")
     return template_data
+
+@app.post("/v1/generate/npc_template", response_model=NpcTemplateResponse, tags=["Generation"])
+async def api_generate_npc_template(request_data: NpcGenerationRequest, request: Request):
+    """
+    Consolidated endpoint: Generates a complete NPC template/stat block
+    using local generation rules and formula. Eliminates one microservice call.
+    """
+    check_state_loaded(request)
+    try:
+        template_data = core.generate_npc_template_core(
+            request=request_data,
+            all_skills_map=request.app.state.all_skills,
+            generation_rules=request.app.state.generation_rules,
+        )
+        # The core function returns a Dict, Pydantic handles the coercion to NpcTemplateResponse
+        return template_data
+    except Exception as e:
+        logger.exception(f"Error during consolidated NPC generation: {e}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"Internal error during NPC generation: {str(e)}"
+        )
