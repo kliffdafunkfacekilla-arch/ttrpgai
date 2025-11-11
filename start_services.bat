@@ -23,13 +23,8 @@ taskkill /F /IM node.exe /T >nul 2>&1
 echo.
 timeout /t 2 /nobreak > nul
 
-REM --- Database Migrations ---
-echo Applying database migrations...
-echo  - Applying character_engine migrations...
-alembic -c "%~dp0AI-TTRPG\character_engine\alembic.ini" upgrade head > "%LOG_DIR%\alembic_character.log" 2>&1
-echo  - Applying world_engine migrations...
-alembic -c "%~dp0AI-TTRPG\world_engine\alembic.ini" upgrade head > "%LOG_DIR%\alembic_world.log" 2>&1
-echo Migrations applied successfully.
+REM --- Database Migrations (REMOVED) ---
+echo "Database migrations are now handled by each service on startup."
 echo.
 
 REM --- Backend Services ---

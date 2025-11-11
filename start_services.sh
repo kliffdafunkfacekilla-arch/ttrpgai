@@ -15,11 +15,8 @@ echo "PYTHONPATH set to: $PYTHONPATH"
 # Create a logs directory if it doesn't exist
 mkdir -p logs
 
-# Apply Alembic migrations
-echo "Applying database migrations..."
-alembic -c AI-TTRPG/character_engine/alembic.ini upgrade head > logs/alembic_character.log 2>&1
-alembic -c AI-TTRPG/world_engine/alembic.ini upgrade head > logs/alembic_world.log 2>&1
-echo "Migrations applied."
+# Apply Alembic migrations (REMOVED)
+echo "Database migrations are now handled by each service on startup."
 
 # Kill any previously running uvicorn processes to avoid port conflicts
 echo "Killing any lingering uvicorn processes..."

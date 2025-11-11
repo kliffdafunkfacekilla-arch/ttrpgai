@@ -2,15 +2,62 @@ from fastapi import Depends, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from typing import List, Dict, Any
+import os
+from contextlib import asynccontextmanager
+from alembic.config import Config as AlembicConfig
+from alembic import command as alembic_command
 
 # Import all our other files
 from . import crud, models, schemas
-from .database import SessionLocal, engine
+from .database import SessionLocal, engine, Base, DATABASE_URL # <-- Import Base and DATABASE_URL
+
+# --- NEW LIFESPAN FUNCTION ---
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    print("INFO: World Engine: Lifespan startup...")
+
+    # 1. Define paths relative to this file
+    _current_dir = os.path.dirname(os.path.abspath(__file__))
+    _service_root = os.path.abspath(os.path.join(_current_dir, ".."))
+    alembic_ini_path = os.path.join(_service_root, "alembic.ini")
+    alembic_script_location = os.path.join(_service_root, "alembic")
+
+    print(f"INFO: World Engine: Database URL: {DATABASE_URL}")
+    print(f"INFO: World Engine: Alembic .ini path: {alembic_ini_path}")
+
+    try:
+        # 2. Create Alembic Config object
+        alembic_cfg = AlembicConfig(alembic_ini_path)
+
+        # 3. Set the script location (must be absolute)
+        alembic_cfg.set_main_option("script_location", alembic_script_location)
+
+        # 4. Set the database URL to be the same one the app uses
+        alembic_cfg.set_main_option("sqlalchemy.url", DATABASE_URL)
+
+        # 5. Run the "upgrade head" command programmatically
+        print("INFO: World Engine: Running Alembic upgrade head...")
+        alembic_command.upgrade(alembic_cfg, "head")
+        print("INFO: World Engine: Alembic upgrade complete.")
+
+    except Exception as e:
+        print(f"FATAL: World Engine: Database migration failed on startup: {e}")
+        # As a fallback, create tables directly (won't run seeding, but prevents crash)
+        print("INFO: World Engine: Running Base.metadata.create_all() as fallback...")
+        Base.metadata.create_all(bind=engine)
+
+    # App is ready to start
+    yield
+
+    # Shutdown logic
+    print("INFO: World Engine: Shutting down.")
+
 
 # This creates the FastAPI application instance
 app = FastAPI(
     title="World Engine",
-    description="Manages the state of all locations, NPCs, items, and world data."
+    description="Manages the state of all locations, NPCs, items, and world data.",
+    lifespan=lifespan  # <--- ASSIGN THE LIFESPAN FUNCTION
 )
 
 # Add CORSMiddleware
