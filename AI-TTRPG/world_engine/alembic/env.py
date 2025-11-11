@@ -3,7 +3,7 @@ from os.path import abspath, dirname
 from logging.config import fileConfig
 
 # Add the project's root directory to the Python path
-sys.path.insert(0, abspath(dirname(dirname(dirname(__file__)))))
+sys.path.insert(0, abspath(dirname(dirname(__file__))))
 
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
@@ -19,18 +19,17 @@ config = context.config
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-# --- THIS IS THE IMPORTANT PART ---
-# It tells Alembic to find the 'Base' variable from
-# our 'app/models.py' file.
-from app.models import Base
+# --- START CRITICAL MODIFICATION ---
+# 1. Import the database object to get the absolute path constant
+from app.database import Base, DATABASE_URL
 target_metadata = Base.metadata
-# --- END IMPORTANT PART ---
+# --- END CRITICAL MODIFICATION ---
 
 
 def run_migrations_offline() -> None:
-    """Run migrations in 'offline' mode.
-    """
-    url = config.get_main_option("sqlalchemy.url")
+    """Run migrations in 'offline' mode."""
+    # 2. Use the imported absolute URL for offline mode
+    url = DATABASE_URL
     context.configure(
         url=url,
         target_metadata=target_metadata,
@@ -43,10 +42,14 @@ def run_migrations_offline() -> None:
 
 
 def run_migrations_online() -> None:
-    """Run migrations in 'online' mode.
-    """
+    """Run migrations in 'online' mode."""
+
+    # 3. Temporarily set the SQLAlchemy URL in the config to the absolute path
+    alembic_config_section = config.get_section(config.config_ini_section, {})
+    alembic_config_section["sqlalchemy.url"] = DATABASE_URL # <-- FORCES ABSOLUTE PATH
+
     connectable = engine_from_config(
-        config.get_section(config.config_ini_section, {}),
+        alembic_config_section, # <-- Use the modified config section
         prefix="sqlalchemy.",
         poolclass=pool.NullPool,
     )
