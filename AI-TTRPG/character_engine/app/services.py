@@ -152,7 +152,7 @@ async def _get_rules_engine_data() -> Dict[str, Any]:
     print("Fetching all creation data from Rules Engine...")
     endpoints = {
         "kingdom_features": "/lookup/creation/kingdom_features",
-        "ability_talents_list": "/lookup/creation/ability_talents",
+        # "ability_talents_list": "/lookup/creation/ability_talents", # This endpoint is flawed/redundant
         "ability_schools": "/lookup/all_ability_schools",
         "stats_list": "/lookup/all_stats",
         "all_skills": "/lookup/all_skills",
@@ -161,6 +161,8 @@ async def _get_rules_engine_data() -> Dict[str, Any]:
         "coming_of_age_choices": "/lookup/creation/coming_of_age_choices",
         "training_choices": "/lookup/creation/training_choices",
         "devotion_choices": "/lookup/creation/devotion_choices",
+        # --- ADDED: New endpoint for all talent data ---
+        "all_talents_structured": "/lookup/all_talents_data",
     }
 
     rules_data = {}
@@ -171,13 +173,85 @@ async def _get_rules_engine_data() -> Dict[str, Any]:
             print(f"Fetching {key} from {endpoint}...")
             rules_data[key] = await _call_rules_engine("GET", endpoint)
 
-        # Fetch full talent data (POST)
-        response = await _call_rules_engine(
-            "POST", "/lookup/talents", json_data={"stats": {}, "skills": {}}
-        )
-        all_talents_list = response
-        rules_data["all_talents_map"] = {t["name"]: t for t in all_talents_list}
+        # --- MODIFIED: Flatten the structured talent data into the map ---
+        all_talents_map = {}
+        structured_talents = rules_data.get("all_talents_structured", {})
+        
+        if not structured_talents:
+             print("WARNING: 'all_talents_structured' data is empty. Talent map will be empty.")
+             logger.warning("Received empty talent data from rules_engine. This may cause ability talent selection to fail.")
+        else:
+            # Flatten single_stat_mastery
+            single_stat_talents = structured_talents.get("single_stat_mastery", [])
+            if not isinstance(single_stat_talents, list):
+                logger.error(f"Expected single_stat_mastery to be a list, got {type(single_stat_talents)}")
+                single_stat_talents = []
+            
+            for talent in single_stat_talents:
+                if not isinstance(talent, dict):
+                    logger.warning(f"Skipping non-dict talent in single_stat_mastery: {talent}")
+                    continue
+                talent_name = talent.get("talent_name")
+                if talent_name:
+                    all_talents_map[talent_name] = talent
+                else:
+                    logger.debug(f"Talent in single_stat_mastery missing 'talent_name': {talent}")
+            
+            # Flatten dual_stat_focus
+            dual_stat_talents = structured_talents.get("dual_stat_focus", [])
+            if not isinstance(dual_stat_talents, list):
+                logger.error(f"Expected dual_stat_focus to be a list, got {type(dual_stat_talents)}")
+                dual_stat_talents = []
+            
+            for talent in dual_stat_talents:
+                if not isinstance(talent, dict):
+                    logger.warning(f"Skipping non-dict talent in dual_stat_focus: {talent}")
+                    continue
+                talent_name = talent.get("talent_name")
+                if talent_name:
+                    all_talents_map[talent_name] = talent
+                else:
+                    logger.debug(f"Talent in dual_stat_focus missing 'talent_name': {talent}")
+            
+            # Flatten single_skill_mastery (this one is nested)
+            skill_mastery_data = structured_talents.get("single_skill_mastery", {})
+            if not isinstance(skill_mastery_data, dict):
+                logger.error(f"Expected single_skill_mastery to be a dict, got {type(skill_mastery_data)}")
+                skill_mastery_data = {}
+            
+            for category_name, category_list in skill_mastery_data.items():
+                if not isinstance(category_list, list):
+                    logger.warning(f"Skipping single_skill_mastery category '{category_name}': expected list, got {type(category_list)}")
+                    continue
+                
+                for skill_group in category_list:
+                    if not isinstance(skill_group, dict):
+                        logger.warning(f"Skipping non-dict skill_group in category '{category_name}'")
+                        continue
+                    
+                    talents_list = skill_group.get("talents", [])
+                    if not isinstance(talents_list, list):
+                        logger.warning(f"Skipping talent list in {category_name}/{skill_group.get('skill', 'Unknown')}: expected list, got {type(talents_list)}")
+                        continue
+                    
+                    for talent in talents_list:
+                        if not isinstance(talent, dict):
+                            logger.warning(f"Skipping non-dict talent in {category_name}")
+                            continue
+                        
+                        # Check both 'talent_name' (primary) and 'name' (fallback) for inconsistent JSON
+                        talent_name = talent.get("talent_name") or talent.get("name")
+                        if talent_name:
+                            all_talents_map[talent_name] = talent
+                        else:
+                            logger.debug(f"Talent in {category_name} missing both 'talent_name' and 'name' fields: {talent}")
+
+        rules_data["all_talents_map"] = all_talents_map
         print(f"Loaded {len(rules_data['all_talents_map'])} talents into map.")
+        if not all_talents_map:
+            print("WARNING: Talent map is empty after processing. Check rules_engine/data/talents.json")
+            logger.warning("Talent map is completely empty after processing all_talents_structured data.")
+        # --- END MODIFICATION ---
 
         # Fetch full ability school data (Series of GETs)
         school_details = {}
@@ -225,7 +299,7 @@ def _apply_mods(stats: Dict[str, int], mods: Dict[str, List[str]]):
             else:
                 print(f"Warning: Stat '{stat_name}' in mods not found in base stats.")
 async def create_character(
-    db: Session, character: schemas.CharacterCreate
+    db: Session, character: schemas.CharacterCreate, rules_data: Optional[Dict[str, Any]] = None
 ) -> schemas.CharacterContextResponse:
     """
     Creates a new character in the database after calculating all
@@ -234,12 +308,17 @@ async def create_character(
     logger.info(f"--- Starting character creation for: {character.name} ---")
     logger.debug(f"Received character creation payload: {character.model_dump_json(indent=2)}")
 
-    # 1. Get all rules data from Rules Engine
-    try:
-        rules = await _get_rules_engine_data()
-    except Exception as e:
-        print(f"Failed to fetch rules data from rules_engine: {e}")
-        raise e # Re-raise the HTTPException from the helper
+    # 1. Get all rules data (either pass it in or fetch it)
+    rules = rules_data
+    if rules is None:
+        try:
+            logger.info("No rules data passed, fetching from rules_engine...")
+            rules = await _get_rules_engine_data()
+        except Exception as e:
+            print(f"Failed to fetch rules data from rules_engine: {e}")
+            raise e # Re-raise the HTTPException from the helper
+    else:
+        logger.info("Using pre-fetched rules data.")
 
     # 2. Initialize base stats and skills
     base_stats = {stat: 8 for stat in rules.get("stats_list", [])}
@@ -259,24 +338,48 @@ async def create_character(
     for choice in character.feature_choices:
         kingdom_key = "All" if choice.feature_id == "F9" else character.kingdom
         try:
-            feature_set = all_features_data.get(choice.feature_id, {}).get(
-                kingdom_key, []
-            )
+            # Check if feature_id exists
+            if choice.feature_id not in all_features_data:
+                logger.warning(f"Feature ID '{choice.feature_id}' not found in kingdom_features. Skipping.")
+                print(f"Warning: Feature ID '{choice.feature_id}' not found. Skipping.")
+                continue
+            
+            feature_id_data = all_features_data.get(choice.feature_id, {})
+            
+            # Check if kingdom exists for this feature
+            if kingdom_key not in feature_id_data:
+                logger.warning(f"Kingdom '{kingdom_key}' not found for feature '{choice.feature_id}'. Available: {list(feature_id_data.keys())}")
+                print(f"Warning: Kingdom '{kingdom_key}' not found for feature {choice.feature_id}. Skipping.")
+                continue
+            
+            feature_set = feature_id_data.get(kingdom_key, [])
+            
+            # Check if feature_set is valid
+            if not isinstance(feature_set, list):
+                logger.error(f"Feature set for {choice.feature_id}/{kingdom_key} is not a list: {type(feature_set)}")
+                print(f"Error: Feature set for {choice.feature_id}/{kingdom_key} is malformed. Skipping.")
+                continue
+            
+            # Find the specific choice
             mod_data = next(
-                (item for item in feature_set if item["name"] == choice.choice_name),
+                (item for item in feature_set if item.get("name") == choice.choice_name),
                 None,
             )
+            
             if mod_data and "mods" in mod_data:
                 print(f"Applying mods for: {choice.choice_name}")
                 _apply_mods(base_stats, mod_data["mods"])
             else:
-                print(
-                    f"Warning: Could not find mod data for {choice.feature_id} -> {choice.choice_name}"
-                )
+                if not mod_data:
+                    available_choices = [item.get("name", "Unknown") for item in feature_set if isinstance(item, dict)]
+                    logger.warning(f"Could not find choice '{choice.choice_name}' for {choice.feature_id}. Available: {available_choices}")
+                    print(f"Warning: Could not find choice '{choice.choice_name}' for feature {choice.feature_id}. Skipping.")
+                else:
+                    logger.warning(f"Choice '{choice.choice_name}' for {choice.feature_id} has no 'mods' field. Skipping.")
+                    print(f"Warning: Choice '{choice.choice_name}' has no 'mods' field. Skipping.")
         except Exception as e:
-            print(
-                f"Error applying feature {choice.feature_id} ({choice.choice_name}): {e}"
-            )
+            logger.exception(f"Error applying feature {choice.feature_id} ({choice.choice_name}): {e}")
+            print(f"Error applying feature {choice.feature_id} ({choice.choice_name}): {e}")
 
     # 4. Apply Background Skills
     print("Applying background skills...")
@@ -332,9 +435,29 @@ async def create_character(
 
     # 5. Apply Ability Talent mods
     print(f"Applying Ability Talent mods for: {character.ability_talent}")
-    ab_talent_data = rules.get("all_talents_map", {}).get(character.ability_talent)
-    if ab_talent_data and "mods" in ab_talent_data:
-        _apply_mods(base_stats, ab_talent_data["mods"])
+    all_talents_map = rules.get("all_talents_map", {})
+    
+    if not all_talents_map:
+        logger.error("Talent map is empty. No ability talents will be applied.")
+        print("ERROR: Talent map is empty. No ability talents available.")
+    else:
+        ab_talent_data = all_talents_map.get(character.ability_talent)
+        
+        if not ab_talent_data:
+            available_talents = list(all_talents_map.keys())[:10]  # Show first 10
+            logger.warning(f"Ability talent '{character.ability_talent}' not found in talent map. Available (showing first 10): {available_talents}")
+            print(f"Warning: Ability talent '{character.ability_talent}' not found. Available talents: {available_talents}...")
+        elif "mods" not in ab_talent_data:
+            logger.warning(f"Ability talent '{character.ability_talent}' has no 'mods' field. Talent will be added but no stat mods applied.")
+            print(f"Warning: Ability talent '{character.ability_talent}' has no 'mods' field. Skipping stat modifications.")
+        else:
+            # Apply the mods
+            try:
+                _apply_mods(base_stats, ab_talent_data["mods"])
+                print(f"Successfully applied mods for talent: {character.ability_talent}")
+            except Exception as e:
+                logger.exception(f"Error applying mods for talent '{character.ability_talent}': {e}")
+                print(f"Error: Failed to apply mods for talent '{character.ability_talent}': {e}")
 
     print(f"Final calculated stats: {base_stats}")
 
@@ -356,9 +479,48 @@ async def create_character(
     # 7. Get base abilities
     base_abilities = []
     school_data = rules.get("all_abilities_map", {}).get(character.ability_school)
-    if school_data and "tiers" in school_data and len(school_data["tiers"]) > 0:
-        base_abilities.append(school_data["tiers"][0].get("name", "Unknown Ability"))
-        print(f"Added Tier 0 ability: {base_abilities[0]}")
+    
+    # --- FIX: Check if school_data and tiers exist before trying to access (with comprehensive error handling) ---
+    if not school_data:
+        logger.warning(f"No ability school data found for '{character.ability_school}'. No base ability added.")
+        print(f"Warning: Could not find school data for {character.ability_school}. No base ability added.")
+    elif "tiers" not in school_data:
+        logger.warning(f"Ability school '{character.ability_school}' has no 'tiers' field. No base ability added.")
+        print(f"Warning: Ability school '{character.ability_school}' has no 'tiers' field. No base ability added.")
+    elif not isinstance(school_data["tiers"], list):
+        logger.error(f"Tiers for '{character.ability_school}' is not a list: {type(school_data['tiers'])}")
+        print(f"Error: Tiers field is not a list for {character.ability_school}. No base ability added.")
+    elif len(school_data["tiers"]) == 0:
+        logger.warning(f"Ability school '{character.ability_school}' has empty tiers list. No base ability added.")
+        print(f"Warning: Ability school '{character.ability_school}' has empty tiers list. No base ability added.")
+    else:
+        # Tiers exist and have content, proceed with logic
+        tiers_list = school_data["tiers"]
+        
+        # Try to find T1 ability
+        t1_ability = None
+        for tier in tiers_list:
+            if isinstance(tier, dict) and tier.get("tier") == "T1":
+                t1_ability = tier
+                break
+        
+        if t1_ability:
+            # Use 'description' as it's the ability text
+            description = t1_ability.get("description", "Unknown T1 Ability")
+            base_abilities.append(description)
+            print(f"Added T1 ability: {description}")
+        else:
+            # No T1 found, use first tier as fallback
+            first_tier = tiers_list[0]
+            if isinstance(first_tier, dict):
+                description = first_tier.get("description", "Unknown Ability")
+                base_abilities.append(description)
+                logger.warning(f"No T1 ability found for {character.ability_school}. Using first available: {description}")
+                print(f"Warning: School {character.ability_school} has no 'T1' ability defined. Using first available: {description}")
+            else:
+                logger.error(f"First tier in {character.ability_school} is not a dict: {first_tier}")
+                print(f"Error: Could not extract ability from {character.ability_school}. First tier is malformed.")
+    # --- END FIX ---
 
     # 8. Create DB model (saving to separate columns)
     print("Creating database entry...")
@@ -454,39 +616,36 @@ async def create_default_test_character(db: Session, rules_data: dict):
     """Creates a hardcoded default character for testing by calling the main creation service."""
     logger.info("--- Creating Default Test Character ---")
 
-    # 1. Define the default choices using the correct schemas.CharacterCreate payload
-    # This payload mirrors what a user would select in the frontend for a quick start.
+    # --- MODIFICATION: Use VALID data from the JSON files ---
     creation_request = schemas.CharacterCreate(
         name="Tester",
-        kingdom="kingdom_automata",
+        kingdom="Mammal", # Was "kingdom_automata"
         feature_choices=[
-            schemas.FeatureChoice(feature_id="F1", choice_name="Automata Optics"),
-            schemas.FeatureChoice(feature_id="F2", choice_name="Automata Plating"),
-            schemas.FeatureChoice(feature_id="F3", choice_name="Automata Scent Sensors"),
-            schemas.FeatureChoice(feature_id="F4", choice_name="Automata Vocalizer"),
-            schemas.FeatureChoice(feature_id="F5", choice_name="Automata Auditory Sensors"),
-            schemas.FeatureChoice(feature_id="F6", choice_name="Automata Stabilizer"),
-            schemas.FeatureChoice(feature_id="F7", choice_name="Automata Chassis"),
-            schemas.FeatureChoice(feature_id="F8", choice_name="Automata Power Core"),
-            schemas.FeatureChoice(feature_id="F9", choice_name="Capstone: +2 Cunning"),
+            schemas.FeatureChoice(feature_id="F1", choice_name="The Predator (Jaws/Horns)"),
+            schemas.FeatureChoice(feature_id="F2", choice_name="The Juggernaut (Pure Armor)"),
+            schemas.FeatureChoice(feature_id="F3", choice_name="The Brute (Raw Power)"),
+            schemas.FeatureChoice(feature_id="F4", choice_name="The Artisan (Delicate)"),
+            schemas.FeatureChoice(feature_id="F5", choice_name="The Acrobat (Speed/Evasion)"),
+            schemas.FeatureChoice(feature_id="F6", choice_name="The Toxin Filter (Resilience)"),
+            schemas.FeatureChoice(feature_id="F7", choice_name="The Tracker (Keen Senses)"),
+            schemas.FeatureChoice(feature_id="F8", choice_name="The Logician (Pure Intellect)"),
+            schemas.FeatureChoice(feature_id="F9", choice_name="Capstone: +3 Might"),
         ],
-        origin_choice="Origin: Scribe",
-        childhood_choice="Childhood: Street Urchin",
-        coming_of_age_choice="Coming of Age: Scout",
-        training_choice="Training: Self-Taught",
-        devotion_choice="Devotion: The People",
+        origin_choice="Forested Highlands",
+        childhood_choice="Street Urchin",
+        coming_of_age_choice="The Grand Tournament",
+        training_choice="Soldier's Discipline",
+        devotion_choice="Devotion to the State",
         ability_school="Force",
-        ability_talent="Mind over Matter"
+        ability_talent="Overpowering Presence" # Was "Mind over Matter" which doesn't exist
     )
+    # --- END MODIFICATION ---
 
     logger.info(f"Default character payload created for '{creation_request.name}'. Passing to main creation service.")
 
-    # 2. Call the robust, existing create_character service with the payload
-    # This avoids duplicating logic and ensures the test character is always created
-    # with the same rules and calculations as a player character.
     try:
-        # Note: We don't need to pass 'rules_data' here because create_character fetches it internally.
-        new_character = await create_character(db=db, character=creation_request)
+        # We pass rules_data from the dependency to avoid fetching it twice
+        new_character = await create_character(db=db, character=creation_request, rules_data=rules_data)
         logger.info("--- Default test character creation successful ---")
         return new_character
     except Exception as e:

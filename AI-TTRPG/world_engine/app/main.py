@@ -98,10 +98,17 @@ def read_location(location_id: int, db: Session = Depends(get_db)):
     Get all data for a single location by its ID.
     This is the main 'get' function for the story_engine.
     """
-    db_loc = crud.get_location(db, location_id=location_id)
-    if db_loc is None:
-        raise HTTPException(status_code=404, detail="Location not found")
-    return db_loc
+    try:
+        db_loc = crud.get_location(db, location_id=location_id)
+        if db_loc is None:
+            raise HTTPException(status_code=404, detail="Location not found")
+        return db_loc
+    except HTTPException:
+        raise
+    except Exception as e:
+        import logging
+        logging.exception(f"Error fetching location {location_id}")
+        raise HTTPException(status_code=500, detail=f"Error fetching location: {str(e)}")
 
 @app.put("/v1/locations/{location_id}/annotations", response_model=schemas.Location)
 def update_location_ai_annotations(

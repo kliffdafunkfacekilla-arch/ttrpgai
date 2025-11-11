@@ -35,7 +35,7 @@ class FactionBase(BaseModel):
 class Faction(FactionBase):
     id: int
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class RegionBase(BaseModel):
     name: str
@@ -46,7 +46,7 @@ class RegionBase(BaseModel):
 class Region(RegionBase):
     id: int
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class ItemInstanceBase(BaseModel):
     template_id: str
@@ -59,7 +59,7 @@ class ItemInstanceBase(BaseModel):
 class ItemInstance(ItemInstanceBase):
     id: int
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class NpcInstanceBase(BaseModel):
     template_id: str
@@ -78,7 +78,7 @@ class NpcInstance(NpcInstanceBase):
     item_instances: List[ItemInstance] = []
     behavior_tags: List[str] = [] # Add this
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class LocationBase(BaseModel):
     name: str
@@ -99,7 +99,7 @@ class Location(LocationBase):
     ai_annotations: Optional[Dict[str, Any]] = None # Add this
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 # --- API Request/Create Models ---
 # These models define the data we expect to RECEIVE

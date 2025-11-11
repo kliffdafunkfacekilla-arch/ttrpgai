@@ -6,6 +6,7 @@ from typing import List, Dict, Any
 import logging
 from contextlib import asynccontextmanager # <-- ADD
 import os # <-- ADD
+from pydantic import BaseModel
 
 # Import alembic
 from alembic.config import Config as AlembicConfig
@@ -15,7 +16,6 @@ from alembic import command as alembic_command
 from . import crud, models, schemas, services
 from .database import SessionLocal, engine, Base, DATABASE_URL # <-- Import Base and DATABASE_URL
 
-print("!!!!!!!!!! IS THE NEW CHARACTER_ENGINE MAIN.PY RUNNING? YES. !!!!!!!!!!")
 
 # --- NEW LIFESPAN FUNCTION ---
 @asynccontextmanager
@@ -102,12 +102,16 @@ async def get_rules_engine_data():
     "/v1/characters/", response_model=schemas.CharacterContextResponse, status_code=201
 )
 async def create_character_endpoint(
-    character: schemas.CharacterCreate, db: Session = Depends(get_db)
+    character: schemas.CharacterCreate,
+    db: Session = Depends(get_db)
 ):
     """
     Creates a new character.
+    Fetches rules data internally to avoid coupling this endpoint to external service availability.
     """
-    return await services.create_character(db=db, character=character)
+    # --- FIX: Don't make rules_data a hard dependency. Fetch it inside the service. ---
+    # This prevents the entire endpoint from failing if rules_engine is temporarily unavailable.
+    return await services.create_character(db=db, character=character, rules_data=None)
 
 
 @app.get("/v1/characters/{char_id}", response_model=schemas.CharacterContextResponse)

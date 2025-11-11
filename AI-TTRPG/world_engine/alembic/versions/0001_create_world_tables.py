@@ -90,6 +90,8 @@ def upgrade() -> None:
     op.create_index(op.f('ix_item_instances_template_id'), 'item_instances', ['template_id'], unique=False)
 
     # ### Seed Data ###
+    # From: world_engine/alembic/versions/0001_create_world_tables.py
+    # Go up 2 levels to world_engine, then into data/
     data_dir = os.path.join(os.path.dirname(__file__), '..', '..', 'data')
 
     with open(os.path.join(data_dir, "initial_factions.json"), "r") as f:

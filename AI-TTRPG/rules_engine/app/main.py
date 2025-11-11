@@ -7,6 +7,7 @@ import logging
 logger = logging.getLogger("uvicorn.error")
 
 from . import core, data_loader, models
+from . import data_validator  # <-- NEW: Import validation module
 from .models import (
     SkillCheckRequest,
     AbilityCheckRequest,
@@ -27,10 +28,26 @@ from .models import (
 # --- Lifespan Event for Startup ---
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """Load rules data on startup and store in app.state."""
+    """Load rules data on startup, validate it, and store in app.state."""
     print("INFO: Loading rules data...")
     try:
         loaded_rules = data_loader.load_data()
+        
+        # --- NEW: Validate all data on startup ---
+        print("INFO: Validating rules data integrity...")
+        is_valid, validation_errors = data_validator.validate_all_rules_data(loaded_rules)
+        
+        if not is_valid:
+            print("FATAL: Data validation failed with the following errors:")
+            for dataset_name, errors in validation_errors.items():
+                print(f"\n  {dataset_name}:")
+                for error in errors:
+                    print(f"    - {error}")
+            raise data_validator.DataValidationError("Rules data failed validation. See errors above.")
+        
+        print("INFO: Data validation passed. All datasets are properly structured.")
+        # --- END NEW ---
+        
         # Store each loaded component onto app.state
         app.state.stats_list = loaded_rules.get("stats_list", [])
         app.state.skill_categories = loaded_rules.get("skill_categories", {})
@@ -38,9 +55,7 @@ async def lifespan(app: FastAPI):
         app.state.ability_data = loaded_rules.get("ability_data", {})
         app.state.talent_data = loaded_rules.get("talent_data", {})
         app.state.feature_stats_map = loaded_rules.get("feature_stats_map", {})
-        # --- ADDED ---
         app.state.kingdom_features_data = loaded_rules.get("kingdom_features_data", {})
-        # --- END ADDED ---
         app.state.melee_weapons = loaded_rules.get("melee_weapons", {})
         app.state.ranged_weapons = loaded_rules.get("ranged_weapons", {})
         app.state.armor = loaded_rules.get("armor", {})
@@ -49,14 +64,12 @@ async def lifespan(app: FastAPI):
         app.state.equipment_category_to_skill_map = loaded_rules.get(
             "equipment_category_to_skill_map", {}
         )
-        # --- ADD NEW BACKGROUND STATES ---
         app.state.origin_choices = loaded_rules.get("origin_choices", [])
         app.state.childhood_choices = loaded_rules.get("childhood_choices", [])
         app.state.coming_of_age_choices = loaded_rules.get("coming_of_age_choices", [])
         app.state.training_choices = loaded_rules.get("training_choices", [])
         app.state.devotion_choices = loaded_rules.get("devotion_choices", [])
-        # --- END ADD ---
-        app.state.generation_rules = loaded_rules.get("generation_rules", {}) # ADDED
+        app.state.generation_rules = loaded_rules.get("generation_rules", {})
         app.state.npc_templates = loaded_rules.get("npc_templates", {})
         app.state.item_templates = loaded_rules.get("item_templates", {})
 
@@ -362,13 +375,35 @@ async def api_get_ability_school(request: Request, school_name: str):
                 status_code=404, detail=f"Ability school '{school_name}' not found."
             )
         data = ability_data[school_name]
+        
+        # --- FIX: Extract all tiers from all branches (with safety checks) ---
+        all_tiers = []
+        branches = data.get("branches", [])
+        
+        if not branches:
+            # If no branches, check if tiers exist at top level (flat structure)
+            all_tiers = data.get("tiers", [])
+            logger.warning(f"Ability school '{school_name}' has no branches. Using flat tier structure.")
+        else:
+            # Extract tiers from each branch
+            for branch in branches:
+                branch_tiers = branch.get("tiers", [])
+                if branch_tiers:
+                    all_tiers.extend(branch_tiers)
+                else:
+                    logger.warning(f"Branch '{branch.get('branch', 'Unknown')}' in {school_name} has no tiers")
+        
+        if not all_tiers:
+            logger.warning(f"Ability school '{school_name}' returned no tiers after processing.")
+        # --- END FIX ---
+
         # Ensure response matches Pydantic model structure
         return AbilitySchoolResponse(
             school=school_name,
             # Check both keys for flexibility, default to Unknown
             resource_pool=data.get("resource_pool", data.get("resource", "Unknown")),
             associated_stat=data.get("associated_stat", "Unknown"),
-            tiers=data.get("tiers", []),
+            tiers=all_tiers,  # <-- Pass the corrected list of all tiers
         )
     except Exception as e:
         logger.exception(f"Error in api_get_ability_school for '{school_name}': {e}")
@@ -409,6 +444,71 @@ async def api_get_all_ability_schools(request: Request):
             status_code=500,
             detail=f"Internal server error getting ability schools list.",
         )
+
+
+# --- ADD THIS NEW ENDPOINT ---
+@app.get(
+    "/v1/lookup/all_talents_data",
+    response_model=Dict[str, Any],
+    tags=["Lookups"],
+)
+async def api_get_all_talents_data(request: Request):
+    """
+    Returns the full, hierarchical talents.json structure
+    for use in the character creation UI and services.
+    """
+    check_state_loaded(request)
+    logger.info("Received request for /v1/lookup/all_talents_data")
+    return request.app.state.talent_data
+# --- END ADD ---
+
+
+# --- NEW VALIDATION ENDPOINT ---
+@app.get(
+    "/v1/admin/validate_data",
+    response_model=Dict[str, Any],
+    tags=["Admin"],
+)
+async def api_validate_data(request: Request):
+    """
+    Validates all rules data currently loaded in memory.
+    Returns validation status and any errors found.
+    Useful for debugging data integrity issues.
+    """
+    check_state_loaded(request)
+    logger.info("Received request for /v1/admin/validate_data")
+    
+    try:
+        # Build a rules_data dict from app.state
+        rules_data = {
+            "ability_data": request.app.state.ability_data,
+            "talent_data": request.app.state.talent_data,
+            "kingdom_features_data": request.app.state.kingdom_features_data,
+            "origin_choices": request.app.state.origin_choices,
+        }
+        
+        # Validate
+        is_valid, validation_errors = data_validator.validate_all_rules_data(rules_data)
+        
+        if is_valid:
+            return {
+                "status": "valid",
+                "message": "All rules data passed validation",
+                "errors": {}
+            }
+        else:
+            return {
+                "status": "invalid",
+                "message": "Rules data contains validation errors",
+                "errors": validation_errors
+            }
+    except Exception as e:
+        logger.exception(f"Error validating rules data: {e}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"Error validating rules data: {e}"
+        )
+# --- END VALIDATION ENDPOINT ---
 
 
 # --- ADDED CHARACTER CREATION ENDPOINTS ---
