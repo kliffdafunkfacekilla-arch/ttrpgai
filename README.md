@@ -1,1 +1,1 @@
-the rough beginnings of an attept at intagrating a LLM AI with a virtual tabletop RPG. currently got basic backend running and setting up the front end the player interface. once a basic functionality is achieved the real fun will begin of giving AI control.
+a python framwork to play a custom ttrpg with AI running as DM.
