@@ -4,20 +4,65 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from typing import List, Dict, Any
 import logging
-from typing import List
-from pydantic import BaseModel
-from sqlalchemy.orm.attributes import flag_modified
+from contextlib import asynccontextmanager # <-- ADD
+import os # <-- ADD
+
+# Import alembic
+from alembic.config import Config as AlembicConfig
+from alembic import command as alembic_command
 
 # Import local modules using relative paths
 from . import crud, models, schemas, services
-from .database import SessionLocal, engine, Base
+from .database import SessionLocal, engine, Base, DATABASE_URL # <-- Import Base and DATABASE_URL
 
 print("!!!!!!!!!! IS THE NEW CHARACTER_ENGINE MAIN.PY RUNNING? YES. !!!!!!!!!!")
 
-# Create tables if they don't exist (useful for simple setups, Alembic is better for prod)
-Base.metadata.create_all(bind=engine)
+# --- NEW LIFESPAN FUNCTION ---
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    print("INFO: Character Engine: Lifespan startup...")
 
-app = FastAPI(title="Character Engine")
+    # 1. Define paths relative to this file
+    _current_dir = os.path.dirname(os.path.abspath(__file__))
+    _service_root = os.path.abspath(os.path.join(_current_dir, ".."))
+    alembic_ini_path = os.path.join(_service_root, "alembic.ini")
+    alembic_script_location = os.path.join(_service_root, "alembic")
+
+    print(f"INFO: Character Engine: Database URL: {DATABASE_URL}")
+    print(f"INFO: Character Engine: Alembic .ini path: {alembic_ini_path}")
+
+    try:
+        # 2. Create Alembic Config object
+        alembic_cfg = AlembicConfig(alembic_ini_path)
+
+        # 3. Set the script location (must be absolute)
+        alembic_cfg.set_main_option("script_location", alembic_script_location)
+
+        # 4. Set the database URL to be the same one the app uses
+        alembic_cfg.set_main_option("sqlalchemy.url", DATABASE_URL)
+
+        # 5. Run the "upgrade head" command programmatically
+        print("INFO: Character Engine: Running Alembic upgrade head...")
+        alembic_command.upgrade(alembic_cfg, "head")
+        print("INFO: Character Engine: Alembic upgrade complete.")
+
+    except Exception as e:
+        print(f"FATAL: Character Engine: Database migration failed on startup: {e}")
+        # As a fallback, create tables directly (won't run seeding, but prevents crash)
+        print("INFO: Character Engine: Running Base.metadata.create_all() as fallback...")
+        Base.metadata.create_all(bind=engine)
+
+    # App is ready to start
+    yield
+
+    # Shutdown logic
+    print("INFO: Character Engine: Shutting down.")
+
+
+app = FastAPI(
+    title="Character Engine",
+    lifespan=lifespan  # <--- ASSIGN THE LIFESPAN
+)
 logger = logging.getLogger("uvicorn.error")
 
 # Add CORSMiddleware
