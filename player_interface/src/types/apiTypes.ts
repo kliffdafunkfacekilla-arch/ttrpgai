@@ -61,8 +61,10 @@ export interface LocationContextResponse {
     id: number; // <-- CHANGE TO number
     name: string;
     generated_map_data: number[][];
-    npc_instances: NpcInstance[];
-    item_instances: ItemInstance[];
+    // --- FIX: RENAME THESE TWO LINES ---
+    npcs: NpcInstance[];            // Was npc_instances
+    items: ItemInstance[];          // Was item_instances
+    // --- END FIX ---
     spawn_points?: { [key: string]: number[][] }; // <-- ADD THIS
     ai_annotations?: {
         [key: string]: AiAnnotationValue;

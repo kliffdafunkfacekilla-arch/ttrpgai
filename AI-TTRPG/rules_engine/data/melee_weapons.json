@@ -13,74 +13,74 @@
     "penalty": -1,
     "properties": ["Reach", "Two-Handed"]
   },
-  "Precision Blades": {
-    "skill": "Precision Blades",
+  "Double/dual wield": {
+    "skill": "Double/dual wield",
     "skill_stat": "Finesse",
     "damage": "1d10",
     "penalty": -1,
     "properties": ["Versatile", "Reliable"]
   },
-  "Quick Pair": {
-    "skill": "Quick Pair",
+  "Daggers/Small Blades": {
+    "skill": "Daggers/Small Blades",
     "skill_stat": "Reflexes",
     "damage": "1d4+1d4",
     "penalty": 0,
     "properties": ["Dual Wield", "Fast", "Low Damage"]
   },
-  "Adept Staves": {
-    "skill": "Adept Staves",
-    "skill_stat": "Fortitude",
+  "Nature Weapons": {
+    "skill": "Nature Weapons",
+    "skill_stat": "Vitality",
     "damage": "1d6",
     "penalty": 0,
-    "properties": ["Defensive", "Shield Bash"]
+    "properties": ["Defensive", "Natural"]
   },
-  "Brawling Weapons": {
-    "skill": "Brawling Weapons",
+  "Unarmed/Fist Weapons": {
+    "skill": "Unarmed/Fist Weapons",
     "skill_stat": "Fortitude",
     "damage": "1d8",
     "penalty": 0,
-    "properties": ["Fast", "Light"]
+    "properties": ["Fast", "Light", "Always Available"]
   },
-  "Elemental Edges": {
-    "skill": "Elemental Edges",
+  "Infused Weapons": {
+    "skill": "Infused Weapons",
     "skill_stat": "Knowledge",
     "damage": "1d10",
     "penalty": -1,
     "properties": ["Elemental Damage", "Focus"]
   },
-  "Utilitarian Weapons": {
-    "skill": "Utilitarian Weapons",
+  "Tool/Improvised Weapons": {
+    "skill": "Tool/Improvised Weapons",
     "skill_stat": "Logic",
     "damage": "0",
     "penalty": 0,
-    "properties": ["Stun", "Non-Lethal"]
+    "properties": ["Stun", "Non-Lethal", "Creative"]
   },
-  "Binding Weapons": {
-    "skill": "Binding Weapons",
+  "Covering/Area Weapons": {
+    "skill": "Covering/Area Weapons",
     "skill_stat": "Awareness",
     "damage": "1d6",
     "penalty": 0,
-    "properties": ["Area Denial", "Bleed"]
+    "properties": ["Area Denial", "Protective"]
   },
-  "Visceral Weapons": {
-    "skill": "Visceral Weapons",
-    "skill_stat": "Reflexes",
+  "Savage Weapons": {
+    "skill": "Savage Weapons",
+    "skill_stat": "Intuition",
     "damage": "1d4",
     "penalty": 0,
-    "properties": ["Concealed", "Stealth"]
+    "properties": ["Primal", "Instinctive", "Ritualistic"]
   },
-  "Performance Weapons": {
-    "skill": "Performance Weapons",
+  "Performance/Show Weapons": {
+    "skill": "Performance/Show Weapons",
     "skill_stat": "Charm",
     "damage": "1d10",
     "penalty": -2,
-    "properties": ["Heavy", "Momentum"]
+    "properties": ["Flashy", "Momentum", "Showmanship"]
   },
-  "Resolute Edges": {
-    "skill": "Resolute Edges",
+  "Exotic/Concentration Weapons": {
+    "skill": "Exotic/Concentration Weapons",
     "skill_stat": "Willpower",
     "damage": "1d12",
     "penalty": -3,
-    "properties": ["Siege", "Destructive"]
+    "properties": ["Complex", "Focus-Based", "Powerful"]
   }
 }

@@ -157,7 +157,24 @@ async def get_world_location_context(client: httpx.AsyncClient, location_id: int
                 "spawn_points": map_response.get("spawn_points")
             }
             await _call_api(client, "PUT", f"{WORLD_ENGINE_URL}/v1/locations/{location_id}/map", json=map_update_payload)
+            
+            # --- RE-FETCH ---
             location_data = await _call_api(client, "GET", url)
+            
         except Exception as e:
             logger.exception(f"FATAL: Failed to dynamically set up STARTING_ZONE: {e}. Returning possibly empty data.")
+    
+    # --- FIX: ADD SECOND PARSE CHECK ---
+    # This ensures that the re-fetched data is *also* parsed,
+    # guaranteeing the frontend never gets a string.
+    map_data = location_data.get("generated_map_data")
+    if isinstance(map_data, str):
+        try:
+            map_data = json.loads(map_data)
+        except json.JSONDecodeError:
+            logger.error("Failed to decode map data string (on refetch) as JSON. Treating as None.")
+            map_data = None
+        location_data["generated_map_data"] = map_data
+    # --- END FIX ---
+
     return location_data

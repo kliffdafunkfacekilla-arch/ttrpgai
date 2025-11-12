@@ -1,86 +1,86 @@
 {
-  "Heavy Artillery": {
-    "skill_stat": "Logic",
+  "Heavy Bows/Launchers": {
+    "skill_stat": "Might",
     "damage": "3d10",
     "penalty": -3,
     "range_m": 150,
     "properties": ["Siege", "AoE", "Slow"]
   },
-  "Long Bow": {
-    "skill_stat": "Agility",
+  "Bows and Firearms": {
+    "skill_stat": "Awareness",
     "damage": "1d10",
     "penalty": -1,
     "range_m": 100,
     "properties": ["Long Range", "Accurate"]
   },
-  "Short Bow": {
-    "skill_stat": "Agility",
+  "Quick Thrown": {
+    "skill_stat": "Finesse",
     "damage": "1d8",
     "penalty": 0,
     "range_m": 50,
     "properties": ["Fast", "Mobile"]
   },
-  "Crossbow": {
-    "skill_stat": "Endurance",
+  "Effect/Surprise Thrown": {
+    "skill_stat": "Reflexes",
     "damage": "1d12",
     "penalty": -2,
     "range_m": 80,
-    "properties": ["High Power", "Slow Reload"]
+    "properties": ["High Power", "Status Effect"]
   },
-  "Thrown Weapons": {
-    "skill_stat": "Might",
+  "Slings/Spears": {
+    "skill_stat": "Logic",
     "damage": "1d6",
     "penalty": 0,
     "range_m": 20,
     "properties": ["Versatile", "Quick"]
   },
-  "Elemental Edge": {
+  "Infused Blasters/Launchers": {
     "skill_stat": "Knowledge",
     "damage": "1d10",
     "penalty": -1,
     "range_m": 30,
     "properties": ["Elemental Damage", "Focus"]
   },
-  "Needle Launcher": {
-    "skill_stat": "Agility",
+  "Nature/Alchemy": {
+    "skill_stat": "Vitality",
     "damage": "3d4",
     "penalty": 0,
     "range_m": 40,
-    "properties": ["Multi-shot", "Poison"]
+    "properties": ["Poison", "Nature-Based"]
   },
-  "Sonic Blast": {
-    "skill_stat": "Willpower",
+  "Fused/Triggered Projectiles": {
+    "skill_stat": "Intuition",
     "damage": "2d6",
     "penalty": 0,
     "range_m": 15,
-    "properties": ["AoE", "Stun"]
+    "properties": ["AoE", "Intuitive"]
   },
-  "Gravity Well": {
-    "skill_stat": "Knowledge",
+  "Crowd Controllers": {
+    "skill_stat": "Endurance",
     "damage": "0",
     "penalty": -2,
     "range_m": 25,
     "properties": ["Control", "Displacement"]
   },
-  "Crystal Shards": {
-    "skill_stat": "Intuition",
+  "Ariel/Flying Strikes": {
+    "skill_stat": "Fortitude",
     "damage": "2d8",
     "penalty": -1,
     "range_m": 35,
-    "properties": ["Armor Piercing", "Bleed"]
+    "properties": ["Armor Piercing", "Flying"]
   },
-  "Distortion Field": {
-    "skill_stat": "Logic",
+  "Scatter/Repeater Bows/Firearms": {
+    "skill_stat": "Charm",
     "damage": "1d4",
     "penalty": 0,
     "range_m": 10,
-    "properties": ["Debuff", "Hazard"]
+    "properties": ["Multi-shot", "Impressive"]
   },
-  "Force Push": {
+  "Concentration/Focus Launchers": {
     "skill_stat": "Willpower",
     "damage": "1d6",
     "penalty": 0,
     "range_m": 20,
-    "properties": ["Knockback", "Control"]
+    "properties": ["Knockback", "Concentration"]
   }
 }

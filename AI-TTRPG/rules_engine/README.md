@@ -45,7 +45,7 @@ The Rules Engine is entirely data-driven. All of its knowledge comes from the JS
 -   `injuries.json` & `status_effects.json`: Define the mechanical impacts of combat afflictions.
 -   `skill_mappings.json`: Defines the mapping between equipment categories and the skills used to wield them.
 -   `npc_templates.json`: Maps NPC template IDs (e.g., "goblin_scout") to the parameters needed by the `npc_generator` to create them.
--   `item_templates.json`: Maps item IDs (e.g., "item_iron_sword") to their type ("melee", "armor") and category ("Precision Blades").
+-   `item_templates.json`: Maps item IDs (e.g., "item_iron_sword") to their type ("melee", "armor") and category (e.g., "Double/dual wield", "Bows and Firearms").
 
 ## 5. Dependencies
 

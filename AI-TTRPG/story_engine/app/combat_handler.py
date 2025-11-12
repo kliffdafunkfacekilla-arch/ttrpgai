@@ -256,8 +256,8 @@ async def get_equipped_weapon(client: httpx.AsyncClient, actor_context: Dict) ->
         npc_skills = actor_context.get("skills", {})
         if npc_skills.get("Great Weapons", 0) > 0:
              return "Great Weapons", "melee"
-        if npc_skills.get("Precision Archery", 0) > 0:
-              return "Precision Archery", "ranged"
+        if npc_skills.get("Bows and Firearms", 0) > 0:
+              return "Bows and Firearms", "ranged"
 
         logger.warning(f"Could not guess weapon for NPC {actor_name}. Defaulting to 'Brawling Weapons'.")
         return "Brawling Weapons", "melee"

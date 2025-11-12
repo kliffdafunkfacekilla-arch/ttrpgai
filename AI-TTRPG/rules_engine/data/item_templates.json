@@ -2,7 +2,7 @@
   "item_iron_sword": {
     "name": "Iron Sword",
     "type": "melee",
-    "category": "Precision Blades"
+    "category": "Double/dual wield"
   },
   "item_iron_axe": {
     "name": "Iron Axe",
@@ -12,7 +12,7 @@
   "item_short_bow": {
     "name": "Short Bow",
     "type": "ranged",
-    "category": "Precision Archery"
+    "category": "Bows and Firearms"
   },
   "item_leather_jerkin": {
     "name": "Leather Jerkin",

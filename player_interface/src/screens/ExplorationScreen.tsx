@@ -124,18 +124,16 @@ const ExplorationScreen: React.FC<ExplorationScreenProps> = ({
         async (dx: number, dy: number) => {
             if (!player || !location || !location.generated_map_data || isTakingTurn)
                 return;
-            setIsTakingTurn(true);
 
-            // --- MODIFICATION: Use flat structure ---
             const currX = player.position_x;
             const currY = player.position_y;
             const locId = player.current_location_id;
-            // --- END MODIFICATION ---
 
             const newX = currX + dx;
             const newY = currY + dy;
 
-            const npcAtTargetTile = location.npc_instances.find(
+            // Check NPC collision
+            const npcAtTargetTile = location.npcs.find(
                 (npc: NpcInstance) => {
                     const coords = npc.coordinates;
                     return coords && coords[0] === newX && coords[1] === newY;
@@ -144,7 +142,7 @@ const ExplorationScreen: React.FC<ExplorationScreenProps> = ({
             if (npcAtTargetTile) {
                 if (npcAtTargetTile.behavior_tags.includes("aggressive")) {
                     addLog(`You encounter a hostile ${npcAtTargetTile.template_id}!`);
-                    const allNpcTemplateIds = location.npc_instances.map(
+                    const allNpcTemplateIds = location.npcs.map(
                         (npc) => npc.template_id,
                     );
                     const payload: CombatStartRequestPayload = {
@@ -162,15 +160,15 @@ const ExplorationScreen: React.FC<ExplorationScreenProps> = ({
                                 ? err.message
                                 : "An unknown error occurred while starting combat.";
                         addLog(`Failed to start combat: ${message}`);
-                        setIsTakingTurn(false);
                     }
                     return;
                 } else {
                     addLog(`${npcAtTargetTile.template_id} is blocking the way.`);
-                    setIsTakingTurn(false);
                     return;
                 }
             }
+
+            // Check bounds
             if (
                 newY < 0 ||
                 newY >= location.generated_map_data.length ||
@@ -178,30 +176,38 @@ const ExplorationScreen: React.FC<ExplorationScreenProps> = ({
                 newX >= location.generated_map_data[0].length
             ) {
                 addLog("You can't move that way (bounds).");
-                setIsTakingTurn(false);
                 return;
             }
+
+            // Check tile passability
             const tileId = location.generated_map_data[newY][newX];
             const tileDef = getTileDefinition(tileId);
             if (!tileDef || !tileDef.passable) {
                 addLog(`You can't move through a ${tileDef?.name || "wall"}.`);
-                setIsTakingTurn(false);
                 return;
             }
+
+            // Client-side prediction: update UI immediately
+            setIsTakingTurn(true);
+            const originalPlayer = player;
+            setPlayer({ ...player, position_x: newX, position_y: newY });
+            addLog(`Moving to [${newX}, ${newY}]...`);
+
+            // Async server update in background
             try {
-                addLog(`Moving to [${newX}, ${newY}]...`);
-                const updatedPlayer = await updatePlayerLocation(
+                await updatePlayerLocation(
                     player.id,
-                    locId, // Use number
+                    locId,
                     [newX, newY],
                 );
-                setPlayer(updatedPlayer);
             } catch (err) {
+                // Rollback on error
                 const message =
                     err instanceof Error
                         ? err.message
                         : "An unknown error occurred while moving.";
                 addLog(`Move failed: ${message}`);
+                setPlayer(originalPlayer);
             } finally {
                 setIsTakingTurn(false);
             }
@@ -359,8 +365,8 @@ const ExplorationScreen: React.FC<ExplorationScreenProps> = ({
                 )}
                 <EntityRenderer
                     player={player}
-                    npcs={location.npc_instances}
-                    items={location.item_instances}
+                    npcs={location.npcs}
+                    items={location.items}
                 />
             </div>
             <footer className="mt-4 h-32 bg-gray-800 border border-gray-700 p-4 overflow-y-auto">

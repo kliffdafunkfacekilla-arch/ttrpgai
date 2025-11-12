@@ -19,22 +19,22 @@
   "skills_by_style_and_difficulty": {
     "offense": {
       "melee_heavy": {
-        "easy": ["Strength", "Great Weapons"],
-        "medium": ["Strength", "Great Weapons", "Intimidation"],
-        "hard": ["Strength", "Great Weapons", "Intimidation", "Athletics"],
-        "boss": ["Strength", "Great Weapons", "Intimidation", "Athletics", "Resilience"]
+        "easy": ["Might", "Great Weapons"],
+        "medium": ["Might", "Great Weapons", "Intimidation"],
+        "hard": ["Might", "Great Weapons", "Intimidation", "Kinetics"],
+        "boss": ["Might", "Great Weapons", "Intimidation", "Kinetics", "Resilience"]
       },
       "ranged_support": {
-        "easy": ["Precision Archery", "Awareness"],
-        "medium": ["Precision Archery", "Awareness", "Survival"],
-        "hard": ["Precision Archery", "Awareness", "Survival", "Communication"],
-        "boss": ["Precision Archery", "Awareness", "Survival", "Communication", "Nature Sense"]
+        "easy": ["Bows and Firearms", "Awareness"],
+        "medium": ["Bows and Firearms", "Awareness", "Environment"],
+        "hard": ["Bows and Firearms", "Awareness", "Environment", "Persuasion"],
+        "boss": ["Bows and Firearms", "Awareness", "Environment", "Persuasion", "Thaumaturgy"]
       },
       "debuff": {
-        "easy": ["Explosives & Vials", "Knowledge"],
-        "medium": ["Explosives & Vials", "Knowledge", "Lore: Science & Acad."],
-        "hard": ["Explosives & Vials", "Knowledge", "Lore: Science & Acad.", "Security"],
-        "boss": ["Explosives & Vials", "Knowledge", "Lore: Science & Acad.", "Security", "Artifice"]
+        "easy": ["Ingenuity", "Knowledge"],
+        "medium": ["Ingenuity", "Knowledge", "Lore: Science & History"],
+        "hard": ["Ingenuity", "Knowledge", "Lore: Science & History", "Security"],
+        "boss": ["Ingenuity", "Knowledge", "Lore: Science & History", "Security", "Artifice"]
       }
     },
     "defense": {
@@ -46,15 +46,15 @@
       },
       "evasive": {
         "easy": ["Evasion"],
-        "medium": ["Evasion", "Athletics"],
-        "hard": ["Evasion", "Athletics", "Slight of Hand"],
-        "boss": ["Evasion", "Athletics", "Slight of Hand", "Security"]
+        "medium": ["Evasion", "Kinetics"],
+        "hard": ["Evasion", "Kinetics", "Slight of Hand"],
+        "boss": ["Evasion", "Kinetics", "Slight of Hand", "Security"]
       },
       "regenerative": {
         "easy": ["Resilience"],
-        "medium": ["Resilience", "Survival"],
-        "hard": ["Resilience", "Survival", "Provisioning"],
-        "boss": ["Resilience", "Survival", "Provisioning", "Nature Sense"]
+        "medium": ["Resilience", "Environment"],
+        "hard": ["Resilience", "Environment", "Provisioning"],
+        "boss": ["Resilience", "Environment", "Provisioning", "Thaumaturgy"]
       }
     },
     "skill_ranks": {

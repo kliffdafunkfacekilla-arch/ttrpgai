@@ -62,9 +62,10 @@ const loadedSpritesheetUrls: Record<string, string> = {};
 /**
  * Caches a spritesheet URL.
  */
-const cacheSheetUrl = (filename: string, path: "tiles" | "entities") => {
+const cacheSheetUrl = (filename: string, path: "Tiles" | "entities") => {
   if (!loadedSpritesheetUrls[filename]) {
-    loadedSpritesheetUrls[filename] = `/assets/graphics/${path}/${filename}`;
+    // Use 'Graphics' to match the actual folder case
+    loadedSpritesheetUrls[filename] = `/assets/Graphics/${path}/${filename}`;
   }
 };
 
@@ -97,7 +98,8 @@ const buildSpriteLookupMap = (): void => {
         gridCol: baseMapInfo.col - 1, // Convert to 0-based index
         gridRow: baseMapInfo.row - 1, // Convert to 0-based index
       };
-      cacheSheetUrl(baseMapInfo.sheet, "tiles");
+      // --- FIX: Pass "Tiles" (capitalized) ---
+      cacheSheetUrl(baseMapInfo.sheet, "Tiles");
     } else {
       console.warn(`No manual mapping provided for Tile ID: ${tileId}`);
     }
@@ -113,7 +115,8 @@ const buildSpriteLookupMap = (): void => {
             gridCol: stateMapInfo.col - 1,
             gridRow: stateMapInfo.row - 1,
           };
-          cacheSheetUrl(stateMapInfo.sheet, "tiles");
+          // --- FIX: Pass "Tiles" (capitalized) ---
+          cacheSheetUrl(stateMapInfo.sheet, "Tiles");
         } else {
           console.warn(
             `No specific manual mapping for state '${stateName}' of Tile ID: ${tileId}.`,
@@ -188,7 +191,7 @@ export const getSpriteRenderInfo = (
       `Render info not found for id: ${id}, state: ${state}. No fallback available.`,
     );
     // As a last resort, render a purple box if even fallback is missing
-    const fallbackUrl = "/assets/graphics/tiles/fallback.png"; // A known fallback asset
+    const fallbackUrl = "/assets/Graphics/Tiles/fallback.png"; // --- FIX: Use correct Graphics path ---
     if (loadedSpritesheetUrls["fallback.png"]) {
       return {
         sheetUrl: fallbackUrl,
@@ -206,7 +209,7 @@ export const getSpriteRenderInfo = (
     console.error(
       `Spritesheet URL not cached for filename: ${spriteInfo.sheetFilename}`,
     );
-    const fallbackUrl = "/assets/graphics/tiles/fallback.png";
+    const fallbackUrl = "/assets/Graphics/Tiles/fallback.png"; // --- FIX: Use correct Graphics path ---
     return {
       sheetUrl: fallbackUrl,
       sx: 0,

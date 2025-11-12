@@ -48,15 +48,15 @@ async def test_create_character_success(mock_call_rules, client):
                 "F9": {"All": [{"name": "Capstone: +2 Might", "mods": {"+2": ["Might"]}}]},
             }
         if endpoint == "/lookup/creation/origin_choices":
-            return [{"name": "Forested Highlands", "skills": ["Survival", "Lore: Agricul. & Wilds"]}]
+            return [{"name": "Forested Highlands", "skills": ["Environment", "Lore: Agricul. & Wilds"]}]
         if endpoint == "/lookup/creation/childhood_choices":
             return [{"name": "Street Urchin", "skills": ["Slight of Hand", "Intimidation"]}]
         if endpoint == "/lookup/creation/coming_of_age_choices":
-            return [{"name": "The Grand Tournament", "skills": ["Precision Blades", "Resilience"]}]
+            return [{"name": "The Grand Tournament", "skills": ["Double/dual wield", "Resilience"]}]
         if endpoint == "/lookup/creation/training_choices":
             return [{"name": "Soldier's Discipline", "skills": ["Polearms & Shields", "Plate Armor"]}]
         if endpoint == "/lookup/creation/devotion_choices":
-            return [{"name": "Devotion to the State", "skills": ["Lore: Royalty/Political", "Reinforced"]}]
+            return [{"name": "Devotion to the State", "skills": ["Lore: Ruling Class/Politics", "Reinforced"]}]
         if endpoint == "/lookup/talents" and method.upper() == "POST":
             return [{"name": "Ability Talent", "mods": {"+1": ["Finesse"]}}]
         if endpoint == "/lookup/all_ability_schools":
@@ -64,7 +64,7 @@ async def test_create_character_success(mock_call_rules, client):
         if endpoint == "/lookup/all_stats":
             return ["Might", "Endurance", "Finesse", "Reflexes", "Vitality", "Fortitude", "Knowledge", "Logic", "Awareness", "Intuition", "Charm", "Willpower"]
         if endpoint == "/lookup/all_skills":
-            return ["Survival", "Intimidation", "Lore: Agricul. & Wilds", "Slight of Hand", "Precision Blades", "Resilience", "Polearms & Shields", "Plate Armor", "Lore: Royalty/Political", "Reinforced"]
+            return ["Environment", "Intimidation", "Lore: Agricul. & Wilds", "Slight of Hand", "Double/dual wield", "Resilience", "Polearms & Shields", "Plate Armor", "Lore: Ruling Class/Politics", "Reinforced"]
         if endpoint.startswith("/lookup/ability_school/"):
             return {"tiers": [{"name": "Force Push"}]}
         if endpoint == "/calculate/base_vitals" and method.upper() == "POST":
@@ -102,7 +102,7 @@ async def test_create_character_success(mock_call_rules, client):
     assert data["stats"]["Awareness"] == 9
     assert data["stats"]["Intuition"] == 9
     assert data["stats"]["Finesse"] == 9
-    assert data["skills"]["Survival"]["rank"] == 1
+    assert data["skills"]["Environment"]["rank"] == 1
     assert data["skills"]["Intimidation"]["rank"] == 1
     assert "Ability Talent" in data["talents"]
     assert "background_talent" not in data["talents"]

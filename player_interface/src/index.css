@@ -3,6 +3,9 @@
 
 
 @layer base {
+  #root {
+    @apply h-full w-full m-0 p-0; /* Make root elements fill the screen */
+  }
   body {
     font-family: "Inter", sans-serif;
   }

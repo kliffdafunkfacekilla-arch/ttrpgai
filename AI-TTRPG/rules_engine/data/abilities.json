@@ -23,7 +23,7 @@
           },
           {
             "tier": "T5",
-            "description": "Weapon Disarm: Force target to drop weapon (Contested Might vs. Strength check)."
+            "description": "Weapon Disarm: Force target to drop weapon (Contested Might vs. Might check)."
           },
           {
             "tier": "T6",
